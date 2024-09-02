@@ -11,24 +11,34 @@ AUPCharacterBase::AUPCharacterBase()
 
 }
 
-// Called when the game starts or when spawned
-void AUPCharacterBase::BeginPlay()
+void AUPCharacterBase::PostInitializeComponents()
 {
-	Super::BeginPlay();
-	
+	Super::PostInitializeComponents();
 }
 
-// Called every frame
-void AUPCharacterBase::Tick(float DeltaTime)
+void AUPCharacterBase::AttackHitCheck()
 {
-	Super::Tick(DeltaTime);
-
 }
 
-// Called to bind functionality to input
-void AUPCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	return 0;
 }
 
+void AUPCharacterBase::SetDead()
+{
+}
+
+void AUPCharacterBase::PlayDeadAnimation()
+{
+}
+
+int32 AUPCharacterBase::GetLevel()
+{
+	return 1;
+}
+
+void AUPCharacterBase::SetLevel(int32 InNewLevel)
+{
+}

@@ -4,26 +4,46 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interface/UPDamagableInterface.h"
+#include "UniversityProject/Interface/UPAnimationAttackInterface.h"
 #include "UPCharacterBase.generated.h"
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter
+class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPAnimationAttackInterface, public IUPDamagableInterface
 {
 	GENERATED_BODY()
 
+// Init Section
 public:
-	// Sets default values for this character's properties
 	AUPCharacterBase();
 
+	virtual void PostInitializeComponents() override;
+
+// Control Or View Section
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	
+// Attack Hit Section
+protected:
+	virtual void AttackHitCheck() override;
+	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	
+// Dead Section
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UAnimMontage> DeadMontage;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void SetDead();
+	void PlayDeadAnimation();
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	float DeadEventDelayTime = 5.0f;
 
+// Stat Section
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UUPCharacterStatComponent> Stat;
+
+// Stat Section
+public:
+	int32 GetLevel();
+	void SetLevel(int32 InNewLevel);
 };
