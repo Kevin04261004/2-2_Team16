@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "UPDamagableInterface.generated.h"
+#include "UPDamageableInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UUPDamagableInterface : public UInterface
+class UUPDamageableInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,7 +16,7 @@ class UUPDamagableInterface : public UInterface
 /**
  * 
  */
-class UNIVERSITYPROJECT_API IUPDamagableInterface
+class UNIVERSITYPROJECT_API IUPDamageableInterface
 {
 	GENERATED_BODY()
 

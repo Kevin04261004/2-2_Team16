@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Interface/UPDamagableInterface.h"
+#include "Interface/UPDamageableInterface.h"
 #include "UniversityProject/Interface/UPAnimationAttackInterface.h"
 #include "UPCharacterBase.generated.h"
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPAnimationAttackInterface, public IUPDamagableInterface
+class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPAnimationAttackInterface, public IUPDamageableInterface
 {
 	GENERATED_BODY()
 
