@@ -10,20 +10,22 @@
 // Delegate Section
 DECLARE_MULTICAST_DELEGATE(FOnHpZeroDelegate);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHpChangeDelegate, float /* CurrentHp */);
-DECLARE_MULTICAST_DELEGATE_TwoParams(FOnStatChangedDelegate, const FUPCharacterStat /* BaseStat */, const FUPCharacterStat /* ModifierStat */);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnStatChangedDelegate, const FUPCharacterStat& /* BaseStat */, const FUPCharacterStat& /* ModifierStat */);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNIVERSITYPROJECT_API UUPCharacterStatComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+// Init Section
+public:
 	UUPCharacterStatComponent();
 
 // Init Section
 protected:
 	virtual void InitializeComponent() override;
 
+// Stat Section
 public:
 	FOnHpZeroDelegate OnHpZero;
 	FOnHpChangeDelegate OnHpChanged;

@@ -3,28 +3,27 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameData/UPCharacterStat.h"
 #include "GameFramework/Character.h"
 #include "Interface/UPDamageableInterface.h"
-#include "UniversityProject/Interface/UPAnimationAttackInterface.h"
 #include "UPCharacterBase.generated.h"
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPAnimationAttackInterface, public IUPDamageableInterface
+class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface
 {
 	GENERATED_BODY()
 
 // Init Section
 public:
 	AUPCharacterBase();
-
+	
 	virtual void PostInitializeComponents() override;
-
+	
 // Control Or View Section
 protected:
 	
 // Attack Hit Section
 protected:
-	virtual void AttackHitCheck() override;
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	
 // Dead Section
@@ -46,4 +45,5 @@ protected:
 public:
 	int32 GetLevel();
 	void SetLevel(int32 InNewLevel);
+	void ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);
 };
