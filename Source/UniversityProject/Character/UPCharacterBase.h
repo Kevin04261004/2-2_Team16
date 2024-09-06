@@ -19,8 +19,10 @@ public:
 	
 	virtual void PostInitializeComponents() override;
 	
-// Control Or View Section
+// ComboAction Section
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UUPComboAttackComponent> ComboAttack;
 	
 // Attack Hit Section
 protected:

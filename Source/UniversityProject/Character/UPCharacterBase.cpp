@@ -3,8 +3,9 @@
 
 #include "UPCharacterBase.h"
 
-#include "CharacterStat/UPCharacterStatComponent.h"
+#include "Components/UPCharacterStatComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/UPComboAttackComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -37,6 +38,9 @@ AUPCharacterBase::AUPCharacterBase()
 	// Set Stat
 	Stat = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
 	// InitializeStat();
+
+	// Set Combo
+	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 }
 
 void AUPCharacterBase::PostInitializeComponents()
