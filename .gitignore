@@ -74,6 +74,4 @@ Plugins/**/Intermediate/*
 DerivedDataCache/*
 
 # Asset
-Content/InfinityBladeWarriors
-Content/InfinityBladeWeapons
-Content/EnvironmentPack2
+Content/Assets/*
