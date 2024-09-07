@@ -3,6 +3,8 @@
 
 #include "Character/UPPlayerCharacter.h"
 #include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputMappingContext.h"
 #include "Camera/CameraComponent.h"
 #include "Components/UPComboAttackComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -39,6 +41,10 @@ AUPPlayerCharacter::AUPPlayerCharacter()
 	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionSprintRef(TEXT("/Script/EnhancedInput.InputAction'/Game/UniversityProject/Input/Actions/IA_Sprint.IA_Sprint'"));
 	check(InputActionSprintRef.Object != nullptr);
 	SprintAction = InputActionSprintRef.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCBackViewRef(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/UniversityProject/Input/IMC_BackView.IMC_BackView'"));
+	check(IMCBackViewRef.Object != nullptr);
+	IMC_BackView = IMCBackViewRef.Object;
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -48,6 +54,12 @@ void AUPPlayerCharacter::BeginPlay()
 	PlayerController = Cast<AUPPlayerController>(GetController());
 	check(PlayerController != nullptr);
 	EnableInput(PlayerController);
+
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+	{
+		Subsystem->ClearAllMappings();
+		Subsystem->AddMappingContext(IMC_BackView, 0);
+	}
 }
 
 void AUPPlayerCharacter::SetDead()
