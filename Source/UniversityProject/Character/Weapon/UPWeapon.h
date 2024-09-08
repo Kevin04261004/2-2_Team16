@@ -21,9 +21,22 @@ public:
 	
 	// 공격 중 프레임마다 호출되는 함수
 	void PerformSwing(int32 CurrentFrameIndex);
-	
+
+	// 애니메이션에서 매 프레임마다 호출하는 Notify함수
+	void NotifySwingEveryTick();
+
+	void SetupAttachment(USkeletalMeshComponent* InParent, FName InSocketName = NAME_None) const;
 protected:
 	// 메쉬
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
 	USkeletalMeshComponent* WeaponMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
+	TArray<FName> CollisionSocketNameArray;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
+	TArray<FVector> SocketLocationArray;
+
+	// Socket위치를 통해 콜리전 체크.
+	void CheckCollisionSockets();
 };

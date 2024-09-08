@@ -11,6 +11,12 @@ AUPWeapon::AUPWeapon()
 	// 스켈레탈 메쉬 초기화
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
 	RootComponent = WeaponMesh;
+
+	CollisionSocketNameArray.Add(TEXT("1"));
+	CollisionSocketNameArray.Add(TEXT("2"));
+	CollisionSocketNameArray.Add(TEXT("3"));
+
+	SocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
 }
 
 void AUPWeapon::PerformSwing(int32 CurrentFrameIndex)
@@ -50,4 +56,34 @@ void AUPWeapon::PerformSwing(int32 CurrentFrameIndex)
 		// 충돌 범위 디버그
 		DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.0f, 0, 2.0f);
 	}
+}
+
+void AUPWeapon::NotifySwingEveryTick()
+{
+	CheckCollisionSockets();
+}
+
+void AUPWeapon::SetupAttachment(USkeletalMeshComponent* InParent, FName InSocketName) const
+{
+	WeaponMesh->SetupAttachment(InParent, InSocketName);
+}
+
+void AUPWeapon::CheckCollisionSockets()
+{
+	check(WeaponMesh != nullptr);
+
+	// 소켓 위치 가져오기. (Array에 넣은 순서대로)
+	for (int32 i = 0; i < CollisionSocketNameArray.Num(); i++)
+	{
+		check(WeaponMesh->DoesSocketExist(CollisionSocketNameArray[i]));
+		check(SocketLocationArray.IsValidIndex(i));
+		SocketLocationArray[i] = WeaponMesh->GetSocketLocation(CollisionSocketNameArray[i]);
+	}
+	
+	// 디버그
+	DrawDebugLine(GetWorld(), SocketLocationArray[0], SocketLocationArray[1], FColor::Green, false, 0.1f, 0, 2.0f);
+	DrawDebugLine(GetWorld(), SocketLocationArray[1], SocketLocationArray[2], FColor::Green, false, 0.1f, 0, 2.0f);
+	DrawDebugLine(GetWorld(), SocketLocationArray[2], SocketLocationArray[0], FColor::Green, false, 0.1f, 0, 2.0f);
+
+	// TODO: 다각형 트레이스;
 }

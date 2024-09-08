@@ -26,8 +26,11 @@ protected:
 	TObjectPtr<class UUPComboAttackComponent> ComboAttack;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class USkeletalMeshComponent> Weapon;
+	TObjectPtr<class AUPWeapon> Weapon;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class USkeletalMeshComponent> meshTest;
+	
 // ComboAction Section
 public:
 	virtual void NotifyComboActionEnd();
