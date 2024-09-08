@@ -63,11 +63,6 @@ void AUPWeapon::NotifySwingEveryTick()
 	CheckCollisionSockets();
 }
 
-void AUPWeapon::SetupAttachment(USkeletalMeshComponent* InParent, FName InSocketName) const
-{
-	WeaponMesh->SetupAttachment(InParent, InSocketName);
-}
-
 void AUPWeapon::CheckCollisionSockets()
 {
 	check(WeaponMesh != nullptr);
