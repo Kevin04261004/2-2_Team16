@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/UPComboAttackComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Weapon/UPWeapon.h"
 
 // Sets default values
 AUPCharacterBase::AUPCharacterBase()
@@ -46,8 +47,12 @@ AUPCharacterBase::AUPCharacterBase()
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 
 	// Get Socket And Add it
-	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
-	Weapon->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
+	// Weapon = CreateDefaultSubobject<AUPWeapon>(TEXT("Weapon"));
+	// Weapon->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
+
+	// Get Socket And Add it
+	meshTest = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
+	meshTest->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
 	
 	// Set AnimInstance
 	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
