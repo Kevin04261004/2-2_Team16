@@ -24,8 +24,6 @@ public:
 
 	// 애니메이션에서 매 프레임마다 호출하는 Notify함수
 	void NotifySwingEveryTick();
-
-	void SetupAttachment(USkeletalMeshComponent* InParent, FName InSocketName = NAME_None) const;
 protected:
 	// 메쉬
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")

@@ -38,6 +38,11 @@ AUPCharacterBase::AUPCharacterBase()
 	MeshComponent->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
+	// Set AnimInstance
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
+	check(AnimInstanceClassRef.Class != nullptr);
+	GetMesh()->SetAnimInstanceClass(AnimInstanceClassRef.Class);
+	
 	// Set Stat
 	Stat = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
 	static ConstructorHelpers::FObjectFinder<UUPCharacterStatData> StatDataRef(TEXT("/Game/UniversityProject/GameData/DA_PlayerCharacterStat.DA_PlayerCharacterStat"));
@@ -46,23 +51,25 @@ AUPCharacterBase::AUPCharacterBase()
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 
-	// Get Socket And Add it
-	// Weapon = CreateDefaultSubobject<AUPWeapon>(TEXT("Weapon"));
-	// Weapon->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
-
-	// Get Socket And Add it
-	meshTest = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
-	meshTest->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
-	
-	// Set AnimInstance
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
-	check(AnimInstanceClassRef.Class != nullptr);
-	GetMesh()->SetAnimInstanceClass(AnimInstanceClassRef.Class);
-
 	// Set Dead Montage
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Game/UniversityProject/Animation/AM_Dead.AM_Dead"));
 	check(DeadMontageRef.Object != nullptr);
 	DeadMontage = DeadMontageRef.Object;
+}
+
+void AUPCharacterBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Spawn the weapon actor And Get Socket to Add it
+	check(WeaponClass != nullptr);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.Instigator = GetInstigator();
+
+	Weapon = GetWorld()->SpawnActor<AUPWeapon>(WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+	check(Weapon != nullptr);
+	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("hand_rSocket"));
 }
 
 void AUPCharacterBase::PostInitializeComponents()
@@ -76,6 +83,11 @@ void AUPCharacterBase::PostInitializeComponents()
 void AUPCharacterBase::NotifyComboActionEnd()
 {
 	
+}
+
+void AUPCharacterBase::NotifySwingEveryTick()
+{
+	Weapon->NotifySwingEveryTick();
 }
 
 float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)

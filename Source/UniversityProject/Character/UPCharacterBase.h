@@ -17,6 +17,7 @@ class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDama
 // Init Section
 public:
 	AUPCharacterBase();
+	virtual void BeginPlay() override;
 	
 	virtual void PostInitializeComponents() override;
 	
@@ -28,13 +29,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class AUPWeapon> Weapon;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class USkeletalMeshComponent> meshTest;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UClass> WeaponClass;
 // ComboAction Section
 public:
+	UFUNCTION(BlueprintCallable, Category = Notify)
 	virtual void NotifyComboActionEnd();
-	
+	UFUNCTION(BlueprintCallable, Category = Notify)
+	virtual void NotifySwingEveryTick();
 // Attack Hit Section
 protected:
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
