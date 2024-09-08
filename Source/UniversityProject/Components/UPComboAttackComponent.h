@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Character/UPCharacterBase.h"
 #include "Components/ActorComponent.h"
 #include "Player/UPPlayerController.h"
 #include "UPComboAttackComponent.generated.h"
@@ -22,7 +23,7 @@ protected:
 	TObjectPtr<class UAnimMontage> ComboActionMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UUPComboAttackComponent> ComboActionData;
+	TObjectPtr<class UUPComboActionData> ComboActionData;
 
 
 	void ComboActionBegin();
@@ -34,5 +35,5 @@ protected:
 	FTimerHandle ComboTimerHandle;
 	bool HasNextComboCommand = false;
 
-	TObjectPtr<AUPPlayerController> CharacterBase;
+	TObjectPtr<AUPCharacterBase> CharacterBase;
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameData/UPCharacterStatData.h"
 #include "GameData/UPCharacterStat.h"
 #include "GameFramework/Character.h"
 #include "Interface/UPDamageableInterface.h"
@@ -23,6 +24,13 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UUPComboAttackComponent> ComboAttack;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class USkeletalMeshComponent> Weapon;
+
+// ComboAction Section
+public:
+	virtual void NotifyComboActionEnd();
 	
 // Attack Hit Section
 protected:
@@ -43,9 +51,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UUPCharacterStatComponent> Stat;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UUPCharacterStatData> CharacterInitalizeStatData;
 // Stat Section
 public:
 	int32 GetLevel();
 	void SetLevel(int32 InNewLevel);
+	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return Stat.Get(); }
 	void ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);
 };

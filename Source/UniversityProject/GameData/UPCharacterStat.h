@@ -11,16 +11,13 @@ struct FUPCharacterStat : public FTableRowBase
 
 // Stat Section <Only float Value>
 public:
-	FUPCharacterStat() : MaxHp(0.0f), AttackDamage(0.0f), AttackRange(0.0f), AttackSpeed(0.0f), MovementSpeed(0) {}
+	FUPCharacterStat() : MaxHp(0.0f), AttackDamage(0.0f), AttackSpeed(0.0f), MovementSpeed(0) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
 	float MaxHp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
 	float AttackDamage;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
-	float AttackRange;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
 	float AttackSpeed;

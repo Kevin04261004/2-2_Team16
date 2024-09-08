@@ -17,30 +17,47 @@ AUPCharacterBase::AUPCharacterBase()
 	bUseControllerRotationRoll = false;
 
 	// Capsule
-	// TObjectPtr<UCapsuleComponent> CapsuleComponent = GetCapsuleComponent();
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-	GetCapsuleComponent()->SetCollisionProfileName("Capsule");
+	TObjectPtr<UCapsuleComponent> CapsuleComponent_ = GetCapsuleComponent();
+	CapsuleComponent_->InitCapsuleSize(42.f, 96.0f);
+	CapsuleComponent_->SetCollisionProfileName("Capsule");
 	
 	// Movement
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
-	GetCharacterMovement()->JumpZVelocity = 700.f;
-	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
-	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
-	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent = GetCharacterMovement();
+	CharacterMovementComponent->bOrientRotationToMovement = true;
+	CharacterMovementComponent->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+	CharacterMovementComponent->JumpZVelocity = 700.f;
+	CharacterMovementComponent->AirControl = 0.35f;
+	CharacterMovementComponent->MaxWalkSpeed = 500.f;
+	CharacterMovementComponent->MinAnalogWalkSpeed = 20.f;
+	CharacterMovementComponent->BrakingDecelerationWalking = 2000.f;
 
 	// Mesh
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -100.0f), FRotator(0.0f, -90.0f, 0.0f));
-	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
+	TObjectPtr<USkeletalMeshComponent> MeshComponent = GetMesh();
+	MeshComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -100.0f), FRotator(0.0f, -90.0f, 0.0f));
+	MeshComponent->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
 	// Set Stat
 	Stat = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
-	// InitializeStat();
-
+	static ConstructorHelpers::FObjectFinder<UUPCharacterStatData> StatDataRef(TEXT("/Game/UniversityProject/GameData/DA_PlayerCharacterStat.DA_PlayerCharacterStat"));
+	Stat->SetBaseStat(StatDataRef.Object.Get()->Stat);
+	
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
+
+	// Get Socket And Add it
+	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
+	Weapon->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
+
+	// Set AnimInstance
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
+	check(AnimInstanceClassRef.Class != nullptr);
+	GetMesh()->SetAnimInstanceClass(AnimInstanceClassRef.Class);
+
+	// Set Dead Montage
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Game/UniversityProject/Animation/AM_Dead.AM_Dead"));
+	check(DeadMontageRef.Object != nullptr);
+	DeadMontage = DeadMontageRef.Object;
 }
 
 void AUPCharacterBase::PostInitializeComponents()
@@ -51,12 +68,15 @@ void AUPCharacterBase::PostInitializeComponents()
 	Stat->OnStatChanged.AddUObject(this, &AUPCharacterBase::ApplyStat);
 }
 
+void AUPCharacterBase::NotifyComboActionEnd()
+{
+	
+}
+
 float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
 	Stat->ApplyDamage(DamageAmount);
-	return 0;
+	return DamageAmount;
 }
 
 void AUPCharacterBase::SetDead()
