@@ -6,11 +6,12 @@
 #include "GameData/UPCharacterStatData.h"
 #include "GameData/UPCharacterStat.h"
 #include "GameFramework/Character.h"
+#include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPDamageableInterface.h"
 #include "UPCharacterBase.generated.h"
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface
+class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface, public IUPAnimationAttackCheckInterface
 {
 	GENERATED_BODY()
 
@@ -31,12 +32,14 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UClass> WeaponClass;
+
+	virtual void AttackHitCheck() override;
 // ComboAction Section
 public:
 	UFUNCTION(BlueprintCallable, Category = Notify)
 	virtual void NotifyComboActionEnd();
 	UFUNCTION(BlueprintCallable, Category = Notify)
-	virtual void NotifySwingEveryTick();
+	virtual void NotifyAttackCheck();
 // Attack Hit Section
 protected:
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;

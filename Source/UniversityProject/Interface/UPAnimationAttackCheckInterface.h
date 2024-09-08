@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "UPAnimationAttackInterface.generated.h"
+#include "UPAnimationAttackCheckInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UUPAnimationAttackInterface : public UInterface
+class UUPAnimationAttackCheckInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,10 +16,11 @@ class UUPAnimationAttackInterface : public UInterface
 /**
  * 
  */
-class UNIVERSITYPROJECT_API IUPAnimationAttackInterface
+class UNIVERSITYPROJECT_API IUPAnimationAttackCheckInterface
 {
 	GENERATED_BODY()
 
+	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void AttackHitCheck() = 0;
 };

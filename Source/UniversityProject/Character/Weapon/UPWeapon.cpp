@@ -58,27 +58,27 @@ void AUPWeapon::PerformSwing(int32 CurrentFrameIndex)
 	}
 }
 
-void AUPWeapon::NotifySwingEveryTick()
+void AUPWeapon::NotifyAttackCheck()
 {
 	CheckCollisionSockets();
 }
 
 void AUPWeapon::CheckCollisionSockets()
 {
-	check(WeaponMesh != nullptr);
-
-	// 소켓 위치 가져오기. (Array에 넣은 순서대로)
-	for (int32 i = 0; i < CollisionSocketNameArray.Num(); i++)
-	{
-		check(WeaponMesh->DoesSocketExist(CollisionSocketNameArray[i]));
-		check(SocketLocationArray.IsValidIndex(i));
-		SocketLocationArray[i] = WeaponMesh->GetSocketLocation(CollisionSocketNameArray[i]);
-	}
-	
-	// 디버그
-	DrawDebugLine(GetWorld(), SocketLocationArray[0], SocketLocationArray[1], FColor::Green, false, 0.1f, 0, 2.0f);
-	DrawDebugLine(GetWorld(), SocketLocationArray[1], SocketLocationArray[2], FColor::Green, false, 0.1f, 0, 2.0f);
-	DrawDebugLine(GetWorld(), SocketLocationArray[2], SocketLocationArray[0], FColor::Green, false, 0.1f, 0, 2.0f);
-
-	// TODO: 다각형 트레이스;
+	// // check(WeaponMesh != nullptr);
+	//
+	// // 소켓 위치 가져오기. (Array에 넣은 순서대로)
+	// for (int32 i = 0; i < CollisionSocketNameArray.Num(); i++)
+	// {
+	// 	check(WeaponMesh->DoesSocketExist(CollisionSocketNameArray[i]));
+	// 	check(SocketLocationArray.IsValidIndex(i));
+	// 	SocketLocationArray[i] = WeaponMesh->GetSocketLocation(CollisionSocketNameArray[i]);
+	// }
+	//
+	// // 디버그
+	// DrawDebugLine(GetWorld(), SocketLocationArray[0], SocketLocationArray[1], FColor::Green, false, 0.1f, 0, 2.0f);
+	// DrawDebugLine(GetWorld(), SocketLocationArray[1], SocketLocationArray[2], FColor::Green, false, 0.1f, 0, 2.0f);
+	// DrawDebugLine(GetWorld(), SocketLocationArray[2], SocketLocationArray[0], FColor::Green, false, 0.1f, 0, 2.0f);
+	//
+	// // TODO: 다각형 트레이스;
 }

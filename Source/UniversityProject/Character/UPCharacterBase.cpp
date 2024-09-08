@@ -80,14 +80,20 @@ void AUPCharacterBase::PostInitializeComponents()
 	Stat->OnStatChanged.AddUObject(this, &AUPCharacterBase::ApplyStat);
 }
 
+void AUPCharacterBase::AttackHitCheck()
+{
+	NotifyAttackCheck();
+}
+
 void AUPCharacterBase::NotifyComboActionEnd()
 {
 	
 }
 
-void AUPCharacterBase::NotifySwingEveryTick()
+void AUPCharacterBase::NotifyAttackCheck()
 {
-	Weapon->NotifySwingEveryTick();
+	check(Weapon != nullptr);
+	Weapon->NotifyAttackCheck();
 }
 
 float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
