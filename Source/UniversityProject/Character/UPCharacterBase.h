@@ -33,8 +33,10 @@ protected:
 	TObjectPtr<UClass> WeaponClass;
 // ComboAction Section
 public:
+	UFUNCTION(BlueprintCallable, Category = Notify)
 	virtual void NotifyComboActionEnd();
-	
+	UFUNCTION(BlueprintCallable, Category = Notify)
+	virtual void NotifySwingEveryTick();
 // Attack Hit Section
 protected:
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;

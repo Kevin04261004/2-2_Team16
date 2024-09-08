@@ -85,6 +85,11 @@ void AUPCharacterBase::NotifyComboActionEnd()
 	
 }
 
+void AUPCharacterBase::NotifySwingEveryTick()
+{
+	Weapon->NotifySwingEveryTick();
+}
+
 float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	Stat->ApplyDamage(DamageAmount);
