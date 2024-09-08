@@ -48,7 +48,7 @@ AUPCharacterBase::AUPCharacterBase()
 	// Get Socket And Add it
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
-
+	
 	// Set AnimInstance
 	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
 	check(AnimInstanceClassRef.Class != nullptr);
