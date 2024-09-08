@@ -12,14 +12,8 @@ UUPCharacterStatComponent::UUPCharacterStatComponent()
 void UUPCharacterStatComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
-
-	SetLevelStat(CurrentLevel);
+	
 	SetHp(BaseStat.MaxHp);
-}
-
-void UUPCharacterStatComponent::SetLevelStat(int32 InNewLevel)
-{
-	// CurrentLevel = FMath::Clamp(InNewLevel, 1)
 }
 
 float UUPCharacterStatComponent::ApplyDamage(float InDamage)

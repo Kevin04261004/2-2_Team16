@@ -93,16 +93,6 @@ void AUPCharacterBase::PlayDeadAnimation()
 	AnimInstance->Montage_Play(DeadMontage, 1.0f);
 }
 
-int32 AUPCharacterBase::GetLevel()
-{
-	return Stat->GetCurrentLevel();
-}
-
-void AUPCharacterBase::SetLevel(int32 InNewLevel)
-{
-	Stat->SetLevelStat(InNewLevel);
-}
-
 void AUPCharacterBase::ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat)
 {
 	float MovementSpeed = (BaseStat + ModifierStat).MovementSpeed;

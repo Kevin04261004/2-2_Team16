@@ -55,8 +55,6 @@ protected:
 	TObjectPtr<UUPCharacterStatData> CharacterInitalizeStatData;
 // Stat Section
 public:
-	int32 GetLevel();
-	void SetLevel(int32 InNewLevel);
 	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return Stat.Get(); }
 	void ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);
 };
