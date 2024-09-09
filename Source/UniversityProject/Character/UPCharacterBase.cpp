@@ -51,6 +51,15 @@ AUPCharacterBase::AUPCharacterBase()
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 
+	// Get Socket And Add it
+	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
+	Weapon->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
+	
+	// Set AnimInstance
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
+	check(AnimInstanceClassRef.Class != nullptr);
+	GetMesh()->SetAnimInstanceClass(AnimInstanceClassRef.Class);
+
 	// Set Dead Montage
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Game/UniversityProject/Animation/AM_Dead.AM_Dead"));
 	check(DeadMontageRef.Object != nullptr);
