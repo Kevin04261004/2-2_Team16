@@ -87,7 +87,8 @@ void AUPCharacterBase::AttackHitCheck()
 
 void AUPCharacterBase::NotifyComboActionEnd()
 {
-	
+	check(Weapon != nullptr);
+	Weapon->NotifyAttackEnd();
 }
 
 void AUPCharacterBase::NotifyAttackCheck()
