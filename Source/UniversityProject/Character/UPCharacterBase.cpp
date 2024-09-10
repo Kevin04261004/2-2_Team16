@@ -37,11 +37,6 @@ AUPCharacterBase::AUPCharacterBase()
 	MeshComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -100.0f), FRotator(0.0f, -90.0f, 0.0f));
 	MeshComponent->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
-
-	// Set AnimInstance
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
-	check(AnimInstanceClassRef.Class != nullptr);
-	GetMesh()->SetAnimInstanceClass(AnimInstanceClassRef.Class);
 	
 	// Set Stat
 	Stat = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
@@ -50,6 +45,11 @@ AUPCharacterBase::AUPCharacterBase()
 	
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
+
+	// Set AnimInstance
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
+	check(AnimInstanceClassRef.Class != nullptr);
+	GetMesh()->SetAnimInstanceClass(AnimInstanceClassRef.Class);
 
 	// Set Dead Montage
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Game/UniversityProject/Animation/AM_Dead.AM_Dead"));
@@ -87,7 +87,8 @@ void AUPCharacterBase::AttackHitCheck()
 
 void AUPCharacterBase::NotifyComboActionEnd()
 {
-	
+	check(Weapon != nullptr);
+	Weapon->NotifyAttackEnd();
 }
 
 void AUPCharacterBase::NotifyAttackCheck()
