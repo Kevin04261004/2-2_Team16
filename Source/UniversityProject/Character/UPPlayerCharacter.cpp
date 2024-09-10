@@ -23,27 +23,27 @@ AUPPlayerCharacter::AUPPlayerCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionMoveRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Move"));
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionMoveRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Move.IA_Move"));
 	check(InputActionMoveRef.Object != nullptr);
 	MoveAction = InputActionMoveRef.Object;
 
-	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionLookRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Look"));
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionLookRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Look.IA_Look"));
 	check(InputActionLookRef.Object != nullptr);
 	LookAction = InputActionLookRef.Object;
 
-	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionAttackRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Attack"));
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionAttackRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Attack.IA_Attack"));
 	check(InputActionAttackRef.Object != nullptr);
 	AttackAction = InputActionAttackRef.Object;
 
-	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionDashRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Dash"));
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionDashRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Dash.IA_Dash"));
 	check(InputActionDashRef.Object != nullptr);
 	DashAction = InputActionDashRef.Object;
 
-	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionSprintRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Sprint"));
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionSprintRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Sprint.IA_Sprint"));
 	check(InputActionSprintRef.Object != nullptr);
 	SprintAction = InputActionSprintRef.Object;
 
-	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCBackViewRef(TEXT("/Game/UniversityProject/Input/IMC_BackView"));
+	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCBackViewRef(TEXT("/Game/UniversityProject/Input/IMC_BackView.IMC_BackView"));
 	check(IMCBackViewRef.Object != nullptr);
 	IMC_BackView = IMCBackViewRef.Object;
 }

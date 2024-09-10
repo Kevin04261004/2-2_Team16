@@ -85,7 +85,7 @@ void UUPComboAttackComponent::SetComboCheckTimer()
 void UUPComboAttackComponent::ComboCheck()
 {
 	ComboTimerHandle.Invalidate();
-	if (HasNextComboCommand) // 만약 공격키가 입력된 상태라면, 다음 공격으로 스킵.
+	if (HasNextComboCommand)
 	{
 		UAnimInstance* AnimInstance = CharacterBase->GetMesh()->GetAnimInstance();
 
