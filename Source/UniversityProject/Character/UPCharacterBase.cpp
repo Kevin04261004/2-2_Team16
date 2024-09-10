@@ -37,11 +37,6 @@ AUPCharacterBase::AUPCharacterBase()
 	MeshComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -100.0f), FRotator(0.0f, -90.0f, 0.0f));
 	MeshComponent->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
-
-	// Set AnimInstance
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
-	check(AnimInstanceClassRef.Class != nullptr);
-	GetMesh()->SetAnimInstanceClass(AnimInstanceClassRef.Class);
 	
 	// Set Stat
 	Stat = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
@@ -51,10 +46,6 @@ AUPCharacterBase::AUPCharacterBase()
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 
-	// Get Socket And Add it
-	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
-	Weapon->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
-	
 	// Set AnimInstance
 	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
 	check(AnimInstanceClassRef.Class != nullptr);
