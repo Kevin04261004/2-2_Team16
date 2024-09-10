@@ -28,6 +28,9 @@ public:
 	// 애니메이션 종료시 호출하는 Notify함수
 	void NotifyAttackEnd();
 
+	// 콤보 공격이 종료되었을 때 호출되는 Notify함수
+	void NotifyAttackComboEnd();
+
 	// 상대와 충돌함.
 	void Attack(FHitResult& result);
 protected:
@@ -44,6 +47,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
 	TArray<FVector> SocketLocationArray;
 
+	TArray<AActor*> AttackedActors;
+	
 	// Socket위치를 통해 콜리전 체크.
 	void CheckCollisionSockets();
 };

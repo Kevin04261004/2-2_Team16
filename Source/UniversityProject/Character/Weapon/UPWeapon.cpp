@@ -76,9 +76,20 @@ void AUPWeapon::NotifyAttackEnd()
 	}
 }
 
+void AUPWeapon::NotifyAttackComboEnd()
+{
+	AttackedActors.Empty();
+}
+
 void AUPWeapon::Attack(FHitResult& result)
 {
-	// TODO: 한번 휘두를때 이미 맞은 상대는 더 안 맞게 수정.
+	if (AttackedActors.Contains(result.GetActor()))
+	{
+		return;
+	}
+	AttackedActors.Add(result.GetActor());
+
+	
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("충돌!!"), true, FVector2D(1.5f, 1.5f));
@@ -153,7 +164,6 @@ void AUPWeapon::CheckCollisionSockets()
 
 		if (bHit1 || bHit2 || bHit3)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Hit detected in line trace!"));
 			Attack(HitResult);
 		}
 

@@ -34,12 +34,14 @@ protected:
 	TObjectPtr<UClass> WeaponClass;
 
 	virtual void AttackHitCheck() override;
+	virtual void AttackComboEnd() override;
 // ComboAction Section
 public:
-	UFUNCTION(BlueprintCallable, Category = Notify)
+	// UUPComboAttackComponent에서 실행.
 	virtual void NotifyComboActionEnd();
-	UFUNCTION(BlueprintCallable, Category = Notify)
-	virtual void NotifyAttackCheck();
+	
+	// UUPComboAttackComponent에서 실행.
+	virtual void NotifyAttackComboEnd();
 // Attack Hit Section
 protected:
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
