@@ -33,7 +33,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UCameraComponent> FollowCamera;
-
+	
 // Input Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
@@ -55,6 +55,8 @@ protected:
 	void Attack(const FInputActionValue& Value);
 	void Dash(const FInputActionValue& Value);
 	void Sprint(const FInputActionValue& Value);
+	void StopSprint(const FInputActionValue& Value);
 
 	TObjectPtr<AUPPlayerController> PlayerController;
+	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent;
 };

@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/UPComboAttackComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Weapon/UPWeapon.h"
 
 // Sets default values
 AUPCharacterBase::AUPCharacterBase()
@@ -36,7 +37,7 @@ AUPCharacterBase::AUPCharacterBase()
 	MeshComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -100.0f), FRotator(0.0f, -90.0f, 0.0f));
 	MeshComponent->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
-
+	
 	// Set Stat
 	Stat = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
 	static ConstructorHelpers::FObjectFinder<UUPCharacterStatData> StatDataRef(TEXT("/Game/UniversityProject/GameData/DA_PlayerCharacterStat.DA_PlayerCharacterStat"));
@@ -44,10 +45,6 @@ AUPCharacterBase::AUPCharacterBase()
 	
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
-
-	// Get Socket And Add it
-	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
-	Weapon->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
 
 	// Set AnimInstance
 	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
@@ -60,6 +57,21 @@ AUPCharacterBase::AUPCharacterBase()
 	DeadMontage = DeadMontageRef.Object;
 }
 
+void AUPCharacterBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Spawn the weapon actor And Get Socket to Add it
+	check(WeaponClass != nullptr);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.Instigator = GetInstigator();
+
+	Weapon = GetWorld()->SpawnActor<AUPWeapon>(WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+	check(Weapon != nullptr);
+	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("hand_rSocket"));
+}
+
 void AUPCharacterBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -68,9 +80,21 @@ void AUPCharacterBase::PostInitializeComponents()
 	Stat->OnStatChanged.AddUObject(this, &AUPCharacterBase::ApplyStat);
 }
 
+void AUPCharacterBase::AttackHitCheck()
+{
+	NotifyAttackCheck();
+}
+
 void AUPCharacterBase::NotifyComboActionEnd()
 {
-	
+	check(Weapon != nullptr);
+	Weapon->NotifyAttackEnd();
+}
+
+void AUPCharacterBase::NotifyAttackCheck()
+{
+	check(Weapon != nullptr);
+	Weapon->NotifyAttackCheck();
 }
 
 float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
