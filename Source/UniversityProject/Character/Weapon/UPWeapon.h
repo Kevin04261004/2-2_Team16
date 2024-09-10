@@ -24,6 +24,12 @@ public:
 
 	// 애니메이션에서 매 프레임마다 호출하는 Notify함수
 	void NotifyAttackCheck();
+	
+	// 애니메이션 종료시 호출하는 Notify함수
+	void NotifyAttackEnd();
+
+	// 상대와 충돌함.
+	void Attack(FHitResult& result);
 protected:
 	// 메쉬
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
@@ -31,6 +37,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
 	TArray<FName> CollisionSocketNameArray;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
+	TArray<FVector> BeforeSocketLocationArray;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
 	TArray<FVector> SocketLocationArray;
