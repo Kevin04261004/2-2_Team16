@@ -31,8 +31,6 @@ public:
 	FOnHpChangeDelegate OnHpChanged;
 	FOnStatChangedDelegate OnStatChanged;
 
-	void SetLevelStat(int32 InNewLevel);
-	FORCEINLINE float GetCurrentLevel() const { return CurrentLevel; }
 	FORCEINLINE void AddBaseStat(const FUPCharacterStat& InAddStat)
 	{
 		BaseStat = BaseStat + InAddStat;

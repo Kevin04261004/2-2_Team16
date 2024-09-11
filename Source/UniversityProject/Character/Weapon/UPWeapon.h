@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "WeaponSwingTrajectoryData.h"
 #include "GameFramework/Actor.h"
 #include "UPWeapon.generated.h"
 
@@ -15,15 +14,17 @@ class UNIVERSITYPROJECT_API AUPWeapon : public AActor
 public:
 	AUPWeapon();
 
-	// 궤적 데이터를 저장할 변수
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	AWeaponSwingTrajectoryData* SwingTrajectoryData;
-	
-	// 공격 중 프레임마다 호출되는 함수
-	void PerformSwing(int32 CurrentFrameIndex);
-
 	// 애니메이션에서 매 프레임마다 호출하는 Notify함수
 	void NotifyAttackCheck();
+	
+	// 애니메이션 종료시 호출하는 Notify함수
+	void NotifyAttackEnd();
+
+	// 콤보 공격이 종료되었을 때 호출되는 Notify함수
+	void NotifyAttackComboEnd();
+
+	// 상대와 충돌함.
+	void Attack(FHitResult& result);
 protected:
 	// 메쉬
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
@@ -31,10 +32,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
 	TArray<FName> CollisionSocketNameArray;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
+	TArray<FVector> BeforeSocketLocationArray;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
 	TArray<FVector> SocketLocationArray;
 
+	TArray<AActor*> AttackedActors;
+	
 	// Socket위치를 통해 콜리전 체크.
 	void CheckCollisionSockets();
 };

@@ -82,18 +82,26 @@ void AUPCharacterBase::PostInitializeComponents()
 
 void AUPCharacterBase::AttackHitCheck()
 {
-	NotifyAttackCheck();
+	check(Weapon != nullptr);
+	Weapon->NotifyAttackCheck();
+}
+
+void AUPCharacterBase::AttackComboEnd()
+{
+	check(Weapon != nullptr);
+	Weapon->NotifyAttackComboEnd();
 }
 
 void AUPCharacterBase::NotifyComboActionEnd()
 {
-	
+	check(Weapon != nullptr);
+	Weapon->NotifyAttackEnd();
 }
 
-void AUPCharacterBase::NotifyAttackCheck()
+void AUPCharacterBase::NotifyAttackComboEnd()
 {
-	check(Weapon != nullptr);
-	Weapon->NotifyAttackCheck();
+	AttackComboEnd();
+	NotifyComboActionEnd();
 }
 
 float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)

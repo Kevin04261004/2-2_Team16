@@ -67,6 +67,7 @@ void UUPComboAttackComponent::ComboActionEnd(class UAnimMontage* TargetMontage, 
 	CharacterBase->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 
 	CharacterBase->NotifyComboActionEnd();
+	CharacterBase->NotifyAttackComboEnd();
 }
 
 void UUPComboAttackComponent::SetComboCheckTimer()
@@ -94,6 +95,7 @@ void UUPComboAttackComponent::ComboCheck()
 		AnimInstance->Montage_JumpToSection(NextSection, ComboActionMontage);
 		SetComboCheckTimer();
 		HasNextComboCommand = false;
+		CharacterBase->NotifyAttackComboEnd();
 	}
 }
 
