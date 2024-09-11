@@ -22,5 +22,5 @@ class UNIVERSITYPROJECT_API IUPWidgetInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void SetupCharacterWidget(class UUserWidget* InUserWidget) = 0;
+	virtual void SetupCharacterWidget(class UUPUserWidget* InUserWidget) = 0;
 };

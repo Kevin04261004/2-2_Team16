@@ -6,10 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "Interface/UPDamageableInterface.h"
 #include "GameData/UPCharacterStatData.h"
+#include "Interface/UPWidgetInterface.h"
 #include "UPDamagableActor.generated.h"
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPDamagableActor : public AActor, public IUPDamageableInterface
+class UNIVERSITYPROJECT_API AUPDamagableActor : public AActor, public IUPDamageableInterface, public IUPWidgetInterface
 {
 	GENERATED_BODY()
 	
@@ -23,6 +24,7 @@ protected:
 	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	virtual void SetDead();
+	
 // Stat Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
@@ -34,5 +36,11 @@ protected:
 // Stat Section
 public:
 	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return Stat.Get(); }
-	void ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);
+
+	// UI Widget Section
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Widget, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UUPWidgetComponent> HpBar;
+	
+	virtual void SetupCharacterWidget(class UUPUserWidget* InUserWidget) override;
 };
