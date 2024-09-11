@@ -1,0 +1,11 @@
+<map id="AUPCharacterBase" name="AUPCharacterBase">
+<area shape="rect" id="Node000001" title=" " alt="" coords="133,80,269,107"/>
+<area shape="rect" id="Node000005" href="$class_a_u_p_player_character.html" title=" " alt="" coords="129,155,273,181"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="204,122,204,154,198,154,198,122"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,93,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,37,175,77,173,82,88,41"/>
+<area shape="rect" id="Node000003" href="$class_i_u_p_damageable_interface.html" title=" " alt="" coords="117,5,285,32"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="204,48,204,80,198,80,198,48"/>
+<area shape="rect" id="Node000004" href="$class_i_u_p_animation_attack_check_interface.html" title=" " alt="" coords="310,5,538,32"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="372,40,241,82,239,77,370,35"/>
+</map>

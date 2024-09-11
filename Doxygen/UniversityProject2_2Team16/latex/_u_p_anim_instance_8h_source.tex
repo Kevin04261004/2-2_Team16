@@ -1,0 +1,47 @@
+\doxysection{UPAnim\+Instance.\+h}
+\hypertarget{_u_p_anim_instance_8h_source}{}\label{_u_p_anim_instance_8h_source}\index{Source/UniversityProject/Animation/UPAnimInstance.h@{Source/UniversityProject/Animation/UPAnimInstance.h}}
+\mbox{\hyperlink{_u_p_anim_instance_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Animation/AnimInstance.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}UPAnimInstance.generated.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00012\ UCLASS()}
+\DoxyCodeLine{00013\ class\ UNIVERSITYPROJECT\_API\ \mbox{\hyperlink{class_u_u_p_anim_instance}{UUPAnimInstance}}\ :\ public\ UAnimInstance}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{class_u_u_p_anim_instance}{UUPAnimInstance}}();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ NativeInitializeAnimation()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ NativeUpdateAnimation(\textcolor{keywordtype}{float}\ DeltaSeconds)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ UPROPERTY(VisibleAnywhere,\ BlueprintReadOnly,\ Category\ =\ Character)}
+\DoxyCodeLine{00025\ \ \ \ \ TObjectPtr<class\ ACharacter>\ Owner;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ UPROPERTY(VisibleAnywhere,\ BlueprintReadOnly,\ Category\ =\ Character)}
+\DoxyCodeLine{00028\ \ \ \ \ TObjectPtr<class\ UCharacterMovementComponent>\ Movement;}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Character)}
+\DoxyCodeLine{00031\ \ \ \ \ FVector\ Velocity;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Character)}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{float}\ GroundSpeed;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Character)}
+\DoxyCodeLine{00037\ \ \ \ \ uint8\ bIsIdle\ :\ 1;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Character)}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{float}\ MovingThreshould;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Character)}
+\DoxyCodeLine{00043\ \ \ \ \ uint8\ bIsFalling\ :\ 1;}
+\DoxyCodeLine{00044\ \};}
+
+\end{DoxyCode}

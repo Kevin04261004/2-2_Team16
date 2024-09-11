@@ -1,0 +1,7 @@
+<map id="AUPCharacterBase::PlayDeadAnimation" name="AUPCharacterBase::PlayDeadAnimation">
+<area shape="rect" id="Node000001" title=" " alt="" coords="516,5,717,48"/>
+<area shape="rect" id="Node000002" href="$class_a_u_p_character_base.html#ab478507eb9ded58487251ef2d44247b1" title=" " alt="" coords="273,13,468,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="501,29,469,29,469,24,501,24"/>
+<area shape="rect" id="Node000003" href="$class_a_u_p_character_base.html#ac933f594938ec4032673fb9c3d910e84" title=" " alt="" coords="5,5,225,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="257,29,225,29,225,24,257,24"/>
+</map>

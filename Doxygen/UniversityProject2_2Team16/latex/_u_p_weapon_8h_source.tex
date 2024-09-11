@@ -1,0 +1,52 @@
+\doxysection{UPWeapon.\+h}
+\hypertarget{_u_p_weapon_8h_source}{}\label{_u_p_weapon_8h_source}\index{Source/UniversityProject/Character/Weapon/UPWeapon.h@{Source/UniversityProject/Character/Weapon/UPWeapon.h}}
+\mbox{\hyperlink{_u_p_weapon_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}GameFramework/Actor.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}UPWeapon.generated.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ UCLASS()}
+\DoxyCodeLine{00010\ class\ UNIVERSITYPROJECT\_API\ \mbox{\hyperlink{class_a_u_p_weapon}{AUPWeapon}}\ :\ public\ AActor}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{class_a_u_p_weapon}{AUPWeapon}}();}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{comment}{//\ 애니메이션에서\ 매\ 프레임마다\ 호출하는\ Notify함수}}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ NotifyAttackCheck();}
+\DoxyCodeLine{00019\ \ \ \ \ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{//\ 애니메이션\ 종료시\ 호출하는\ Notify함수}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ NotifyAttackEnd();}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{//\ 콤보\ 공격이\ 종료되었을\ 때\ 호출되는\ Notify함수}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ NotifyAttackComboEnd();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ 상대와\ 충돌함.}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ Attack(FHitResult\&\ result);}
+\DoxyCodeLine{00028\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ 메쉬}}
+\DoxyCodeLine{00030\ \ \ \ \ UPROPERTY(VisibleAnywhere,\ BlueprintReadOnly,\ Category\ =\ \textcolor{stringliteral}{"{}Weapon"{}})}
+\DoxyCodeLine{00031\ \ \ \ \ USkeletalMeshComponent*\ WeaponMesh;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ UPROPERTY(VisibleAnywhere,\ BlueprintReadOnly,\ Category=\ "{}Weapon"{})}
+\DoxyCodeLine{00034\ \ \ \ \ TArray<FName>\ CollisionSocketNameArray;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ UPROPERTY(VisibleAnywhere,\ BlueprintReadOnly,\ Category=\ "{}Weapon"{})}
+\DoxyCodeLine{00037\ \ \ \ \ TArray<FVector>\ BeforeSocketLocationArray;}
+\DoxyCodeLine{00038\ \ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ UPROPERTY(VisibleAnywhere,\ BlueprintReadOnly,\ Category=\ "{}Weapon"{})}
+\DoxyCodeLine{00040\ \ \ \ \ TArray<FVector>\ SocketLocationArray;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ TArray<AActor*>\ AttackedActors;}
+\DoxyCodeLine{00043\ \ \ \ \ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ Socket위치를\ 통해\ 콜리전\ 체크.}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ CheckCollisionSockets();}
+\DoxyCodeLine{00046\ \};}
+
+\end{DoxyCode}

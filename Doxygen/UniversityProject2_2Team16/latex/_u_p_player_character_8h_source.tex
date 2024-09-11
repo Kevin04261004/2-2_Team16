@@ -1,0 +1,65 @@
+\doxysection{UPPlayer\+Character.\+h}
+\hypertarget{_u_p_player_character_8h_source}{}\label{_u_p_player_character_8h_source}\index{Source/UniversityProject/Character/UPPlayerCharacter.h@{Source/UniversityProject/Character/UPPlayerCharacter.h}}
+\mbox{\hyperlink{_u_p_player_character_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_u_p_character_base_8h}{Character/UPCharacterBase.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}InputActionValue.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_u_p_player_controller_8h}{Player/UPPlayerController.h}}"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}UPPlayerCharacter.generated.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00014\ UCLASS()}
+\DoxyCodeLine{00015\ class\ UNIVERSITYPROJECT\_API\ \mbox{\hyperlink{class_a_u_p_player_character}{AUPPlayerCharacter}}\ :\ public\ \mbox{\hyperlink{class_a_u_p_character_base}{AUPCharacterBase}}}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{class_a_u_p_player_character}{AUPPlayerCharacter}}();}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ BeginPlay()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ SetDead()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ SetupPlayerInputComponent(UInputComponent*\ PlayerInputComponent)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{comment}{//\ Camera\ Section}}
+\DoxyCodeLine{00030\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00031\ \ \ \ \ UPROPERTY(VisibleAnywhere,\ BlueprintReadOnly,\ Category=Camera,\ Meta\ =\ (AllowPrivateAccess\ =\ \textcolor{keyword}{true}))}
+\DoxyCodeLine{00032\ \ \ \ \ TObjectPtr<class\ USpringArmComponent>\ CameraBoom;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ UPROPERTY(VisibleAnywhere,\ BlueprintReadOnly,\ Category=Camera,\ Meta\ =\ (AllowPrivateAccess\ =\ true))}
+\DoxyCodeLine{00035\ \ \ \ \ TObjectPtr<class\ UCameraComponent>\ FollowCamera;}
+\DoxyCodeLine{00036\ \ \ \ \ }
+\DoxyCodeLine{00037\ \textcolor{comment}{//\ Input\ Section}}
+\DoxyCodeLine{00038\ protected:}
+\DoxyCodeLine{00039\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Input,\ Meta\ =\ (AllowPrivateAccess\ =\ "{}true"{}))}
+\DoxyCodeLine{00040\ \ \ \ \ TObjectPtr<class\ UInputMappingContext>\ IMC\_BackView;}
+\DoxyCodeLine{00041\ \ \ \ \ }
+\DoxyCodeLine{00042\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Input,\ Meta\ =\ (AllowPrivateAccess\ =\ "{}true"{}))}
+\DoxyCodeLine{00043\ \ \ \ \ TObjectPtr<class\ UInputAction>\ MoveAction;}
+\DoxyCodeLine{00044\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Input,\ Meta\ =\ (AllowPrivateAccess\ =\ "{}true"{}))}
+\DoxyCodeLine{00045\ \ \ \ \ TObjectPtr<class\ UInputAction>\ AttackAction;}
+\DoxyCodeLine{00046\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Input,\ Meta\ =\ (AllowPrivateAccess\ =\ "{}true"{}))}
+\DoxyCodeLine{00047\ \ \ \ \ TObjectPtr<class\ UInputAction>\ DashAction;}
+\DoxyCodeLine{00048\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Input,\ Meta\ =\ (AllowPrivateAccess\ =\ "{}true"{}))}
+\DoxyCodeLine{00049\ \ \ \ \ TObjectPtr<class\ UInputAction>\ SprintAction;}
+\DoxyCodeLine{00050\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Input,\ Meta\ =\ (AllowPrivateAccess\ =\ "{}true"{}))}
+\DoxyCodeLine{00051\ \ \ \ \ TObjectPtr<class\ UInputAction>\ LookAction;}
+\DoxyCodeLine{00052\ \ \ \ \ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ Move(const\ FInputActionValue\&\ Value);}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ Look(const\ FInputActionValue\&\ Value);}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ Attack(const\ FInputActionValue\&\ Value);}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ Dash(const\ FInputActionValue\&\ Value);}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ Sprint(const\ FInputActionValue\&\ Value);}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ StopSprint(const\ FInputActionValue\&\ Value);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ TObjectPtr<\mbox{\hyperlink{class_a_u_p_player_controller}{AUPPlayerController}}>\ PlayerController;}
+\DoxyCodeLine{00061\ \ \ \ \ TObjectPtr<UCharacterMovementComponent>\ CharacterMovementComponent;}
+\DoxyCodeLine{00062\ \};}
+
+\end{DoxyCode}

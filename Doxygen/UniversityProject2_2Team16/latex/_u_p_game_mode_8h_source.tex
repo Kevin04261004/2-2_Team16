@@ -1,0 +1,29 @@
+\doxysection{UPGame\+Mode.\+h}
+\hypertarget{_u_p_game_mode_8h_source}{}\label{_u_p_game_mode_8h_source}\index{Source/UniversityProject/Game/UPGameMode.h@{Source/UniversityProject/Game/UPGameMode.h}}
+\mbox{\hyperlink{_u_p_game_mode_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}GameFramework/GameModeBase.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_u_p_game_interface_8h}{Interface/UPGameInterface.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}UPGameMode.generated.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00013\ UCLASS()}
+\DoxyCodeLine{00014\ class\ UNIVERSITYPROJECT\_API\ \mbox{\hyperlink{class_a_u_p_game_mode}{AUPGameMode}}\ :\ public\ AGameModeBase,\ public\ \mbox{\hyperlink{class_i_u_p_game_interface}{IUPGameInterface}}}
+\DoxyCodeLine{00015\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{class_a_u_p_game_mode}{AUPGameMode}}();}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ OnPlayerDead()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ IsGameCleared()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category=Game)}
+\DoxyCodeLine{00025\ \ \ \ \ uint8\ bIsCleared\ :\ 1;}
+\DoxyCodeLine{00026\ \};}
+
+\end{DoxyCode}

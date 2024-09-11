@@ -1,0 +1,16 @@
+<map id="Source/UniversityProject/Game/UPGameMode.h" name="Source/UniversityProject/Game/UPGameMode.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="176,5,343,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="58,171,163,197"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,43,78,65,38,80,14,98,9,107,8,115,18,132,38,148,63,162,60,166,35,153,14,136,3,116,4,105,9,94,35,75,76,60,175,37"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="24,96,258,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="230,51,173,89,170,85,227,46"/>
+<area shape="rect" id="Node000004" href="$_u_p_game_interface_8h.html" title=" " alt="" coords="282,96,474,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="292,46,349,85,346,89,289,51"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="498,96,677,123"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="344,46,522,89,521,94,342,51"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="332,126,172,169,171,164,331,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="215,171,350,197"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="363,125,313,163,309,159,360,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="374,171,572,197"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="396,121,446,159,443,163,393,125"/>
+</map>

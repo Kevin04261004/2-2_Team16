@@ -1,0 +1,128 @@
+\doxysection{UUPAnim\+Instance Class Reference}
+\hypertarget{class_u_u_p_anim_instance}{}\label{class_u_u_p_anim_instance}\index{UUPAnimInstance@{UUPAnimInstance}}
+
+
+{\ttfamily \#include $<$UPAnim\+Instance.\+h$>$}
+
+
+
+Inheritance diagram for UUPAnim\+Instance\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=177pt]{class_u_u_p_anim_instance__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for UUPAnim\+Instance\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=177pt]{class_u_u_p_anim_instance__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_u_u_p_anim_instance_a89bf9b929971c85c376a07211cc74b6d}{UUPAnim\+Instance}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_u_u_p_anim_instance_a3275233f1870dd3933edc9b4cb18ff65}{Native\+Initialize\+Animation}} () override
+\item 
+virtual void \mbox{\hyperlink{class_u_u_p_anim_instance_a125f9aac3a7edd5fc705aa3da6d5fb60}{Native\+Update\+Animation}} (float Delta\+Seconds) override
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+TObject\+Ptr$<$ class ACharacter $>$ \mbox{\hyperlink{class_u_u_p_anim_instance_a5abf51e02439053aa0ddd33ec7bc37d8}{Owner}}
+\item 
+TObject\+Ptr$<$ class UCharacter\+Movement\+Component $>$ \mbox{\hyperlink{class_u_u_p_anim_instance_a0b118853cdfcb036dc230b46cb49717b}{Movement}}
+\item 
+FVector \mbox{\hyperlink{class_u_u_p_anim_instance_ac61af94c2239b86f328880cabcf80afc}{Velocity}}
+\item 
+float \mbox{\hyperlink{class_u_u_p_anim_instance_a2994de90f0afd675075e7c8eb5faf838}{Ground\+Speed}}
+\item 
+uint8 \mbox{\hyperlink{class_u_u_p_anim_instance_a3fe862ea3a04c15be29f661a75b641eb}{b\+Is\+Idle}}\+: 1
+\item 
+float \mbox{\hyperlink{class_u_u_p_anim_instance_add9444eda1f38d42dfee656d536fe878}{Moving\+Threshould}}
+\item 
+uint8 \mbox{\hyperlink{class_u_u_p_anim_instance_aa136fdc7247551392943d3166fe66fcf}{b\+Is\+Falling}}\+: 1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_u_u_p_anim_instance_a89bf9b929971c85c376a07211cc74b6d}\index{UUPAnimInstance@{UUPAnimInstance}!UUPAnimInstance@{UUPAnimInstance}}
+\index{UUPAnimInstance@{UUPAnimInstance}!UUPAnimInstance@{UUPAnimInstance}}
+\doxysubsubsection{\texorpdfstring{UUPAnimInstance()}{UUPAnimInstance()}}
+{\footnotesize\ttfamily \label{class_u_u_p_anim_instance_a89bf9b929971c85c376a07211cc74b6d} 
+UUPAnim\+Instance\+::\+UUPAnim\+Instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_u_u_p_anim_instance_a3275233f1870dd3933edc9b4cb18ff65}\index{UUPAnimInstance@{UUPAnimInstance}!NativeInitializeAnimation@{NativeInitializeAnimation}}
+\index{NativeInitializeAnimation@{NativeInitializeAnimation}!UUPAnimInstance@{UUPAnimInstance}}
+\doxysubsubsection{\texorpdfstring{NativeInitializeAnimation()}{NativeInitializeAnimation()}}
+{\footnotesize\ttfamily \label{class_u_u_p_anim_instance_a3275233f1870dd3933edc9b4cb18ff65} 
+void UUPAnim\+Instance\+::\+Native\+Initialize\+Animation (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+\Hypertarget{class_u_u_p_anim_instance_a125f9aac3a7edd5fc705aa3da6d5fb60}\index{UUPAnimInstance@{UUPAnimInstance}!NativeUpdateAnimation@{NativeUpdateAnimation}}
+\index{NativeUpdateAnimation@{NativeUpdateAnimation}!UUPAnimInstance@{UUPAnimInstance}}
+\doxysubsubsection{\texorpdfstring{NativeUpdateAnimation()}{NativeUpdateAnimation()}}
+{\footnotesize\ttfamily \label{class_u_u_p_anim_instance_a125f9aac3a7edd5fc705aa3da6d5fb60} 
+void UUPAnim\+Instance\+::\+Native\+Update\+Animation (\begin{DoxyParamCaption}\item[{float}]{Delta\+Seconds}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_u_u_p_anim_instance_aa136fdc7247551392943d3166fe66fcf}\index{UUPAnimInstance@{UUPAnimInstance}!bIsFalling@{bIsFalling}}
+\index{bIsFalling@{bIsFalling}!UUPAnimInstance@{UUPAnimInstance}}
+\doxysubsubsection{\texorpdfstring{bIsFalling}{bIsFalling}}
+{\footnotesize\ttfamily \label{class_u_u_p_anim_instance_aa136fdc7247551392943d3166fe66fcf} 
+uint8 UUPAnim\+Instance\+::b\+Is\+Falling\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{class_u_u_p_anim_instance_a3fe862ea3a04c15be29f661a75b641eb}\index{UUPAnimInstance@{UUPAnimInstance}!bIsIdle@{bIsIdle}}
+\index{bIsIdle@{bIsIdle}!UUPAnimInstance@{UUPAnimInstance}}
+\doxysubsubsection{\texorpdfstring{bIsIdle}{bIsIdle}}
+{\footnotesize\ttfamily \label{class_u_u_p_anim_instance_a3fe862ea3a04c15be29f661a75b641eb} 
+uint8 UUPAnim\+Instance\+::b\+Is\+Idle\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{class_u_u_p_anim_instance_a2994de90f0afd675075e7c8eb5faf838}\index{UUPAnimInstance@{UUPAnimInstance}!GroundSpeed@{GroundSpeed}}
+\index{GroundSpeed@{GroundSpeed}!UUPAnimInstance@{UUPAnimInstance}}
+\doxysubsubsection{\texorpdfstring{GroundSpeed}{GroundSpeed}}
+{\footnotesize\ttfamily \label{class_u_u_p_anim_instance_a2994de90f0afd675075e7c8eb5faf838} 
+float UUPAnim\+Instance\+::\+Ground\+Speed\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{class_u_u_p_anim_instance_a0b118853cdfcb036dc230b46cb49717b}\index{UUPAnimInstance@{UUPAnimInstance}!Movement@{Movement}}
+\index{Movement@{Movement}!UUPAnimInstance@{UUPAnimInstance}}
+\doxysubsubsection{\texorpdfstring{Movement}{Movement}}
+{\footnotesize\ttfamily \label{class_u_u_p_anim_instance_a0b118853cdfcb036dc230b46cb49717b} 
+TObject\+Ptr$<$class UCharacter\+Movement\+Component$>$ UUPAnim\+Instance\+::\+Movement\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{class_u_u_p_anim_instance_add9444eda1f38d42dfee656d536fe878}\index{UUPAnimInstance@{UUPAnimInstance}!MovingThreshould@{MovingThreshould}}
+\index{MovingThreshould@{MovingThreshould}!UUPAnimInstance@{UUPAnimInstance}}
+\doxysubsubsection{\texorpdfstring{MovingThreshould}{MovingThreshould}}
+{\footnotesize\ttfamily \label{class_u_u_p_anim_instance_add9444eda1f38d42dfee656d536fe878} 
+float UUPAnim\+Instance\+::\+Moving\+Threshould\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{class_u_u_p_anim_instance_a5abf51e02439053aa0ddd33ec7bc37d8}\index{UUPAnimInstance@{UUPAnimInstance}!Owner@{Owner}}
+\index{Owner@{Owner}!UUPAnimInstance@{UUPAnimInstance}}
+\doxysubsubsection{\texorpdfstring{Owner}{Owner}}
+{\footnotesize\ttfamily \label{class_u_u_p_anim_instance_a5abf51e02439053aa0ddd33ec7bc37d8} 
+TObject\+Ptr$<$class ACharacter$>$ UUPAnim\+Instance\+::\+Owner\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{class_u_u_p_anim_instance_ac61af94c2239b86f328880cabcf80afc}\index{UUPAnimInstance@{UUPAnimInstance}!Velocity@{Velocity}}
+\index{Velocity@{Velocity}!UUPAnimInstance@{UUPAnimInstance}}
+\doxysubsubsection{\texorpdfstring{Velocity}{Velocity}}
+{\footnotesize\ttfamily \label{class_u_u_p_anim_instance_ac61af94c2239b86f328880cabcf80afc} 
+FVector UUPAnim\+Instance\+::\+Velocity\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Source/\+University\+Project/\+Animation/\mbox{\hyperlink{_u_p_anim_instance_8h}{UPAnim\+Instance.\+h}}\item 
+Source/\+University\+Project/\+Animation/\mbox{\hyperlink{_u_p_anim_instance_8cpp}{UPAnim\+Instance.\+cpp}}\end{DoxyCompactItemize}

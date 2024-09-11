@@ -1,0 +1,7 @@
+<map id="IUPDamageableInterface" name="IUPDamageableInterface">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,174,32"/>
+<area shape="rect" id="Node000002" href="$class_a_u_p_character_base.html" title=" " alt="" coords="21,80,158,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,48,92,80,87,80,87,48"/>
+<area shape="rect" id="Node000003" href="$class_a_u_p_player_character.html" title=" " alt="" coords="18,155,161,181"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="92,122,92,154,87,154,87,122"/>
+</map>

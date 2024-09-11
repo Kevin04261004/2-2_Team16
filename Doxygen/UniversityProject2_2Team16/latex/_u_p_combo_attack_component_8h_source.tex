@@ -1,0 +1,45 @@
+\doxysection{UPCombo\+Attack\+Component.\+h}
+\hypertarget{_u_p_combo_attack_component_8h_source}{}\label{_u_p_combo_attack_component_8h_source}\index{Source/UniversityProject/Components/UPComboAttackComponent.h@{Source/UniversityProject/Components/UPComboAttackComponent.h}}
+\mbox{\hyperlink{_u_p_combo_attack_component_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Fill\ out\ your\ copyright\ notice\ in\ the\ Description\ page\ of\ Project\ Settings.}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CoreMinimal.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_u_p_character_base_8h}{Character/UPCharacterBase.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Components/ActorComponent.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_u_p_player_controller_8h}{Player/UPPlayerController.h}}"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}UPComboAttackComponent.generated.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ UCLASS(\ ClassGroup=(Custom),\ meta=(BlueprintSpawnableComponent)\ )}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }UNIVERSITYPROJECT\_API\ UUPComboAttackComponent\ :\ \textcolor{keyword}{public}\ UActorComponent}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ GENERATED\_BODY()}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ public:\ }
+\DoxyCodeLine{00018\ \ \ \ \ UUPComboAttackComponent();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ ProcessComboCommand();}
+\DoxyCodeLine{00021\ protected:}
+\DoxyCodeLine{00022\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadWrite,\ Category\ =\ Animation)}
+\DoxyCodeLine{00023\ \ \ \ \ TObjectPtr<class\ UAnimMontage>\ ComboActionMontage;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ UPROPERTY(EditAnywhere,\ BlueprintReadOnly,\ Category\ =\ Attack,\ Meta\ =\ (AllowPrivateAccess\ =\ "{}true"{}))}
+\DoxyCodeLine{00026\ \ \ \ \ TObjectPtr<class\ \mbox{\hyperlink{class_u_u_p_combo_action_data}{UUPComboActionData}}>\ ComboActionData;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ ComboActionBegin();}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ ComboActionEnd(class\ UAnimMontage*\ TargetMontage,\ \textcolor{keywordtype}{bool}\ IsProperlyEnded);}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ SetComboCheckTimer();}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ ComboCheck();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ int32\ CurrentCombo\ =\ 0;}
+\DoxyCodeLine{00035\ \ \ \ \ FTimerHandle\ ComboTimerHandle;}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{bool}\ HasNextComboCommand\ =\ false;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ TObjectPtr<\mbox{\hyperlink{class_a_u_p_character_base}{AUPCharacterBase}}>\ CharacterBase;}
+\DoxyCodeLine{00039\ \};}
+
+\end{DoxyCode}
