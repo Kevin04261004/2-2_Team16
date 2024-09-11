@@ -16,7 +16,7 @@ AUPDamagableActor::AUPDamagableActor()
 	Stat->SetBaseStat(StatDataRef.Object.Get()->Stat);
 
 	HpBar = CreateDefaultSubobject<UUPWidgetComponent>(TEXT("Widget"));
-	HpBar->AttachToComponent();
+	// HpBar->AttachToComponent();
 	HpBar->SetRelativeLocation(FVector(0.0f, 0.0f, 180.0f));
 	static ConstructorHelpers::FClassFinder<UUserWidget> HpBarWidgetRef(TEXT("/Game/UniversityProject/UI/WBP_HpBarWidget.WBP_HpBarWidget_C"));
 
