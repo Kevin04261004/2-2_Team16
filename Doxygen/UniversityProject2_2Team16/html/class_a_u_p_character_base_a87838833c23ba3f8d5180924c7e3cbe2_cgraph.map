@@ -1,7 +1,0 @@
-<map id="AUPCharacterBase::NotifyAttackComboEnd" name="AUPCharacterBase::NotifyAttackComboEnd">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,39,185,81"/>
-<area shape="rect" id="Node000002" href="$class_a_u_p_character_base.html#aed84b5268385e9ffccb0b7a4d1ead526" title=" " alt="" coords="233,5,415,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="185,44,217,40,217,45,185,50"/>
-<area shape="rect" id="Node000003" href="$class_a_u_p_character_base.html#a68c5ff4942e8a3e2aacbc836156e2851" title=" " alt="" coords="234,72,414,115"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="185,70,219,75,218,81,185,76"/>
-</map>

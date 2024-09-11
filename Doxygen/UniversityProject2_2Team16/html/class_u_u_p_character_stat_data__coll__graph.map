@@ -1,9 +1,0 @@
-<map id="UUPCharacterStatData" name="UUPCharacterStatData">
-<area shape="rect" id="Node000001" title=" " alt="" coords="44,172,204,199"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,81,144,108"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,120,119,170,114,173,87,123"/>
-<area shape="rect" id="Node000003" href="$struct_f_u_p_character_stat.html" title=" " alt="" coords="167,81,296,108"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="206,120,141,173,138,169,203,116"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="173,5,290,32"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="234,47,234,81,229,81,229,47"/>
-</map>

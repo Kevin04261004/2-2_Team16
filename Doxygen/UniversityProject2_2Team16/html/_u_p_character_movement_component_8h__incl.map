@@ -1,9 +1,0 @@
-<map id="Source/UniversityProject/UPCharacterMovementComponent.h" name="Source/UniversityProject/UPCharacterMovementComponent.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="136,5,377,48"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,104,111,131"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,51,101,100,99,95,209,46"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="135,96,378,139"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,48,259,81,254,81,254,48"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="403,104,700,131"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="327,46,496,97,494,102,325,51"/>
-</map>

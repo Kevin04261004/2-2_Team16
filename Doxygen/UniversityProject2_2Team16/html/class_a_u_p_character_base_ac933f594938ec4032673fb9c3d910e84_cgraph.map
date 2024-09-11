@@ -1,9 +1,0 @@
-<map id="AUPCharacterBase::PostInitializeComponents" name="AUPCharacterBase::PostInitializeComponents">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,23,225,65"/>
-<area shape="rect" id="Node000002" href="$class_a_u_p_character_base.html#ae580c162862b7de41cd7af642425973e" title=" " alt="" coords="273,5,474,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,31,257,27,257,33,225,36"/>
-<area shape="rect" id="Node000003" href="$class_a_u_p_character_base.html#ab478507eb9ded58487251ef2d44247b1" title=" " alt="" coords="276,56,471,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,52,260,56,260,61,225,57"/>
-<area shape="rect" id="Node000004" href="$class_a_u_p_character_base.html#ab65b244534c33e8070aebb143e4f3df7" title=" " alt="" coords="522,48,723,91"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="471,67,506,67,506,72,471,72"/>
-</map>

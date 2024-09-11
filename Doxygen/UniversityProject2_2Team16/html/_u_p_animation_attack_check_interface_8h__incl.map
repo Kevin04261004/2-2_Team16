@@ -1,9 +1,0 @@
-<map id="Source/UniversityProject/Interface/UPAnimationAttackCheckInterface.h" name="Source/UniversityProject/Interface/UPAnimationAttackCheckInterface.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="86,5,318,64"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,112,111,139"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,67,93,106,90,101,154,62"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="134,112,270,139"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="205,64,205,96,199,96,199,64"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="294,112,590,139"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="281,62,395,104,393,109,279,67"/>
-</map>
