@@ -1,6 +1,6 @@
 ﻿#include "UPWeapon.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "DrawDebugHelpers.h"
+#include "Interface/UPDamageableInterface.h"
 
 // Sets default values
 AUPWeapon::AUPWeapon()
@@ -20,13 +20,14 @@ AUPWeapon::AUPWeapon()
 	BeforeSocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
 }
 
-void AUPWeapon::NotifyAttackCheck()
+void AUPWeapon::CheckAttackRange()
 {
 	CheckCollisionSockets();
 }
 
-void AUPWeapon::NotifyAttackEnd()
+void AUPWeapon::ComboStepEnd()
 {
+	AttackedActors.Empty();
 	for (int32 i = 0; i < CollisionSocketNameArray.Num(); i++)
 	{
 		check(WeaponMesh->DoesSocketExist(CollisionSocketNameArray[i]));
@@ -37,11 +38,6 @@ void AUPWeapon::NotifyAttackEnd()
 	}
 }
 
-void AUPWeapon::NotifyAttackComboEnd()
-{
-	AttackedActors.Empty();
-}
-
 void AUPWeapon::Attack(FHitResult& result)
 {
 	if (AttackedActors.Contains(result.GetActor()))
@@ -49,6 +45,8 @@ void AUPWeapon::Attack(FHitResult& result)
 		return;
 	}
 	AttackedActors.Add(result.GetActor());
+	
+	OnWeaponHit.Broadcast(result);
 	
 	if (GEngine)
 	{

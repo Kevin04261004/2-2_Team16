@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "UPWeapon.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnWeaponHit, FHitResult& /* Result */);
+
 UCLASS()
 class UNIVERSITYPROJECT_API AUPWeapon : public AActor
 {
@@ -15,16 +17,15 @@ public:
 	AUPWeapon();
 
 	// 애니메이션에서 매 프레임마다 호출하는 Notify함수
-	void NotifyAttackCheck();
+	void CheckAttackRange();
 	
-	// 애니메이션 종료시 호출하는 Notify함수
-	void NotifyAttackEnd();
-
 	// 콤보 공격이 종료되었을 때 호출되는 Notify함수
-	void NotifyAttackComboEnd();
+	void ComboStepEnd();
 
 	// 상대와 충돌함.
 	void Attack(FHitResult& result);
+
+	FOnWeaponHit OnWeaponHit;
 protected:
 	// 메쉬
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")

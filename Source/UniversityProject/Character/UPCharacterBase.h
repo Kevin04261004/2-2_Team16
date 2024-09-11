@@ -32,20 +32,13 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UClass> WeaponClass;
-
-	virtual void AttackHitCheck() override;
-	virtual void AttackComboEnd() override;
-// ComboAction Section
-public:
-	// UUPComboAttackComponent에서 실행.
-	virtual void NotifyComboActionEnd();
 	
-	// UUPComboAttackComponent에서 실행.
-	virtual void NotifyAttackComboEnd();
+	virtual void AttackHitCheck() override;
 // Attack Hit Section
 protected:
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-	
+
+	virtual void Attack(FHitResult& InHit);
 // Dead Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))

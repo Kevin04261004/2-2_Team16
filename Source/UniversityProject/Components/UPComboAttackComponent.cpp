@@ -19,7 +19,7 @@ UUPComboAttackComponent::UUPComboAttackComponent()
 	check(ComboActionDataRef.Object != nullptr);
 	ComboActionData = ComboActionDataRef.Object;
 
-	CharacterBase = Cast<AUPCharacterBase>(GetOwner());
+	OwningCharacter = Cast<AUPCharacterBase>(GetOwner());
 }
 
 void UUPComboAttackComponent::ProcessComboCommand()
@@ -45,29 +45,29 @@ void UUPComboAttackComponent::ComboActionBegin()
 	CurrentCombo = 1; 
 	
 	// Movement Setting
-	UCharacterMovementComponent* movement = CharacterBase->GetCharacterMovement();
+	UCharacterMovementComponent* movement = OwningCharacter->GetCharacterMovement();
 	movement->SetMovementMode(EMovementMode::MOVE_None);
 	
 	// Animation Setting
-	const float AttackSpeedRate = CharacterBase->GetStat()->GetTotalStat().AttackSpeed;
-	UAnimInstance* AnimInstance = CharacterBase->GetMesh()->GetAnimInstance();
+	const float AttackSpeedRate = OwningCharacter->GetStat()->GetTotalStat().AttackSpeed;
+	UAnimInstance* AnimInstance = OwningCharacter->GetMesh()->GetAnimInstance();
 	AnimInstance->Montage_Play(ComboActionMontage, AttackSpeedRate);
 
 	FOnMontageEnded EndDelegate;
-	EndDelegate.BindUObject(this, &UUPComboAttackComponent::ComboActionEnd);
+	EndDelegate.BindUObject(this, &UUPComboAttackComponent::ComboActionFinish);
 	AnimInstance->Montage_SetEndDelegate(EndDelegate, ComboActionMontage);
 
 	ComboTimerHandle.Invalidate();
 	SetComboCheckTimer();
 }
 
-void UUPComboAttackComponent::ComboActionEnd(class UAnimMontage* TargetMontage, bool IsProperlyEnded)
+void UUPComboAttackComponent::ComboActionFinish(class UAnimMontage* TargetMontage, bool IsProperlyEnded)
 {
 	CurrentCombo = 0;
-	CharacterBase->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	UCharacterMovementComponent* movement = OwningCharacter->GetCharacterMovement();
+	movement->SetMovementMode(EMovementMode::MOVE_Walking);
 
-	CharacterBase->NotifyComboActionEnd();
-	CharacterBase->NotifyAttackComboEnd();
+	OnComboAttackFinish.Broadcast();
 }
 
 void UUPComboAttackComponent::SetComboCheckTimer()
@@ -75,7 +75,7 @@ void UUPComboAttackComponent::SetComboCheckTimer()
 	int32 ComboIndex = CurrentCombo - 1;
 	ensure(ComboActionData->EffectiveFrameCount.IsValidIndex(ComboIndex));
 
-	const float AttackSpeedRate = CharacterBase->GetStat()->GetTotalStat().AttackSpeed;
+	const float AttackSpeedRate = OwningCharacter->GetStat()->GetTotalStat().AttackSpeed;
 	float ComboEffectiveTime = (ComboActionData->EffectiveFrameCount[ComboIndex] / ComboActionData->FrameRate) / AttackSpeedRate;
 	if (ComboEffectiveTime > 0.f)
 	{
@@ -88,14 +88,15 @@ void UUPComboAttackComponent::ComboCheck()
 	ComboTimerHandle.Invalidate();
 	if (HasNextComboCommand)
 	{
-		UAnimInstance* AnimInstance = CharacterBase->GetMesh()->GetAnimInstance();
+		UAnimInstance* AnimInstance = OwningCharacter->GetMesh()->GetAnimInstance();
 
 		CurrentCombo = FMath::Clamp(CurrentCombo + 1, 1, ComboActionData->MaxComboCount);
 		FName NextSection = *FString::Printf(TEXT("%s%d"), *ComboActionData->MontageSectionNamePrefix, CurrentCombo);
 		AnimInstance->Montage_JumpToSection(NextSection, ComboActionMontage);
 		SetComboCheckTimer();
 		HasNextComboCommand = false;
-		CharacterBase->NotifyAttackComboEnd();
+		
+		OnComboStepEnd.Broadcast();
 	}
 }
 
