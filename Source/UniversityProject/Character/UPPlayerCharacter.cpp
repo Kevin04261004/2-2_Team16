@@ -5,11 +5,13 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/UPComboAttackComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
+#include "Components/TimelineComponent.h"
 #include "Interface/UPGameInterface.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter()
@@ -46,6 +48,15 @@ AUPPlayerCharacter::AUPPlayerCharacter()
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCBackViewRef(TEXT("/Game/UniversityProject/Input/IMC_BackView.IMC_BackView"));
 	check(IMCBackViewRef.Object != nullptr);
 	IMC_BackView = IMCBackViewRef.Object;
+
+	FOnTimelineFloat TimelineCallback;
+	FOnTimelineEvent TimelineFinishedCallback;
+
+	TimelineCallback.BindUFunction(this, FName("UpdateDash"));
+	TimelineFinishedCallback.BindUFunction(this, FName("FinishDash"));
+
+	DashTimeline.AddInterpFloat(DashCurve, TimelineCallback);
+	DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -64,6 +75,14 @@ void AUPPlayerCharacter::BeginPlay()
 		Subsystem->ClearAllMappings();
 		Subsystem->AddMappingContext(IMC_BackView, 0);
 	}
+}
+
+void AUPPlayerCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	// 타임라인 프레임 당 업데이트하고 변경 점 반영함
+	DashTimeline.TickTimeline(DeltaSeconds);
 }
 
 void AUPPlayerCharacter::SetDead()
@@ -119,6 +138,52 @@ void AUPPlayerCharacter::Attack(const FInputActionValue& Value)
 void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 {
 	// TODO: Dash->Dash();
+	FVector LastInputVector = CharacterMovementComponent->GetLastInputVector();
+	FVector PlayerLocation = GetActorLocation();
+	FVector TraceDirectionVector = PlayerLocation + (LastInputVector * 500.0f);
+	if (UAIBlueprintHelperLibrary::IsValidAIDirection(LastInputVector))
+	{
+		FHitResult HitResult;
+		bool bHit = GetWorld()->LineTraceSingleByChannel(
+			HitResult,
+			PlayerLocation,
+			TraceDirectionVector,
+			ECC_Visibility,
+			FCollisionQueryParams(FName(TEXT("DashTrace")), false, this)
+		);
+		if (bHit)
+		{
+			FVector DashDirection = (LastInputVector * -55.0f) + HitResult.Location;
+			DashStart(DashDirection, LastInputVector);
+		}
+		else
+		{
+			FVector DashDirection = HitResult.TraceEnd;
+			DashStart(DashDirection, LastInputVector);
+		}
+	}
+	else
+	{
+		FHitResult HitResult;
+		TraceDirectionVector = PlayerLocation + (GetActorForwardVector() * 500.0f);
+		bool bHit = GetWorld()->LineTraceSingleByChannel(
+			HitResult,
+			PlayerLocation,
+			TraceDirectionVector,
+			ECC_Visibility,
+			FCollisionQueryParams(FName(TEXT("DashTrace")), false, this)
+		);
+		if (bHit)
+		{
+			FVector DashDirection = (GetActorForwardVector() * -55.0f) + HitResult.Location;
+			DashStart(DashDirection, GetActorForwardVector());
+		}
+		else
+		{
+			FVector DashDirection = HitResult.TraceEnd;
+			DashStart(DashDirection, GetActorForwardVector());
+		}
+	}
 }
 
 void AUPPlayerCharacter::Sprint(const FInputActionValue& Value)
@@ -129,4 +194,26 @@ void AUPPlayerCharacter::Sprint(const FInputActionValue& Value)
 void AUPPlayerCharacter::StopSprint(const FInputActionValue& Value)
 {
 	CharacterMovementComponent->MaxWalkSpeed = 500.0f;
+}
+
+void AUPPlayerCharacter::DashStart(FVector DashDirection, FVector DashVelocity)
+{
+	DashStartLocation = GetActorLocation();
+	DashEndLocation = DashStartLocation + (DashDirection * DashVelocity);
+	DashEndVelocity = DashVelocity;
+	DashTimeline.PlayFromStart();
+}
+
+void AUPPlayerCharacter::UpdateDash(float Value)
+{
+	//위치 보간
+	FVector NewLocation = FMath::Lerp(DashStartLocation, DashEndLocation, Value);
+	SetActorLocation(NewLocation);
+
+	
+}
+
+void AUPPlayerCharacter::FinishDash()
+{
+	CharacterMovementComponent->Velocity = DashEndVelocity * 500.0f;
 }
