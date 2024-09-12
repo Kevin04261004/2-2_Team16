@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
 #include "InputActionValue.h"
+#include "Components/TimelineComponent.h"
 #include "Player/UPPlayerController.h"
 #include "UPPlayerCharacter.generated.h"
 
@@ -24,6 +25,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetDead() override;
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
@@ -55,6 +57,18 @@ protected:
 	TObjectPtr<class UInputAction> SprintAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> LookAction;
+
+	FOnTimelineFloat TimelineCallback;
+	FOnTimelineEvent TimelineFinishedCallback;
+	FVector DashStartLocation;
+	FVector DashEndLocation;
+	FVector DashEndVelocity;
+	float DashDistance;
+	FTimeline DashTimeline;
+
+	
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	UCurveFloat* DashCurve;
 	
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -63,6 +77,13 @@ protected:
 	void Sprint(const FInputActionValue& Value);
 	void StopSprint(const FInputActionValue& Value);
 
+	void DashStart(FVector DashDirection, FVector DashVelocity);
+	UFUNCTION()
+	void UpdateDash(float Value);
+	UFUNCTION()
+	void FinishDash();
+	
+	
 	TObjectPtr<AUPPlayerController> PlayerController;
 	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent;
 };

@@ -30,6 +30,30 @@
       <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPDamageableInterface.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPDamageableInterface.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_TestEnemy.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/GameData/DA_TestEnemyStat.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/NonPlayerCharacter/Cylinder.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/NonPlayerCharacter/Cylinder_Skeleton.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/UI/WBP_HpBarWidget.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/UsingAssets/SK_CharM_Bladed.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPNonPlayerCharacter.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPNonPlayerCharacter.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPUserWidget.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPUserWidget.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPWidgetInterface.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPWidgetInterface.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPHpBarWidget.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPHpBarWidget.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPWidgetComponent.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPWidgetComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,6 +109,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;Uproject.UniversityProject.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/player/sprint&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
