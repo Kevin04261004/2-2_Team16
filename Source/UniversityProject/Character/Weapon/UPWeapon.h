@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "WeaponSwingTrajectoryData.h"
 #include "GameFramework/Actor.h"
 #include "UPWeapon.generated.h"
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnWeaponHit, FHitResult& /* Result */);
 
 UCLASS()
 class UNIVERSITYPROJECT_API AUPWeapon : public AActor
@@ -15,24 +16,16 @@ class UNIVERSITYPROJECT_API AUPWeapon : public AActor
 public:
 	AUPWeapon();
 
-	// 궤적 데이터를 저장할 변수
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	AWeaponSwingTrajectoryData* SwingTrajectoryData;
-	
-	// 공격 중 프레임마다 호출되는 함수
-	void PerformSwing(int32 CurrentFrameIndex);
-
 	// 애니메이션에서 매 프레임마다 호출하는 Notify함수
-	void NotifyAttackCheck();
+	void CheckAttackRange();
 	
-	// 애니메이션 종료시 호출하는 Notify함수
-	void NotifyAttackEnd();
-
 	// 콤보 공격이 종료되었을 때 호출되는 Notify함수
-	void NotifyAttackComboEnd();
+	void ComboStepEnd();
 
 	// 상대와 충돌함.
 	void Attack(FHitResult& result);
+
+	FOnWeaponHit OnWeaponHit;
 protected:
 	// 메쉬
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
@@ -47,6 +40,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
 	TArray<FVector> SocketLocationArray;
 
+	/* 상대방에 Effect가 없으면 실행되는 기본 이펙트 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Effects")
+	UParticleSystem* BaseHitEffect;
+
+	/* 상대방에 Effect가 없으면 실행되는 기본 이펙트 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sounds")
+	USoundBase* BaseHitSound;
+	
 	TArray<AActor*> AttackedActors;
 	
 	// Socket위치를 통해 콜리전 체크.

@@ -6,6 +6,7 @@
 #include "Components/UPCharacterStatComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/UPComboAttackComponent.h"
+#include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Weapon/UPWeapon.h"
 
@@ -25,7 +26,7 @@ AUPCharacterBase::AUPCharacterBase()
 	// Movement
 	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent = GetCharacterMovement();
 	CharacterMovementComponent->bOrientRotationToMovement = true;
-	CharacterMovementComponent->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+	CharacterMovementComponent->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
 	CharacterMovementComponent->JumpZVelocity = 700.f;
 	CharacterMovementComponent->AirControl = 0.35f;
 	CharacterMovementComponent->MaxWalkSpeed = 500.f;
@@ -70,6 +71,10 @@ void AUPCharacterBase::BeginPlay()
 	Weapon = GetWorld()->SpawnActor<AUPWeapon>(WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 	check(Weapon != nullptr);
 	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("hand_rSocket"));
+
+	ComboAttack->OnComboAttackFinish.AddUObject(Weapon, &AUPWeapon::ComboStepEnd);
+	ComboAttack->OnComboStepEnd.AddUObject(Weapon, &AUPWeapon::ComboStepEnd);
+	Weapon->OnWeaponHit.AddUObject(this, &AUPCharacterBase::Attack);
 }
 
 void AUPCharacterBase::PostInitializeComponents()
@@ -78,36 +83,30 @@ void AUPCharacterBase::PostInitializeComponents()
 
 	Stat->OnHpZero.AddUObject(this, &AUPCharacterBase::SetDead);
 	Stat->OnStatChanged.AddUObject(this, &AUPCharacterBase::ApplyStat);
+
 }
 
 void AUPCharacterBase::AttackHitCheck()
 {
 	check(Weapon != nullptr);
-	Weapon->NotifyAttackCheck();
-}
-
-void AUPCharacterBase::AttackComboEnd()
-{
-	check(Weapon != nullptr);
-	Weapon->NotifyAttackComboEnd();
-}
-
-void AUPCharacterBase::NotifyComboActionEnd()
-{
-	check(Weapon != nullptr);
-	Weapon->NotifyAttackEnd();
-}
-
-void AUPCharacterBase::NotifyAttackComboEnd()
-{
-	AttackComboEnd();
-	NotifyComboActionEnd();
+	Weapon->CheckAttackRange();
 }
 
 float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	Stat->ApplyDamage(DamageAmount);
 	return DamageAmount;
+}
+
+void AUPCharacterBase::Attack(FHitResult& InHit)
+{
+	IUPDamageableInterface* Damageable = Cast<IUPDamageableInterface>(InHit.GetActor());
+	if (Damageable == nullptr)
+	{
+		return;
+	}
+	FDamageEvent DamageEvent;
+	Damageable->UPTakeDamage(Stat->GetTotalStat().AttackDamage, DamageEvent, GetController(), this);
 }
 
 void AUPCharacterBase::SetDead()
