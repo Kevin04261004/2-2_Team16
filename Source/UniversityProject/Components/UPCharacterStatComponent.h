@@ -66,9 +66,6 @@ protected:
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
 	float CurrentHp;
 
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
-	float CurrentLevel;
-
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
 	FUPCharacterStat BaseStat;
 
