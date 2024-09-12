@@ -52,9 +52,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> LookAction;
 
+	FOnTimelineFloat TimelineCallback;
+	FOnTimelineEvent TimelineFinishedCallback;
 	FVector DashStartLocation;
 	FVector DashEndLocation;
 	FVector DashEndVelocity;
+	float DashDistance;
 	FTimeline DashTimeline;
 
 	
@@ -69,7 +72,9 @@ protected:
 	void StopSprint(const FInputActionValue& Value);
 
 	void DashStart(FVector DashDirection, FVector DashVelocity);
+	UFUNCTION()
 	void UpdateDash(float Value);
+	UFUNCTION()
 	void FinishDash();
 	
 	

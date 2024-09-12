@@ -12,10 +12,13 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "Components/TimelineComponent.h"
+#include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter()
 {
+	PrimaryActorTick.bCanEverTick = true;
+	
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f;
@@ -49,14 +52,28 @@ AUPPlayerCharacter::AUPPlayerCharacter()
 	check(IMCBackViewRef.Object != nullptr);
 	IMC_BackView = IMCBackViewRef.Object;
 
-	FOnTimelineFloat TimelineCallback;
-	FOnTimelineEvent TimelineFinishedCallback;
+	static ConstructorHelpers::FObjectFinder<UCurveFloat> CurveRef(TEXT("/Game/UniversityProject/GameData/CV_DashCurve"));
+	if (CurveRef.Succeeded())
+	{
+		DashCurve = CurveRef.Object;
+	}
+	
+	if (DashCurve)
+	{
+		TimelineCallback.BindUFunction(this, FName("UpdateDash"));
+		TimelineFinishedCallback.BindUFunction(this, FName("FinishDash"));
 
-	TimelineCallback.BindUFunction(this, FName("UpdateDash"));
-	TimelineFinishedCallback.BindUFunction(this, FName("FinishDash"));
+		DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
+		DashTimeline.AddInterpFloat(DashCurve, TimelineCallback);
 
-	DashTimeline.AddInterpFloat(DashCurve, TimelineCallback);
-	DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
+		UE_LOG(LogTemp, Warning, TEXT("Dash Timeline Initialized with Curve"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Dash Curve is not loaded"));
+	}
+
+	DashDistance = 500.0f;
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -137,10 +154,9 @@ void AUPPlayerCharacter::Attack(const FInputActionValue& Value)
 
 void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 {
-	// TODO: Dash->Dash();
 	FVector LastInputVector = CharacterMovementComponent->GetLastInputVector();
 	FVector PlayerLocation = GetActorLocation();
-	FVector TraceDirectionVector = PlayerLocation + (LastInputVector * 500.0f);
+	FVector TraceDirectionVector = PlayerLocation + (LastInputVector * DashDistance);
 	if (UAIBlueprintHelperLibrary::IsValidAIDirection(LastInputVector))
 	{
 		FHitResult HitResult;
@@ -151,21 +167,23 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 			ECC_Visibility,
 			FCollisionQueryParams(FName(TEXT("DashTrace")), false, this)
 		);
+		DrawDebugLine(GetWorld(), PlayerLocation, TraceDirectionVector, FColor::Red, false, 2.0f, 0, 2.0f);
+		UE_LOG(LogTemp, Warning, TEXT("Dash Trace"));
 		if (bHit)
 		{
-			FVector DashDirection = (LastInputVector * -55.0f) + HitResult.Location;
+			FVector DashDirection = HitResult.Location;
 			DashStart(DashDirection, LastInputVector);
 		}
 		else
 		{
-			FVector DashDirection = HitResult.TraceEnd;
+			FVector DashDirection = LastInputVector + HitResult.TraceEnd;
 			DashStart(DashDirection, LastInputVector);
 		}
 	}
 	else
 	{
 		FHitResult HitResult;
-		TraceDirectionVector = PlayerLocation + (GetActorForwardVector() * 500.0f);
+		TraceDirectionVector = PlayerLocation + (GetActorForwardVector() * DashDistance);
 		bool bHit = GetWorld()->LineTraceSingleByChannel(
 			HitResult,
 			PlayerLocation,
@@ -173,14 +191,15 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 			ECC_Visibility,
 			FCollisionQueryParams(FName(TEXT("DashTrace")), false, this)
 		);
+		DrawDebugLine(GetWorld(), PlayerLocation, TraceDirectionVector, FColor::Red, false, 2.0f, 0, 2.0f);
 		if (bHit)
 		{
-			FVector DashDirection = (GetActorForwardVector() * -55.0f) + HitResult.Location;
+			FVector DashDirection = HitResult.Location;
 			DashStart(DashDirection, GetActorForwardVector());
 		}
 		else
 		{
-			FVector DashDirection = HitResult.TraceEnd;
+			FVector DashDirection = (GetActorForwardVector()) + HitResult.TraceEnd;
 			DashStart(DashDirection, GetActorForwardVector());
 		}
 	}
@@ -199,9 +218,16 @@ void AUPPlayerCharacter::StopSprint(const FInputActionValue& Value)
 void AUPPlayerCharacter::DashStart(FVector DashDirection, FVector DashVelocity)
 {
 	DashStartLocation = GetActorLocation();
-	DashEndLocation = DashStartLocation + (DashDirection * DashVelocity);
+	DashEndLocation = DashDirection;
 	DashEndVelocity = DashVelocity;
-	DashTimeline.PlayFromStart();
+	if (!DashTimeline.IsPlaying())
+	{
+		DashTimeline.PlayFromStart();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Dash Timeline is already playing"));
+	}
 }
 
 void AUPPlayerCharacter::UpdateDash(float Value)
@@ -209,7 +235,6 @@ void AUPPlayerCharacter::UpdateDash(float Value)
 	//위치 보간
 	FVector NewLocation = FMath::Lerp(DashStartLocation, DashEndLocation, Value);
 	SetActorLocation(NewLocation);
-
 	
 }
 
