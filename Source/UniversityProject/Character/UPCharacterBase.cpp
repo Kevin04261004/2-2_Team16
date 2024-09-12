@@ -26,7 +26,7 @@ AUPCharacterBase::AUPCharacterBase()
 	// Movement
 	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent = GetCharacterMovement();
 	CharacterMovementComponent->bOrientRotationToMovement = true;
-	CharacterMovementComponent->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+	CharacterMovementComponent->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
 	CharacterMovementComponent->JumpZVelocity = 700.f;
 	CharacterMovementComponent->AirControl = 0.35f;
 	CharacterMovementComponent->MaxWalkSpeed = 500.f;
@@ -83,6 +83,7 @@ void AUPCharacterBase::PostInitializeComponents()
 
 	Stat->OnHpZero.AddUObject(this, &AUPCharacterBase::SetDead);
 	Stat->OnStatChanged.AddUObject(this, &AUPCharacterBase::ApplyStat);
+
 }
 
 void AUPCharacterBase::AttackHitCheck()

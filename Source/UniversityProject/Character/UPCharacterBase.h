@@ -39,6 +39,15 @@ protected:
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	virtual void Attack(FHitResult& InHit);
+
+// Attack Hit Section
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Effect, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UParticleSystem> HitEffect;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Effect, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundBase> HitSound;
+	FORCEINLINE virtual UParticleSystem* GetHitEffect() override { return HitEffect.Get(); }
+	FORCEINLINE virtual USoundBase* GetHitSound() override { return HitSound.Get(); }
 // Dead Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))

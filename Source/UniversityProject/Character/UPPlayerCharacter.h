@@ -19,6 +19,8 @@ class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase
 public:
 	AUPPlayerCharacter();
 
+	virtual void PostInitializeComponents() override;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetDead() override;
@@ -33,7 +35,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UCameraComponent> FollowCamera;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	TSubclassOf<UCameraShakeBase> HitCameraShake;
+
+	void ShakeCamera(FHitResult& HitResult);
 // Input Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))

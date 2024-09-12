@@ -11,6 +11,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "Interface/UPGameInterface.h"
+#include "Weapon/UPWeapon.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter()
 {
@@ -46,6 +47,15 @@ AUPPlayerCharacter::AUPPlayerCharacter()
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCBackViewRef(TEXT("/Game/UniversityProject/Input/IMC_BackView.IMC_BackView"));
 	check(IMCBackViewRef.Object != nullptr);
 	IMC_BackView = IMCBackViewRef.Object;
+
+	static ConstructorHelpers::FClassFinder<UCameraShakeBase> HitSuccessCameraShakeRef(TEXT("/Game/UniversityProject/GameData/BP_PlayerHitSuccessCameraShake.BP_PlayerHitSuccessCameraShake_C"));
+	check(HitSuccessCameraShakeRef.Class != nullptr);
+	HitCameraShake = HitSuccessCameraShakeRef.Class;
+}
+
+void AUPPlayerCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -64,6 +74,7 @@ void AUPPlayerCharacter::BeginPlay()
 		Subsystem->ClearAllMappings();
 		Subsystem->AddMappingContext(IMC_BackView, 0);
 	}
+	Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::ShakeCamera);
 }
 
 void AUPPlayerCharacter::SetDead()
@@ -87,6 +98,15 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Sprint);
 	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AUPPlayerCharacter::StopSprint);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Look);
+}
+
+void AUPPlayerCharacter::ShakeCamera(FHitResult& HitResult)
+{
+	if (PlayerController == nullptr || HitCameraShake == nullptr)
+	{
+		return;
+	}
+	PlayerController->ClientStartCameraShake(HitCameraShake);
 }
 
 void AUPPlayerCharacter::Move(const FInputActionValue& Value)

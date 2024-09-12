@@ -1,6 +1,7 @@
 ﻿#include "UPWeapon.h"
 #include "DrawDebugHelpers.h"
 #include "Interface/UPDamageableInterface.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AUPWeapon::AUPWeapon()
@@ -18,6 +19,11 @@ AUPWeapon::AUPWeapon()
 
 	SocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
 	BeforeSocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
+
+	// Set Effect
+	// static ConstructorHelpers::FObjectFinder<UParticleSystem> HitEffectRef(TEXT("/Game/Assets/InfinityBladeEffects/Effects/FX_Combat_Base/Impact/P_ImpactSpark.P_ImpactSpark"));
+	// check(HitEffectRef.Object != nullptr);
+	// HitEffect = HitEffectRef.Object;
 }
 
 void AUPWeapon::CheckAttackRange()
@@ -46,8 +52,36 @@ void AUPWeapon::Attack(FHitResult& result)
 	}
 	AttackedActors.Add(result.GetActor());
 	
-	OnWeaponHit.Broadcast(result);
+	IUPDamageableInterface* Damageable = Cast<IUPDamageableInterface>(result.GetActor());
+	if (Damageable == nullptr)
+	{
+		return;
+	}
+
+	/* Effect */
+	UParticleSystem* DamageParticle = BaseHitEffect;
+	if (Damageable->GetHitEffect() != nullptr)
+	{
+		DamageParticle = Damageable->GetHitEffect();
+	}
+	if (DamageParticle != nullptr)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DamageParticle, result.ImpactPoint);
+	}
 	
+	/* Sound */
+	USoundBase* DamageSound = BaseHitSound;
+	if (Damageable->GetHitSound() != nullptr)
+	{
+		DamageSound = Damageable->GetHitSound();
+	}
+	if (DamageSound != nullptr)
+	{
+		UGameplayStatics::SpawnSound2D(GetWorld(), DamageSound);
+	}
+
+	OnWeaponHit.Broadcast(result);
+
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("충돌됨"), true, FVector2D(1.5f, 1.5f));
@@ -79,7 +113,7 @@ void AUPWeapon::CheckCollisionSockets()
     DrawDebugLine(GetWorld(), SocketLocationArray[2], SocketLocationArray[0], FColor::Green, false, 0.1f, 0, 2.0f);
 
     // 보간된 위치를 기반으로 충돌 감지
-    static int NUM_STEP = 5;
+    static int NUM_STEP = 10;
     for (int Step = 0; Step < NUM_STEP; Step++)
     {
         float Alpha = (float)Step / NUM_STEP;

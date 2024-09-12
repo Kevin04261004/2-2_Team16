@@ -39,6 +39,7 @@ public:
 	FORCEINLINE void SetBaseStat(const FUPCharacterStat& InModifierStat)
 	{
 		BaseStat = InModifierStat;
+		CurrentHp = InModifierStat.MaxHp;
 		OnStatChanged.Broadcast(GetBaseStat(), GetModifierStat());
 	}
 	FORCEINLINE void SetModifierStat(const FUPCharacterStat& InModifierStat)

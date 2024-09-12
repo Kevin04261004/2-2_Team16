@@ -40,6 +40,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
 	TArray<FVector> SocketLocationArray;
 
+	/* 상대방에 Effect가 없으면 실행되는 기본 이펙트 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Effects")
+	UParticleSystem* BaseHitEffect;
+
+	/* 상대방에 Effect가 없으면 실행되는 기본 이펙트 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sounds")
+	USoundBase* BaseHitSound;
+	
 	TArray<AActor*> AttackedActors;
 	
 	// Socket위치를 통해 콜리전 체크.
