@@ -8,30 +8,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f23c5a2c-eee8-4698-9eae-9b888130aac6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_TestEnemy.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/GameData/DA_TestEnemyStat.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/NonPlayerCharacter/Cylinder.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/NonPlayerCharacter/Cylinder_Skeleton.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/UI/WBP_HpBarWidget.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/UsingAssets/SK_CharM_Bladed.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPNonPlayerCharacter.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPNonPlayerCharacter.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPUserWidget.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPUserWidget.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPWidgetInterface.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPWidgetInterface.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPHpBarWidget.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPHpBarWidget.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPWidgetComponent.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPWidgetComponent.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/NewPoseSearchDatabase.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/NewPoseSearchNormalizationSet.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/NewPoseSearchSchema.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/AM_ComboAttack.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/AM_ComboAttack.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/AM_Dead.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/AM_Dead.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/AUP_UPCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/AUP_UPCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/BS_IdleWalkRun.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/BS_IdleWalkRun.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/IK_Warrior.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/IK_Warrior.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/RTG_Warrior.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/RTG_Warrior.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorAttack1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorAttack1.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorAttack2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorAttack2.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorAttack3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorAttack3.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorAttack4.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorAttack4.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorDead.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorDead.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorFallLoop.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorFallLoop.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorIdle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorIdle.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorJump.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorJump.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorLand.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorLand.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorRunFwd.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorRunFwd.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorSkill1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorSkill1.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorWalkFwd.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorWalkFwd.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorWalkInPlace.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorWalkInPlace.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniversityProject.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/UniversityProject.uproject" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,19 +206,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Uproject.UniversityProject.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/player/sprint&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Uproject.UniversityProject.executor": "Run",
+    "git-widget-placeholder": "feature/player/sprint",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "rider.external.source.directories": [
+      "C:\\Users\\jacob\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\jacob\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\jacob\\AppData\\Local\\Symbols\\src"
+    ]
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="UniversityProject" type="Uproject" factoryName="rider.uproject">
       <configuration_1>
@@ -225,10 +233,10 @@
         <option name="PLATFORM" value="Win64" />
         <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/UniversityProject.uproject" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="C:\Program Files\Epic Games\UE_5.4\Engine\Binaries\Win64\UnrealEditor.exe" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\GitHub\2-2_Team16\UniversityProject.uproject&quot;" />
+        <option name="EXECUTABLE_PATH" value="D:\Unreal Engine\UE_5.4\Engine\Binaries\Win64\UnrealEditor.exe" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\Unreal Projects\2-2_Team16\UniversityProject.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
-        <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.4" />
+        <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.4" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="1" />
         <option name="TERMINAL_INTERACTION_BEHAVIOR" value="FORCE_CONSOLE" />
@@ -238,10 +246,10 @@
         <option name="PLATFORM" value="Win64" />
         <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/UniversityProject.uproject" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="C:\Program Files\Epic Games\UE_5.4\Engine\Binaries\Win64\UnrealEditor-Win64-DebugGame.exe" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\GitHub\2-2_Team16\UniversityProject.uproject&quot;" />
+        <option name="EXECUTABLE_PATH" value="D:\Unreal Engine\UE_5.4\Engine\Binaries\Win64\UnrealEditor-Win64-DebugGame.exe" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;D:\Unreal Projects\2-2_Team16\UniversityProject.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
-        <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.4" />
+        <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.4" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="1" />
         <option name="TERMINAL_INTERACTION_BEHAVIOR" value="FORCE_CONSOLE" />
@@ -251,10 +259,10 @@
         <option name="PLATFORM" value="Win64" />
         <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/UniversityProject.uproject" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="D:\GitHub\2-2_Team16\Binaries\Win64\UniversityProject-Win64-DebugGame.exe" />
+        <option name="EXECUTABLE_PATH" value="D:\Unreal Projects\2-2_Team16\Binaries\Win64\UniversityProject-Win64-DebugGame.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
-        <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.4" />
+        <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.4" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="1" />
         <option name="TERMINAL_INTERACTION_BEHAVIOR" value="FORCE_CONSOLE" />
@@ -264,10 +272,10 @@
         <option name="PLATFORM" value="Win64" />
         <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/UniversityProject.uproject" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="D:\GitHub\2-2_Team16\Binaries\Win64\UniversityProject.exe" />
+        <option name="EXECUTABLE_PATH" value="D:\Unreal Projects\2-2_Team16\Binaries\Win64\UniversityProject.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
-        <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.4" />
+        <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.4" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="1" />
         <option name="TERMINAL_INTERACTION_BEHAVIOR" value="FORCE_CONSOLE" />
@@ -277,10 +285,10 @@
         <option name="PLATFORM" value="Win64" />
         <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/UniversityProject.uproject" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="D:\GitHub\2-2_Team16\Binaries\Win64\UniversityProject-Win64-Shipping.exe" />
+        <option name="EXECUTABLE_PATH" value="D:\Unreal Projects\2-2_Team16\Binaries\Win64\UniversityProject-Win64-Shipping.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
-        <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.4" />
+        <option name="WORKING_DIRECTORY" value="D:\Unreal Engine\UE_5.4" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="1" />
         <option name="TERMINAL_INTERACTION_BEHAVIOR" value="FORCE_CONSOLE" />
@@ -303,6 +311,7 @@
       <workItem from="1725980564604" duration="3306000" />
       <workItem from="1725986090467" duration="678000" />
       <workItem from="1726001154699" duration="2538000" />
+      <workItem from="1726199388452" duration="616000" />
     </task>
     <servers />
   </component>
@@ -311,7 +320,6 @@
   </component>
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
-    <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
 </project>
