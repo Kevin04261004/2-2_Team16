@@ -38,10 +38,19 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UCameraComponent> FollowCamera;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Camera)
 	TSubclassOf<UCameraShakeBase> HitCameraShake;
 
 	void ShakeCamera(FHitResult& HitResult);
+
+// Animation Section
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Animation)
+	float PauseDuration = 0.15f;
+
+	void AnimationHitStop(FHitResult& HitResult);
+	void SetHitStopTimer();
+	void ResumeAnimation();
 // Input Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))

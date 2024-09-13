@@ -19,11 +19,6 @@ AUPWeapon::AUPWeapon()
 
 	SocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
 	BeforeSocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
-
-	// Set Effect
-	// static ConstructorHelpers::FObjectFinder<UParticleSystem> HitEffectRef(TEXT("/Game/Assets/InfinityBladeEffects/Effects/FX_Combat_Base/Impact/P_ImpactSpark.P_ImpactSpark"));
-	// check(HitEffectRef.Object != nullptr);
-	// HitEffect = HitEffectRef.Object;
 }
 
 void AUPWeapon::CheckAttackRange()
@@ -109,9 +104,6 @@ void AUPWeapon::CheckCollisionSockets()
         return;
     }
 
-    // 디버그 라인
-    DrawDebugLine(GetWorld(), SocketLocationArray[2], SocketLocationArray[0], FColor::Green, false, 0.1f, 0, 2.0f);
-
     // 보간된 위치를 기반으로 충돌 감지
     static int NUM_STEP = 10;
     for (int Step = 0; Step < NUM_STEP; Step++)
@@ -170,8 +162,8 @@ void AUPWeapon::CheckCollisionSockets()
         }
 
         // 디버그 라인 그리기
-        DrawDebugLine(GetWorld(), InterpolatedPosition0, InterpolatedPosition1, FColor::Green, false, 0.3f, 0, 2.0f);
-        DrawDebugLine(GetWorld(), InterpolatedPosition1, InterpolatedPosition2, FColor::Green, false, 0.3f, 0, 2.0f);
-        DrawDebugLine(GetWorld(), InterpolatedPosition2, InterpolatedPosition0, FColor::Green, false, 0.3f, 0, 2.0f);
+        // DrawDebugLine(GetWorld(), InterpolatedPosition0, InterpolatedPosition1, FColor::Green, false, 0.3f, 0, 2.0f);
+        // DrawDebugLine(GetWorld(), InterpolatedPosition1, InterpolatedPosition2, FColor::Green, false, 0.3f, 0, 2.0f);
+        // DrawDebugLine(GetWorld(), InterpolatedPosition2, InterpolatedPosition0, FColor::Green, false, 0.3f, 0, 2.0f);
     }
 }

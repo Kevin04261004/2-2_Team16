@@ -103,6 +103,7 @@ void AUPPlayerCharacter::BeginPlay()
 		Subsystem->AddMappingContext(IMC_BackView, 0);
 	}
 	Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::ShakeCamera);
+	Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::AnimationHitStop);
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -143,6 +144,40 @@ void AUPPlayerCharacter::ShakeCamera(FHitResult& HitResult)
 		return;
 	}
 	PlayerController->ClientStartCameraShake(HitCameraShake);
+}
+
+void AUPPlayerCharacter::AnimationHitStop(FHitResult& HitResult)
+{
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	{
+		UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
+		if (CurrentMontage)
+		{
+			AnimInstance->Montage_Pause(CurrentMontage);
+		}
+		SetHitStopTimer();
+	}
+}
+
+void AUPPlayerCharacter::SetHitStopTimer()
+{
+	// 타이머 핸들 선언
+	FTimerHandle UnpauseTimerHandle;
+
+	// 일정 시간이 지나면 다시 재개
+	GetWorld()->GetTimerManager().SetTimer(UnpauseTimerHandle, this, &AUPPlayerCharacter::ResumeAnimation, PauseDuration, false);
+}
+
+void AUPPlayerCharacter::ResumeAnimation()
+{
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	{
+		UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
+		if (CurrentMontage)
+		{
+			AnimInstance->Montage_Resume(CurrentMontage);
+		}
+	}
 }
 
 void AUPPlayerCharacter::Move(const FInputActionValue& Value)

@@ -8,9 +8,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f23c5a2c-eee8-4698-9eae-9b888130aac6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Trail/BP_DrawRenderTarget.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Trail/M_Draw.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Trail/M_DrawNormal.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Trail/M_RefTrail_01.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Trail/M_TrailColor_01.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Trail/NS_Trail_01.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Trail/RT_DrawRenderTarget.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Trail/RT_DrawRenderTarget_Tex.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Trail/RT_DrawRenderTarget_Tex1.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Trail/Tex_1.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Trail/Tex_2.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/AM_ComboAttack.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/AM_ComboAttack.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/GameData/BP_PlayerHitSuccessCameraShake.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/GameData/BP_PlayerHitSuccessCameraShake.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/GameData/DA_PlayerCharacterStat.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/GameData/DA_PlayerCharacterStat.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/UsingAssets/SK_Mannequin_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/UsingAssets/SK_Mannequin_Skeleton.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +55,7 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Core/Public/Containers/Array.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Core/Public/Delegates/DelegateSignatureImpl.inl" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/CoreUObject/Public/UObject/Object.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/CoreUObject/Public/UObject/PropertyAccessUtil.h" root0="FORCE_HIGHLIGHTING" />
@@ -52,6 +71,7 @@
     <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Interface/UPUserWidget.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Interface/UPWidgetInterface.h" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 5
@@ -170,14 +190,31 @@
       <workItem from="1726122142379" duration="1605000" />
       <workItem from="1726165478462" duration="674000" />
       <workItem from="1726186988357" duration="1377000" />
-      <workItem from="1726202236126" duration="684000" />
+      <workItem from="1726202236126" duration="1282000" />
+      <workItem from="1726205427354" duration="4087000" />
+      <workItem from="1726211416807" duration="1846000" />
+      <workItem from="1726245901363" duration="2504000" />
+      <workItem from="1726252042653" duration="207000" />
+      <workItem from="1726252263989" duration="1796000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
