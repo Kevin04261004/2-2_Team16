@@ -9,15 +9,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f23c5a2c-eee8-4698-9eae-9b888130aac6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_TestEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_TestEnemy.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_TestEnemy2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_TestEnemy2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/CharacterAction/DA_ComboAttack.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/CharacterAction/DA_ComboAttack.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/UsingAssets/Dual_Blade_Axe13/SK_Dual_Blade_Axe13.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/UsingAssets/Dual_Blade_Axe13/SK_Dual_Blade_Axe13.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/UsingAssets/Dual_Blade_Axe13/SK_Dual_Blade_Axe13_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/UsingAssets/Dual_Blade_Axe13/SK_Dual_Blade_Axe13_Skeleton.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Components/UPCharacterStatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Components/UPCharacterStatComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Components/UPCharacterStatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Components/UPCharacterStatComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +65,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;Uproject.UniversityProject.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/player/weapon&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -176,6 +169,8 @@
       <workItem from="1726114102083" duration="7596000" />
       <workItem from="1726122142379" duration="1605000" />
       <workItem from="1726165478462" duration="674000" />
+      <workItem from="1726186988357" duration="1377000" />
+      <workItem from="1726202236126" duration="684000" />
     </task>
     <servers />
   </component>

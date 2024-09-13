@@ -12,8 +12,6 @@
 AUPDamagableActor::AUPDamagableActor()
 {
 	Stat = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
-	static ConstructorHelpers::FObjectFinder<UUPCharacterStatData> StatDataRef(TEXT("/Game/UniversityProject/GameData/DA_PlayerCharacterStat.DA_PlayerCharacterStat"));
-	Stat->SetBaseStat(StatDataRef.Object.Get()->Stat);
 
 	HpBar = CreateDefaultSubobject<UUPWidgetComponent>(TEXT("Widget"));
 	// HpBar->AttachToComponent();
@@ -41,6 +39,12 @@ void AUPDamagableActor::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	Stat->OnHpZero.AddUObject(this, &AUPDamagableActor::SetDead);
+}
+
+void AUPDamagableActor::BeginPlay()
+{
+	Super::BeginPlay();
+	Stat->SetBaseStat(CharacterInitalizeStatData.Get()->Stat);
 }
 
 void AUPDamagableActor::SetDead()
