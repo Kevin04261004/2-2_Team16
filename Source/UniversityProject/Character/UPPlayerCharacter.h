@@ -30,6 +30,10 @@ protected:
 public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+protected:
+	TObjectPtr<AUPPlayerController> PlayerController;
+	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent;
+	
 // Camera Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
@@ -51,6 +55,7 @@ protected:
 	void AnimationHitStop(FHitResult& HitResult);
 	void SetHitStopTimer();
 	void ResumeAnimation();
+	
 // Input Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
@@ -67,6 +72,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> LookAction;
 
+	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
+	void Attack(const FInputActionValue& Value);
+	void Dash(const FInputActionValue& Value);
+	void Sprint(const FInputActionValue& Value);
+	void StopSprint(const FInputActionValue& Value);
+	
+/* dash Section*/
+protected:
 	FOnTimelineFloat TimelineCallback;
 	FOnTimelineEvent TimelineFinishedCallback;
 	FVector DashStartLocation;
@@ -76,23 +90,12 @@ protected:
 	FTimeline DashTimeline;
 
 	
-	UPROPERTY(EditAnywhere, Category = "Timeline")
-	UCurveFloat* DashCurve;
-	
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
-	void Attack(const FInputActionValue& Value);
-	void Dash(const FInputActionValue& Value);
-	void Sprint(const FInputActionValue& Value);
-	void StopSprint(const FInputActionValue& Value);
-
 	void DashStart(FVector DashDirection, FVector DashVelocity);
 	UFUNCTION()
 	void UpdateDash(float Value);
 	UFUNCTION()
 	void FinishDash();
 	
-	
-	TObjectPtr<AUPPlayerController> PlayerController;
-	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent;
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	UCurveFloat* DashCurve;
 };

@@ -103,7 +103,9 @@ void AUPPlayerCharacter::BeginPlay()
 		Subsystem->AddMappingContext(IMC_BackView, 0);
 	}
 	Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::ShakeCamera);
-	Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::AnimationHitStop);
+
+	// AnimationHitStop 삭제
+	// Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::AnimationHitStop);
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)

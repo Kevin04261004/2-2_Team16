@@ -6,8 +6,7 @@
 // Sets default values
 AUPWeapon::AUPWeapon()
 {
-	// 틱 안씀
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	// 스켈레탈 메쉬 초기화
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
@@ -19,6 +18,21 @@ AUPWeapon::AUPWeapon()
 
 	SocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
 	BeforeSocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
+}
+
+void AUPWeapon::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (bIsTimeStopped)
+	{
+		float CurrentRealTime = GetWorld()->GetRealTimeSeconds();
+		if (CurrentRealTime - RealTimeAtStart >= StopTimeDuration)
+		{
+			ResetTimeDilation();
+			bIsTimeStopped = false;
+		}
+	}
 }
 
 void AUPWeapon::CheckAttackRange()
@@ -75,6 +89,14 @@ void AUPWeapon::Attack(FHitResult& result)
 		UGameplayStatics::SpawnSound2D(GetWorld(), DamageSound);
 	}
 
+	/* Game Time Stop */
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), StopTimeVolume);
+
+	RealTimeAtStart = GetWorld()->GetRealTimeSeconds();
+
+	bIsTimeStopped = true;
+
+	/* delegate */
 	OnWeaponHit.Broadcast(result);
 
 	if (GEngine)
@@ -163,7 +185,12 @@ void AUPWeapon::CheckCollisionSockets()
 
         // 디버그 라인 그리기
         // DrawDebugLine(GetWorld(), InterpolatedPosition0, InterpolatedPosition1, FColor::Green, false, 0.3f, 0, 2.0f);
-        // DrawDebugLine(GetWorld(), InterpolatedPosition1, InterpolatedPosition2, FColor::Green, false, 0.3f, 0, 2.0f);
+    	// DrawDebugLine(GetWorld(), InterpolatedPosition1, InterpolatedPosition2, FColor::Green, false, 0.3f, 0, 2.0f);
         // DrawDebugLine(GetWorld(), InterpolatedPosition2, InterpolatedPosition0, FColor::Green, false, 0.3f, 0, 2.0f);
     }
+}
+
+void AUPWeapon::ResetTimeDilation()
+{
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 }

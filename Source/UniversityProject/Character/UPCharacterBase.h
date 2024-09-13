@@ -65,6 +65,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UUPCharacterStatData> CharacterInitalizeStatData;
+
 // Stat Section
 public:
 	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return Stat.Get(); }

@@ -16,6 +16,7 @@ class UNIVERSITYPROJECT_API AUPWeapon : public AActor
 public:
 	AUPWeapon();
 
+	void Tick(float DeltaSeconds) override;
 	// 애니메이션에서 매 프레임마다 호출하는 Notify함수
 	void CheckAttackRange();
 	
@@ -52,4 +53,15 @@ protected:
 	
 	// Socket위치를 통해 콜리전 체크.
 	void CheckCollisionSockets();
+
+/* Time Stop Section */
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Time")
+	float StopTimeVolume = 0.01f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Time")
+	float StopTimeDuration = 0.1f;
+	float RealTimeAtStart;
+	bool bIsTimeStopped;
+	
+	void ResetTimeDilation();
 };
