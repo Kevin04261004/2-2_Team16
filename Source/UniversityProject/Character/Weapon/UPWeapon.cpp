@@ -2,6 +2,7 @@
 #include "DrawDebugHelpers.h"
 #include "Interface/UPDamageableInterface.h"
 #include "Kismet/GameplayStatics.h"
+#include "Manager/UPPostProcessManager.h"
 
 // Sets default values
 AUPWeapon::AUPWeapon()
@@ -96,6 +97,10 @@ void AUPWeapon::Attack(FHitResult& result)
 
 	bIsTimeStopped = true;
 
+	/* Volume */
+	UUPPostProcessManager* PostProcessManager = GetGameInstance()->GetSubsystem<UUPPostProcessManager>();
+	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::Blur, true, 0.1f);
+	
 	/* delegate */
 	OnWeaponHit.Broadcast(result);
 

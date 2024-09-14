@@ -59,7 +59,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Time")
 	float StopTimeVolume = 0.01f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Time")
-	float StopTimeDuration = 0.1f;
+	float StopTimeDuration = 0.05f;
 	float RealTimeAtStart;
 	bool bIsTimeStopped;
 	

@@ -30,24 +30,3 @@ bool AUPGameMode::IsGameCleared()
 {
 	return bIsCleared;
 }
-
-void AUPGameMode::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// 서브레벨 로드
-	LoadSublevels();
-}
-
-void AUPGameMode::LoadSublevels()
-{
-	// 서브레벨 리스트
-	TArray<FName> SublevelNames = {
-		FName("GlobalLevel"),
-	};
-
-	for (const FName& SublevelName : SublevelNames)
-	{
-		UGameplayStatics::LoadStreamLevel(this, SublevelName, true, true, FLatentActionInfo());
-	}
-}

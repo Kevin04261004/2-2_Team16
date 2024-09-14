@@ -23,10 +23,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Game)
 	uint8 bIsCleared : 1;
-
-protected:
-	virtual void BeginPlay() override;
-
-private:
-	void LoadSublevels();
 };

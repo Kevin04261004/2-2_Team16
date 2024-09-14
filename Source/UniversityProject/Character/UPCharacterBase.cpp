@@ -97,7 +97,7 @@ void AUPCharacterBase::GoForward()
 
 	CollisionComponent = Cast<UPrimitiveComponent>(GetRootComponent());
 	CollisionComponent->SetSimulatePhysics(true);
-	if (!TryCheckForwardCollision(GoForwardDistance / 5.f))
+	if (!TryCheckForwardCollision(GoForwardDistance / 3.f))
 	{
 		CollisionComponent->AddImpulse(GetActorForwardVector() * GoForwardDistance,"", true);
 	}
