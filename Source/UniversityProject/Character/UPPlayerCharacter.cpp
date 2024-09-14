@@ -19,7 +19,8 @@
 AUPPlayerCharacter::AUPPlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+
+	// Camera Setting
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f;
@@ -107,7 +108,7 @@ void AUPPlayerCharacter::BeginPlay()
 	// AnimationHitStop 삭제
 	// Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::AnimationHitStop);
 
-	CurrentZoom = SpringArm->TargetArmLength;
+	CurrentZoom = CameraBoom->TargetArmLength;
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -156,7 +157,7 @@ void AUPPlayerCharacter::ZoomCamera(float Value)
 	if (Value != 0.0f)
 	{
 		CurrentZoom = FMath::Clamp(CurrentZoom - (Value * ZoomStep), MinZoom, MaxZoom);
-		SpringArm->TargetArmLength = CurrentZoom;
+		CameraBoom->TargetArmLength = CurrentZoom;
 	}
 }
 

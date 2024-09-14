@@ -51,7 +51,7 @@ protected:
 	float MinZoom = 300.0f;
 
 	UPROPERTY(EditAnywhere, Category="Camera")
-	float MaxZoom = 1000.0f;
+	float MaxZoom = 800.0f;
 
 	UPROPERTY(EditAnywhere, Category="Camera")
 	float ZoomStep = 10.0f;
