@@ -127,7 +127,7 @@ void AUPWeapon::CheckCollisionSockets()
     }
 
     // 보간된 위치를 기반으로 충돌 감지
-    static int NUM_STEP = 10;
+    static int NUM_STEP = 5;
     for (int Step = 0; Step < NUM_STEP; Step++)
     {
         float Alpha = (float)Step / NUM_STEP;

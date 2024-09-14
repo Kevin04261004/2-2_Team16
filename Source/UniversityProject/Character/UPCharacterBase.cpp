@@ -71,7 +71,6 @@ void AUPCharacterBase::BeginPlay()
 	Weapon = GetWorld()->SpawnActor<AUPWeapon>(WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 	check(Weapon != nullptr);
 	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("hand_rSocket"));
-
 	ComboAttack->OnComboAttackFinish.AddUObject(Weapon, &AUPWeapon::ComboStepEnd);
 	ComboAttack->OnComboStepEnd.AddUObject(Weapon, &AUPWeapon::ComboStepEnd);
 	Weapon->OnWeaponHit.AddUObject(this, &AUPCharacterBase::Attack);

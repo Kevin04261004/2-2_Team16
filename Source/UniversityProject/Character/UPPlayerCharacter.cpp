@@ -75,10 +75,6 @@ AUPPlayerCharacter::AUPPlayerCharacter()
 	}
 
 	DashDistance = 500.0f;
-	
-	static ConstructorHelpers::FClassFinder<UCameraShakeBase> HitSuccessCameraShakeRef(TEXT("/Game/UniversityProject/GameData/BP_PlayerHitSuccessCameraShake.BP_PlayerHitSuccessCameraShake_C"));
-	check(HitSuccessCameraShakeRef.Class != nullptr);
-	HitCameraShake = HitSuccessCameraShakeRef.Class;
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
