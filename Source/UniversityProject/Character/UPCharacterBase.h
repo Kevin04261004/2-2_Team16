@@ -45,6 +45,8 @@ protected:
 	FTimerHandle PhysicsTimerHandle;
 	virtual void GoForward() override;
 	void SetPhysicsFalse();
+	bool TryCheckForwardCollision(float InLineTraceDistance);
+
 // Attack Hit Section
 protected:
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;

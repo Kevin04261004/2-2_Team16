@@ -97,9 +97,34 @@ void AUPCharacterBase::GoForward()
 
 	CollisionComponent = Cast<UPrimitiveComponent>(GetRootComponent());
 	CollisionComponent->SetSimulatePhysics(true);
-	CollisionComponent->AddImpulse(GetActorForwardVector() * GoForwardDistance,"", true);
-
+	if (!TryCheckForwardCollision(GoForwardDistance / 5.f))
+	{
+		CollisionComponent->AddImpulse(GetActorForwardVector() * GoForwardDistance,"", true);
+	}
 	GetWorld()->GetTimerManager().SetTimer(PhysicsTimerHandle, this, &AUPCharacterBase::SetPhysicsFalse, 0.2f, false);
+}
+
+bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance)
+{
+	FVector Start = GetActorLocation();
+	FVector ForwardVector = GetActorForwardVector();
+	FVector End = (Start + (ForwardVector * InLineTraceDistance));
+
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		ECC_Visibility,
+		CollisionParams
+	);
+
+	DrawDebugLine(GetWorld(), Start, End, bHit ? FColor::Green : FColor::Red, false, 1, 0, 1);
+
+	return bHit;
 }
 
 void AUPCharacterBase::SetPhysicsFalse()
