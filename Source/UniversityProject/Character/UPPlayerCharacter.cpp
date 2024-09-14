@@ -49,6 +49,10 @@ AUPPlayerCharacter::AUPPlayerCharacter()
 	check(InputActionSprintRef.Object != nullptr);
 	SprintAction = InputActionSprintRef.Object;
 
+	static ConstructorHelpers::FObjectFinder<UInputAction> CameraZoomActionSprintRef(TEXT("/Game/UniversityProject/Input/Actions/IA_CameraZoom.IA_CameraZoom"));
+	check(CameraZoomActionSprintRef.Object != nullptr);
+	CameraZoomAction = CameraZoomActionSprintRef.Object;
+	
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCBackViewRef(TEXT("/Game/UniversityProject/Input/IMC_BackView.IMC_BackView"));
 	check(IMCBackViewRef.Object != nullptr);
 	IMC_BackView = IMCBackViewRef.Object;
@@ -102,6 +106,8 @@ void AUPPlayerCharacter::BeginPlay()
 
 	// AnimationHitStop 삭제
 	// Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::AnimationHitStop);
+
+	CurrentZoom = SpringArm->TargetArmLength;
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -133,6 +139,7 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Sprint);
 	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AUPPlayerCharacter::StopSprint);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Look);
+	EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::ZoomCamera);
 }
 
 void AUPPlayerCharacter::ShakeCamera(FHitResult& HitResult)
@@ -142,6 +149,15 @@ void AUPPlayerCharacter::ShakeCamera(FHitResult& HitResult)
 		return;
 	}
 	PlayerController->ClientStartCameraShake(HitCameraShake);
+}
+
+void AUPPlayerCharacter::ZoomCamera(float Value)
+{
+	if (Value != 0.0f)
+	{
+		CurrentZoom = FMath::Clamp(CurrentZoom - (Value * ZoomStep), MinZoom, MaxZoom);
+		SpringArm->TargetArmLength = CurrentZoom;
+	}
 }
 
 void AUPPlayerCharacter::AnimationHitStop(FHitResult& HitResult)
@@ -266,6 +282,13 @@ void AUPPlayerCharacter::Sprint(const FInputActionValue& Value)
 void AUPPlayerCharacter::StopSprint(const FInputActionValue& Value)
 {
 	CharacterMovementComponent->MaxWalkSpeed = 500.0f;
+}
+
+void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
+{
+	float val = Value.Get<float>();
+
+	ZoomCamera(val);
 }
 
 void AUPPlayerCharacter::DashStart(FVector DashDirection, FVector DashVelocity)

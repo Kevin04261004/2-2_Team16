@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Camera/CameraComponent.h"
 #include "GameData/UPCharacterStatData.h"
 #include "GameData/UPCharacterStat.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPDamageableInterface.h"
 #include "UPCharacterBase.generated.h"
@@ -21,6 +23,13 @@ public:
 	virtual void BeginPlay() override;
 	
 	virtual void PostInitializeComponents() override;
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Camera")
+	USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Camera")
+	UCameraComponent* Camera;
 	
 // ComboAction Section
 protected:

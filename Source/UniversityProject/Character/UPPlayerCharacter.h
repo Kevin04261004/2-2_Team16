@@ -47,6 +47,20 @@ protected:
 
 	void ShakeCamera(FHitResult& HitResult);
 
+	UPROPERTY(EditAnywhere, Category="Camera")
+	float MinZoom = 300.0f;
+
+	UPROPERTY(EditAnywhere, Category="Camera")
+	float MaxZoom = 1000.0f;
+
+	UPROPERTY(EditAnywhere, Category="Camera")
+	float ZoomStep = 10.0f;
+
+	UPROPERTY(EditAnywhere, Category="Camera")
+	float CurrentZoom;
+
+	UFUNCTION()
+	void ZoomCamera(float Value);
 // Animation Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Animation)
@@ -71,14 +85,16 @@ protected:
 	TObjectPtr<class UInputAction> SprintAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> LookAction;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> CameraZoomAction;
+	
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Attack(const FInputActionValue& Value);
 	void Dash(const FInputActionValue& Value);
 	void Sprint(const FInputActionValue& Value);
 	void StopSprint(const FInputActionValue& Value);
-	
+	void ZoomCamera(const FInputActionValue& Value);
 /* dash Section*/
 protected:
 	FOnTimelineFloat TimelineCallback;
@@ -98,4 +114,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Timeline")
 	UCurveFloat* DashCurve;
+
+
 };

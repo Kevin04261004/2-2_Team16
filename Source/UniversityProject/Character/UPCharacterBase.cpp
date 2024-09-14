@@ -8,6 +8,7 @@
 #include "Components/UPComboAttackComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Weapon/UPWeapon.h"
 
 // Sets default values
@@ -56,6 +57,16 @@ AUPCharacterBase::AUPCharacterBase()
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Game/UniversityProject/Animation/AM_Dead.AM_Dead"));
 	check(DeadMontageRef.Object != nullptr);
 	DeadMontage = DeadMontageRef.Object;
+
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm->SetupAttachment(RootComponent); // RootComponent 또는 Mesh에 연결
+	SpringArm->TargetArmLength = 300.0f;       // 카메라와 캐릭터 사이의 기본 거리
+	SpringArm->bUsePawnControlRotation = true; // 캐릭터의 회전과 동기화
+
+	// Camera 초기화
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName); // SpringArm에 연결
+	Camera->bUsePawnControlRotation = false; // 카메라 자체 회전 금지
 }
 
 void AUPCharacterBase::BeginPlay()
