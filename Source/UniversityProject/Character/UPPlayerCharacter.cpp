@@ -14,6 +14,8 @@
 #include "Components/TimelineComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
+#include "Engine/PostProcessVolume.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Weapon/UPWeapon.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter()
@@ -204,7 +206,7 @@ void AUPPlayerCharacter::Move(const FInputActionValue& Value)
 
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
+	
 	AddMovementInput(ForwardDirection, MovementVector.X);
 	AddMovementInput(RightDirection, MovementVector.Y);
 }

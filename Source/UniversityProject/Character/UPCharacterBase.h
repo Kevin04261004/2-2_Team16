@@ -9,11 +9,12 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
+#include "Interface/UPCharacterGoForwardInterface.h"
 #include "Interface/UPDamageableInterface.h"
 #include "UPCharacterBase.generated.h"
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface, public IUPAnimationAttackCheckInterface
+class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface, public IUPAnimationAttackCheckInterface, public IUPCharacterGoForwardInterface
 {
 	GENERATED_BODY()
 
@@ -36,6 +37,14 @@ protected:
 	TObjectPtr<UClass> WeaponClass;
 	
 	virtual void AttackHitCheck() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= ComboAttack, Meta = (AllowPrivateAccess = "true"))
+	float GoForwardDistance = 300.0f;
+	
+	UPrimitiveComponent* CollisionComponent;
+	FTimerHandle PhysicsTimerHandle;
+	virtual void GoForward() override;
+	void SetPhysicsFalse();
 // Attack Hit Section
 protected:
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;

@@ -8,7 +8,6 @@
 #include "Components/UPComboAttackComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "Weapon/UPWeapon.h"
 
 // Sets default values
@@ -90,6 +89,25 @@ void AUPCharacterBase::AttackHitCheck()
 {
 	check(Weapon != nullptr);
 	Weapon->CheckAttackRange();
+}
+
+void AUPCharacterBase::GoForward()
+{
+	IUPCharacterGoForwardInterface::GoForward();
+
+	CollisionComponent = Cast<UPrimitiveComponent>(GetRootComponent());
+	CollisionComponent->SetSimulatePhysics(true);
+	CollisionComponent->AddImpulse(GetActorForwardVector() * GoForwardDistance,"", true);
+
+	GetWorld()->GetTimerManager().SetTimer(PhysicsTimerHandle, this, &AUPCharacterBase::SetPhysicsFalse, 0.2f, false);
+}
+
+void AUPCharacterBase::SetPhysicsFalse()
+{
+	if (CollisionComponent != nullptr)
+	{
+		CollisionComponent->SetSimulatePhysics(false);
+	}
 }
 
 float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)

@@ -8,12 +8,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f23c5a2c-eee8-4698-9eae-9b888130aac6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Config/DefaultNiagara.ini" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Blur/M_HitSuccessScreenBlur.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/SpeedLine/M_SpeedLine.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Animation/Notify/UPMoveForwardAnimNotify.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Animation/Notify/UPMoveForwardAnimNotify.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPCharacterGoForwardInterface.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPCharacterGoForwardInterface.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/AM_ComboAttack.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Animation/AM_ComboAttack.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/WarriorWalkFwd/Driving_WarriorWalkFwd.uasset" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Blur/M_HitSuccessScreenBlur.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Blur/M_HitSuccessScreenBlur.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPUserWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPUserWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Interface/UPUserWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPUserWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/UI/UPHpBarWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPHpBarWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/UI/UPWidgetComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/UI/UPWidgetComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,16 +60,21 @@
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/Animation/AnimInstance.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/Engine/HitResult.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/Character.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/NavMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/Pawn.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/PlayerController.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Private/Character.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Private/Timeline.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Public/TimerManager.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://C:/Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/UMG/Public/Blueprint/UserWidget.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPDamagableActor.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Interface/UPUserWidget.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Interface/UPUserWidget.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Interface/UPWidgetInterface.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/UI/UPUserWidget.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/UI/UPUserWidget.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -190,6 +206,9 @@
       <workItem from="1726271754956" duration="266000" />
       <workItem from="1726279668729" duration="796000" />
       <workItem from="1726280559274" duration="9842000" />
+      <workItem from="1726305993100" duration="1496000" />
+      <workItem from="1726307506591" duration="5574000" />
+      <workItem from="1726333950823" duration="4598000" />
     </task>
     <servers />
   </component>

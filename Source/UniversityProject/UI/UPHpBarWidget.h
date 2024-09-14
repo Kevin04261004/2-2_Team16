@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameData/UPCharacterStat.h"
-#include "Interface/UPUserWidget.h"
+#include "UI/UPUserWidget.h"
 #include "UPHpBarWidget.generated.h"
 
 /**
