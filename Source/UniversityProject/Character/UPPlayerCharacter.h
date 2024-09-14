@@ -42,7 +42,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UCameraComponent> FollowCamera;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Camera)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TSubclassOf<UCameraShakeBase> HitCameraShake;
 
 	void ShakeCamera(FHitResult& HitResult);
@@ -114,6 +114,4 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Timeline")
 	UCurveFloat* DashCurve;
-
-
 };
