@@ -3,18 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Camera/CameraComponent.h"
+#include "AfterImage/UPAfterImage.h"
 #include "GameData/UPCharacterStatData.h"
 #include "GameData/UPCharacterStat.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "Interface/UPAfterImageableInterface.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterGoForwardInterface.h"
 #include "Interface/UPDamageableInterface.h"
 #include "UPCharacterBase.generated.h"
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface, public IUPAnimationAttackCheckInterface, public IUPCharacterGoForwardInterface
+class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface, public IUPAnimationAttackCheckInterface, public IUPCharacterGoForwardInterface, public IUPAfterImageableInterface
 {
 	GENERATED_BODY()
 
@@ -83,4 +83,11 @@ protected:
 public:
 	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return Stat.Get(); }
 	void ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);
+
+// After Image;
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UClass> AfterImageClass;
+	
+	virtual void CreateAfterImage() override;
 };

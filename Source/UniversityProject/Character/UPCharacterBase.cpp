@@ -171,3 +171,14 @@ void AUPCharacterBase::ApplyStat(const FUPCharacterStat& BaseStat, const FUPChar
 	float MovementSpeed = (BaseStat + ModifierStat).MovementSpeed;
 	GetCharacterMovement()->MaxWalkSpeed = MovementSpeed;
 }
+
+void AUPCharacterBase::CreateAfterImage()
+{
+	check(AfterImageClass != nullptr);
+
+	FVector location = GetActorLocation() - FVector(0.f,0.f,100.f);
+	FRotator rotation = GetActorRotation() - FRotator(0.f,100.f,0.f);
+	
+	AUPAfterImage* afterImage = GetWorld()->SpawnActor<AUPAfterImage>(AfterImageClass, location, rotation);
+	afterImage->Init(GetMesh());
+}
