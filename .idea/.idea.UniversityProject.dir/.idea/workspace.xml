@@ -8,12 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f23c5a2c-eee8-4698-9eae-9b888130aac6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Fade/M_Blode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Fade/M_EdgeFadeDesaturation.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Graphics/Effects/Fade/M_EdgeFadeDesaturation.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Manager/UPPostProcessManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Manager/UPPostProcessManager.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,7 +230,7 @@
       <workItem from="1726333950823" duration="15041000" />
       <workItem from="1726379510241" duration="12657000" />
       <workItem from="1726418269032" duration="1417000" />
-      <workItem from="1726421142829" duration="744000" />
+      <workItem from="1726421142829" duration="1239000" />
     </task>
     <servers />
   </component>
