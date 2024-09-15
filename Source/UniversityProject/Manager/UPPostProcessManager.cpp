@@ -28,7 +28,7 @@ void UUPPostProcessManager::FindPostProcessVolume()
 			break;
 		}
 
-		if (PostProcessVolume != nullptr)
+		if (PostProcessVolume == nullptr)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("No PostProcessingVolume found"));
 		}

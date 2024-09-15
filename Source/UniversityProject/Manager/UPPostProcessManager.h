@@ -10,6 +10,7 @@ UENUM()
 enum EPostProcessMaterialType
 {
 	Blur = 0,
+	SpeedLine = 1,
 	
 };
 
