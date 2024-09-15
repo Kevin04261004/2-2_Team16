@@ -11,7 +11,8 @@ enum EPostProcessMaterialType
 {
 	Blur = 0,
 	SpeedLine = 1,
-	
+	EdgeFadeDesaturation = 2,
+	Blode = 3,
 };
 
 /**
