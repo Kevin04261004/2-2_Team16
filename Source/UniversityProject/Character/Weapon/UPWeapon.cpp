@@ -17,8 +17,8 @@ AUPWeapon::AUPWeapon()
 	CollisionSocketNameArray.Add(TEXT("2"));
 	CollisionSocketNameArray.Add(TEXT("3"));
 
-	SocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
-	BeforeSocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
+	SocketLocationArray.Init(FVector::ZeroVector, CollisionSocketNameArray.Num());
+	BeforeSocketLocationArray.Init(FVector::ZeroVector, CollisionSocketNameArray.Num());
 }
 
 void AUPWeapon::Tick(float DeltaSeconds)
@@ -49,8 +49,8 @@ void AUPWeapon::ComboStepEnd()
 		check(WeaponMesh->DoesSocketExist(CollisionSocketNameArray[i]));
 		check(SocketLocationArray.IsValidIndex(i));
 		check(BeforeSocketLocationArray.IsValidIndex(i));
-		BeforeSocketLocationArray[i] = FVector(0, 0, 0);
-		SocketLocationArray[i] = FVector(0, 0, 0);
+		BeforeSocketLocationArray[i] = FVector::ZeroVector;
+		SocketLocationArray[i] = FVector::ZeroVector;
 	}
 }
 
@@ -128,7 +128,7 @@ void AUPWeapon::CheckCollisionSockets()
     }
 
     // 이전 위치가 초기값이면(처음이면) 리턴
-    if (BeforeSocketLocationArray.IsValidIndex(0) && BeforeSocketLocationArray[0] == FVector(0,0,0))
+    if (BeforeSocketLocationArray.IsValidIndex(0) && BeforeSocketLocationArray[0] == FVector::ZeroVector)
     {
         return;
     }

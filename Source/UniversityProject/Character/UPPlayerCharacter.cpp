@@ -165,15 +165,17 @@ void AUPPlayerCharacter::ZoomCamera(float Value)
 
 void AUPPlayerCharacter::AnimationHitStop(FHitResult& HitResult)
 {
-	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance == nullptr)
 	{
-		UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
-		if (CurrentMontage)
-		{
-			AnimInstance->Montage_Pause(CurrentMontage);
-		}
-		SetHitStopTimer();
+		return;
 	}
+	UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
+	if (CurrentMontage)
+	{
+		AnimInstance->Montage_Pause(CurrentMontage);
+	}
+	SetHitStopTimer();
 }
 
 void AUPPlayerCharacter::SetHitStopTimer()
@@ -187,13 +189,15 @@ void AUPPlayerCharacter::SetHitStopTimer()
 
 void AUPPlayerCharacter::ResumeAnimation()
 {
-	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance == nullptr)
 	{
-		UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
-		if (CurrentMontage)
-		{
-			AnimInstance->Montage_Resume(CurrentMontage);
-		}
+		return;
+	}
+	UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
+	if (CurrentMontage)
+	{
+		AnimInstance->Montage_Resume(CurrentMontage);
 	}
 }
 
