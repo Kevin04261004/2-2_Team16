@@ -13,5 +13,9 @@ UCLASS()
 class UNIVERSITYPROJECT_API AUPPettuAIController : public AAIController
 {
 	GENERATED_BODY()
-	
+public:
+	explicit AUPPettuAIController(FObjectInitializer const& ObjectInitializer);
+
+protected:
+	virtual void OnPossess(APawn* InPawn) override;
 };
