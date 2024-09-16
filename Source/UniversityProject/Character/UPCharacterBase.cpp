@@ -68,6 +68,7 @@ void AUPCharacterBase::BeginPlay()
 	check(StatComponent != nullptr);
 	check(CharacterInitalizeStatData != nullptr);	
 	StatComponent->SetBaseStat(CharacterInitalizeStatData->Stat);
+    GetCharacterMovement()->MaxWalkSpeed = CharacterInitalizeStatData->Stat.WalkSpeed;
 	
 	// Spawn the weapon(Actor) & Get hand Socket to Add it
 	FActorSpawnParameters SpawnParams;
@@ -189,7 +190,7 @@ void AUPCharacterBase::PlayDeadAnimation()
 
 void AUPCharacterBase::ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat)
 {
-	float MovementSpeed = (BaseStat + ModifierStat).MovementSpeed;
+	float MovementSpeed = (BaseStat + ModifierStat).WalkSpeed;
 	GetCharacterMovement()->MaxWalkSpeed = MovementSpeed;
 }
 

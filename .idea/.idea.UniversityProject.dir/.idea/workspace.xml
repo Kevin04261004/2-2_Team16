@@ -8,20 +8,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f23c5a2c-eee8-4698-9eae-9b888130aac6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Effects/BP_PlayerCharacterAfterImage.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Enemys/BP_TestEnemy.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Enemys/BP_TestEnemy2.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacterAfterImage.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacterAfterImage.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_TestEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_TestEnemy.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_TestEnemy2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_TestEnemy2.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/GameData/DA_PlayerCharacterStat.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/GameData/DA_PlayerCharacterStat.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/GameData/DA_TestEnemyStat.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/GameData/DA_TestEnemyStat.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/Level/MainLevel.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/GameData/UPCharacterStat.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/GameData/UPCharacterStat.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -214,6 +207,9 @@
       <workItem from="1726418269032" duration="1417000" />
       <workItem from="1726421142829" duration="1239000" />
       <workItem from="1726430232102" duration="8648000" />
+      <workItem from="1726462703746" duration="1706000" />
+      <workItem from="1726480179696" duration="403000" />
+      <workItem from="1726480633200" duration="460000" />
     </task>
     <servers />
   </component>

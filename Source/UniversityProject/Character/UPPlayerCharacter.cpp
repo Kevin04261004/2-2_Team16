@@ -12,6 +12,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "Components/TimelineComponent.h"
+#include "Components/UPCharacterStatComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
 #include "Engine/PostProcessVolume.h"
@@ -283,12 +284,12 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 
 void AUPPlayerCharacter::Sprint(const FInputActionValue& Value)
 {
-	CharacterMovementComponent->MaxWalkSpeed = 1000.0f;
+	CharacterMovementComponent->MaxWalkSpeed = StatComponent->GetTotalStat().SprintSpeed;
 }
 
 void AUPPlayerCharacter::StopSprint(const FInputActionValue& Value)
 {
-	CharacterMovementComponent->MaxWalkSpeed = 500.0f;
+	CharacterMovementComponent->MaxWalkSpeed = StatComponent->GetTotalStat().WalkSpeed;
 }
 
 void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
