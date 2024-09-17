@@ -8,15 +8,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f23c5a2c-eee8-4698-9eae-9b888130aac6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Enemys/BP_PettuCharacter.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/GameData/DA_PettuCharacterStat.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/UniversityProject/Level/GH_TestLevel.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/NewPoseSearchDatabase.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/NewPoseSearchNormalizationSet.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/NewPoseSearchSchema.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UniversityProject.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/UniversityProject.uproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,17 +38,17 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/../../Unreal Engine/UE_5.4/Engine/Source/Runtime/AIModule/Classes/Blueprint/AIBlueprintHelperLibrary.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.h" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Animation/UPAnimInstance.h" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.h" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.h" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Animation/UPAnimInstance.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/UniversityProject/Character/Weapon/UPWeapon.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -169,6 +167,8 @@
       <workItem from="1726199388452" duration="616000" />
       <workItem from="1726486045545" duration="792000" />
       <workItem from="1726486857221" duration="4768000" />
+      <workItem from="1726508016777" duration="2863000" />
+      <workItem from="1726566902565" duration="5570000" />
     </task>
     <servers />
   </component>

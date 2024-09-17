@@ -26,11 +26,19 @@ class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPCharacterBase
 	GENERATED_BODY()
 public:
 	AUPPettuCharacter();
-	TObjectPtr<class UBehaviorTree> GetBehaviorTree() const { return BTree; }
+
+	virtual void PostInitializeComponents() override;
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UBehaviorTree> BTree;
+
+	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	virtual void SetDead() override;
+
+public:
+	TObjectPtr<class UBehaviorTree> GetBehaviorTree() const { return BTree; }
 	
 private:
 
@@ -38,7 +46,7 @@ private:
 	float MaxHp;
 	float AttackDamage;
 	float AttackSpeed;
-	float MovementSpeed;
+	float PettuMovementSpeed;
 	float MaxComboCount;
 	float BaseComboFrameRate;
 	float LastComboFrameRate;

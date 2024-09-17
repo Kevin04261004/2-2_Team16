@@ -10,18 +10,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="24c72154-1dc1-4959-8403-06eefc0588a4" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPettuCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/NewPoseSearchDatabase.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/NewPoseSearchNormalizationSet.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/Animation/NewPoseSearchSchema.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UniversityProject.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/UniversityProject.uproject" afterDir="false" />
-    </list>
+    <list default="true" id="24c72154-1dc1-4959-8403-06eefc0588a4" name="변경" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -497,7 +486,7 @@
       <workItem from="1725867521352" duration="2252000" />
       <workItem from="1725926724795" duration="4628000" />
       <workItem from="1726027517507" duration="621000" />
-      <workItem from="1726499962878" duration="2211000" />
+      <workItem from="1726499962878" duration="2805000" />
     </task>
     <servers />
   </component>
