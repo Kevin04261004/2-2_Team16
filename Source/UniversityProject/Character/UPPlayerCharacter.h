@@ -21,7 +21,7 @@ class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase, public
 	GENERATED_BODY()
 
 public:
-	AUPPlayerCharacter();
+	AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer);
 	virtual void PostInitializeComponents() override;
 
 protected:

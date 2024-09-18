@@ -7,10 +7,11 @@
 #include "Components/UPCharacterMovementComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Runtime/MovieSceneTracks/Private/MovieSceneTracksCustomAccessors.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
 // Sets default values
-AUPCharacterBase::AUPCharacterBase()
+AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	// Pawn
 	bUseControllerRotationPitch = false;
@@ -23,15 +24,15 @@ AUPCharacterBase::AUPCharacterBase()
 	CapsuleComponent_->SetCollisionProfileName("Capsule");
 	
 	// Movement
-	CharacterMovementComponent = CreateDefaultSubobject<UUPCharacterMovementComponent>(TEXT("CharacterMovementComponent"));
-	CharacterMovementComponent->bOrientRotationToMovement = true;
-	CharacterMovementComponent->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
-	CharacterMovementComponent->JumpZVelocity = 700.f;
-	CharacterMovementComponent->AirControl = 0.35f;
-	CharacterMovementComponent->MaxWalkSpeed = 500.f;
-	CharacterMovementComponent->MinAnalogWalkSpeed = 20.f;
-	CharacterMovementComponent->BrakingDecelerationWalking = 2000.f;
-
+	MovementComponent = Cast<UUPCharacterMovementComponent>(GetCharacterMovement());
+	MovementComponent->bOrientRotationToMovement = true;
+	MovementComponent->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
+	MovementComponent->JumpZVelocity = 700.f;
+	MovementComponent->AirControl = 0.35f;
+	MovementComponent->MaxWalkSpeed = 500.f;
+	MovementComponent->MinAnalogWalkSpeed = 20.f;
+	MovementComponent->BrakingDecelerationWalking = 2000.f;
+	
 	// Mesh
 	TObjectPtr<USkeletalMeshComponent> MeshComponent = GetMesh();
 	MeshComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -100.0f), FRotator(0.0f, -90.0f, 0.0f));
@@ -40,6 +41,7 @@ AUPCharacterBase::AUPCharacterBase()
 
 	// Set Stat
 	StatComponent = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
+
 }
 
 void AUPCharacterBase::BeginPlay()
@@ -57,8 +59,8 @@ void AUPCharacterBase::BeginPlay()
 	check(StatComponent != nullptr);
 	check(CharacterInitalizeStatData != nullptr);	
 	StatComponent->SetBaseStat(CharacterInitalizeStatData->Stat);
-	GetCharacterMovement()->SetCharacterStat(StatComponent);
-    GetCharacterMovement()->SetIsSprinting(false);
+	MovementComponent->SetCharacterStat(StatComponent);
+    MovementComponent->SetIsSprinting(false);
 	
 	// Spawn the weapon(Actor) & Get hand Socket to Add it
 	FActorSpawnParameters SpawnParams;
@@ -143,5 +145,5 @@ void AUPCharacterBase::PlayDeadAnimation()
 void AUPCharacterBase::ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat)
 {
 	float MovementSpeed = (BaseStat + ModifierStat).WalkSpeed;
-	GetCharacterMovement()->SetIsSprinting(GetCharacterMovement()->GetIsSprinting());
+	MovementComponent->SetIsSprinting(MovementComponent->GetIsSprinting());
 }

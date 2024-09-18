@@ -17,7 +17,7 @@
 #include "Interface/UPGameInterface.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
-AUPPlayerCharacter::AUPPlayerCharacter()
+AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -148,7 +148,7 @@ void AUPPlayerCharacter::ZoomCamera(float Value)
 void AUPPlayerCharacter::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
-
+	
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0);
 
@@ -227,12 +227,12 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 
 void AUPPlayerCharacter::Sprint(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->SetIsSprinting(true);
+	MovementComponent->SetIsSprinting(true);
 }
 
 void AUPPlayerCharacter::Walk(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->SetIsSprinting(false);
+	MovementComponent->SetIsSprinting(false);
 }
 
 void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)

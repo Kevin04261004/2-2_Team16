@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/UPCharacterMovementComponent.h"
 #include "GameData/UPCharacterStatData.h"
 #include "GameData/UPCharacterStat.h"
 #include "GameFramework/Character.h"
@@ -13,17 +14,16 @@ UCLASS()
 class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface
 {
 	GENERATED_BODY()
-
-// Important!!: Use this Charactermovement Component;
-private:
-	TObjectPtr<class UUPCharacterMovementComponent> CharacterMovementComponent;
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MovementComponent, meta = (AllowPrivateAccess = "true"))
+	UUPCharacterMovementComponent* MovementComponent;
+	
 // Init Section
 public:
-	AUPCharacterBase();
+	AUPCharacterBase(const FObjectInitializer& ObjectInitializer);
 	virtual void BeginPlay() override;
 	
 	virtual void PostInitializeComponents() override;
-	FORCEINLINE UUPCharacterMovementComponent* GetCharacterMovement() { return CharacterMovementComponent; }
 // Utils...
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Init, meta=(AllowPrivateAccess= "true", Tooltip = "캐릭터가 사용하는 애니메이션 클래스"))
