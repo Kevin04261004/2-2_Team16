@@ -22,7 +22,6 @@ class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase, public
 
 public:
 	AUPPlayerCharacter();
-
 	virtual void PostInitializeComponents() override;
 
 protected:
@@ -35,7 +34,7 @@ public:
 
 protected:
 	TObjectPtr<AUPPlayerController> PlayerController;
-	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent;
+	TObjectPtr<UUPCharacterMovementComponent> CharacterMovementComponent;
 	
 // Camera Section
 protected:
@@ -64,31 +63,21 @@ protected:
 
 	UFUNCTION()
 	void ZoomCamera(float Value);
-// Animation Section
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Animation)
-	float PauseDuration = 0.15f;
-
-	void AnimationHitStop(FHitResult& HitResult);
-	void SetHitStopTimer();
-	void ResumeAnimation();
-	
 // Input Section
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputMappingContext> IMC_BackView;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> MoveAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> AttackAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> DashAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> SprintAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> LookAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> CameraZoomAction;
 	
 	void Move(const FInputActionValue& Value);
@@ -96,9 +85,9 @@ protected:
 	void Attack(const FInputActionValue& Value);
 	void Dash(const FInputActionValue& Value);
 	void Sprint(const FInputActionValue& Value);
-	void StopSprint(const FInputActionValue& Value);
+	void Walk(const FInputActionValue& Value);
 	void ZoomCamera(const FInputActionValue& Value);
-/* dash Section*/
+/* dash Section */
 protected:
 	FOnTimelineFloat TimelineCallback;
 	FOnTimelineEvent TimelineFinishedCallback;
@@ -135,7 +124,7 @@ protected:
 	
 	virtual void AttackHitCheck() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= ComboAttack, Meta = (AllowPrivateAccess = "true", Tooltip = "공격 시 얼마나 앞으로 이동하는가"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= Init, Meta = (AllowPrivateAccess = "true", Tooltip = "공격 시 얼마나 앞으로 이동하는가"))
 	float GoForwardDistance;
 	
 	UPrimitiveComponent* CollisionComponent;

@@ -6,6 +6,7 @@
 #include "AfterImage/UPAfterImage.h"
 #include "Components/UPCharacterStatComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/UPCharacterMovementComponent.h"
 #include "Components/UPComboAttackComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -59,7 +60,8 @@ void AUPCharacterBase::BeginPlay()
 	check(StatComponent != nullptr);
 	check(CharacterInitalizeStatData != nullptr);	
 	StatComponent->SetBaseStat(CharacterInitalizeStatData->Stat);
-    GetCharacterMovement()->MaxWalkSpeed = CharacterInitalizeStatData->Stat.WalkSpeed;
+	GetCharacterMovement()->SetCharacterStat(StatComponent);
+    GetCharacterMovement()->SetIsSprinting(false);
 	
 	// Spawn the weapon(Actor) & Get hand Socket to Add it
 	FActorSpawnParameters SpawnParams;
@@ -144,5 +146,5 @@ void AUPCharacterBase::PlayDeadAnimation()
 void AUPCharacterBase::ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat)
 {
 	float MovementSpeed = (BaseStat + ModifierStat).WalkSpeed;
-	GetCharacterMovement()->MaxWalkSpeed = MovementSpeed;
+	GetCharacterMovement()->SetIsSprinting(GetCharacterMovement()->GetIsSprinting());
 }

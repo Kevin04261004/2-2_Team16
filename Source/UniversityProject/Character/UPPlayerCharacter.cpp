@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Character/UPPlayerCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -13,7 +12,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "Components/TimelineComponent.h"
-#include "Components/UPCharacterStatComponent.h"
+#include "Components/UPCharacterMovementComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
@@ -22,44 +21,18 @@ AUPPlayerCharacter::AUPPlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	/* Init Components */
 	// Camera Setting
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f;
 	CameraBoom->bUsePawnControlRotation = true;
-
+	
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionMoveRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Move.IA_Move"));
-	check(InputActionMoveRef.Object != nullptr);
-	MoveAction = InputActionMoveRef.Object;
-
-	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionLookRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Look.IA_Look"));
-	check(InputActionLookRef.Object != nullptr);
-	LookAction = InputActionLookRef.Object;
-
-	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionAttackRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Attack.IA_Attack"));
-	check(InputActionAttackRef.Object != nullptr);
-	AttackAction = InputActionAttackRef.Object;
-
-	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionDashRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Dash.IA_Dash"));
-	check(InputActionDashRef.Object != nullptr);
-	DashAction = InputActionDashRef.Object;
-
-	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionSprintRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Sprint.IA_Sprint"));
-	check(InputActionSprintRef.Object != nullptr);
-	SprintAction = InputActionSprintRef.Object;
-
-	static ConstructorHelpers::FObjectFinder<UInputAction> CameraZoomActionSprintRef(TEXT("/Game/UniversityProject/Input/Actions/IA_CameraZoom.IA_CameraZoom"));
-	check(CameraZoomActionSprintRef.Object != nullptr);
-	CameraZoomAction = CameraZoomActionSprintRef.Object;
-	
-	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCBackViewRef(TEXT("/Game/UniversityProject/Input/IMC_BackView.IMC_BackView"));
-	check(IMCBackViewRef.Object != nullptr);
-	IMC_BackView = IMCBackViewRef.Object;
-
+	// 
 	static ConstructorHelpers::FObjectFinder<UCurveFloat> CurveRef(TEXT("/Game/UniversityProject/GameData/CV_DashCurve"));
 	if (CurveRef.Succeeded())
 	{
@@ -89,9 +62,6 @@ AUPPlayerCharacter::AUPPlayerCharacter()
 
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
-
-	// Set GoForwardDistance
-	GoForwardDistance = 300.0f;
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -117,9 +87,6 @@ void AUPPlayerCharacter::BeginPlay()
 	}
 	Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::ShakeCamera);
 
-	// AnimationHitStop 삭제
-	// Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::AnimationHitStop);
-
 	CurrentZoom = CameraBoom->TargetArmLength;
 
 	/* Actor Delegate */
@@ -129,8 +96,6 @@ void AUPPlayerCharacter::BeginPlay()
 		ComboAttack->OnComboAttackFinish.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 		ComboAttack->OnComboStepEnd.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 	}
-	// ComboAttack->OnComboAttackFinish.AddUObject(Weapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
-	// ComboAttack->OnComboStepEnd.AddUObject(Weapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -160,7 +125,7 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Attack);
 	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Dash);
 	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Sprint);
-	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AUPPlayerCharacter::StopSprint);
+	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AUPPlayerCharacter::Walk);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Look);
 	EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::ZoomCamera);
 }
@@ -180,44 +145,6 @@ void AUPPlayerCharacter::ZoomCamera(float Value)
 	{
 		CurrentZoom = FMath::Clamp(CurrentZoom - (Value * ZoomStep), MinZoom, MaxZoom);
 		CameraBoom->TargetArmLength = CurrentZoom;
-	}
-}
-
-void AUPPlayerCharacter::AnimationHitStop(FHitResult& HitResult)
-{
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance == nullptr)
-	{
-		return;
-	}
-	UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
-	if (CurrentMontage)
-	{
-		AnimInstance->Montage_Pause(CurrentMontage);
-	}
-	SetHitStopTimer();
-}
-
-void AUPPlayerCharacter::SetHitStopTimer()
-{
-	// 타이머 핸들 선언
-	FTimerHandle UnpauseTimerHandle;
-
-	// 일정 시간이 지나면 다시 재개
-	GetWorld()->GetTimerManager().SetTimer(UnpauseTimerHandle, this, &AUPPlayerCharacter::ResumeAnimation, PauseDuration, false);
-}
-
-void AUPPlayerCharacter::ResumeAnimation()
-{
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance == nullptr)
-	{
-		return;
-	}
-	UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
-	if (CurrentMontage)
-	{
-		AnimInstance->Montage_Resume(CurrentMontage);
 	}
 }
 
@@ -303,19 +230,18 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 
 void AUPPlayerCharacter::Sprint(const FInputActionValue& Value)
 {
-	CharacterMovementComponent->MaxWalkSpeed = StatComponent->GetTotalStat().SprintSpeed;
+	CharacterMovementComponent->SetIsSprinting(true);
 }
 
-void AUPPlayerCharacter::StopSprint(const FInputActionValue& Value)
+void AUPPlayerCharacter::Walk(const FInputActionValue& Value)
 {
-	CharacterMovementComponent->MaxWalkSpeed = StatComponent->GetTotalStat().WalkSpeed;
+	CharacterMovementComponent->SetIsSprinting(false);
 }
 
 void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
 {
-	float val = Value.Get<float>();
-
-	ZoomCamera(val);
+	float zoomAxis = Value.Get<float>();
+	ZoomCamera(zoomAxis);
 }
 
 void AUPPlayerCharacter::DashStart(FVector DashDirection, FVector DashVelocity)
@@ -376,7 +302,7 @@ void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 	
 	// SimulatePhysics가 true이면, 캐릭터가 인풋으로 이동이 불가능함. 그래서, 0.2초정도 활성화 후 되돌리기.
 	CollisionComponent->SetSimulatePhysics(true);
-	if (!TryCheckForwardCollision(GoForwardDistance / 3.f))
+	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f))
 	{
 		CollisionComponent->AddImpulse(GetActorForwardVector() * GoForwardDistance,"", true);
 	}
