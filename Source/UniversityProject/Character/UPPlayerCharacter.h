@@ -6,6 +6,9 @@
 #include "Character/UPCharacterBase.h"
 #include "InputActionValue.h"
 #include "Components/TimelineComponent.h"
+#include "Interface/UPAfterImageableInterface.h"
+#include "Interface/UPAnimationAttackCheckInterface.h"
+#include "Interface/UPCharacterGoForwardInterface.h"
 #include "Player/UPPlayerController.h"
 #include "UPPlayerCharacter.generated.h"
 
@@ -13,7 +16,7 @@
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase
+class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterGoForwardInterface, public IUPAfterImageableInterface
 {
 	GENERATED_BODY()
 
@@ -114,4 +117,29 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Timeline")
 	UCurveFloat* DashCurve;
+
+// After Image;
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 잔상 이펙트"))
+	TObjectPtr<UClass> AfterImageClass;
+	
+	virtual void CreateAfterImage() override;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터로부터 얼마나 떨어져서 생성되는지"))
+	FVector PositionOffset;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터로부터 얼마나 회전해서 생성되는지"))
+	FRotator RotationOffset;
+// ComboAction Section
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true", Tooltip = "콤보 공격 컴포넌트"))
+	TObjectPtr<class UUPComboAttackComponent> ComboAttack;
+	
+	virtual void AttackHitCheck() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= ComboAttack, Meta = (AllowPrivateAccess = "true", Tooltip = "공격 시 얼마나 앞으로 이동하는가"))
+	float GoForwardDistance;
+	
+	UPrimitiveComponent* CollisionComponent;
+	FTimerHandle PhysicsTimerHandle;
+	virtual void GoForward() override;
+	void SetPhysicsFalse();
 };

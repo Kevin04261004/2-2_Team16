@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
+#include "AfterImage/UPAfterImage.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/UPComboAttackComponent.h"
@@ -15,9 +16,7 @@
 #include "Components/UPCharacterStatComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
-#include "Engine/PostProcessVolume.h"
-#include "Materials/MaterialInstanceDynamic.h"
-#include "Weapon/UPWeapon.h"
+#include "Weapon/UPPlayerCharacterWeapon.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter()
 {
@@ -83,6 +82,16 @@ AUPPlayerCharacter::AUPPlayerCharacter()
 	}
 
 	DashDistance = 500.0f;
+
+	// Set Offset
+	PositionOffset = FVector(0.f,0.f,-100.f);
+	RotationOffset = FRotator(0.f,-100.f,0.f);
+
+	// Set Combo
+	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
+
+	// Set GoForwardDistance
+	GoForwardDistance = 300.0f;
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -112,6 +121,10 @@ void AUPPlayerCharacter::BeginPlay()
 	// Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::AnimationHitStop);
 
 	CurrentZoom = CameraBoom->TargetArmLength;
+
+	/* Actor Delegate */
+	ComboAttack->OnComboAttackFinish.AddUObject(Weapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
+	ComboAttack->OnComboStepEnd.AddUObject(Weapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -325,4 +338,44 @@ void AUPPlayerCharacter::UpdateDash(float Value)
 void AUPPlayerCharacter::FinishDash()
 {
 	CharacterMovementComponent->Velocity = DashEndVelocity * 500.0f;
+}
+
+void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
+{
+	check(AfterImageClass != nullptr);
+
+	FVector location = GetActorLocation() + PositionOffset;
+	FRotator rotation = GetActorRotation() + RotationOffset;
+	
+	AUPAfterImage* afterImage = GetWorld()->SpawnActor<AUPAfterImage>(AfterImageClass, location, rotation);
+	afterImage->Init(GetMesh());
+}
+
+void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface
+{
+	check(Weapon != nullptr);
+	Weapon->CheckAttackRange();
+}
+
+void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
+{
+	IUPCharacterGoForwardInterface::GoForward();
+
+	CollisionComponent = Cast<UPrimitiveComponent>(GetRootComponent());
+	
+	// SimulatePhysics가 true이면, 캐릭터가 인풋으로 이동이 불가능함. 그래서, 0.2초정도 활성화 후 되돌리기.
+	CollisionComponent->SetSimulatePhysics(true);
+	if (!TryCheckForwardCollision(GoForwardDistance / 3.f))
+	{
+		CollisionComponent->AddImpulse(GetActorForwardVector() * GoForwardDistance,"", true);
+	}
+	GetWorld()->GetTimerManager().SetTimer(PhysicsTimerHandle, this, &AUPPlayerCharacter::SetPhysicsFalse, 0.2f, false);
+}
+
+void AUPPlayerCharacter::SetPhysicsFalse()
+{
+	if (CollisionComponent != nullptr)
+	{
+		CollisionComponent->SetSimulatePhysics(false);
+	}
 }

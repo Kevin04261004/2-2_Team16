@@ -3,35 +3,28 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UPWeaponBase.h"
 #include "GameFramework/Actor.h"
-#include "UPWeapon.generated.h"
-
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnWeaponHit, FHitResult& /* Result */);
+#include "UPPlayerCharacterWeapon.generated.h"
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPWeapon : public AActor
+class UNIVERSITYPROJECT_API AUPPlayerCharacterWeapon : public AUPWeaponBase
 {
 	GENERATED_BODY()
 
 public:
-	AUPWeapon();
+	AUPPlayerCharacterWeapon();
 
-	void Tick(float DeltaSeconds) override;
+protected:
+	virtual void Tick(float DeltaSeconds) override;
+
+public:
 	// 애니메이션에서 매 프레임마다 호출하는 Notify함수
 	void CheckAttackRange();
 	
 	// 콤보 공격이 종료되었을 때 호출되는 Notify함수
 	void ComboStepEnd();
-
-	// 상대와 충돌함.
-	void Attack(FHitResult& result);
-
-	FOnWeaponHit OnWeaponHit;
 protected:
-	// 메쉬
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
-	USkeletalMeshComponent* WeaponMesh;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
 	TArray<FName> CollisionSocketNameArray;
 
@@ -40,20 +33,10 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
 	TArray<FVector> SocketLocationArray;
-
-	/* 상대방에 Effect가 없으면 실행되는 기본 이펙트 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Effects")
-	UParticleSystem* BaseHitEffect;
-
-	/* 상대방에 Effect가 없으면 실행되는 기본 이펙트 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sounds")
-	USoundBase* BaseHitSound;
-	
-	TArray<AActor*> AttackedActors;
 	
 	// Socket위치를 통해 콜리전 체크.
 	void CheckCollisionSockets();
-
+	virtual void AttackSuccess(FHitResult& result) override;
 /* Time Stop Section */
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Time")

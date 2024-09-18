@@ -1,11 +1,11 @@
-﻿#include "UPWeapon.h"
+﻿#include "UPPlayerCharacterWeapon.h"
 #include "DrawDebugHelpers.h"
 #include "Interface/UPDamageableInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Manager/UPPostProcessManager.h"
 
 // Sets default values
-AUPWeapon::AUPWeapon()
+AUPPlayerCharacterWeapon::AUPPlayerCharacterWeapon()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -21,7 +21,7 @@ AUPWeapon::AUPWeapon()
 	BeforeSocketLocationArray.Init(FVector::ZeroVector, CollisionSocketNameArray.Num());
 }
 
-void AUPWeapon::Tick(float DeltaSeconds)
+void AUPPlayerCharacterWeapon::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
@@ -36,12 +36,12 @@ void AUPWeapon::Tick(float DeltaSeconds)
 	}
 }
 
-void AUPWeapon::CheckAttackRange()
+void AUPPlayerCharacterWeapon::CheckAttackRange()
 {
 	CheckCollisionSockets();
 }
 
-void AUPWeapon::ComboStepEnd()
+void AUPPlayerCharacterWeapon::ComboStepEnd()
 {
 	AttackedActors.Empty();
 	for (int32 i = 0; i < CollisionSocketNameArray.Num(); i++)
@@ -54,65 +54,7 @@ void AUPWeapon::ComboStepEnd()
 	}
 }
 
-void AUPWeapon::Attack(FHitResult& result)
-{
-	if (AttackedActors.Contains(result.GetActor()))
-	{
-		return;
-	}
-	AttackedActors.Add(result.GetActor());
-	
-	IUPDamageableInterface* Damageable = Cast<IUPDamageableInterface>(result.GetActor());
-	if (Damageable == nullptr)
-	{
-		return;
-	}
-
-	/* Effect */
-	UParticleSystem* DamageParticle = BaseHitEffect;
-	if (Damageable->GetHitEffect() != nullptr)
-	{
-		DamageParticle = Damageable->GetHitEffect();
-	}
-	if (DamageParticle != nullptr)
-	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DamageParticle, result.ImpactPoint);
-	}
-	
-	/* Sound */
-	USoundBase* DamageSound = BaseHitSound;
-	if (Damageable->GetHitSound() != nullptr)
-	{
-		DamageSound = Damageable->GetHitSound();
-	}
-	if (DamageSound != nullptr)
-	{
-		UGameplayStatics::SpawnSound2D(GetWorld(), DamageSound);
-	}
-
-	/* Game Time Stop */
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), StopTimeVolume);
-
-	RealTimeAtStart = GetWorld()->GetRealTimeSeconds();
-
-	bIsTimeStopped = true;
-
-	/* Volume */
-	UUPPostProcessManager* PostProcessManager = GetGameInstance()->GetSubsystem<UUPPostProcessManager>();
-	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::Blur, true, 0.1f);
-	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::SpeedLine, true, 0.1f);
-	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::EdgeFadeDesaturation, true, 0.1f);
-	
-	/* delegate */
-	OnWeaponHit.Broadcast(result);
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("충돌됨"), true, FVector2D(1.5f, 1.5f));
-	}
-}
-
-void AUPWeapon::CheckCollisionSockets()
+void AUPPlayerCharacterWeapon::CheckCollisionSockets()
 {
     check(WeaponMesh != nullptr);
 
@@ -197,7 +139,24 @@ void AUPWeapon::CheckCollisionSockets()
     }
 }
 
-void AUPWeapon::ResetTimeDilation()
+void AUPPlayerCharacterWeapon::AttackSuccess(FHitResult& result)
+{
+	Super::AttackSuccess(result);
+	
+	/* Game Time Stop */
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), StopTimeVolume);
+
+	RealTimeAtStart = GetWorld()->GetRealTimeSeconds();
+	bIsTimeStopped = true;
+
+	/* Volume */
+	UUPPostProcessManager* PostProcessManager = GetGameInstance()->GetSubsystem<UUPPostProcessManager>();
+	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::Blur, true, 0.1f);
+	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::SpeedLine, true, 0.1f);
+	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::EdgeFadeDesaturation, true, 0.1f);
+}
+
+void AUPPlayerCharacterWeapon::ResetTimeDilation()
 {
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 }
