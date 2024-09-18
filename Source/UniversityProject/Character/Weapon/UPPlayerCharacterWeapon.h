@@ -36,7 +36,7 @@ protected:
 	
 	// Socket위치를 통해 콜리전 체크.
 	void CheckCollisionSockets();
-	virtual void AttackSuccess(FHitResult& result) override;
+	virtual void AttackSuccess(FHitResult& result, class IUPDamageableInterface* Damageable) override;
 /* Time Stop Section */
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Time")

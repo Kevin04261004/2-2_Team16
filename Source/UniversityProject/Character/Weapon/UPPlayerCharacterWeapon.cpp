@@ -139,9 +139,9 @@ void AUPPlayerCharacterWeapon::CheckCollisionSockets()
     }
 }
 
-void AUPPlayerCharacterWeapon::AttackSuccess(FHitResult& result)
+void AUPPlayerCharacterWeapon::AttackSuccess(FHitResult& result, IUPDamageableInterface* Damageable)
 {
-	Super::AttackSuccess(result);
+	Super::AttackSuccess(result, Damageable);
 	
 	/* Game Time Stop */
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), StopTimeVolume);

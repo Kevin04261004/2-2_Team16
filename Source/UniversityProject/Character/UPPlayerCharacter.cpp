@@ -123,8 +123,14 @@ void AUPPlayerCharacter::BeginPlay()
 	CurrentZoom = CameraBoom->TargetArmLength;
 
 	/* Actor Delegate */
-	ComboAttack->OnComboAttackFinish.AddUObject(Weapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
-	ComboAttack->OnComboStepEnd.AddUObject(Weapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
+	AUPPlayerCharacterWeapon* PlayerWeapon = Cast<AUPPlayerCharacterWeapon>(Weapon);
+	if (PlayerWeapon)
+	{
+		ComboAttack->OnComboAttackFinish.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
+		ComboAttack->OnComboStepEnd.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
+	}
+	// ComboAttack->OnComboAttackFinish.AddUObject(Weapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
+	// ComboAttack->OnComboStepEnd.AddUObject(Weapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -354,7 +360,12 @@ void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
 void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface
 {
 	check(Weapon != nullptr);
-	Weapon->CheckAttackRange();
+	AUPPlayerCharacterWeapon* PlayerWeapon = Cast<AUPPlayerCharacterWeapon>(Weapon);
+	if (PlayerWeapon)
+	{
+		PlayerWeapon->CheckAttackRange();
+	}
+	// Weapon->CheckAttackRange();
 }
 
 void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface

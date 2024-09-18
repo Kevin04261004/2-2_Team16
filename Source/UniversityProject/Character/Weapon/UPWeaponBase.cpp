@@ -18,21 +18,20 @@ void AUPWeaponBase::Attack(FHitResult& result)
 		return;
 	}
 	AttackedActors.Add(result.GetActor());
-	
-	AttackSuccess(result);
-	
-	/* delegate */
-	OnWeaponHit.Broadcast(result);
-}
-
-void AUPWeaponBase::AttackSuccess(FHitResult& result)
-{
 	IUPDamageableInterface* Damageable = Cast<IUPDamageableInterface>(result.GetActor());
 	if (Damageable == nullptr)
 	{
 		return;
 	}
 
+	AttackSuccess(result, Damageable);
+	
+	/* delegate */
+	OnWeaponHit.Broadcast(result);
+}
+
+void AUPWeaponBase::AttackSuccess(FHitResult& result, IUPDamageableInterface* Damageable)
+{
 	/* Effect */
 	UParticleSystem* DamageParticle = BaseHitEffect;
 	if (Damageable->GetHitEffect() != nullptr)
