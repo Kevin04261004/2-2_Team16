@@ -76,9 +76,6 @@ void AUPPlayerCharacter::BeginPlay()
 	PlayerController = Cast<AUPPlayerController>(GetController());
 	check(PlayerController != nullptr);
 	EnableInput(PlayerController);
-	
-	CharacterMovementComponent = GetCharacterMovement();
-	check(CharacterMovementComponent != nullptr);
 
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 	{
@@ -177,7 +174,7 @@ void AUPPlayerCharacter::Attack(const FInputActionValue& Value)
 
 void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 {
-	FVector LastInputVector = CharacterMovementComponent->GetLastInputVector();
+	FVector LastInputVector = GetCharacterMovement()->GetLastInputVector();
 	FVector PlayerLocation = GetActorLocation();
 	FVector TraceDirectionVector = PlayerLocation + (LastInputVector * DashDistance);
 	if (UAIBlueprintHelperLibrary::IsValidAIDirection(LastInputVector))
@@ -230,12 +227,12 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 
 void AUPPlayerCharacter::Sprint(const FInputActionValue& Value)
 {
-	CharacterMovementComponent->SetIsSprinting(true);
+	GetCharacterMovement()->SetIsSprinting(true);
 }
 
 void AUPPlayerCharacter::Walk(const FInputActionValue& Value)
 {
-	CharacterMovementComponent->SetIsSprinting(false);
+	GetCharacterMovement()->SetIsSprinting(false);
 }
 
 void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
@@ -269,7 +266,7 @@ void AUPPlayerCharacter::UpdateDash(float Value)
 
 void AUPPlayerCharacter::FinishDash()
 {
-	CharacterMovementComponent->Velocity = DashEndVelocity * 500.0f;
+	GetCharacterMovement()->Velocity = DashEndVelocity * 500.0f;
 }
 
 void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface

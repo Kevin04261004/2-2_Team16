@@ -10,9 +10,11 @@ UUPCharacterMovementComponent::UUPCharacterMovementComponent()
 
 void UUPCharacterMovementComponent::SetIsSprinting(bool isSprinting)
 {
-	check(StatComponent != nullptr);
+	if (StatComponent == nullptr)
+	{
+		return;
+	}
 	bIsSprinting = isSprinting;
-
 	FUPCharacterStat Stat = StatComponent->GetTotalStat();
 	DesiredSpeed = bIsSprinting ? Stat.SprintSpeed : Stat.WalkSpeed;
 

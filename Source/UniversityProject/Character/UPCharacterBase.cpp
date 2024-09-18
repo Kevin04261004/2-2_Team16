@@ -2,12 +2,9 @@
 
 
 #include "UPCharacterBase.h"
-
-#include "AfterImage/UPAfterImage.h"
 #include "Components/UPCharacterStatComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/UPCharacterMovementComponent.h"
-#include "Components/UPComboAttackComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
@@ -26,7 +23,7 @@ AUPCharacterBase::AUPCharacterBase()
 	CapsuleComponent_->SetCollisionProfileName("Capsule");
 	
 	// Movement
-	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent = GetCharacterMovement();
+	CharacterMovementComponent = CreateDefaultSubobject<UUPCharacterMovementComponent>(TEXT("CharacterMovementComponent"));
 	CharacterMovementComponent->bOrientRotationToMovement = true;
 	CharacterMovementComponent->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
 	CharacterMovementComponent->JumpZVelocity = 700.f;

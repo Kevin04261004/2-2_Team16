@@ -34,7 +34,6 @@ public:
 
 protected:
 	TObjectPtr<AUPPlayerController> PlayerController;
-	TObjectPtr<UUPCharacterMovementComponent> CharacterMovementComponent;
 	
 // Camera Section
 protected:
@@ -106,7 +105,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Timeline")
 	UCurveFloat* DashCurve;
-
 // After Image;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 잔상 이펙트"))

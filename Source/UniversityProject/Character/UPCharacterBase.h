@@ -14,12 +14,16 @@ class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDama
 {
 	GENERATED_BODY()
 
+// Important!!: Use this Charactermovement Component;
+private:
+	TObjectPtr<class UUPCharacterMovementComponent> CharacterMovementComponent;
 // Init Section
 public:
 	AUPCharacterBase();
 	virtual void BeginPlay() override;
 	
 	virtual void PostInitializeComponents() override;
+	FORCEINLINE UUPCharacterMovementComponent* GetCharacterMovement() { return CharacterMovementComponent; }
 // Utils...
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Init, meta=(AllowPrivateAccess= "true", Tooltip = "캐릭터가 사용하는 애니메이션 클래스"))
