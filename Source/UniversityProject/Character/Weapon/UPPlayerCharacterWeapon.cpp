@@ -1,8 +1,8 @@
 ﻿#include "UPPlayerCharacterWeapon.h"
 #include "DrawDebugHelpers.h"
-#include "Interface/UPDamageableInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Manager/UPPostProcessManager.h"
+#include "Physics/Collision.h"
 
 // Sets default values
 AUPPlayerCharacterWeapon::AUPPlayerCharacterWeapon()
@@ -91,29 +91,30 @@ void AUPPlayerCharacterWeapon::CheckCollisionSockets()
         FHitResult HitResult2;
         FHitResult HitResult3;
 
+		FCollisionQueryParams weaponCollisionParams = FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, GetOwner());
         // 라인 트레이스
         bool bHit1 = GetWorld()->LineTraceSingleByChannel(
             HitResult1,
             InterpolatedPosition0,
             InterpolatedPosition1,
-            ECC_Visibility,
-            FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, this)
+            CCHANEL_UPACTION,
+            weaponCollisionParams
         );
 
         bool bHit2 = GetWorld()->LineTraceSingleByChannel(
             HitResult2,
             InterpolatedPosition1,
             InterpolatedPosition2,
-            ECC_Visibility,
-            FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, this)
+            CCHANEL_UPACTION,
+            weaponCollisionParams
         );
 
         bool bHit3 = GetWorld()->LineTraceSingleByChannel(
             HitResult3,
             InterpolatedPosition2,
             InterpolatedPosition0,
-            ECC_Visibility,
-            FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, this)
+            CCHANEL_UPACTION,
+            weaponCollisionParams
         );
 
         // 충돌된 액터가 이미 처리된 액터인지 확인 및 처리

@@ -16,6 +16,7 @@
 #include "Components/UPCharacterMovementComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
+#include "Physics/Collision.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -160,7 +161,7 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 			HitResult,
 			PlayerLocation,
 			TraceDirectionVector,
-			ECC_Visibility,
+			CCHANEL_UPACTION,
 			CollisionParams
 		);
 
@@ -190,7 +191,7 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 			HitResult,
 			PlayerLocation,
 			TraceDirectionVector,
-			ECC_Visibility,
+			CCHANEL_UPACTION,
 			CollisionParams
 		);
 
