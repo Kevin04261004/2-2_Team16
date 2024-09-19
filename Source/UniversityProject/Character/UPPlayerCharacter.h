@@ -36,15 +36,6 @@ public:
 protected:
 	TObjectPtr<AUPPlayerController> PlayerController;
 	
-// Camera Section
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<USpringArmComponent> CameraBoom;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UCameraComponent> FollowCamera;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UUPCameraComponent> CameraComponent;
-	
 // Input Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
@@ -69,6 +60,15 @@ protected:
 	void Sprint(const FInputActionValue& Value);
 	void Walk(const FInputActionValue& Value);
 	void ZoomCamera(const FInputActionValue& Value);
+		
+/* Camera Section */
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<USpringArmComponent> CameraBoom;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UCameraComponent> FollowCamera;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UUPCameraComponent> CameraComponent;
 /* dash Section */
 protected:
 	FOnTimelineFloat TimelineCallback;
@@ -88,24 +88,25 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Timeline")
 	UCurveFloat* DashCurve;
-// After Image;
+/* After Image */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UUPAfterImageComponent> AfterImageComponent;
 	
 	virtual void CreateAfterImage() override;
-// ComboAction Section
+/* ComboAttack Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true", Tooltip = "콤보 공격 컴포넌트"))
 	TObjectPtr<class UUPComboAttackComponent> ComboAttack;
 	
 	virtual void AttackHitCheck() override;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= Init, Meta = (AllowPrivateAccess = "true", Tooltip = "공격 시 얼마나 앞으로 이동하는가"))
 	float GoForwardDistance;
-	
-	UPrimitiveComponent* CollisionComponent;
-	FTimerHandle PhysicsTimerHandle;
+/* Physics Section */
+protected:
 	virtual void GoForward() override;
-	void SetPhysicsFalse();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UPhysicsControlComponent> PhysicsControlComponent;
 };

@@ -7,6 +7,7 @@
 #include "AfterImage/UPAfterImage.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Camera/CameraComponent.h"
+#include "Components/PhysicsControlComponent.h"
 #include "Components/UPComboAttackComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -61,6 +62,7 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
+	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -68,6 +70,7 @@ void AUPPlayerCharacter::PostInitializeComponents()
 	Super::PostInitializeComponents();
 	CameraComponent->Initialize(*CameraBoom, *FollowCamera);
 	AfterImageComponent->Initialize(*this);
+	PhysicsControlComponent->Initialize();
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -92,8 +95,6 @@ void AUPPlayerCharacter::BeginPlay()
 		ComboAttack->OnComboAttackFinish.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 		ComboAttack->OnComboStepEnd.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 	}
-	
-	CollisionComponent = Cast<UPrimitiveComponent>(GetRootComponent());
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -265,26 +266,14 @@ void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface
 	{
 		PlayerWeapon->CheckAttackRange();
 	}
-	// Weapon->CheckAttackRange();
 }
 
 void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 {
 	IUPCharacterGoForwardInterface::GoForward();
 	
-	// SimulatePhysics가 true이면, 캐릭터가 인풋으로 이동이 불가능함. 그래서, 0.2초정도 활성화 후 되돌리기.
-	CollisionComponent->SetSimulatePhysics(true);
 	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f))
 	{
-		CollisionComponent->AddImpulse(GetActorForwardVector() * GoForwardDistance,"", true);
-	}
-	GetWorld()->GetTimerManager().SetTimer(PhysicsTimerHandle, this, &AUPPlayerCharacter::SetPhysicsFalse, 0.2f, false);
-}
-
-void AUPPlayerCharacter::SetPhysicsFalse()
-{
-	if (CollisionComponent != nullptr)
-	{
-		CollisionComponent->SetSimulatePhysics(false);
+		PhysicsControlComponent->GoForward(GoForwardDistance);
 	}
 }
