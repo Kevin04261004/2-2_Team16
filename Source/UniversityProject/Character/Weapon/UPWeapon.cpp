@@ -1,12 +1,13 @@
-﻿#include "UPWeapon.h"
-#include "Kismet/KismetSystemLibrary.h"
+﻿#include "UPPlayerCharacterWeapon.h"
 #include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
+#include "Manager/UPPostProcessManager.h"
+#include "Physics/Collision.h"
 
 // Sets default values
-AUPWeapon::AUPWeapon()
+AUPPlayerCharacterWeapon::AUPPlayerCharacterWeapon()
 {
-	// 틱 안씀
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	// 스켈레탈 메쉬 초기화
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
@@ -16,47 +17,44 @@ AUPWeapon::AUPWeapon()
 	CollisionSocketNameArray.Add(TEXT("2"));
 	CollisionSocketNameArray.Add(TEXT("3"));
 
-	SocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
-	BeforeSocketLocationArray.Init(FVector(0,0,0), CollisionSocketNameArray.Num());
+	SocketLocationArray.Init(FVector::ZeroVector, CollisionSocketNameArray.Num());
+	BeforeSocketLocationArray.Init(FVector::ZeroVector, CollisionSocketNameArray.Num());
 }
 
-void AUPWeapon::NotifyAttackCheck()
+void AUPPlayerCharacterWeapon::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (bIsTimeStopped)
+	{
+		float CurrentRealTime = GetWorld()->GetRealTimeSeconds();
+		if (CurrentRealTime - RealTimeAtStart >= StopTimeDuration)
+		{
+			ResetTimeDilation();
+			bIsTimeStopped = false;
+		}
+	}
+}
+
+void AUPPlayerCharacterWeapon::CheckAttackRange()
 {
 	CheckCollisionSockets();
 }
 
-void AUPWeapon::NotifyAttackEnd()
+void AUPPlayerCharacterWeapon::ComboStepEnd()
 {
+	AttackedActors.Empty();
 	for (int32 i = 0; i < CollisionSocketNameArray.Num(); i++)
 	{
 		check(WeaponMesh->DoesSocketExist(CollisionSocketNameArray[i]));
 		check(SocketLocationArray.IsValidIndex(i));
 		check(BeforeSocketLocationArray.IsValidIndex(i));
-		BeforeSocketLocationArray[i] = FVector(0, 0, 0);
-		SocketLocationArray[i] = FVector(0, 0, 0);
+		BeforeSocketLocationArray[i] = FVector::ZeroVector;
+		SocketLocationArray[i] = FVector::ZeroVector;
 	}
 }
 
-void AUPWeapon::NotifyAttackComboEnd()
-{
-	AttackedActors.Empty();
-}
-
-void AUPWeapon::Attack(FHitResult& result)
-{
-	if (AttackedActors.Contains(result.GetActor()))
-	{
-		return;
-	}
-	AttackedActors.Add(result.GetActor());
-	
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("충돌됨"), true, FVector2D(1.5f, 1.5f));
-	}
-}
-
-void AUPWeapon::CheckCollisionSockets()
+void AUPPlayerCharacterWeapon::CheckCollisionSockets()
 {
     check(WeaponMesh != nullptr);
 
@@ -72,13 +70,10 @@ void AUPWeapon::CheckCollisionSockets()
     }
 
     // 이전 위치가 초기값이면(처음이면) 리턴
-    if (BeforeSocketLocationArray.IsValidIndex(0) && BeforeSocketLocationArray[0] == FVector(0,0,0))
+    if (BeforeSocketLocationArray.IsValidIndex(0) && BeforeSocketLocationArray[0] == FVector::ZeroVector)
     {
         return;
     }
-
-    // 디버그 라인
-    DrawDebugLine(GetWorld(), SocketLocationArray[2], SocketLocationArray[0], FColor::Green, false, 0.1f, 0, 2.0f);
 
     // 보간된 위치를 기반으로 충돌 감지
     static int NUM_STEP = 5;
@@ -96,29 +91,30 @@ void AUPWeapon::CheckCollisionSockets()
         FHitResult HitResult2;
         FHitResult HitResult3;
 
+		FCollisionQueryParams weaponCollisionParams = FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, GetOwner());
         // 라인 트레이스
         bool bHit1 = GetWorld()->LineTraceSingleByChannel(
             HitResult1,
             InterpolatedPosition0,
             InterpolatedPosition1,
-            ECC_Visibility,
-            FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, this)
+            CCHANEL_UPACTION,
+            weaponCollisionParams
         );
 
         bool bHit2 = GetWorld()->LineTraceSingleByChannel(
             HitResult2,
             InterpolatedPosition1,
             InterpolatedPosition2,
-            ECC_Visibility,
-            FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, this)
+            CCHANEL_UPACTION,
+            weaponCollisionParams
         );
 
         bool bHit3 = GetWorld()->LineTraceSingleByChannel(
             HitResult3,
             InterpolatedPosition2,
             InterpolatedPosition0,
-            ECC_Visibility,
-            FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, this)
+            CCHANEL_UPACTION,
+            weaponCollisionParams
         );
 
         // 충돌된 액터가 이미 처리된 액터인지 확인 및 처리
@@ -138,8 +134,30 @@ void AUPWeapon::CheckCollisionSockets()
         }
 
         // 디버그 라인 그리기
-        DrawDebugLine(GetWorld(), InterpolatedPosition0, InterpolatedPosition1, FColor::Green, false, 0.3f, 0, 2.0f);
-        DrawDebugLine(GetWorld(), InterpolatedPosition1, InterpolatedPosition2, FColor::Green, false, 0.3f, 0, 2.0f);
-        DrawDebugLine(GetWorld(), InterpolatedPosition2, InterpolatedPosition0, FColor::Green, false, 0.3f, 0, 2.0f);
+        // DrawDebugLine(GetWorld(), InterpolatedPosition0, InterpolatedPosition1, FColor::Green, false, 0.3f, 0, 2.0f);
+    	// DrawDebugLine(GetWorld(), InterpolatedPosition1, InterpolatedPosition2, FColor::Green, false, 0.3f, 0, 2.0f);
+        // DrawDebugLine(GetWorld(), InterpolatedPosition2, InterpolatedPosition0, FColor::Green, false, 0.3f, 0, 2.0f);
     }
+}
+
+void AUPPlayerCharacterWeapon::AttackSuccess(FHitResult& result, IUPDamageableInterface* Damageable)
+{
+	Super::AttackSuccess(result, Damageable);
+	
+	/* Game Time Stop */
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), StopTimeVolume);
+
+	RealTimeAtStart = GetWorld()->GetRealTimeSeconds();
+	bIsTimeStopped = true;
+
+	/* Volume */
+	UUPPostProcessManager* PostProcessManager = GetGameInstance()->GetSubsystem<UUPPostProcessManager>();
+	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::Blur, true, 0.1f);
+	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::SpeedLine, true, 0.1f);
+	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::EdgeFadeDesaturation, true, 0.1f);
+}
+
+void AUPPlayerCharacterWeapon::ResetTimeDilation()
+{
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 }

@@ -126,6 +126,5 @@ void AUPCharacterBase::PlayDeadAnimation()
 
 void AUPCharacterBase::ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat)
 {
-	float MovementSpeed = (BaseStat + ModifierStat).MovementSpeed;
-	GetCharacterMovement()->MaxWalkSpeed = MovementSpeed;
+	MovementComponent->SetIsSprinting(MovementComponent->GetIsSprinting());
 }
