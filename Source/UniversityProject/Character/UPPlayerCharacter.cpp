@@ -171,8 +171,6 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 			ECC_Visibility,
 			FCollisionQueryParams(FName(TEXT("DashTrace")), false, this)
 		);
-		DrawDebugLine(GetWorld(), PlayerLocation, TraceDirectionVector, FColor::Red, false, 2.0f, 0, 2.0f);
-		UE_LOG(LogTemp, Warning, TEXT("Dash Trace"));
 		if (bHit)
 		{
 			FVector DashDirection = HitResult.Location;
