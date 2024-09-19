@@ -12,6 +12,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "Components/TimelineComponent.h"
+#include "Components/UPAfterImageComponent.h"
 #include "Components/UPCharacterMovementComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
@@ -57,19 +58,16 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	}
 
 	DashDistance = 500.0f;
-
-	// Set Offset
-	PositionOffset = FVector(0.f,0.f,-100.f);
-	RotationOffset = FRotator(0.f,-100.f,0.f);
-
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
+	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	CameraComponent->Initialize(*CameraBoom, *FollowCamera);
+	AfterImageComponent->Initialize(*this);
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -256,13 +254,7 @@ void AUPPlayerCharacter::FinishDash()
 
 void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
 {
-	check(AfterImageClass != nullptr);
-
-	FVector location = GetActorLocation() + PositionOffset;
-	FRotator rotation = GetActorRotation() + RotationOffset;
-	
-	AUPAfterImage* afterImage = GetWorld()->SpawnActor<AUPAfterImage>(AfterImageClass, location, rotation);
-	afterImage->Init(GetMesh());
+	AfterImageComponent->CreateAfterImage();
 }
 
 void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface

@@ -90,14 +90,10 @@ protected:
 	UCurveFloat* DashCurve;
 // After Image;
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 잔상 이펙트"))
-	TObjectPtr<UClass> AfterImageClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UUPAfterImageComponent> AfterImageComponent;
 	
 	virtual void CreateAfterImage() override;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터로부터 얼마나 떨어져서 생성되는지"))
-	FVector PositionOffset;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터로부터 얼마나 회전해서 생성되는지"))
-	FRotator RotationOffset;
 // ComboAction Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true", Tooltip = "콤보 공격 컴포넌트"))

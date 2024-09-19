@@ -9,7 +9,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f23c5a2c-eee8-4698-9eae-9b888130aac6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UniversityProject/BluePrints/Character/BP_PlayerCharacter.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPCharacterBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/Character/UPPlayerCharacter.h" afterDir="false" />
@@ -84,20 +83,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Uproject.UniversityProject.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;CodeLensConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Uproject.UniversityProject.executor": "Run",
+    "git-widget-placeholder": "feature/player/weapon",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "CodeLensConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="UniversityProject" type="Uproject" factoryName="rider.uproject">
       <configuration_1>
