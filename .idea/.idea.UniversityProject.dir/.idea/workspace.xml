@@ -10,7 +10,6 @@
     <list default="true" id="f23c5a2c-eee8-4698-9eae-9b888130aac6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UniversityProject.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/UniversityProject/AI/UPPettuAIController.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,7 +168,7 @@
       <workItem from="1726508016777" duration="2863000" />
       <workItem from="1726566902565" duration="5570000" />
       <workItem from="1726720272067" duration="114000" />
-      <workItem from="1726720393714" duration="1888000" />
+      <workItem from="1726720393714" duration="3299000" />
     </task>
     <servers />
   </component>
