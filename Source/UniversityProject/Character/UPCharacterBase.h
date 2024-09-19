@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/UPCharacterMovementComponent.h"
 #include "GameData/UPCharacterStatData.h"
 #include "GameData/UPCharacterStat.h"
 #include "GameFramework/Character.h"
@@ -13,51 +14,57 @@ UCLASS()
 class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface
 {
 	GENERATED_BODY()
-
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MovementComponent, meta = (AllowPrivateAccess = "true"))
+	UUPCharacterMovementComponent* MovementComponent;
+	
 // Init Section
 public:
-	AUPCharacterBase();
+	AUPCharacterBase(const FObjectInitializer& ObjectInitializer);
+	virtual void BeginPlay() override;
 	
 	virtual void PostInitializeComponents() override;
-	
-// ComboAction Section
+// Utils...
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UUPComboAttackComponent> ComboAttack;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class AUPWeapon> Weapon;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class USkeletalMeshComponent> meshTest;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Init, meta=(AllowPrivateAccess= "true", Tooltip = "캐릭터가 사용하는 애니메이션 클래스"))
+	TObjectPtr<UClass> AnimInstanceClass;
 	
-// ComboAction Section
-public:
-	virtual void NotifyComboActionEnd();
-	
+	bool TryCheckForwardCollision(float InLineTraceDistance);
+// Weapon Section
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터가 사용하는 무기 클래스"))
+	TObjectPtr<UClass> WeaponClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터가 사용하는 무기"))
+	TObjectPtr<class AUPWeaponBase> Weapon;
 // Attack Hit Section
 protected:
-	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true", Tooltip = "피격시 생성되는 파티클"))
+	TObjectPtr<UParticleSystem> HitEffect;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true", Tooltip = "피격시 생성되는 사운드"))
+	TObjectPtr<USoundBase> HitSound;
 	
+	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void Attack(FHitResult& InHit);
+// Attack Hit Section
+public:
+	FORCEINLINE virtual UParticleSystem* GetHitEffect() override { return HitEffect.Get(); }
+	FORCEINLINE virtual USoundBase* GetHitSound() override { return HitSound.Get(); }
 // Dead Section
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 죽음 애니메이션 몽타주"))
 	TObjectPtr<class UAnimMontage> DeadMontage;
 
 	virtual void SetDead();
 	void PlayDeadAnimation();
-
-	float DeadEventDelayTime = 5.0f;
-
 // Stat Section
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UUPCharacterStatComponent> Stat;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UUPCharacterStatData> CharacterInitalizeStatData;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true", Tooltip = "스텟 컴포넌트"))
+	TObjectPtr<class UUPCharacterStatComponent> StatComponent;
 // Stat Section
 public:
-	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return Stat.Get(); }
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "게임 시작 시 초기화 될 캐릭터의 스텟"))
+	TObjectPtr<UUPCharacterStatData> CharacterInitalizeStatData;
+	
+	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return StatComponent.Get(); }
 	void ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);
 };

@@ -22,4 +22,6 @@ class UNIVERSITYPROJECT_API IUPDamageableInterface
 
 public:
 	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) = 0;
+	virtual UParticleSystem* GetHitEffect() = 0;
+	virtual USoundBase* GetHitSound() = 0;
 };
