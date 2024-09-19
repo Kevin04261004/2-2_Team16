@@ -43,17 +43,15 @@ public:
 	
 private:
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat, Meta = (AllowPrivateAccess = "true"))
+	float MaxPatternActivateTime; // 패턴이 재발동 되기까지 걸리는 최대 시간 (1000당 1초)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat, Meta = (AllowPrivateAccess = "true"))
+	float MaxStunStack;			  // 보스가 스턴 상태가 되기 위한 스턴치 누적 최대값
+
 	///////////// 상수 //////////////
-	float MaxHp;
-	float AttackDamage;
-	float AttackSpeed;
-	float PettuMovementSpeed;
 	float MaxComboCount;
 	float BaseComboFrameRate;
 	float LastComboFrameRate;
-	float MaxPatternActivateTime; // 패턴이 재발동 되기까지 걸리는 최대 시간 (1000당 1초)
-	float MaxStunStack;			  // 보스가 스턴 상태가 되기 위한 스턴치 누적 최대값
-	float StandardDistance;		  // idle 상태와 Move 상태 전환의 기준이 되는 보스와 플레이어 사이의 물리적 거리값 (m)
 
 	///////////// 변수 //////////////
 	float CurrentHp;

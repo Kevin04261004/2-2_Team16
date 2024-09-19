@@ -9,10 +9,6 @@ AUPPettuCharacter::AUPPettuCharacter()
 {
 	static ConstructorHelpers::FObjectFinder<UUPCharacterStatData> StatDataRef(TEXT("/Game/UniversityProject/GameData/DA_PettuCharacterStat.DA_PettuCharacterStat"));
 	Stat->SetBaseStat(StatDataRef.Object.Get()->Stat);
-	
-	MaxHp = Stat->GetBaseStat().MaxHp;			
-	AttackDamage = Stat->GetBaseStat().AttackDamage;
-	AttackSpeed = Stat->GetBaseStat().AttackSpeed;
 	GetCharacterMovement()->MaxWalkSpeed = Stat->GetBaseStat().MovementSpeed;
 	
 	MaxComboCount = 3.0f;
@@ -20,9 +16,8 @@ AUPPettuCharacter::AUPPettuCharacter()
 	LastComboFrameRate = 120.0f;
 	MaxPatternActivateTime = 5000.0f;
 	MaxStunStack = 100.0f;
-	StandardDistance = 15.0f;
 
-	CurrentHp = MaxHp;
+	CurrentHp = Stat->GetBaseStat().MaxHp;
 	CurrentPatternActivateTime = 0.0f;
 	DistanceFromPlayer = 0.0f;
 	CurrentStunStack = 0.0f;
