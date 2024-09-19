@@ -4,14 +4,15 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
-#include "AfterImage/UPAfterImage.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Camera/CameraComponent.h"
+#include "Components/PhysicsControlComponent.h"
 #include "Components/UPComboAttackComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "Components/TimelineComponent.h"
+#include "Components/UPAfterImageComponent.h"
 #include "Components/UPCharacterMovementComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
@@ -19,8 +20,6 @@
 
 AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	PrimaryActorTick.bCanEverTick = true;
-
 	/* Init Components */
 	// Camera Setting
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -57,19 +56,18 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	}
 
 	DashDistance = 500.0f;
-
-	// Set Offset
-	PositionOffset = FVector(0.f,0.f,-100.f);
-	RotationOffset = FRotator(0.f,-100.f,0.f);
-
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
+	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
+	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	CameraComponent->Initialize(*CameraBoom, *FollowCamera);
+	AfterImageComponent->Initialize(*this);
+	PhysicsControlComponent->Initialize();
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -94,16 +92,6 @@ void AUPPlayerCharacter::BeginPlay()
 		ComboAttack->OnComboAttackFinish.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 		ComboAttack->OnComboStepEnd.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 	}
-	
-	CollisionComponent = Cast<UPrimitiveComponent>(GetRootComponent());
-}
-
-void AUPPlayerCharacter::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	// 타임라인 프레임 당 업데이트하고 변경 점 반영함
-	DashTimeline.TickTimeline(DeltaSeconds);
 }
 
 void AUPPlayerCharacter::SetDead()
@@ -165,47 +153,61 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 	if (UAIBlueprintHelperLibrary::IsValidAIDirection(LastInputVector))
 	{
 		FHitResult HitResult;
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(this);
+
 		bool bHit = GetWorld()->LineTraceSingleByChannel(
 			HitResult,
 			PlayerLocation,
 			TraceDirectionVector,
 			ECC_Visibility,
-			FCollisionQueryParams(FName(TEXT("DashTrace")), false, this)
+			CollisionParams
 		);
-		DrawDebugLine(GetWorld(), PlayerLocation, TraceDirectionVector, FColor::Red, false, 2.0f, 0, 2.0f);
-		UE_LOG(LogTemp, Warning, TEXT("Dash Trace"));
+
 		if (bHit)
 		{
-			FVector DashDirection = HitResult.Location;
-			DashStart(DashDirection, LastInputVector);
+			FVector DashLocation = HitResult.Location;
+			DashStart(DashLocation, LastInputVector);
 		}
 		else
 		{
-			FVector DashDirection = LastInputVector + HitResult.TraceEnd;
-			DashStart(DashDirection, LastInputVector);
+			FVector DashLocation =  HitResult.TraceEnd;
+			DashStart(DashLocation, LastInputVector);
+		}
+		if (GEngine)
+		{
+			FString DashString = LastInputVector.ToString() + TEXT(" ") + TraceDirectionVector.ToString();
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, DashString);
 		}
 	}
 	else
 	{
 		FHitResult HitResult;
-		TraceDirectionVector = PlayerLocation + (GetActorForwardVector() * DashDistance);
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(this);
+
 		bool bHit = GetWorld()->LineTraceSingleByChannel(
 			HitResult,
 			PlayerLocation,
 			TraceDirectionVector,
 			ECC_Visibility,
-			FCollisionQueryParams(FName(TEXT("DashTrace")), false, this)
+			CollisionParams
 		);
-		DrawDebugLine(GetWorld(), PlayerLocation, TraceDirectionVector, FColor::Red, false, 2.0f, 0, 2.0f);
+
 		if (bHit)
 		{
-			FVector DashDirection = HitResult.Location;
-			DashStart(DashDirection, GetActorForwardVector());
+			FVector DashLocation = HitResult.Location;
+			DashStart(DashLocation, GetActorForwardVector());
 		}
 		else
 		{
-			FVector DashDirection = (GetActorForwardVector()) + HitResult.TraceEnd;
-			DashStart(DashDirection, GetActorForwardVector());
+			FVector DashLocation = HitResult.TraceEnd;
+			DashStart(DashLocation, GetActorForwardVector());
+		}
+		if (GEngine)
+		{
+			FString DashString = LastInputVector.ToString() + TEXT(" ") + TraceDirectionVector.ToString();
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, DashString);
 		}
 	}
 }
@@ -226,19 +228,23 @@ void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
 	CameraComponent->ZoomCamera(zoomAxis);
 }
 
-void AUPPlayerCharacter::DashStart(FVector DashDirection, FVector DashVelocity)
+void AUPPlayerCharacter::DashStart(FVector InDashEndLocation, FVector InDashVelocity)
 {
+	check(DashCurve != nullptr);
+
 	DashStartLocation = GetActorLocation();
-	DashEndLocation = DashDirection;
-	DashEndVelocity = DashVelocity;
-	if (!DashTimeline.IsPlaying())
-	{
-		DashTimeline.PlayFromStart();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Dash Timeline is already playing"));
-	}
+	DashEndLocation = InDashEndLocation;
+	DashEndVelocity = InDashVelocity;
+
+	FOnTimelineFloat UpdateDashDelegate;
+	UpdateDashDelegate.BindUFunction(this, FName("UpdateDash"));
+	DashTimeline.AddInterpFloat(DashCurve, UpdateDashDelegate);
+	
+	FOnTimelineEvent FinishDashDelegate;
+	FinishDashDelegate.BindUFunction(this, FName("FinishDash"));
+	DashTimeline.SetTimelineFinishedFunc(FinishDashDelegate);
+
+	DashTimeline.PlayFromStart();
 }
 
 void AUPPlayerCharacter::UpdateDash(float Value)
@@ -256,13 +262,7 @@ void AUPPlayerCharacter::FinishDash()
 
 void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
 {
-	check(AfterImageClass != nullptr);
-
-	FVector location = GetActorLocation() + PositionOffset;
-	FRotator rotation = GetActorRotation() + RotationOffset;
-	
-	AUPAfterImage* afterImage = GetWorld()->SpawnActor<AUPAfterImage>(AfterImageClass, location, rotation);
-	afterImage->Init(GetMesh());
+	AfterImageComponent->CreateAfterImage();
 }
 
 void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface
@@ -273,26 +273,14 @@ void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface
 	{
 		PlayerWeapon->CheckAttackRange();
 	}
-	// Weapon->CheckAttackRange();
 }
 
 void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 {
 	IUPCharacterGoForwardInterface::GoForward();
 	
-	// SimulatePhysics가 true이면, 캐릭터가 인풋으로 이동이 불가능함. 그래서, 0.2초정도 활성화 후 되돌리기.
-	CollisionComponent->SetSimulatePhysics(true);
 	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f))
 	{
-		CollisionComponent->AddImpulse(GetActorForwardVector() * GoForwardDistance,"", true);
-	}
-	GetWorld()->GetTimerManager().SetTimer(PhysicsTimerHandle, this, &AUPPlayerCharacter::SetPhysicsFalse, 0.2f, false);
-}
-
-void AUPPlayerCharacter::SetPhysicsFalse()
-{
-	if (CollisionComponent != nullptr)
-	{
-		CollisionComponent->SetSimulatePhysics(false);
+		PhysicsControlComponent->GoForward(GoForwardDistance);
 	}
 }
