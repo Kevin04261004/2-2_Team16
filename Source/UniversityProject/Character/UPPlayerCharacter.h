@@ -28,8 +28,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetDead() override;
-	virtual void Tick(float DeltaSeconds) override;
-
 public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
@@ -80,7 +78,7 @@ protected:
 	FTimeline DashTimeline;
 
 	
-	void DashStart(FVector DashDirection, FVector DashVelocity);
+	void DashStart(FVector InDashEndLocation, FVector InDashVelocity);
 	UFUNCTION()
 	void UpdateDash(float Value);
 	UFUNCTION()

@@ -4,7 +4,6 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
-#include "AfterImage/UPAfterImage.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/PhysicsControlComponent.h"
@@ -21,8 +20,6 @@
 
 AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	PrimaryActorTick.bCanEverTick = true;
-
 	/* Init Components */
 	// Camera Setting
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -97,14 +94,6 @@ void AUPPlayerCharacter::BeginPlay()
 	}
 }
 
-void AUPPlayerCharacter::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	// 타임라인 프레임 당 업데이트하고 변경 점 반영함
-	DashTimeline.TickTimeline(DeltaSeconds);
-}
-
 void AUPPlayerCharacter::SetDead()
 {
 	Super::SetDead();
@@ -164,45 +153,61 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 	if (UAIBlueprintHelperLibrary::IsValidAIDirection(LastInputVector))
 	{
 		FHitResult HitResult;
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(this);
+
 		bool bHit = GetWorld()->LineTraceSingleByChannel(
 			HitResult,
 			PlayerLocation,
 			TraceDirectionVector,
 			ECC_Visibility,
-			FCollisionQueryParams(FName(TEXT("DashTrace")), false, this)
+			CollisionParams
 		);
+
 		if (bHit)
 		{
-			FVector DashDirection = HitResult.Location;
-			DashStart(DashDirection, LastInputVector);
+			FVector DashLocation = HitResult.Location;
+			DashStart(DashLocation, LastInputVector);
 		}
 		else
 		{
-			FVector DashDirection = LastInputVector + HitResult.TraceEnd;
-			DashStart(DashDirection, LastInputVector);
+			FVector DashLocation =  HitResult.TraceEnd;
+			DashStart(DashLocation, LastInputVector);
+		}
+		if (GEngine)
+		{
+			FString DashString = LastInputVector.ToString() + TEXT(" ") + TraceDirectionVector.ToString();
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, DashString);
 		}
 	}
 	else
 	{
 		FHitResult HitResult;
-		TraceDirectionVector = PlayerLocation + (GetActorForwardVector() * DashDistance);
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(this);
+
 		bool bHit = GetWorld()->LineTraceSingleByChannel(
 			HitResult,
 			PlayerLocation,
 			TraceDirectionVector,
 			ECC_Visibility,
-			FCollisionQueryParams(FName(TEXT("DashTrace")), false, this)
+			CollisionParams
 		);
-		DrawDebugLine(GetWorld(), PlayerLocation, TraceDirectionVector, FColor::Red, false, 2.0f, 0, 2.0f);
+
 		if (bHit)
 		{
-			FVector DashDirection = HitResult.Location;
-			DashStart(DashDirection, GetActorForwardVector());
+			FVector DashLocation = HitResult.Location;
+			DashStart(DashLocation, GetActorForwardVector());
 		}
 		else
 		{
-			FVector DashDirection = (GetActorForwardVector()) + HitResult.TraceEnd;
-			DashStart(DashDirection, GetActorForwardVector());
+			FVector DashLocation = HitResult.TraceEnd;
+			DashStart(DashLocation, GetActorForwardVector());
+		}
+		if (GEngine)
+		{
+			FString DashString = LastInputVector.ToString() + TEXT(" ") + TraceDirectionVector.ToString();
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, DashString);
 		}
 	}
 }
@@ -223,19 +228,23 @@ void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
 	CameraComponent->ZoomCamera(zoomAxis);
 }
 
-void AUPPlayerCharacter::DashStart(FVector DashDirection, FVector DashVelocity)
+void AUPPlayerCharacter::DashStart(FVector InDashEndLocation, FVector InDashVelocity)
 {
+	check(DashCurve != nullptr);
+
 	DashStartLocation = GetActorLocation();
-	DashEndLocation = DashDirection;
-	DashEndVelocity = DashVelocity;
-	if (!DashTimeline.IsPlaying())
-	{
-		DashTimeline.PlayFromStart();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Dash Timeline is already playing"));
-	}
+	DashEndLocation = InDashEndLocation;
+	DashEndVelocity = InDashVelocity;
+
+	FOnTimelineFloat UpdateDashDelegate;
+	UpdateDashDelegate.BindUFunction(this, FName("UpdateDash"));
+	DashTimeline.AddInterpFloat(DashCurve, UpdateDashDelegate);
+	
+	FOnTimelineEvent FinishDashDelegate;
+	FinishDashDelegate.BindUFunction(this, FName("FinishDash"));
+	DashTimeline.SetTimelineFinishedFunc(FinishDashDelegate);
+
+	DashTimeline.PlayFromStart();
 }
 
 void AUPPlayerCharacter::UpdateDash(float Value)
