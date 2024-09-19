@@ -32,6 +32,8 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+	CameraComponent = CreateDefaultSubobject<UUPCameraComponent>(TEXT("CameraComponent"));
+	
 	// 
 	static ConstructorHelpers::FObjectFinder<UCurveFloat> CurveRef(TEXT("/Game/UniversityProject/GameData/CV_DashCurve"));
 	if (CurveRef.Succeeded())
@@ -67,6 +69,7 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 void AUPPlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+	CameraComponent->Initialize(*CameraBoom, *FollowCamera);
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -82,9 +85,7 @@ void AUPPlayerCharacter::BeginPlay()
 		Subsystem->ClearAllMappings();
 		Subsystem->AddMappingContext(IMC_BackView, 0);
 	}
-	Weapon->OnWeaponHit.AddUObject(this, &AUPPlayerCharacter::ShakeCamera);
-
-	CurrentZoom = CameraBoom->TargetArmLength;
+	Weapon->OnWeaponHit.AddUObject(CameraComponent, &UUPCameraComponent::ShakeCamera);
 
 	/* Actor Delegate */
 	AUPPlayerCharacterWeapon* PlayerWeapon = Cast<AUPPlayerCharacterWeapon>(Weapon);
@@ -93,6 +94,8 @@ void AUPPlayerCharacter::BeginPlay()
 		ComboAttack->OnComboAttackFinish.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 		ComboAttack->OnComboStepEnd.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 	}
+	
+	CollisionComponent = Cast<UPrimitiveComponent>(GetRootComponent());
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -125,24 +128,6 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AUPPlayerCharacter::Walk);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Look);
 	EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::ZoomCamera);
-}
-
-void AUPPlayerCharacter::ShakeCamera(FHitResult& HitResult)
-{
-	if (PlayerController == nullptr || HitCameraShake == nullptr)
-	{
-		return;
-	}
-	PlayerController->ClientStartCameraShake(HitCameraShake);
-}
-
-void AUPPlayerCharacter::ZoomCamera(float Value)
-{
-	if (Value != 0.0f)
-	{
-		CurrentZoom = FMath::Clamp(CurrentZoom - (Value * ZoomStep), MinZoom, MaxZoom);
-		CameraBoom->TargetArmLength = CurrentZoom;
-	}
 }
 
 void AUPPlayerCharacter::Move(const FInputActionValue& Value)
@@ -238,7 +223,7 @@ void AUPPlayerCharacter::Walk(const FInputActionValue& Value)
 void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
 {
 	float zoomAxis = Value.Get<float>();
-	ZoomCamera(zoomAxis);
+	CameraComponent->ZoomCamera(zoomAxis);
 }
 
 void AUPPlayerCharacter::DashStart(FVector DashDirection, FVector DashVelocity)
@@ -294,8 +279,6 @@ void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface
 void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 {
 	IUPCharacterGoForwardInterface::GoForward();
-
-	CollisionComponent = Cast<UPrimitiveComponent>(GetRootComponent());
 	
 	// SimulatePhysics가 true이면, 캐릭터가 인풋으로 이동이 불가능함. 그래서, 0.2초정도 활성화 후 되돌리기.
 	CollisionComponent->SetSimulatePhysics(true);

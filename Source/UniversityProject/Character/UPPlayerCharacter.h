@@ -6,6 +6,7 @@
 #include "Character/UPCharacterBase.h"
 #include "InputActionValue.h"
 #include "Components/TimelineComponent.h"
+#include "Components/UPCameraComponent.h"
 #include "Interface/UPAfterImageableInterface.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterGoForwardInterface.h"
@@ -38,30 +39,12 @@ protected:
 // Camera Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<class USpringArmComponent> CameraBoom;
-
+	TObjectPtr<USpringArmComponent> CameraBoom;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UCameraComponent> FollowCamera;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TSubclassOf<UCameraShakeBase> HitCameraShake;
-
-	void ShakeCamera(FHitResult& HitResult);
-
-	UPROPERTY(EditAnywhere, Category="Camera")
-	float MinZoom = 300.0f;
-
-	UPROPERTY(EditAnywhere, Category="Camera")
-	float MaxZoom = 800.0f;
-
-	UPROPERTY(EditAnywhere, Category="Camera")
-	float ZoomStep = 10.0f;
-
-	UPROPERTY(EditAnywhere, Category="Camera")
-	float CurrentZoom;
-
-	UFUNCTION()
-	void ZoomCamera(float Value);
+	TObjectPtr<UCameraComponent> FollowCamera;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UUPCameraComponent> CameraComponent;
+	
 // Input Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
