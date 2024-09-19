@@ -6,6 +6,7 @@
 #include "Character/UPCharacterBase.h"
 #include "InputActionValue.h"
 #include "Components/TimelineComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Player/UPPlayerController.h"
 #include "UPPlayerCharacter.generated.h"
 
@@ -80,4 +81,8 @@ protected:
 	
 	TObjectPtr<AUPPlayerController> PlayerController;
 	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent;
+private:
+	TObjectPtr<UAIPerceptionStimuliSourceComponent> StimuliSource;
+
+	void SetupStimuliSource();
 };

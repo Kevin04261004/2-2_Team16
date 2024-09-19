@@ -14,6 +14,8 @@
 #include "Components/TimelineComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Sight.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter()
 {
@@ -74,6 +76,9 @@ AUPPlayerCharacter::AUPPlayerCharacter()
 	}
 
 	DashDistance = 500.0f;
+
+
+	SetupStimuliSource();
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -241,4 +246,15 @@ void AUPPlayerCharacter::UpdateDash(float Value)
 void AUPPlayerCharacter::FinishDash()
 {
 	CharacterMovementComponent->Velocity = DashEndVelocity * 500.0f;
+}
+
+void AUPPlayerCharacter::SetupStimuliSource()
+{
+	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSource"));
+	if (StimuliSource)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("StimuliSource Created"));
+		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>()); // StimuliSource가 제공하는 시각 정보를 인식 할 수 있게 설정
+		StimuliSource->RegisterWithPerceptionSystem();					// PerceptionSystem에 등록
+	}
 }

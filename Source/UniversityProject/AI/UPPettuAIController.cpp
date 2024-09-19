@@ -37,7 +37,7 @@ void AUPPettuAIController::SetupPerceptionSystem()
 		SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
 		SightConfig->SightRadius = 500.0f;								 // 감지 반경
 		SightConfig->LoseSightRadius = SightConfig->SightRadius + 25.0f; // 시야 잃는 반경
-		SightConfig->PeripheralVisionAngleDegrees = 90.0f;				 // 시야 각도
+		SightConfig->PeripheralVisionAngleDegrees = 360.0f;				 // 시야 각도
 		SightConfig->SetMaxAge(5.0f);									 // 감지되고 5초동안은 감지된 정보를 기억
 		SightConfig->AutoSuccessRangeFromLastSeenLocation = 520.0f;		 // 마지막으로 본 위치로부터 반경 내에 있는 목표를 감지한 것으로 간주
 		SightConfig->DetectionByAffiliation.bDetectEnemies = true;		 // 적 감지
