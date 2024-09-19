@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Perception/AISenseConfig_Sight.h"
 #include "UPPettuAIController.generated.h"
 
 /**
@@ -18,4 +19,11 @@ public:
 
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
+
+private:
+	TObjectPtr<UAISenseConfig_Sight> SightConfig;
+	void SetupPerceptionSystem();
+
+	UFUNCTION()
+	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
 };

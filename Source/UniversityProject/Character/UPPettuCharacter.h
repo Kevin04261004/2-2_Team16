@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 
 #include "UPPettuCharacter.generated.h"
 
@@ -61,4 +62,7 @@ private:
 	float CurrentStunStack;
 	float DamageReceived;
 	PettuStatus hasStatus;
+
+	
+	
 };
