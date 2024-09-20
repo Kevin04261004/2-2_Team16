@@ -3,68 +3,68 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/UPCharacterMovementComponent.h"
 #include "GameData/UPCharacterStatData.h"
 #include "GameData/UPCharacterStat.h"
 #include "GameFramework/Character.h"
+#include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPDamageableInterface.h"
 #include "UPCharacterBase.generated.h"
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface
+class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface, public IUPAnimationAttackCheckInterface
 {
 	GENERATED_BODY()
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MovementComponent, meta = (AllowPrivateAccess = "true"))
-	UUPCharacterMovementComponent* MovementComponent;
-	
+
 // Init Section
 public:
-	AUPCharacterBase(const FObjectInitializer& ObjectInitializer);
+	AUPCharacterBase();
 	virtual void BeginPlay() override;
 	
 	virtual void PostInitializeComponents() override;
-// Utils...
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Init, meta=(AllowPrivateAccess= "true", Tooltip = "캐릭터가 사용하는 애니메이션 클래스"))
-	TObjectPtr<UClass> AnimInstanceClass;
 	
-	bool TryCheckForwardCollision(float InLineTraceDistance);
-// Weapon Section
+// ComboAction Section
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터가 사용하는 무기 클래스"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UUPComboAttackComponent> ComboAttack;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class AUPWeapon> Weapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UClass> WeaponClass;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터가 사용하는 무기"))
-	TObjectPtr<class AUPWeaponBase> Weapon;
+
+	virtual void AttackHitCheck() override;
+	virtual void AttackComboEnd() override;
+// ComboAction Section
+public:
+	// UUPComboAttackComponent에서 실행.
+	virtual void NotifyComboActionEnd();
+	
+	// UUPComboAttackComponent에서 실행.
+	virtual void NotifyAttackComboEnd();
 // Attack Hit Section
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true", Tooltip = "피격시 생성되는 파티클"))
-	TObjectPtr<UParticleSystem> HitEffect;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true", Tooltip = "피격시 생성되는 사운드"))
-	TObjectPtr<USoundBase> HitSound;
-	
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-	virtual void Attack(FHitResult& InHit);
-// Attack Hit Section
-public:
-	FORCEINLINE virtual UParticleSystem* GetHitEffect() override { return HitEffect.Get(); }
-	FORCEINLINE virtual USoundBase* GetHitSound() override { return HitSound.Get(); }
+	
 // Dead Section
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 죽음 애니메이션 몽타주"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UAnimMontage> DeadMontage;
 
 	virtual void SetDead();
 	void PlayDeadAnimation();
+
+	float DeadEventDelayTime = 5.0f;
+
 // Stat Section
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true", Tooltip = "스텟 컴포넌트"))
-	TObjectPtr<class UUPCharacterStatComponent> StatComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UUPCharacterStatComponent> Stat;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UUPCharacterStatData> CharacterInitalizeStatData;
 // Stat Section
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "게임 시작 시 초기화 될 캐릭터의 스텟"))
-	TObjectPtr<UUPCharacterStatData> CharacterInitalizeStatData;
-	
-	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return StatComponent.Get(); }
+	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return Stat.Get(); }
 	void ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);
 };

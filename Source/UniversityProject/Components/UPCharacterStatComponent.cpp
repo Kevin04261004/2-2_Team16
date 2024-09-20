@@ -5,6 +5,7 @@
 
 UUPCharacterStatComponent::UUPCharacterStatComponent()
 {
+	CurrentLevel = 1;
 	bWantsInitializeComponent = true;
 }
 
