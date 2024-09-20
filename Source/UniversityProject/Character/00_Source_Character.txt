@@ -1,0 +1,5 @@
+작업자: 프로그래머
+폴더 내용: Character와 관련된 cpp파일
+
+Character:
+ACharacter을 상속받았거나, 캐릭터와 관련된 정보
