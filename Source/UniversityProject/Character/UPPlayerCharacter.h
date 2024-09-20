@@ -69,22 +69,9 @@ protected:
 	TObjectPtr<UUPCameraComponent> CameraComponent;
 /* dash Section */
 protected:
-	FOnTimelineFloat TimelineCallback;
-	FOnTimelineEvent TimelineFinishedCallback;
-	FVector DashStartLocation;
-	FVector DashEndLocation;
-	FVector DashEndVelocity;
-	float DashDistance;
-	FTimeline DashTimeline;
-	FTimerHandle DashTimerHandle;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UUPDashComponent> DashComponent;
 	
-	void DashStart(FVector InDashEndLocation, FVector InDashVelocity);
-	void UpdateDash(float Value);
-	void UpdateDashTimeline();
-	void FinishDash();
-	
-	UPROPERTY(EditAnywhere, Category = "Timeline")
-	UCurveFloat* DashCurve;
 /* After Image */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))

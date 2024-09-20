@@ -28,7 +28,9 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Init, meta=(AllowPrivateAccess= "true", Tooltip = "캐릭터가 사용하는 애니메이션 클래스"))
 	TObjectPtr<UClass> AnimInstanceClass;
-	
+
+// Utils...
+public:
 	bool TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit);
 // Weapon Section
 protected:

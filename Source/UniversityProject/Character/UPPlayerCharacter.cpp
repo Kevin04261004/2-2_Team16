@@ -14,6 +14,7 @@
 #include "Components/TimelineComponent.h"
 #include "Components/UPAfterImageComponent.h"
 #include "Components/UPCharacterMovementComponent.h"
+#include "Components/UPDashComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
@@ -36,46 +37,11 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 
 	CameraComponent = CreateDefaultSubobject<UUPCameraComponent>(TEXT("CameraComponent"));
 	
-	// 
-	static ConstructorHelpers::FObjectFinder<UCurveFloat> CurveRef(TEXT("/Game/UniversityProject/GameData/CV_DashCurve"));
-	if (CurveRef.Succeeded())
-	{
-		DashCurve = CurveRef.Object;
-	}
-	
-	if (DashCurve)
-	{
-		TimelineCallback.BindUFunction(this, FName("UpdateDash"));
-		TimelineFinishedCallback.BindUFunction(this, FName("FinishDash"));
-
-		DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
-		DashTimeline.AddInterpFloat(DashCurve, TimelineCallback);
-
-		UE_LOG(LogTemp, Warning, TEXT("Dash Timeline Initialized with Curve"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Dash Curve is not loaded"));
-	}
-
-	/* Dash */
-	DashDistance = 500.0f;
-
-	if (DashCurve)
-	{
-		// UpdateDash 함수에 대한 Delegate 바인딩
-		TimelineCallback.BindUFunction(this, FName("UpdateDash"));
-		DashTimeline.AddInterpFloat(DashCurve, TimelineCallback);
-
-		// FinishDash 함수에 대한 Delegate 바인딩
-		TimelineFinishedCallback.BindUFunction(this, FName("FinishDash"));
-		DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
-	}
-	
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
 	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
+	DashComponent = CreateDefaultSubobject<UUPDashComponent>(TEXT("DashComponent"));
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -84,6 +50,7 @@ void AUPPlayerCharacter::PostInitializeComponents()
 	CameraComponent->Initialize(*CameraBoom, *FollowCamera);
 	AfterImageComponent->Initialize(*this);
 	PhysicsControlComponent->Initialize();
+	DashComponent->Initialize(MovementComponent, this);
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -163,16 +130,7 @@ void AUPPlayerCharacter::Attack(const FInputActionValue& Value)
 
 void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 {
-	FVector LastInputVector = GetCharacterMovement()->GetLastInputVector();
-	
-	FHitResult HitResult;
-	bool bHit = TryCheckForwardCollision(DashDistance, HitResult);
-	
-	FVector DashLocation = bHit ? HitResult.Location : HitResult.TraceEnd;
-
-	FVector DashVelocity = UAIBlueprintHelperLibrary::IsValidAIDirection(LastInputVector) ? LastInputVector : GetActorForwardVector();
-
-	DashStart(DashLocation, DashVelocity);
+	DashComponent->Dash();
 }
 
 
@@ -191,58 +149,6 @@ void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
 {
 	float zoomAxis = Value.Get<float>();
 	CameraComponent->ZoomCamera(zoomAxis);
-}
-
-void AUPPlayerCharacter::DashStart(FVector InDashEndLocation, FVector InDashVelocity)
-{
-	check(DashCurve != nullptr);
-
-	DashStartLocation = GetActorLocation();
-	DashEndLocation = InDashEndLocation;
-	DashEndVelocity = InDashVelocity;
-
-	DashTimeline.PlayFromStart();
-
-	if (!GetWorldTimerManager().IsTimerActive(DashTimerHandle))
-	{
-		GetWorldTimerManager().SetTimer(DashTimerHandle, this, &AUPPlayerCharacter::UpdateDashTimeline, 0.01f, true);
-	}
-}
-
-void AUPPlayerCharacter::UpdateDash(float Value)
-{
-	//위치 보간
-	FVector NewLocation = FMath::Lerp(DashStartLocation, DashEndLocation, Value);
-	SetActorLocation(NewLocation);
-}
-
-void AUPPlayerCharacter::UpdateDashTimeline()
-{
-	if (DashTimeline.IsPlaying())
-	{
-		DashTimeline.TickTimeline(0.01f);
-
-		float PlaybackPosition = DashTimeline.GetPlaybackPosition();
-		float TimelineLength = DashTimeline.GetTimelineLength();
-		float NormalizedPosition = PlaybackPosition / TimelineLength;  // 0~1 사이 값
-		
-		UpdateDash(NormalizedPosition);
-	}
-	else
-	{
-		GetWorldTimerManager().ClearTimer(DashTimerHandle);  // 타이머 정리
-	}
-}
-
-void AUPPlayerCharacter::FinishDash()
-{
-	GetWorldTimerManager().ClearTimer(DashTimerHandle);
-	GetCharacterMovement()->Velocity = DashEndVelocity * 500.0f;
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, TEXT("Dash End"));
-	}
 }
 
 void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
