@@ -34,7 +34,6 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 
 	CameraComponent = CreateDefaultSubobject<UUPCameraComponent>(TEXT("CameraComponent"));
 	
-	// 
 	static ConstructorHelpers::FObjectFinder<UCurveFloat> CurveRef(TEXT("/Game/UniversityProject/GameData/CV_DashCurve"));
 	if (CurveRef.Succeeded())
 	{
@@ -61,6 +60,8 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
 	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
+
+
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -161,7 +162,7 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 			HitResult,
 			PlayerLocation,
 			TraceDirectionVector,
-			CCHANEL_UPACTION,
+			ECC_Visibility,
 			CollisionParams
 		);
 
@@ -186,12 +187,13 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 		FHitResult HitResult;
 		FCollisionQueryParams CollisionParams;
 		CollisionParams.AddIgnoredActor(this);
+		// CollisionParams.AddIgnoredComponents(this->GetComponents());
 
 		bool bHit = GetWorld()->LineTraceSingleByChannel(
 			HitResult,
 			PlayerLocation,
 			TraceDirectionVector,
-			CCHANEL_UPACTION,
+			ECC_Visibility,
 			CollisionParams
 		);
 

@@ -27,7 +27,7 @@ protected:
 	
 	FTimerHandle SpeedChangeTimerHandle;
 	float DesiredSpeed;
-	float SpeedChangeRate = 200.0f; // 속도가 변화하는 비율
+	float SpeedChangeRate = 5.0f; // 속도가 변화하는 비율
 
 	void UpdateSpeed();
 };
