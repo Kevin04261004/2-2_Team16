@@ -2,7 +2,7 @@
 
 
 #include "AI/UPPettuAIController.h"
-#include "Character/Enemy/UPPettuCharacter.h"
+#include "Character/UPPettuCharacter.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/UPPlayerCharacter.h"
