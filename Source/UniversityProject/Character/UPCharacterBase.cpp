@@ -84,18 +84,17 @@ void AUPCharacterBase::PostInitializeComponents()
 	StatComponent->OnStatChanged.AddUObject(this, &AUPCharacterBase::ApplyStat);
 }
 
-bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance) // 캐릭터 앞에 콜라이더가 존재하는지 확인합니다. 존재하면 true를 리턴합니다.
+bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit) // 캐릭터 앞에 콜라이더가 존재하는지 확인합니다. 존재하면 true를 리턴합니다.
 {
 	FVector Start = GetActorLocation();
 	FVector ForwardVector = GetActorForwardVector();
 	FVector End = (Start + (ForwardVector * InLineTraceDistance));
-
-	FHitResult HitResult;
+	
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this);
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(
-		HitResult,
+		OutHit,
 		Start,
 		End,
 		ECC_Visibility,

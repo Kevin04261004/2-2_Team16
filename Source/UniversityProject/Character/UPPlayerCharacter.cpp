@@ -58,7 +58,20 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 		UE_LOG(LogTemp, Warning, TEXT("Dash Curve is not loaded"));
 	}
 
+	/* Dash */
 	DashDistance = 500.0f;
+
+	if (DashCurve)
+	{
+		// UpdateDash 함수에 대한 Delegate 바인딩
+		TimelineCallback.BindUFunction(this, FName("UpdateDash"));
+		DashTimeline.AddInterpFloat(DashCurve, TimelineCallback);
+
+		// FinishDash 함수에 대한 Delegate 바인딩
+		TimelineFinishedCallback.BindUFunction(this, FName("FinishDash"));
+		DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
+	}
+	
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
@@ -151,69 +164,18 @@ void AUPPlayerCharacter::Attack(const FInputActionValue& Value)
 void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 {
 	FVector LastInputVector = GetCharacterMovement()->GetLastInputVector();
-	FVector PlayerLocation = GetActorLocation();
-	FVector TraceDirectionVector = PlayerLocation + (LastInputVector * DashDistance);
-	if (UAIBlueprintHelperLibrary::IsValidAIDirection(LastInputVector))
-	{
-		FHitResult HitResult;
-		FCollisionQueryParams CollisionParams;
-		CollisionParams.AddIgnoredActor(this);
+	
+	FHitResult HitResult;
+	bool bHit = TryCheckForwardCollision(DashDistance, HitResult);
+	
+	FVector DashLocation = bHit ? HitResult.Location : HitResult.TraceEnd;
 
-		bool bHit = GetWorld()->LineTraceSingleByChannel(
-			HitResult,
-			PlayerLocation,
-			TraceDirectionVector,
-			CCHANEL_UPACTION,
-			CollisionParams
-		);
+	FVector DashVelocity = UAIBlueprintHelperLibrary::IsValidAIDirection(LastInputVector) ? LastInputVector : GetActorForwardVector();
 
-		if (bHit)
-		{
-			FVector DashLocation = HitResult.Location;
-			DashStart(DashLocation, LastInputVector);
-		}
-		else
-		{
-			FVector DashLocation =  HitResult.TraceEnd;
-			DashStart(DashLocation, LastInputVector);
-		}
-		if (GEngine)
-		{
-			FString DashString = LastInputVector.ToString() + TEXT(" ") + TraceDirectionVector.ToString();
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, DashString);
-		}
-	}
-	else
-	{
-		FHitResult HitResult;
-		FCollisionQueryParams CollisionParams;
-		CollisionParams.AddIgnoredActor(this);
-
-		bool bHit = GetWorld()->LineTraceSingleByChannel(
-			HitResult,
-			PlayerLocation,
-			TraceDirectionVector,
-			CCHANEL_UPACTION,
-			CollisionParams
-		);
-
-		if (bHit)
-		{
-			FVector DashLocation = HitResult.Location;
-			DashStart(DashLocation, GetActorForwardVector());
-		}
-		else
-		{
-			FVector DashLocation = HitResult.TraceEnd;
-			DashStart(DashLocation, GetActorForwardVector());
-		}
-		if (GEngine)
-		{
-			FString DashString = LastInputVector.ToString() + TEXT(" ") + TraceDirectionVector.ToString();
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, DashString);
-		}
-	}
+	DashStart(DashLocation, DashVelocity);
 }
+
+
 
 void AUPPlayerCharacter::Sprint(const FInputActionValue& Value)
 {
@@ -239,15 +201,12 @@ void AUPPlayerCharacter::DashStart(FVector InDashEndLocation, FVector InDashVelo
 	DashEndLocation = InDashEndLocation;
 	DashEndVelocity = InDashVelocity;
 
-	FOnTimelineFloat UpdateDashDelegate;
-	UpdateDashDelegate.BindUFunction(this, FName("UpdateDash"));
-	DashTimeline.AddInterpFloat(DashCurve, UpdateDashDelegate);
-	
-	FOnTimelineEvent FinishDashDelegate;
-	FinishDashDelegate.BindUFunction(this, FName("FinishDash"));
-	DashTimeline.SetTimelineFinishedFunc(FinishDashDelegate);
-
 	DashTimeline.PlayFromStart();
+
+	if (!GetWorldTimerManager().IsTimerActive(DashTimerHandle))
+	{
+		GetWorldTimerManager().SetTimer(DashTimerHandle, this, &AUPPlayerCharacter::UpdateDashTimeline, 0.01f, true);
+	}
 }
 
 void AUPPlayerCharacter::UpdateDash(float Value)
@@ -255,12 +214,35 @@ void AUPPlayerCharacter::UpdateDash(float Value)
 	//위치 보간
 	FVector NewLocation = FMath::Lerp(DashStartLocation, DashEndLocation, Value);
 	SetActorLocation(NewLocation);
-	
+}
+
+void AUPPlayerCharacter::UpdateDashTimeline()
+{
+	if (DashTimeline.IsPlaying())
+	{
+		DashTimeline.TickTimeline(0.01f);
+
+		float PlaybackPosition = DashTimeline.GetPlaybackPosition();
+		float TimelineLength = DashTimeline.GetTimelineLength();
+		float NormalizedPosition = PlaybackPosition / TimelineLength;  // 0~1 사이 값
+		
+		UpdateDash(NormalizedPosition);
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(DashTimerHandle);  // 타이머 정리
+	}
 }
 
 void AUPPlayerCharacter::FinishDash()
 {
+	GetWorldTimerManager().ClearTimer(DashTimerHandle);
 	GetCharacterMovement()->Velocity = DashEndVelocity * 500.0f;
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, TEXT("Dash End"));
+	}
 }
 
 void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
@@ -281,8 +263,9 @@ void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface
 void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 {
 	IUPCharacterGoForwardInterface::GoForward();
+	FHitResult OutHit;
 	
-	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f))
+	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f, OutHit))
 	{
 		PhysicsControlComponent->GoForward(GoForwardDistance);
 	}

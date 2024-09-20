@@ -29,7 +29,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Init, meta=(AllowPrivateAccess= "true", Tooltip = "캐릭터가 사용하는 애니메이션 클래스"))
 	TObjectPtr<UClass> AnimInstanceClass;
 	
-	bool TryCheckForwardCollision(float InLineTraceDistance);
+	bool TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit);
 // Weapon Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터가 사용하는 무기 클래스"))

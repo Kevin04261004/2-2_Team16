@@ -76,12 +76,11 @@ protected:
 	FVector DashEndVelocity;
 	float DashDistance;
 	FTimeline DashTimeline;
-
+	FTimerHandle DashTimerHandle;
 	
 	void DashStart(FVector InDashEndLocation, FVector InDashVelocity);
-	UFUNCTION()
 	void UpdateDash(float Value);
-	UFUNCTION()
+	void UpdateDashTimeline();
 	void FinishDash();
 	
 	UPROPERTY(EditAnywhere, Category = "Timeline")
