@@ -3,6 +3,7 @@
 
 #include "UPGameMode.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "Player/UPPlayerController.h"
 
 AUPGameMode::AUPGameMode()

@@ -3,7 +3,7 @@
 
 #include "UI/UPWidgetComponent.h"
 
-#include "Interface/UPUserWidget.h"
+#include "UI/UPUserWidget.h"
 
 void UUPWidgetComponent::InitWidget()
 {

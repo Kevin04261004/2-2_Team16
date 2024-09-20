@@ -39,6 +39,7 @@ public:
 	FORCEINLINE void SetBaseStat(const FUPCharacterStat& InModifierStat)
 	{
 		BaseStat = InModifierStat;
+		CurrentHp = InModifierStat.MaxHp;
 		OnStatChanged.Broadcast(GetBaseStat(), GetModifierStat());
 	}
 	FORCEINLINE void SetModifierStat(const FUPCharacterStat& InModifierStat)
@@ -64,9 +65,6 @@ protected:
 
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
 	float CurrentHp;
-
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
-	float CurrentLevel;
 
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
 	FUPCharacterStat BaseStat;
