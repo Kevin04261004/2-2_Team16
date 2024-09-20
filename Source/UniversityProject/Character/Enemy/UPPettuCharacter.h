@@ -26,7 +26,7 @@ class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPCharacterBase
 {
 	GENERATED_BODY()
 public:
-	AUPPettuCharacter(const FObjectInitializer& ObjectInitializer);
+	AUPPettuCharacter();
 
 	virtual void PostInitializeComponents() override;
 	
