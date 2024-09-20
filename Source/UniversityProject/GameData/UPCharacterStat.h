@@ -11,7 +11,7 @@ struct FUPCharacterStat : public FTableRowBase
 
 // Stat Section <Only float Value>
 public:
-	FUPCharacterStat() : MaxHp(0.0f), AttackDamage(0.0f), AttackSpeed(0.0f), WalkSpeed(0.0f), SprintSpeed(0.0f) {}
+	FUPCharacterStat() : MaxHp(0.0f), AttackDamage(0.0f), AttackSpeed(0.0f), MovementSpeed(0) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
 	float MaxHp;
@@ -23,11 +23,8 @@ public:
 	float AttackSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
-	float WalkSpeed;
+	float MovementSpeed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
-	float SprintSpeed;
-	
 	FUPCharacterStat operator+(const FUPCharacterStat& Other) const
 	{
 		const float* const ThisPtr = reinterpret_cast<const float* const>(this);

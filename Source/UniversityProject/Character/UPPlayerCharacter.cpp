@@ -16,6 +16,9 @@
 #include "Components/UPCharacterMovementComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Sight.h"
+#include "Physics/Collision.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -33,7 +36,6 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 
 	CameraComponent = CreateDefaultSubobject<UUPCameraComponent>(TEXT("CameraComponent"));
 	
-	// 
 	static ConstructorHelpers::FObjectFinder<UCurveFloat> CurveRef(TEXT("/Game/UniversityProject/GameData/CV_DashCurve"));
 	if (CurveRef.Succeeded())
 	{
@@ -60,6 +62,8 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
 	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
+
+
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -185,6 +189,7 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 		FHitResult HitResult;
 		FCollisionQueryParams CollisionParams;
 		CollisionParams.AddIgnoredActor(this);
+		// CollisionParams.AddIgnoredComponents(this->GetComponents());
 
 		bool bHit = GetWorld()->LineTraceSingleByChannel(
 			HitResult,
@@ -282,5 +287,15 @@ void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f))
 	{
 		PhysicsControlComponent->GoForward(GoForwardDistance);
+	}
+}
+
+void AUPPlayerCharacter::SetupStimuliSource()
+{
+	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSource"));
+	if (StimuliSource)
+	{
+		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
+		StimuliSource->RegisterWithPerceptionSystem();
 	}
 }
