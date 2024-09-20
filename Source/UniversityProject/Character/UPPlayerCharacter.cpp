@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+
 #include "Character/UPPlayerCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -21,7 +22,7 @@
 #include "Physics/Collision.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
-AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+AUPPlayerCharacter::AUPPlayerCharacter()
 {
 	/* Init Components */
 	// Camera Setting
@@ -29,14 +30,35 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f;
 	CameraBoom->bUsePawnControlRotation = true;
-	
+
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	CameraComponent = CreateDefaultSubobject<UUPCameraComponent>(TEXT("CameraComponent"));
-	
-	// 
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionMoveRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Move.IA_Move"));
+	check(InputActionMoveRef.Object != nullptr);
+	MoveAction = InputActionMoveRef.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionLookRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Look.IA_Look"));
+	check(InputActionLookRef.Object != nullptr);
+	LookAction = InputActionLookRef.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionAttackRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Attack.IA_Attack"));
+	check(InputActionAttackRef.Object != nullptr);
+	AttackAction = InputActionAttackRef.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionDashRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Dash.IA_Dash"));
+	check(InputActionDashRef.Object != nullptr);
+	DashAction = InputActionDashRef.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionSprintRef(TEXT("/Game/UniversityProject/Input/Actions/IA_Sprint.IA_Sprint"));
+	check(InputActionSprintRef.Object != nullptr);
+	SprintAction = InputActionSprintRef.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCBackViewRef(TEXT("/Game/UniversityProject/Input/IMC_BackView.IMC_BackView"));
+	check(IMCBackViewRef.Object != nullptr);
+	IMC_BackView = IMCBackViewRef.Object;
+
 	static ConstructorHelpers::FObjectFinder<UCurveFloat> CurveRef(TEXT("/Game/UniversityProject/GameData/CV_DashCurve"));
 	if (CurveRef.Succeeded())
 	{
@@ -59,6 +81,10 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	}
 
 	DashDistance = 500.0f;
+	
+	
+	// Setup Stimuli Source
+	SetupStimuliSource();
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
@@ -124,13 +150,13 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 void AUPPlayerCharacter::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
-	
+
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0);
 
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-	
+
 	AddMovementInput(ForwardDirection, MovementVector.X);
 	AddMovementInput(RightDirection, MovementVector.Y);
 }
@@ -231,6 +257,8 @@ void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
 	CameraComponent->ZoomCamera(zoomAxis);
 }
 
+
+
 void AUPPlayerCharacter::DashStart(FVector InDashEndLocation, FVector InDashVelocity)
 {
 	check(DashCurve != nullptr);
@@ -260,10 +288,10 @@ void AUPPlayerCharacter::UpdateDash(float Value)
 
 void AUPPlayerCharacter::FinishDash()
 {
-	GetCharacterMovement()->Velocity = DashEndVelocity * 500.0f;
+	CharacterMovementComponent->Velocity = DashEndVelocity * 500.0f;
 }
 
-void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
+void AUPPlayerCharacter::SetupStimuliSource()
 {
 	AfterImageComponent->CreateAfterImage();
 }

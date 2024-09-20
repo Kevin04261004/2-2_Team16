@@ -2,15 +2,15 @@
 
 
 #include "UPCharacterBase.h"
+
 #include "Components/UPCharacterStatComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/UPCharacterMovementComponent.h"
-#include "Engine/DamageEvents.h"
+#include "Components/UPComboAttackComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Weapon/UPPlayerCharacterWeapon.h"
+#include "Weapon/UPWeapon.h"
 
 // Sets default values
-AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
+AUPCharacterBase::AUPCharacterBase()
 {
 	// Pawn
 	bUseControllerRotationPitch = false;
@@ -23,103 +23,91 @@ AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) 
 	CapsuleComponent_->SetCollisionProfileName("Capsule");
 	
 	// Movement
-	MovementComponent = Cast<UUPCharacterMovementComponent>(GetCharacterMovement());
-	MovementComponent->bOrientRotationToMovement = true;
-	MovementComponent->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
-	MovementComponent->JumpZVelocity = 700.f;
-	MovementComponent->AirControl = 0.35f;
-	MovementComponent->MaxWalkSpeed = 500.f;
-	MovementComponent->MinAnalogWalkSpeed = 20.f;
-	MovementComponent->BrakingDecelerationWalking = 2000.f;
-	
+	TObjectPtr<UCharacterMovementComponent> CharacterMovementComponent = GetCharacterMovement();
+	CharacterMovementComponent->bOrientRotationToMovement = true;
+	CharacterMovementComponent->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+	CharacterMovementComponent->JumpZVelocity = 700.f;
+	CharacterMovementComponent->AirControl = 0.35f;
+	CharacterMovementComponent->MaxWalkSpeed = 500.f;
+	CharacterMovementComponent->MinAnalogWalkSpeed = 20.f;
+	CharacterMovementComponent->BrakingDecelerationWalking = 2000.f;
+
 	// Mesh
 	TObjectPtr<USkeletalMeshComponent> MeshComponent = GetMesh();
 	MeshComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -100.0f), FRotator(0.0f, -90.0f, 0.0f));
 	MeshComponent->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
+	// Set AnimInstance
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/UniversityProject/Animation/AUP_UPCharacter.AUP_UPCharacter_C"));
+	check(AnimInstanceClassRef.Class != nullptr);
+	GetMesh()->SetAnimInstanceClass(AnimInstanceClassRef.Class);
+	
 	// Set Stat
-	StatComponent = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
+	Stat = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
+	static ConstructorHelpers::FObjectFinder<UUPCharacterStatData> StatDataRef(TEXT("/Game/UniversityProject/GameData/DA_PlayerCharacterStat.DA_PlayerCharacterStat"));
+	Stat->SetBaseStat(StatDataRef.Object.Get()->Stat);
+	
+	// Set Combo
+	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 
+	// Set Dead Montage
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Game/UniversityProject/Animation/AM_Dead.AM_Dead"));
+	check(DeadMontageRef.Object != nullptr);
+	DeadMontage = DeadMontageRef.Object;
 }
 
 void AUPCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	/* Check InitSection */
-	check(DeadMontage != nullptr);
-	
-	/* Init */
-	// Set AnimInstance
-	GetMesh()->SetAnimInstanceClass(AnimInstanceClass);
-
-	// Set StatComponent Value
-	check(StatComponent != nullptr);
-	check(CharacterInitalizeStatData != nullptr);	
-	StatComponent->SetBaseStat(CharacterInitalizeStatData->Stat);
-	MovementComponent->SetCharacterStat(StatComponent);
-    MovementComponent->SetIsSprinting(false);
-	
-	// Spawn the weapon(Actor) & Get hand Socket to Add it
+	// Spawn the weapon actor And Get Socket to Add it
+	check(WeaponClass != nullptr);
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = GetInstigator();
-	check(WeaponClass != nullptr);
-	Weapon = GetWorld()->SpawnActor<AUPPlayerCharacterWeapon>(WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+
+	Weapon = GetWorld()->SpawnActor<AUPWeapon>(WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 	check(Weapon != nullptr);
 	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("hand_rSocket"));
-
-	/* Actor Delegate */
-	Weapon->OnWeaponHit.AddUObject(this, &AUPCharacterBase::Attack);
 }
 
 void AUPCharacterBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	/* Component Delegate */
-	check(StatComponent != nullptr);
-	StatComponent->OnHpZero.AddUObject(this, &AUPCharacterBase::SetDead);
-	StatComponent->OnStatChanged.AddUObject(this, &AUPCharacterBase::ApplyStat);
+	Stat->OnHpZero.AddUObject(this, &AUPCharacterBase::SetDead);
+	Stat->OnStatChanged.AddUObject(this, &AUPCharacterBase::ApplyStat);
 }
 
-bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance) // 캐릭터 앞에 콜라이더가 존재하는지 확인합니다. 존재하면 true를 리턴합니다.
+void AUPCharacterBase::AttackHitCheck()
 {
-	FVector Start = GetActorLocation();
-	FVector ForwardVector = GetActorForwardVector();
-	FVector End = (Start + (ForwardVector * InLineTraceDistance));
+	check(Weapon != nullptr);
+	Weapon->NotifyAttackCheck();
+}
 
-	FHitResult HitResult;
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(this);
+void AUPCharacterBase::AttackComboEnd()
+{
+	check(Weapon != nullptr);
+	Weapon->NotifyAttackComboEnd();
+}
 
-	bool bHit = GetWorld()->LineTraceSingleByChannel(
-		HitResult,
-		Start,
-		End,
-		ECC_Visibility,
-		CollisionParams
-	);
+void AUPCharacterBase::NotifyComboActionEnd()
+{
+	check(Weapon != nullptr);
+	Weapon->NotifyAttackEnd();
+}
 
-	return bHit;
+void AUPCharacterBase::NotifyAttackComboEnd()
+{
+	AttackComboEnd();
+	NotifyComboActionEnd();
 }
 
 float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
-	StatComponent->ApplyDamage(DamageAmount);
+	Stat->ApplyDamage(DamageAmount);
 	return DamageAmount;
-}
-
-void AUPCharacterBase::Attack(FHitResult& InHit)
-{
-	IUPDamageableInterface* Damageable = Cast<IUPDamageableInterface>(InHit.GetActor());
-	if (Damageable == nullptr)
-	{
-		return;
-	}
-	FDamageEvent DamageEvent;
-	Damageable->UPTakeDamage(StatComponent->GetTotalStat().AttackDamage, DamageEvent, GetController(), this);
 }
 
 void AUPCharacterBase::SetDead()
@@ -132,12 +120,7 @@ void AUPCharacterBase::SetDead()
 void AUPCharacterBase::PlayDeadAnimation()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance == nullptr)
-	{
-		return;
-	}
 	AnimInstance->StopAllMontages(0.0f);
-	check(DeadMontage != nullptr);
 	AnimInstance->Montage_Play(DeadMontage, 1.0f);
 }
 

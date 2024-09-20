@@ -5,10 +5,9 @@
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
 #include "Components/ActorComponent.h"
+#include "Player/UPPlayerController.h"
 #include "UPComboAttackComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnComboStepEnd);
-DECLARE_MULTICAST_DELEGATE(FOnComboAttackFinish);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNIVERSITYPROJECT_API UUPComboAttackComponent : public UActorComponent
@@ -19,12 +18,6 @@ public:
 	UUPComboAttackComponent();
 
 	void ProcessComboCommand();
-
-// Delegate Section
-public:
-	FOnComboAttackFinish OnComboAttackFinish;
-	FOnComboStepEnd OnComboStepEnd;
-	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
 	TObjectPtr<class UAnimMontage> ComboActionMontage;
@@ -34,7 +27,7 @@ protected:
 
 
 	void ComboActionBegin();
-	void ComboActionFinish(class UAnimMontage* TargetMontage, bool IsProperlyEnded);
+	void ComboActionEnd(class UAnimMontage* TargetMontage, bool IsProperlyEnded);
 	void SetComboCheckTimer();
 	void ComboCheck();
 
@@ -42,5 +35,5 @@ protected:
 	FTimerHandle ComboTimerHandle;
 	bool HasNextComboCommand = false;
 
-	TObjectPtr<AUPCharacterBase> OwningCharacter;
+	TObjectPtr<AUPCharacterBase> CharacterBase;
 };

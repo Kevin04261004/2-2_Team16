@@ -78,9 +78,3 @@ DerivedDataCache/*
 
 # Asset
 Content/Assets/*
-
-#Doxygen
-!Doxygen/**
-
-# idea
-.idea/*

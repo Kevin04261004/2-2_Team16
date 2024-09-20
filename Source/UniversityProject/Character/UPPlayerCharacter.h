@@ -6,10 +6,7 @@
 #include "Character/UPCharacterBase.h"
 #include "InputActionValue.h"
 #include "Components/TimelineComponent.h"
-#include "Components/UPCameraComponent.h"
-#include "Interface/UPAfterImageableInterface.h"
-#include "Interface/UPAnimationAttackCheckInterface.h"
-#include "Interface/UPCharacterGoForwardInterface.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Player/UPPlayerController.h"
 #include "UPPlayerCharacter.generated.h"
 
@@ -17,13 +14,12 @@
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterGoForwardInterface, public IUPAfterImageableInterface
+class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase
 {
 	GENERATED_BODY()
 
 public:
-	AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer);
-	virtual void PostInitializeComponents() override;
+	AUPPlayerCharacter();
 
 protected:
 	virtual void BeginPlay() override;
@@ -36,20 +32,8 @@ protected:
 	
 // Input Section
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputMappingContext> IMC_BackView;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> MoveAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> AttackAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> DashAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> SprintAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> LookAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> CameraZoomAction;
 	
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
