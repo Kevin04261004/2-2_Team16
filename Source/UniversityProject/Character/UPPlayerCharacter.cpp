@@ -16,6 +16,8 @@
 #include "Components/UPCharacterMovementComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Sight.h"
 #include "Physics/Collision.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
@@ -285,5 +287,15 @@ void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f))
 	{
 		PhysicsControlComponent->GoForward(GoForwardDistance);
+	}
+}
+
+void AUPPlayerCharacter::SetupStimuliSource()
+{
+	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSource"));
+	if (StimuliSource)
+	{
+		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
+		StimuliSource->RegisterWithPerceptionSystem();
 	}
 }

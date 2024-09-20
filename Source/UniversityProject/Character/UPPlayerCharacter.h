@@ -107,4 +107,10 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UPhysicsControlComponent> PhysicsControlComponent;
+
+/* AI Section */
+private:
+	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSource;
+
+	void SetupStimuliSource();
 };
