@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
+#include "Character/UPPlayerCharacter.h"
 #include "Components/ActorComponent.h"
 #include "Player/UPPlayerController.h"
 #include "UPComboAttackComponent.generated.h"
