@@ -56,8 +56,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 죽음 애니메이션 몽타주"))
 	TObjectPtr<class UAnimMontage> DeadMontage;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=STAT)
+	bool bIsDead;
+
+	FORCEINLINE bool IsDead() const { return bIsDead; }
 	virtual void SetDead();
 	void PlayDeadAnimation();
+	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted);
 // Stat Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true", Tooltip = "스텟 컴포넌트"))
@@ -69,4 +74,16 @@ public:
 	
 	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return StatComponent.Get(); }
 	void ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);
+// Stun Section
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 스턴 애니메이션 몽타주"))
+	TObjectPtr<class UAnimMontage> StunMontage;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=STAT)
+	bool bIsStun;
+
+	FORCEINLINE bool IsStun() const { return bIsStun; }
+	virtual void SetStun();
+	void PlayStunAnimation();
+	virtual void StunAnimEnd(UAnimMontage* Montage, bool bInterrupted);
 };
