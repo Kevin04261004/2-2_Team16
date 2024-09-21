@@ -15,7 +15,7 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 	BaseComboFrameRate = 60.0f;
 	LastComboFrameRate = 120.0f;
 	MaxPatternActivateTime = 5000.0f;
-	MaxStunStack = 100.0f;
+	//MaxStunStack = 100.0f;
 
 	CurrentHp = StatComponent->GetBaseStat().MaxHp;
 	CurrentPatternActivateTime = 0.0f;
@@ -50,3 +50,4 @@ void AUPPettuCharacter::SetDead()
 	Super::SetDead();
 	Destroy();
 }
+
