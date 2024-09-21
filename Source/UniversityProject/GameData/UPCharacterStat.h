@@ -17,6 +17,9 @@ public:
 	float MaxHp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
+	float MaxStunStack;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
 	float AttackDamage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)

@@ -9,7 +9,9 @@
 
 // Delegate Section
 DECLARE_MULTICAST_DELEGATE(FOnHpZeroDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnStunStackZeroDelegate);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHpChangeDelegate, float /* CurrentHp */);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnStunStackChangeDelegate, float /* CurrentStunStack */);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnStatChangedDelegate, const FUPCharacterStat& /* BaseStat */, const FUPCharacterStat& /* ModifierStat */);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -30,6 +32,8 @@ public:
 	FOnHpZeroDelegate OnHpZero;
 	FOnHpChangeDelegate OnHpChanged;
 	FOnStatChangedDelegate OnStatChanged;
+	FOnStunStackZeroDelegate OnStunStackZero;
+	FOnStunStackChangeDelegate OnStunStackChanged;
 
 	FORCEINLINE void AddBaseStat(const FUPCharacterStat& InAddStat)
 	{
@@ -40,6 +44,7 @@ public:
 	{
 		BaseStat = InModifierStat;
 		CurrentHp = InModifierStat.MaxHp;
+		CurrentStunStack = InModifierStat.MaxStunStack;
 		OnStatChanged.Broadcast(GetBaseStat(), GetModifierStat());
 	}
 	FORCEINLINE void SetModifierStat(const FUPCharacterStat& InModifierStat)
@@ -58,14 +63,20 @@ public:
 		OnHpChanged.Broadcast(CurrentHp);
 	}
 	float ApplyDamage(float InDamage);
+	float ApplyStunStack(float InDamage);
 
 // Data Section
 protected:
 	void SetHp(float NewHp);
 
+	void SetStunStack(float NewStunStat);
+	
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
 	float CurrentHp;
 
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
+	float CurrentStunStack;
+	
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
 	FUPCharacterStat BaseStat;
 

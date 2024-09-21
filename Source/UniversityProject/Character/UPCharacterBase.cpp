@@ -41,6 +41,7 @@ AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) 
 	// Set Stat
 	StatComponent = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
 
+	bIsDead = false;
 }
 
 void AUPCharacterBase::BeginPlay()
@@ -84,18 +85,17 @@ void AUPCharacterBase::PostInitializeComponents()
 	StatComponent->OnStatChanged.AddUObject(this, &AUPCharacterBase::ApplyStat);
 }
 
-bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance) // 캐릭터 앞에 콜라이더가 존재하는지 확인합니다. 존재하면 true를 리턴합니다.
+bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit) // 캐릭터 앞에 콜라이더가 존재하는지 확인합니다. 존재하면 true를 리턴합니다.
 {
 	FVector Start = GetActorLocation();
 	FVector ForwardVector = GetActorForwardVector();
 	FVector End = (Start + (ForwardVector * InLineTraceDistance));
-
-	FHitResult HitResult;
+	
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this);
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(
-		HitResult,
+		OutHit,
 		Start,
 		End,
 		ECC_Visibility,
@@ -127,6 +127,7 @@ void AUPCharacterBase::SetDead()
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 	PlayDeadAnimation();
 	SetActorEnableCollision(false);
+	bIsDead = true;
 }
 
 void AUPCharacterBase::PlayDeadAnimation()
@@ -139,9 +140,44 @@ void AUPCharacterBase::PlayDeadAnimation()
 	AnimInstance->StopAllMontages(0.0f);
 	check(DeadMontage != nullptr);
 	AnimInstance->Montage_Play(DeadMontage, 1.0f);
+	AnimInstance->OnMontageEnded.AddDynamic(this, &AUPCharacterBase::StunAnimEnd);
+}
+
+void AUPCharacterBase::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	bIsDead = false;
 }
 
 void AUPCharacterBase::ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat)
 {
 	MovementComponent->SetIsSprinting(MovementComponent->GetIsSprinting());
+}
+
+void AUPCharacterBase::SetStun()
+{
+	GetCharacterMovement()->SetMovementMode(MOVE_None);
+	PlayStunAnimation();
+	bIsStun = true;
+}
+
+void AUPCharacterBase::PlayStunAnimation()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance == nullptr)
+	{
+		return;
+	}
+	AnimInstance->StopAllMontages(0.0f);
+	if (StunMontage)
+	{
+		AnimInstance->Montage_Play(StunMontage, 1.0f);
+		AnimInstance->OnMontageEnded.AddDynamic(this, &AUPCharacterBase::StunAnimEnd);
+	}
+}
+
+void AUPCharacterBase::StunAnimEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	bIsStun = false;
 }

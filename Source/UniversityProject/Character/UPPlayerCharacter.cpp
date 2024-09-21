@@ -14,6 +14,7 @@
 #include "Components/TimelineComponent.h"
 #include "Components/UPAfterImageComponent.h"
 #include "Components/UPCharacterMovementComponent.h"
+#include "Components/UPDashComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
@@ -36,33 +37,11 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 
 	CameraComponent = CreateDefaultSubobject<UUPCameraComponent>(TEXT("CameraComponent"));
 	
-	// 
-	static ConstructorHelpers::FObjectFinder<UCurveFloat> CurveRef(TEXT("/Game/UniversityProject/GameData/CV_DashCurve"));
-	if (CurveRef.Succeeded())
-	{
-		DashCurve = CurveRef.Object;
-	}
-	
-	if (DashCurve)
-	{
-		TimelineCallback.BindUFunction(this, FName("UpdateDash"));
-		TimelineFinishedCallback.BindUFunction(this, FName("FinishDash"));
-
-		DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
-		DashTimeline.AddInterpFloat(DashCurve, TimelineCallback);
-
-		UE_LOG(LogTemp, Warning, TEXT("Dash Timeline Initialized with Curve"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Dash Curve is not loaded"));
-	}
-
-	DashDistance = 500.0f;
 	// Set Combo
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
 	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
+	DashComponent = CreateDefaultSubobject<UUPDashComponent>(TEXT("DashComponent"));
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -71,6 +50,7 @@ void AUPPlayerCharacter::PostInitializeComponents()
 	CameraComponent->Initialize(*CameraBoom, *FollowCamera);
 	AfterImageComponent->Initialize(*this);
 	PhysicsControlComponent->Initialize();
+	DashComponent->Initialize(MovementComponent, this);
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -150,70 +130,10 @@ void AUPPlayerCharacter::Attack(const FInputActionValue& Value)
 
 void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 {
-	FVector LastInputVector = GetCharacterMovement()->GetLastInputVector();
-	FVector PlayerLocation = GetActorLocation();
-	FVector TraceDirectionVector = PlayerLocation + (LastInputVector * DashDistance);
-	if (UAIBlueprintHelperLibrary::IsValidAIDirection(LastInputVector))
-	{
-		FHitResult HitResult;
-		FCollisionQueryParams CollisionParams;
-		CollisionParams.AddIgnoredActor(this);
-
-		bool bHit = GetWorld()->LineTraceSingleByChannel(
-			HitResult,
-			PlayerLocation,
-			TraceDirectionVector,
-			CCHANEL_UPACTION,
-			CollisionParams
-		);
-
-		if (bHit)
-		{
-			FVector DashLocation = HitResult.Location;
-			DashStart(DashLocation, LastInputVector);
-		}
-		else
-		{
-			FVector DashLocation =  HitResult.TraceEnd;
-			DashStart(DashLocation, LastInputVector);
-		}
-		if (GEngine)
-		{
-			FString DashString = LastInputVector.ToString() + TEXT(" ") + TraceDirectionVector.ToString();
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, DashString);
-		}
-	}
-	else
-	{
-		FHitResult HitResult;
-		FCollisionQueryParams CollisionParams;
-		CollisionParams.AddIgnoredActor(this);
-
-		bool bHit = GetWorld()->LineTraceSingleByChannel(
-			HitResult,
-			PlayerLocation,
-			TraceDirectionVector,
-			CCHANEL_UPACTION,
-			CollisionParams
-		);
-
-		if (bHit)
-		{
-			FVector DashLocation = HitResult.Location;
-			DashStart(DashLocation, GetActorForwardVector());
-		}
-		else
-		{
-			FVector DashLocation = HitResult.TraceEnd;
-			DashStart(DashLocation, GetActorForwardVector());
-		}
-		if (GEngine)
-		{
-			FString DashString = LastInputVector.ToString() + TEXT(" ") + TraceDirectionVector.ToString();
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, DashString);
-		}
-	}
+	DashComponent->Dash();
 }
+
+
 
 void AUPPlayerCharacter::Sprint(const FInputActionValue& Value)
 {
@@ -229,38 +149,6 @@ void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
 {
 	float zoomAxis = Value.Get<float>();
 	CameraComponent->ZoomCamera(zoomAxis);
-}
-
-void AUPPlayerCharacter::DashStart(FVector InDashEndLocation, FVector InDashVelocity)
-{
-	check(DashCurve != nullptr);
-
-	DashStartLocation = GetActorLocation();
-	DashEndLocation = InDashEndLocation;
-	DashEndVelocity = InDashVelocity;
-
-	FOnTimelineFloat UpdateDashDelegate;
-	UpdateDashDelegate.BindUFunction(this, FName("UpdateDash"));
-	DashTimeline.AddInterpFloat(DashCurve, UpdateDashDelegate);
-	
-	FOnTimelineEvent FinishDashDelegate;
-	FinishDashDelegate.BindUFunction(this, FName("FinishDash"));
-	DashTimeline.SetTimelineFinishedFunc(FinishDashDelegate);
-
-	DashTimeline.PlayFromStart();
-}
-
-void AUPPlayerCharacter::UpdateDash(float Value)
-{
-	//위치 보간
-	FVector NewLocation = FMath::Lerp(DashStartLocation, DashEndLocation, Value);
-	SetActorLocation(NewLocation);
-	
-}
-
-void AUPPlayerCharacter::FinishDash()
-{
-	GetCharacterMovement()->Velocity = DashEndVelocity * 500.0f;
 }
 
 void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
@@ -281,8 +169,9 @@ void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface
 void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 {
 	IUPCharacterGoForwardInterface::GoForward();
+	FHitResult OutHit;
 	
-	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f))
+	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f, OutHit))
 	{
 		PhysicsControlComponent->GoForward(GoForwardDistance);
 	}
