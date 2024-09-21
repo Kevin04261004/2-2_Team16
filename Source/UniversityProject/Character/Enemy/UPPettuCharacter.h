@@ -41,12 +41,12 @@ protected:
 public:
 	TObjectPtr<class UBehaviorTree> GetBehaviorTree() const { return BTree; }
 	
+	
 private:
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 죽음 애니메이션 몽타주"))
+	TObjectPtr<class UAnimMontage> StunMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat, Meta = (AllowPrivateAccess = "true"))
 	float MaxPatternActivateTime; // 패턴이 재발동 되기까지 걸리는 최대 시간 (1000당 1초)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat, Meta = (AllowPrivateAccess = "true"))
-	float MaxStunStack;			  // 보스가 스턴 상태가 되기 위한 스턴치 누적 최대값
 
 	///////////// 상수 //////////////
 	float MaxComboCount;
