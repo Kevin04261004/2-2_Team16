@@ -40,7 +40,7 @@ void AUPPettuCharacter::PostInitializeComponents()
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-                                      AActor* DamageCauser)
+									  AActor* DamageCauser)
 {
 	return Super::UPTakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
