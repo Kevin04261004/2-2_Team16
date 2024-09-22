@@ -24,8 +24,6 @@ protected:
 	UMaterialInstance* GhostMaterial;
 	UMaterialInstanceDynamic* Material;
 
-	float InitOpacity = 0.f;
-	
 	bool IsSpawned = false;
 	float FadeCountDown;
 	float FadeOutTime = 0.2f;
