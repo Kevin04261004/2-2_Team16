@@ -41,7 +41,7 @@ void AUPAfterImage::Tick(float DeltaTime)
 			UMaterialInstanceDynamic* DynMaterial = Cast<UMaterialInstanceDynamic>(PoseableMesh->GetMaterial(i));
 			if (DynMaterial)
 			{
-				DynMaterial->SetScalarParameterValue("Opacity", FadeCountDown / FadeOutTime);
+				DynMaterial->SetScalarParameterValue("Opacity", InitOpacity * (FadeCountDown / FadeOutTime));
 			}
 		}
 		if (FadeCountDown <= 0.0f)
@@ -68,6 +68,15 @@ void AUPAfterImage::Init(USkeletalMeshComponent* Mesh)
 	}
 
 	FadeCountDown = FadeOutTime;
+	for (int32 i = 0; i < PoseableMesh->GetNumMaterials(); i++)
+	{
+		UMaterialInstanceDynamic* DynMaterial = Cast<UMaterialInstanceDynamic>(PoseableMesh->GetMaterial(i));
+		if (DynMaterial != nullptr)
+		{
+			DynMaterial->GetScalarParameterValue(TEXT("Opacity"), InitOpacity, false);
+		}
+	}
+	
 	IsSpawned = true;
 }
 
