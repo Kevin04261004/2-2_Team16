@@ -133,8 +133,6 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 	DashComponent->Dash();
 }
 
-
-
 void AUPPlayerCharacter::Sprint(const FInputActionValue& Value)
 {
 	MovementComponent->SetIsSprinting(true);

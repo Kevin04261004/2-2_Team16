@@ -53,9 +53,17 @@ void UUPDashComponent::Dash()
 	FHitResult HitResult;
 
 	bool bHit = PlayerCharacter->TryCheckForwardCollision(DashDistance, HitResult);
-	
-	FVector DashLocation = bHit ? HitResult.Location : HitResult.TraceEnd;
 
+	if (bHit && FVector::Distance(GetOwner()->GetActorLocation(), HitResult.Location) < 150.0f)
+	{
+		return;
+	}
+	
+	FVector DashLocation = bHit ? HitResult.Location - GetOwner()->GetActorForwardVector() * 150 : HitResult.TraceEnd;
+
+	DrawDebugLine(GetWorld(), GetOwner()->GetActorLocation(), DashLocation, FColor::Blue, false, 5.f);
+	DrawDebugSphere(GetWorld(), DashLocation, 10.f, 30, FColor::Red, false, 5.f);
+	
 	FVector DashVelocity = UAIBlueprintHelperLibrary::IsValidAIDirection(LastInputVector) ? LastInputVector : GetOwner()->GetActorForwardVector();
 
 	DashStart(DashLocation, DashVelocity);
