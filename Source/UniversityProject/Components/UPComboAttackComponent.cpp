@@ -42,7 +42,7 @@ void UUPComboAttackComponent::ProcessComboCommand()
 
 void UUPComboAttackComponent::ComboActionBegin()
 {
-	CurrentCombo = 1; 
+	CurrentCombo = 1;
 	
 	// Movement Setting
 	UCharacterMovementComponent* movement = OwningCharacter->GetCharacterMovement();
