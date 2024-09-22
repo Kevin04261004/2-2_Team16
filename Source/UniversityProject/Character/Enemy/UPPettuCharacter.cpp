@@ -45,9 +45,16 @@ float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& Da
 	return Super::UPTakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
-void AUPPettuCharacter::SetDead()
+void AUPPettuCharacter::SetPettuDead()
 {
-	Super::SetDead();
+	SetDead();
 	Destroy();
 }
+
+void AUPPettuCharacter::SetPettuStun()
+{
+	SetStun();
+	hasStatus = PettuStatus::Stunned;
+}
+
 

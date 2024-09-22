@@ -16,19 +16,14 @@ EBTNodeResult::Type UUPBTTask_Died::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	if (PettuController)
 	{
 		auto* const Pettu = Cast<AUPPettuCharacter>(PettuController->GetPawn());
-		/*if (Pettu->IsDead())
+		if (Pettu)
 		{
-			//Pettu->Died();
+			// 죽음 처리
+			Pettu->SetPettuDead();
 			OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("IsDead"), true);
+			//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded); 완료 안해도 될듯?
 			return EBTNodeResult::Succeeded;
 		}
-		else
-		{
-			// 캐릭터가 사망하지 않은 경우
-			OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("IsDead"), false);
-			return EBTNodeResult::Failed;
-		}*/
-
 	}
 	return EBTNodeResult::Failed;
 }

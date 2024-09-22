@@ -5,8 +5,6 @@
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
 #include "BehaviorTree/BehaviorTree.h"
-#include "Perception/AIPerceptionStimuliSourceComponent.h"
-
 #include "UPPettuCharacter.generated.h"
 
 UENUM(BlueprintType)
@@ -36,15 +34,13 @@ protected:
 
 	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	virtual void SetDead() override;
-
 public:
 	TObjectPtr<class UBehaviorTree> GetBehaviorTree() const { return BTree; }
-	
-	
+	FORCEINLINE bool IsPettuDead() const { return IsDead(); }
+	void SetPettuDead();
+	FORCEINLINE bool IsPettuStun() const { return IsStun(); }
+	void SetPettuStun();
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 죽음 애니메이션 몽타주"))
-	TObjectPtr<class UAnimMontage> StunMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat, Meta = (AllowPrivateAccess = "true"))
 	float MaxPatternActivateTime; // 패턴이 재발동 되기까지 걸리는 최대 시간 (1000당 1초)
 
