@@ -41,8 +41,6 @@ public:
 	FORCEINLINE bool IsPettuStun() const { return IsStun(); }
 	void SetPettuStun();
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat, Meta = (AllowPrivateAccess = "true"))
-	float MaxPatternActivateTime; // 패턴이 재발동 되기까지 걸리는 최대 시간 (1000당 1초)
 
 	///////////// 상수 //////////////
 	float MaxComboCount;
@@ -51,9 +49,7 @@ private:
 
 	///////////// 변수 //////////////
 	float CurrentHp;
-	float CurrentPatternActivateTime;
 	float DistanceFromPlayer;
-	float CurrentStunStack;
 	float DamageReceived;
 	PettuStatus hasStatus;
 

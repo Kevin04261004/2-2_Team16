@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "AI/UPBTTask_Died.h"
 #include "Character/Enemy/UPPettuCharacter.h"
 #include "AI/UPPettuAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "AI/UPBTTask_Died.h"
 
 UUPBTTask_Died::UUPBTTask_Died(const FObjectInitializer& ObjectInitializer)
 {

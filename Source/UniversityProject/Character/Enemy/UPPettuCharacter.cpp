@@ -14,18 +14,12 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 	MaxComboCount = 3.0f;
 	BaseComboFrameRate = 60.0f;
 	LastComboFrameRate = 120.0f;
-	MaxPatternActivateTime = 5000.0f;
-	//MaxStunStack = 100.0f;
-
-	CurrentHp = StatComponent->GetBaseStat().MaxHp;
-	CurrentPatternActivateTime = 0.0f;
+	
 	DistanceFromPlayer = 0.0f;
-	CurrentStunStack = 0.0f;
-	CurrentStunStack = 0.0f;
 	DamageReceived = 1.0f;
 	hasStatus = PettuStatus::Idle;
 	
-	
+	StatComponent->ApplyStunStack(101.0f); // 내가 쓰는 방식이 틀렸나?
 	// 죽는 몽타주 재설정
 	// static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Game/Assets/Ancient_Golem/Demo/ThirdPersonRun_Montage.ThirdPersonRun_Montage"));
 	// check(DeadMontageRef.Object != nullptr);
