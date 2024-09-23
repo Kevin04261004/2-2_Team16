@@ -54,7 +54,13 @@ void UUPDashComponent::Dash()
 
 	bool bHit = PlayerCharacter->TryCheckForwardCollision(DashDistance, HitResult);
 	
-	FVector DashLocation = bHit ? HitResult.Location : HitResult.TraceEnd;
+	if (bHit && FVector::Distance(GetOwner()->GetActorLocation(), HitResult.Location) < 150.0f)
+    {
+    	return;
+    }
+    	
+    FVector DashLocation = bHit ? HitResult.Location - GetOwner()->GetActorForwardVector() * 150 : HitResult.TraceEnd;
+
 
 	FVector DashVelocity = UAIBlueprintHelperLibrary::IsValidAIDirection(LastInputVector) ? LastInputVector : GetOwner()->GetActorForwardVector();
 
