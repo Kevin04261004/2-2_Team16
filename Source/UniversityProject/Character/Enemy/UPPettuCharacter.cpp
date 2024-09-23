@@ -31,7 +31,7 @@ void AUPPettuCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(TestHandle, this, &AUPPettuCharacter::TestFunc, 5.0f, false);
+	GetWorldTimerManager().SetTimer(TestHandle, this, &AUPPettuCharacter::TestFunc, 6.0f, false);
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -59,14 +59,14 @@ void AUPPettuCharacter::TestFunc()
 
 void AUPPettuCharacter::PlayPatternMontage(UAnimMontage* Montage)
 {
-	StunMontage = Montage;
+	PatternMontage = Montage;
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance == nullptr)
 	{
 		return;
 	}
 	AnimInstance->StopAllMontages(0.0f);
-	if (StunMontage)
+	if (PatternMontage)
 	{
 		AnimInstance->Montage_Play(PatternMontage, 1.0f);
 		AnimInstance->OnMontageEnded.AddDynamic(this, &AUPPettuCharacter::PatternMontageEnd);

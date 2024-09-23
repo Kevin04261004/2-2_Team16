@@ -14,7 +14,7 @@ void UUPBTService_CheckPattern::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	
 	ElapsedTime += DeltaSeconds;
-
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("ElapsedTime: %f"), ElapsedTime));
 	if (ElapsedTime >= TimerInterval)
 	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("CanExecutePattern"), true);
