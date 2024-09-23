@@ -15,26 +15,27 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 	BaseComboFrameRate = 60.0f;
 	LastComboFrameRate = 120.0f;
 	
-	DistanceFromPlayer = 0.0f;
 	DamageReceived = 1.0f;
 	hasStatus = PettuStatus::Idle;
-	
-	StatComponent->ApplyStunStack(101.0f); // 내가 쓰는 방식이 틀렸나?
-	// 죽는 몽타주 재설정
-	// static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Game/Assets/Ancient_Golem/Demo/ThirdPersonRun_Montage.ThirdPersonRun_Montage"));
-	// check(DeadMontageRef.Object != nullptr);
-	// DeadMontage = DeadMontageRef.Object;
 }
 
 void AUPPettuCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	StatComponent->OnHpZero.AddUObject(this, &AUPPettuCharacter::SetDead);
+	StatComponent->OnHpZero.AddUObject(this, &AUPPettuCharacter::SetPettuDead);
+	StatComponent->OnStunStackZero.AddUObject(this, &AUPPettuCharacter::SetStun);
+}
+
+void AUPPettuCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	GetWorldTimerManager().SetTimer(TestHandle, this, &AUPPettuCharacter::TestFunc, 5.0f, false);
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-									  AActor* DamageCauser)
+                                      AActor* DamageCauser)
 {
 	return Super::UPTakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
@@ -45,10 +46,36 @@ void AUPPettuCharacter::SetPettuDead()
 	Destroy();
 }
 
-void AUPPettuCharacter::SetPettuStun()
+void AUPPettuCharacter::SetStun()
 {
-	SetStun();
-	hasStatus = PettuStatus::Stunned;
+	Super::SetStun();
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Cyan, TEXT("Stun"));
+}
+
+void AUPPettuCharacter::TestFunc()
+{
+	StatComponent->ApplyStunStack(101.0f);
+}
+
+void AUPPettuCharacter::PlayPatternMontage(UAnimMontage* Montage)
+{
+	StunMontage = Montage;
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance == nullptr)
+	{
+		return;
+	}
+	AnimInstance->StopAllMontages(0.0f);
+	if (StunMontage)
+	{
+		AnimInstance->Montage_Play(PatternMontage, 1.0f);
+		AnimInstance->OnMontageEnded.AddDynamic(this, &AUPPettuCharacter::PatternMontageEnd);
+	}
+}
+
+void AUPPettuCharacter::PatternMontageEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	
 }
 
 

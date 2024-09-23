@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
+#include "Character/Enemy/UPPettuCharacter.h"
 #include "UPBTTask_Stun.generated.h"
 
 /**
@@ -20,5 +21,7 @@ public:
 	void OnStunEnded(UAnimMontage* Montage, bool bInterrupted);
 private:
 	UPROPERTY()
-	UBehaviorTreeComponent* CurrentOwnerComp;
+	TObjectPtr<UBehaviorTreeComponent> CurrentOwnerComp;
+
+	TObjectPtr<AUPPettuCharacter> PettuCharacter;
 };

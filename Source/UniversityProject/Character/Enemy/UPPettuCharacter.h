@@ -27,6 +27,8 @@ public:
 	AUPPettuCharacter(const FObjectInitializer& ObjectInitializer);
 
 	virtual void PostInitializeComponents() override;
+
+	virtual void BeginPlay() override;
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
@@ -39,7 +41,8 @@ public:
 	FORCEINLINE bool IsPettuDead() const { return IsDead(); }
 	void SetPettuDead();
 	FORCEINLINE bool IsPettuStun() const { return IsStun(); }
-	void SetPettuStun();
+	virtual void SetStun() override;
+	
 private:
 
 	///////////// 상수 //////////////
@@ -49,10 +52,21 @@ private:
 
 	///////////// 변수 //////////////
 	float CurrentHp;
-	float DistanceFromPlayer;
 	float DamageReceived;
 	PettuStatus hasStatus;
 
+	UFUNCTION()
+	void TestFunc();
+	FTimerHandle TestHandle;
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pattern, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UAnimMontage> PatternMontage;
 	
-	
+
+	UFUNCTION()
+	void PlayPatternMontage(UAnimMontage* Montage);
+
+	UFUNCTION()
+	void PatternMontageEnd(UAnimMontage* Montage, bool bInterrupted);
 };

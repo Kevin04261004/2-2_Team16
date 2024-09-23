@@ -85,5 +85,6 @@ protected:
 	FORCEINLINE bool IsStun() const { return bIsStun; }
 	virtual void SetStun();
 	void PlayStunAnimation();
+	UFUNCTION()
 	virtual void StunAnimEnd(UAnimMontage* Montage, bool bInterrupted);
 };
