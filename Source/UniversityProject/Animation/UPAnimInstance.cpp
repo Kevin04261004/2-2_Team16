@@ -29,6 +29,7 @@ void UUPAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		GroundSpeed = Velocity.Size2D();
 		bIsIdle = GroundSpeed < MovingThreshould;
 		bIsFalling = Movement->IsFalling();
+		bIsJumping = bIsFalling & (Velocity.Z > JumpingThreshould);
 	}
 }
 
