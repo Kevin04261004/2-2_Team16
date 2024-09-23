@@ -95,8 +95,7 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Move);
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Attack);
 	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Dash);
-	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Sprint);
-	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AUPPlayerCharacter::Walk);
+	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Jump);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Look);
 	EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::ZoomCamera);
 }
@@ -133,11 +132,10 @@ void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
 	DashComponent->Dash();
 }
 
-
-
-void AUPPlayerCharacter::Sprint(const FInputActionValue& Value)
+void AUPPlayerCharacter::Jump(const FInputActionValue& Value)
 {
-	MovementComponent->SetIsSprinting(true);
+	bool Jump = Value.Get<bool>();
+	GetCharacterMovement()->DoJump(Jump);
 }
 
 void AUPPlayerCharacter::Walk(const FInputActionValue& Value)

@@ -41,4 +41,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character)
 	uint8 bIsFalling : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character)
+	uint8 bIsJumping : 1;
+		
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character)
+	float JumpingThreshould;
 };
