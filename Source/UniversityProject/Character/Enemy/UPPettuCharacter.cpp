@@ -2,6 +2,9 @@
 
 
 #include "Character/Enemy/UPPettuCharacter.h"
+
+#include "AI/UPPettuAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Components/UPCharacterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -31,7 +34,7 @@ void AUPPettuCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(TestHandle, this, &AUPPettuCharacter::TestFunc, 6.0f, false);
+	GetWorldTimerManager().SetTimer(TestHandle, this, &AUPPettuCharacter::TestFunc, 5.5f, false);
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -49,7 +52,16 @@ void AUPPettuCharacter::SetPettuDead()
 void AUPPettuCharacter::SetStun()
 {
 	Super::SetStun();
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Cyan, TEXT("Stun"));
+	AUPPettuAIController* AIController = Cast<AUPPettuAIController>(GetController());
+	if (AIController)
+	{
+		UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComponent();
+		if (BlackboardComp)
+		{
+			BlackboardComp->SetValueAsBool(TEXT("IsStun"), bIsStun);
+		}
+	}
+	GetMesh()->GetAnimInstance()->OnMontageEnded.AddDynamic(this, &AUPPettuCharacter::StunEnd);
 }
 
 void AUPPettuCharacter::TestFunc()
@@ -75,7 +87,26 @@ void AUPPettuCharacter::PlayPatternMontage(UAnimMontage* Montage)
 
 void AUPPettuCharacter::PatternMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 {
-	
+	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPPettuCharacter::PatternMontageEnd);
+}
+
+void AUPPettuCharacter::StunEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	if (Montage != StunMontage)
+	{
+		return;
+	}
+	bIsStun = false;
+	AUPPettuAIController* AIController = Cast<AUPPettuAIController>(GetController());
+	if (AIController)
+	{
+		UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComponent();
+		if (BlackboardComp)
+		{
+			BlackboardComp->SetValueAsBool(TEXT("IsStun"), bIsStun);
+		}
+	}
+	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPPettuCharacter::StunEnd);
 }
 
 

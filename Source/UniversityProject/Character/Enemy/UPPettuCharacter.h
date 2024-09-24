@@ -36,12 +36,15 @@ protected:
 
 	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+/* State Section */
 public:
 	TObjectPtr<class UBehaviorTree> GetBehaviorTree() const { return BTree; }
 	FORCEINLINE bool IsPettuDead() const { return IsDead(); }
 	void SetPettuDead();
 	FORCEINLINE bool IsPettuStun() const { return IsStun(); }
 	virtual void SetStun() override;
+	UFUNCTION()
+	void StunEnd(UAnimMontage* Montage, bool bInterrupted);
 	
 private:
 
@@ -58,12 +61,12 @@ private:
 	UFUNCTION()
 	void TestFunc();
 	FTimerHandle TestHandle;
-
+	
+/* Pattern Section */
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pattern, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UAnimMontage> PatternMontage;
 	
-
 	UFUNCTION()
 	void PlayPatternMontage(UAnimMontage* Montage);
 
