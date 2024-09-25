@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "AI/UPPettuAIController.h"
 #include "UPPettuCharacter.generated.h"
 
 UENUM(BlueprintType)
@@ -31,14 +32,21 @@ public:
 	virtual void BeginPlay() override;
 	
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UBehaviorTree> BTree;
+	
 
 	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	/* AI Section */
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UBehaviorTree> BTree;
+	
+	TObjectPtr<class UBehaviorTree> GetBehaviorTree() const { return BTree; }
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class AAIController> PettuAIController;
+	
 /* State Section */
 public:
-	TObjectPtr<class UBehaviorTree> GetBehaviorTree() const { return BTree; }
 	
 /* Dead Section */
 	FORCEINLINE bool IsPettuDead() const { return IsDead(); }

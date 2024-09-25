@@ -21,6 +21,8 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 	DamageReceived = 1.0f;
 	hasStatus = PettuStatus::Idle;
 	bIsStiffen = false;
+
+	PettuAIController = Cast<AUPPettuAIController>(GetController());
 }
 
 void AUPPettuCharacter::PostInitializeComponents()
@@ -54,10 +56,9 @@ void AUPPettuCharacter::SetPettuDead()
 void AUPPettuCharacter::SetStun()
 {
 	Super::SetStun();
-	AUPPettuAIController* AIController = Cast<AUPPettuAIController>(GetController());
-	if (AIController)
+	if (PettuAIController)
 	{
-		UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComponent();
+		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
 		if (BlackboardComp)
 		{
 			BlackboardComp->SetValueAsBool(TEXT("IsStun"), bIsStun);
@@ -99,10 +100,9 @@ void AUPPettuCharacter::StunEnd(UAnimMontage* Montage, bool bInterrupted)
 		return;
 	}
 	bIsStun = false;
-	AUPPettuAIController* AIController = Cast<AUPPettuAIController>(GetController());
-	if (AIController)
+	if (PettuAIController)
 	{
-		UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComponent();
+		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
 		if (BlackboardComp)
 		{
 			BlackboardComp->SetValueAsBool(TEXT("IsStun"), bIsStun);
@@ -117,10 +117,9 @@ void AUPPettuCharacter::SetStiffen()
 	PlayStiffenAnimation();
 	bIsStiffen = true;
 	
-	AUPPettuAIController* AIController = Cast<AUPPettuAIController>(GetController());
-	if (AIController)
+	if (PettuAIController)
 	{
-		UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComponent();
+		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
 		if (BlackboardComp)
 		{
 			BlackboardComp->SetValueAsBool(TEXT("IsStiffen"), bIsStiffen);
@@ -137,10 +136,9 @@ void AUPPettuCharacter::StiffenEnd(UAnimMontage* Montage, bool bInterrupted)
 	}
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	bIsStiffen = false;
-	AUPPettuAIController* AIController = Cast<AUPPettuAIController>(GetController());
-	if (AIController)
+	if (PettuAIController)
 	{
-		UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComponent();
+		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
 		if (BlackboardComp)
 		{
 			BlackboardComp->SetValueAsBool(TEXT("IsStiffen"), bIsStiffen);
