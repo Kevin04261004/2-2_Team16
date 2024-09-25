@@ -39,12 +39,25 @@ protected:
 /* State Section */
 public:
 	TObjectPtr<class UBehaviorTree> GetBehaviorTree() const { return BTree; }
+	
+/* Dead Section */
 	FORCEINLINE bool IsPettuDead() const { return IsDead(); }
 	void SetPettuDead();
+
+/* Stun Section */
 	FORCEINLINE bool IsPettuStun() const { return IsStun(); }
 	virtual void SetStun() override;
 	UFUNCTION()
 	void StunEnd(UAnimMontage* Montage, bool bInterrupted);
+
+/* Stiffen Section */
+	bool bIsStiffen;
+	void SetStiffen();
+	UFUNCTION()
+	void StiffenEnd(UAnimMontage* Montage, bool bInterrupted);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UAnimMontage> StiffenMontage;
+	void PlayStiffenAnimation();
 	
 private:
 
