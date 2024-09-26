@@ -38,6 +38,10 @@ float UUPCharacterStatComponent::ApplyStunStack(float InDamage)
 	{
 		OnStunStackZero.Broadcast();
 	}
+	else if (ActualDamage >= 3)
+	{
+		OnStiffen.Broadcast();
+	}
 	return ActualDamage;
 }
 

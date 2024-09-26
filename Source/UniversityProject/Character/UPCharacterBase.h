@@ -62,6 +62,7 @@ protected:
 	FORCEINLINE bool IsDead() const { return bIsDead; }
 	virtual void SetDead();
 	void PlayDeadAnimation();
+	UFUNCTION()
 	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted);
 // Stat Section
 protected:
