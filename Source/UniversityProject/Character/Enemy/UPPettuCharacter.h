@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "Interface/UPDamageableInterface.h"
 #include "AI/UPPettuAIController.h"
 #include "UPPettuCharacter.generated.h"
 
@@ -32,10 +33,9 @@ public:
 	virtual void BeginPlay() override;
 	
 protected:
-	
-
 	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	/* AI Section */
+	
+/* AI Section */
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UBehaviorTree> BTree;
@@ -75,7 +75,6 @@ private:
 	float LastComboFrameRate;
 
 	///////////// 변수 //////////////
-	float CurrentHp;
 	float DamageReceived;
 	PettuStatus hasStatus;
 
