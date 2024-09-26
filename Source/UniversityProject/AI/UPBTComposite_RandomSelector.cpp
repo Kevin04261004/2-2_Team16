@@ -33,12 +33,19 @@ int32 UUPBTComposite_RandomSelector::GetNextChildHandler(FBehaviorTreeSearchData
 	{
 		// First execution, choose a random child
 		NextChildIdx = FMath::RandRange(0, GetChildrenNum() - 1);
+		if (NextChildIdx == LastSuccessfulChildIdx && GetChildrenNum() > 1)
+		{
+			// Avoid the last successful child being chosen first if possible
+			NextChildIdx = (NextChildIdx + 1) % GetChildrenNum();
+		}
 	}
 	else
 	{
 		// Handle last result
 		if (LastResult == EBTNodeResult::Succeeded)
 		{
+			// If last child succeeded, return success and reset
+			LastSuccessfulChildIdx = PrevChild;
 			ExecutedChildren.Empty();
 			return BTSpecialChild::ReturnToParent;
 		}
@@ -51,6 +58,7 @@ int32 UUPBTComposite_RandomSelector::GetNextChildHandler(FBehaviorTreeSearchData
 			if (ExecutedChildren.Num() >= GetChildrenNum())
 			{
 				ExecutedChildren.Empty();
+				LastSuccessfulChildIdx = INDEX_NONE;
 				return BTSpecialChild::ReturnToParent;
 			}
  

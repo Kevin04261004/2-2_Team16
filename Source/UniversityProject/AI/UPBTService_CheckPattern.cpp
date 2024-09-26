@@ -12,15 +12,13 @@ UUPBTService_CheckPattern::UUPBTService_CheckPattern(const FObjectInitializer& O
 void UUPBTService_CheckPattern::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
-	if (!OwnerComp.GetBlackboardComponent()->GetValueAsBool(TEXT("IsStun")))
+	
+	ElapsedTime += DeltaSeconds;
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("ElapsedTime: %f"), ElapsedTime));
+	if (ElapsedTime >= TimerInterval)
 	{
-		ElapsedTime += DeltaSeconds;
-		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("ElapsedTime: %f"), ElapsedTime));
-		if (ElapsedTime >= TimerInterval)
-		{
-			OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("CanExecutePattern"), true);
-			ResetTimer();
-		}
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("CanExecutePattern"), true);
+		ResetTimer();
 	}
 }
 

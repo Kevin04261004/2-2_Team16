@@ -2,9 +2,6 @@
 
 
 #include "AI/UPBTDecorator_IsStiffen.h"
-#include "UPPettuAIController.h"
-#include "BehaviorTree/BlackboardComponent.h"
-#include "Character/Enemy/UPPettuCharacter.h"
 
 UUPBTDecorator_IsStiffen::UUPBTDecorator_IsStiffen(const FObjectInitializer& ObjectInitializer)
 {
@@ -13,14 +10,5 @@ UUPBTDecorator_IsStiffen::UUPBTDecorator_IsStiffen(const FObjectInitializer& Obj
 
 bool UUPBTDecorator_IsStiffen::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
-	auto* const PettuController = Cast<AUPPettuAIController>(OwnerComp.GetAIOwner());
-	if (PettuController)
-	{
-		auto* const Pettu = Cast<AUPPettuCharacter>(PettuController->GetPawn());
-		if (Pettu)
-		{
-			return OwnerComp.GetBlackboardComponent()->GetValueAsBool(TEXT("IsStiffen"));
-		}
-	}
-	return false;
+	return Super::CalculateRawConditionValue(OwnerComp, NodeMemory);
 }
