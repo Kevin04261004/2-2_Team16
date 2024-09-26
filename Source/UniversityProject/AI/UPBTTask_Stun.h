@@ -24,7 +24,4 @@ private:
 	TObjectPtr<UBehaviorTreeComponent> CurrentOwnerComp;
 
 	TObjectPtr<AUPPettuCharacter> PettuCharacter;
-
-	UPROPERTY()
-	TObjectPtr<UAnimInstance> AnimInstance;
 };

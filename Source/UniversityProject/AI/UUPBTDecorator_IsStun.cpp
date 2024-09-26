@@ -3,7 +3,6 @@
 
 #include "AI/UUPBTDecorator_IsStun.h"
 #include "UPPettuAIController.h"
-#include "BehaviorTree/BlackboardComponent.h"
 #include "Character/Enemy/UPPettuCharacter.h"
 
 UUUPBTDecorator_IsStun::UUUPBTDecorator_IsStun(const FObjectInitializer& ObjectInitializer)
@@ -19,7 +18,7 @@ bool UUUPBTDecorator_IsStun::CalculateRawConditionValue(UBehaviorTreeComponent& 
 		auto* const Pettu = Cast<AUPPettuCharacter>(PettuController->GetPawn());
 		if (Pettu)
 		{
-			return OwnerComp.GetBlackboardComponent()->GetValueAsBool(TEXT("IsStun"));
+			return Pettu->IsPettuStun();
 		}
 	}
 	return false;

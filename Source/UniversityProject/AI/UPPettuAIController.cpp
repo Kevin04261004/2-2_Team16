@@ -43,7 +43,7 @@ void AUPPettuAIController::SetupPerceptionSystem()
 		SightConfig->DetectionByAffiliation.bDetectEnemies = true;		 // 적 감지
 		SightConfig->DetectionByAffiliation.bDetectNeutrals = true;		 // 중립 감지
 		SightConfig->DetectionByAffiliation.bDetectFriendlies = true;	 // 아군 감지
-		
+
 		GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation()); // 시각 감지를 우선으로 설정
 		GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AUPPettuAIController::OnTargetDetected); // 감지된 대상이 업데이트 될 때마다 호출
 		GetPerceptionComponent()->ConfigureSense(*SightConfig); // 감지 설정 적용

@@ -140,12 +140,11 @@ void AUPCharacterBase::PlayDeadAnimation()
 	AnimInstance->StopAllMontages(0.0f);
 	check(DeadMontage != nullptr);
 	AnimInstance->Montage_Play(DeadMontage, 1.0f);
-	AnimInstance->OnMontageEnded.AddDynamic(this, &AUPCharacterBase::DeadAnimEnd);
+	AnimInstance->OnMontageEnded.AddDynamic(this, &AUPCharacterBase::StunAnimEnd);
 }
 
 void AUPCharacterBase::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 {
-	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPCharacterBase::DeadAnimEnd);
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	bIsDead = false;
 }
@@ -179,7 +178,6 @@ void AUPCharacterBase::PlayStunAnimation()
 
 void AUPCharacterBase::StunAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 {
-	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPCharacterBase::StunAnimEnd);
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	bIsStun = false;
 }
