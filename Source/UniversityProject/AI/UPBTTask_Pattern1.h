@@ -27,5 +27,7 @@ private:
 	void OnPatternMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 	TObjectPtr<UBehaviorTreeComponent> CurrentOwnerComp;
 
+	UPROPERTY()
+	TObjectPtr<UAnimInstance> AnimInstance;
 	
 };

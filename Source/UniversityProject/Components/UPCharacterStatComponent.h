@@ -10,6 +10,7 @@
 // Delegate Section
 DECLARE_MULTICAST_DELEGATE(FOnHpZeroDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnStunStackZeroDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnStiffenDelegate);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHpChangeDelegate, float /* CurrentHp */);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStunStackChangeDelegate, float /* CurrentStunStack */);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnStatChangedDelegate, const FUPCharacterStat& /* BaseStat */, const FUPCharacterStat& /* ModifierStat */);
@@ -34,6 +35,7 @@ public:
 	FOnStatChangedDelegate OnStatChanged;
 	FOnStunStackZeroDelegate OnStunStackZero;
 	FOnStunStackChangeDelegate OnStunStackChanged;
+	FOnStiffenDelegate OnStiffen;
 
 	FORCEINLINE void AddBaseStat(const FUPCharacterStat& InAddStat)
 	{

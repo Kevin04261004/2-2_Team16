@@ -18,7 +18,7 @@ EBTNodeResult::Type UUPBTTask_Pattern1::ExecuteTask(UBehaviorTreeComponent& Owne
 	auto* const Pettu = Cast<AUPPettuCharacter>(PettuController->GetPawn());
 	if (Pettu)
 	{
-		UAnimInstance* AnimInstance = Pettu->GetMesh()->GetAnimInstance();
+		AnimInstance = Pettu->GetMesh()->GetAnimInstance();
 		if (AnimInstance)
 		{
 			Pettu->PlayPatternMontage(PatternMontage);
@@ -32,6 +32,7 @@ EBTNodeResult::Type UUPBTTask_Pattern1::ExecuteTask(UBehaviorTreeComponent& Owne
 
 void UUPBTTask_Pattern1::OnPatternMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
+	AnimInstance->OnMontageEnded.RemoveDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
 	CurrentOwnerComp->GetBlackboardComponent()->SetValueAsBool(TEXT("CanExecutePattern"), false);
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Pattern1 End")));
 	FinishLatentTask(*CurrentOwnerComp, EBTNodeResult::Succeeded);

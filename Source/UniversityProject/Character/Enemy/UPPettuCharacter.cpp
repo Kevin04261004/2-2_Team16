@@ -2,6 +2,9 @@
 
 
 #include "Character/Enemy/UPPettuCharacter.h"
+
+#include "AI/UPPettuAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Components/UPCharacterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -17,6 +20,9 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 	
 	DamageReceived = 1.0f;
 	hasStatus = PettuStatus::Idle;
+	bIsStiffen = false;
+
+	PettuAIController = Cast<AUPPettuAIController>(GetController());
 }
 
 void AUPPettuCharacter::PostInitializeComponents()
@@ -25,13 +31,14 @@ void AUPPettuCharacter::PostInitializeComponents()
 
 	StatComponent->OnHpZero.AddUObject(this, &AUPPettuCharacter::SetPettuDead);
 	StatComponent->OnStunStackZero.AddUObject(this, &AUPPettuCharacter::SetStun);
+	StatComponent->OnStiffen.AddUObject(this, &AUPPettuCharacter::SetStiffen);
 }
 
 void AUPPettuCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(TestHandle, this, &AUPPettuCharacter::TestFunc, 6.0f, false);
+	GetWorldTimerManager().SetTimer(TestHandle, this, &AUPPettuCharacter::TestFunc, 5.5f, false);
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -49,12 +56,20 @@ void AUPPettuCharacter::SetPettuDead()
 void AUPPettuCharacter::SetStun()
 {
 	Super::SetStun();
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Cyan, TEXT("Stun"));
+	if (PettuAIController)
+	{
+		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
+		if (BlackboardComp)
+		{
+			BlackboardComp->SetValueAsBool(TEXT("IsStun"), bIsStun);
+		}
+	}
+	GetMesh()->GetAnimInstance()->OnMontageEnded.AddDynamic(this, &AUPPettuCharacter::StunEnd);
 }
 
 void AUPPettuCharacter::TestFunc()
 {
-	StatComponent->ApplyStunStack(101.0f);
+	StatComponent->ApplyStunStack(4.0f);
 }
 
 void AUPPettuCharacter::PlayPatternMontage(UAnimMontage* Montage)
@@ -75,7 +90,76 @@ void AUPPettuCharacter::PlayPatternMontage(UAnimMontage* Montage)
 
 void AUPPettuCharacter::PatternMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 {
+	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPPettuCharacter::PatternMontageEnd);
+}
+
+void AUPPettuCharacter::StunEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	if (Montage != StunMontage)
+	{
+		return;
+	}
+	bIsStun = false;
+	if (PettuAIController)
+	{
+		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
+		if (BlackboardComp)
+		{
+			BlackboardComp->SetValueAsBool(TEXT("IsStun"), bIsStun);
+		}
+	}
+	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPPettuCharacter::StunEnd);
+}
+
+void AUPPettuCharacter::SetStiffen()
+{
+	GetCharacterMovement()->SetMovementMode(MOVE_None);
+	PlayStiffenAnimation();
+	bIsStiffen = true;
 	
+	if (PettuAIController)
+	{
+		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
+		if (BlackboardComp)
+		{
+			BlackboardComp->SetValueAsBool(TEXT("IsStiffen"), bIsStiffen);
+		}
+	}
+	GetMesh()->GetAnimInstance()->OnMontageEnded.AddDynamic(this, &AUPPettuCharacter::StiffenEnd);
+}
+
+void AUPPettuCharacter::StiffenEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	if (Montage != StiffenMontage)
+	{
+		return;
+	}
+	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	bIsStiffen = false;
+	if (PettuAIController)
+	{
+		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
+		if (BlackboardComp)
+		{
+			BlackboardComp->SetValueAsBool(TEXT("IsStiffen"), bIsStiffen);
+		}
+	}
+	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPPettuCharacter::StiffenEnd);
+}
+
+
+void AUPPettuCharacter::PlayStiffenAnimation()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance == nullptr)
+	{
+		return;
+	}
+	AnimInstance->StopAllMontages(0.0f);
+	if (StiffenMontage)
+	{
+		AnimInstance->Montage_Play(StiffenMontage, 1.0f);
+	}
 }
 
 

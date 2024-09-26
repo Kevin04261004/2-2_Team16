@@ -4,26 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
-#include "Character/Enemy/UPPettuCharacter.h"
-#include "UPBTTask_Stun.generated.h"
+#include "UPBTTask_Stiffen.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPBTTask_Stun : public UBTTask_BlackboardBase
+class UNIVERSITYPROJECT_API UUPBTTask_Stiffen : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
 public:
-	UUPBTTask_Stun(const FObjectInitializer& ObjectInitializer);
+	UUPBTTask_Stiffen(const FObjectInitializer& ObjectInitializer);
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
 	UFUNCTION()
-	void OnStunEnded(UAnimMontage* Montage, bool bInterrupted);
+	void OnStiffenEnded(UAnimMontage* Montage, bool bInterrupted);
+	
 private:
 	UPROPERTY()
 	TObjectPtr<UBehaviorTreeComponent> CurrentOwnerComp;
-
-	TObjectPtr<AUPPettuCharacter> PettuCharacter;
 
 	UPROPERTY()
 	TObjectPtr<UAnimInstance> AnimInstance;
