@@ -22,12 +22,11 @@ EBTNodeResult::Type UUPBTTask_Stun::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		PettuCharacter = Pettu;
 		CurrentOwnerComp = &OwnerComp;
 		
-		UAnimInstance* AnimInstance = PettuCharacter->GetMesh()->GetAnimInstance();
+		AnimInstance = PettuCharacter->GetMesh()->GetAnimInstance();
 		if (AnimInstance)
 		{
 			AnimInstance->OnMontageEnded.AddDynamic(this, &UUPBTTask_Stun::OnStunEnded);
 		}
-		CurrentOwnerComp->GetBlackboardComponent()->SetValueAsBool(TEXT("IsStun"), true);
 		return EBTNodeResult::InProgress;  // 애니메이션 끝날 때까지 대기
 	}
 
@@ -36,7 +35,7 @@ EBTNodeResult::Type UUPBTTask_Stun::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 
 void UUPBTTask_Stun::OnStunEnded(UAnimMontage* Montage, bool bInterrupted)
 {
-	CurrentOwnerComp->GetBlackboardComponent()->SetValueAsBool(TEXT("IsStun"), false);
+	AnimInstance->OnMontageEnded.RemoveDynamic(this, &UUPBTTask_Stun::OnStunEnded);
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Cyan, TEXT("StunEnd"));
 	FinishLatentTask(*CurrentOwnerComp, EBTNodeResult::Succeeded);
 }
