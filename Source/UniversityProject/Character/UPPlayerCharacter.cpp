@@ -4,22 +4,21 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
-#include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Camera/CameraComponent.h"
+#include "Components/AutoTargetingComponent.h"
 #include "Components/PhysicsControlComponent.h"
 #include "Components/UPComboAttackComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
-#include "Components/TimelineComponent.h"
 #include "Components/UPAfterImageComponent.h"
 #include "Components/UPCharacterMovementComponent.h"
 #include "Components/UPDashComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
-#include "Physics/Collision.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -42,6 +41,7 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
 	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
 	DashComponent = CreateDefaultSubobject<UUPDashComponent>(TEXT("DashComponent"));
+	AutoTargetingComponent = CreateDefaultSubobject<UAutoTargetingComponent>(TEXT("AutoTargeting"));
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -92,15 +92,15 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Move);
-	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Attack);
-	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Dash);
-	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Jump);
-	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Look);
-	EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::ZoomCamera);
+	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::MoveInputAction);
+	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::AttackInputAction);
+	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::DashInputAction);
+	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::JumpInputAction);
+	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::LookInputAction);
+	EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::ZoomCameraInputAction);
 }
 
-void AUPPlayerCharacter::Move(const FInputActionValue& Value)
+void AUPPlayerCharacter::MoveInputAction(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 	
@@ -114,7 +114,7 @@ void AUPPlayerCharacter::Move(const FInputActionValue& Value)
 	AddMovementInput(RightDirection, MovementVector.Y);
 }
 
-void AUPPlayerCharacter::Look(const FInputActionValue& Value)
+void AUPPlayerCharacter::LookInputAction(const FInputActionValue& Value)
 {
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -122,28 +122,37 @@ void AUPPlayerCharacter::Look(const FInputActionValue& Value)
 	AddControllerPitchInput(LookAxisVector.Y);
 }
 
-void AUPPlayerCharacter::Attack(const FInputActionValue& Value)
+void AUPPlayerCharacter::AttackInputAction(const FInputActionValue& Value)
 {
+	// 캐릭터가 오토 타겟팅을 한다.
+	AActor* Target = AutoTargetingComponent->FindDamageableTargetOrNull(GetActorLocation(), EAutoTargetingMode::ATM_Nearest);
+
+	if (Target != nullptr)
+	{
+		FVector TargetLocation = Target->GetActorLocation();
+		AutoTargetingComponent->RotateToTarget(TargetLocation);
+	}
+
 	ComboAttack->ProcessComboCommand();
 }
 
-void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
+void AUPPlayerCharacter::DashInputAction(const FInputActionValue& Value)
 {
 	DashComponent->Dash();
 }
 
-void AUPPlayerCharacter::Jump(const FInputActionValue& Value)
+void AUPPlayerCharacter::JumpInputAction(const FInputActionValue& Value)
 {
 	bool Jump = Value.Get<bool>();
 	GetCharacterMovement()->DoJump(Jump);
 }
 
-void AUPPlayerCharacter::Walk(const FInputActionValue& Value)
+void AUPPlayerCharacter::WalkInputAction(const FInputActionValue& Value)
 {
 	MovementComponent->SetIsSprinting(false);
 }
 
-void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
+void AUPPlayerCharacter::ZoomCameraInputAction(const FInputActionValue& Value)
 {
 	float zoomAxis = Value.Get<float>();
 	CameraComponent->ZoomCamera(zoomAxis);

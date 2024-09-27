@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
 #include "InputActionValue.h"
-#include "Components/TimelineComponent.h"
 #include "Components/UPCameraComponent.h"
 #include "Interface/UPAfterImageableInterface.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
@@ -51,13 +50,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> CameraZoomAction;
 	
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
-	void Attack(const FInputActionValue& Value);
-	void Dash(const FInputActionValue& Value);
-	void Jump(const FInputActionValue& Value);
-	void Walk(const FInputActionValue& Value);
-	void ZoomCamera(const FInputActionValue& Value);
+	void MoveInputAction(const FInputActionValue& Value);
+	void LookInputAction(const FInputActionValue& Value);
+	void AttackInputAction(const FInputActionValue& Value);
+	void DashInputAction(const FInputActionValue& Value);
+	void JumpInputAction(const FInputActionValue& Value);
+	void WalkInputAction(const FInputActionValue& Value);
+	void ZoomCameraInputAction(const FInputActionValue& Value);
 		
 /* Camera Section */
 protected:
@@ -93,10 +92,14 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UPhysicsControlComponent> PhysicsControlComponent;
-
 /* AI Section */
 private:
 	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSource;
 
 	void SetupStimuliSource();
+
+/* Auto Targeting */
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AutoTargeting, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UAutoTargetingComponent> AutoTargetingComponent;
 };
