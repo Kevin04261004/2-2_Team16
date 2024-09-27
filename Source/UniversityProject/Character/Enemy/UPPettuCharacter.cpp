@@ -12,10 +12,9 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 {
 	static ConstructorHelpers::FObjectFinder<UUPCharacterStatData> StatDataRef(TEXT("/Game/UniversityProject/GameData/DA_PettuCharacterStat.DA_PettuCharacterStat"));
 	StatComponent->SetBaseStat(StatDataRef.Object.Get()->Stat);
-	GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetBaseStat().WalkSpeed;
 	
 	MaxComboCount = 3.0f;
-	BaseComboFrameRate = 60.0f;
+	BaseComboFrameRate = 60.f;
 	LastComboFrameRate = 120.0f;
 	
 	DamageReceived = 1.0f;
@@ -39,6 +38,7 @@ void AUPPettuCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	GetWorldTimerManager().SetTimer(TestHandle, this, &AUPPettuCharacter::TestFunc, 5.5f, false);
+	GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetBaseStat().WalkSpeed;
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
