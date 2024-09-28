@@ -2,7 +2,6 @@
 
 
 #include "Character/Enemy/UPPettuCharacter.h"
-
 #include "AI/UPPettuAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/UPCharacterStatComponent.h"
@@ -18,8 +17,9 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 	LastComboFrameRate = 120.0f;
 	
 	DamageReceived = 1.0f;
-	hasStatus = PettuStatus::Idle;
 	bIsStiffen = false;
+	bIsStun = false;
+	bIsDead = false;
 
 	PettuAIController = Cast<AUPPettuAIController>(GetController());
 }
@@ -28,7 +28,7 @@ void AUPPettuCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	StatComponent->OnHpZero.AddUObject(this, &AUPPettuCharacter::SetPettuDead);
+	StatComponent->OnHpZero.AddUObject(this, &AUPPettuCharacter::SetDead);
 	StatComponent->OnStunStackZero.AddUObject(this, &AUPPettuCharacter::SetStun);
 	StatComponent->OnStiffen.AddUObject(this, &AUPPettuCharacter::SetStiffen);
 }
@@ -36,8 +36,6 @@ void AUPPettuCharacter::PostInitializeComponents()
 void AUPPettuCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	GetWorldTimerManager().SetTimer(TestHandle, this, &AUPPettuCharacter::TestFunc, 5.5f, false);
 	GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetBaseStat().WalkSpeed;
 }
 
@@ -47,9 +45,9 @@ float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& Da
 	return Super::UPTakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
-void AUPPettuCharacter::SetPettuDead()
+void AUPPettuCharacter::SetDead()
 {
-	SetDead();
+	Super::SetDead();
 	Destroy();
 }
 
@@ -69,7 +67,7 @@ void AUPPettuCharacter::SetStun()
 
 void AUPPettuCharacter::TestFunc()
 {
-	StatComponent->ApplyStunStack(4.0f);
+	// TODO -> 필요한 기능 테스트용
 }
 
 void AUPPettuCharacter::PlayPatternMontage(UAnimMontage* Montage)
