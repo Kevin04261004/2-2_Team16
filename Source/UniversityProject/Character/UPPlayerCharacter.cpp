@@ -16,7 +16,6 @@
 #include "Components/UPDashComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
@@ -36,12 +35,15 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 
 	CameraComponent = CreateDefaultSubobject<UUPCameraComponent>(TEXT("CameraComponent"));
 	
-	// Set Combo
+	// CDO
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
 	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
 	DashComponent = CreateDefaultSubobject<UUPDashComponent>(TEXT("DashComponent"));
 	AutoTargetingComponent = CreateDefaultSubobject<UAutoTargetingComponent>(TEXT("AutoTargeting"));
+
+	// Skill
+	InitSkillMap();
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -124,6 +126,7 @@ void AUPPlayerCharacter::LookInputAction(const FInputActionValue& Value)
 
 void AUPPlayerCharacter::AttackInputAction(const FInputActionValue& Value)
 {
+	// TODO: 스킬을 사용할 때 인자로 Target을 넘기기.
 	// 캐릭터가 오토 타겟팅을 한다.
 	AActor* Target = AutoTargetingComponent->FindDamageableTargetOrNull(GetActorLocation(), EAutoTargetingMode::ATM_Nearest);
 
@@ -191,5 +194,23 @@ void AUPPlayerCharacter::SetupStimuliSource()
 	{
 		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
 		StimuliSource->RegisterWithPerceptionSystem();
+	}
+}
+
+void AUPPlayerCharacter::InitSkillMap()
+{
+	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESkillType"), true);
+	if (!EnumPtr)
+	{
+		return; // If the ESkillType enum is not found, return early
+	}
+	for (int32 i = 0; i < EnumPtr->NumEnums() - 1; ++i)
+	{
+		// Exclude the MAX value usually present in the enum
+		if (!EnumPtr->HasMetaData(TEXT("Hidden"), i))
+		{
+			ESkillType EnumValue = static_cast<ESkillType>(EnumPtr->GetValueByIndex(i));
+			SkillMap.Add(EnumValue, nullptr); // Add each enum value to the map with a nullptr as the value
+		}
 	}
 }

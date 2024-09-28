@@ -27,7 +27,7 @@ AUPAfterImage::AUPAfterImage()
 void AUPAfterImage::BeginPlay()
 {
 	Super::BeginPlay();
-	PoseableMesh->SetVisibility(true, true);  // 모든 하위 컴포넌트 포함
+	PoseableMesh->SetVisibility(true, true);
 }
 
 void AUPAfterImage::Tick(float DeltaTime)

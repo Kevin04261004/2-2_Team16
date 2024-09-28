@@ -10,7 +10,26 @@
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterGoForwardInterface.h"
 #include "Player/UPPlayerController.h"
+#include "Skill/UPSkillBase.h"
 #include "UPPlayerCharacter.generated.h"
+
+UENUM(BlueprintType)
+enum ESkillType : uint8
+{
+	RapidAttack01 UMETA(DisplayName="약 공격 1타"),
+	RapidAttack02 UMETA(DisplayName="약 공격 2타"),
+	RapidAttack03 UMETA(DisplayName="약 공격 3타"),
+	RapidAttackFinal UMETA(DisplayName="약 공격 마무리"),
+	HeavyAttack01 UMETA(DisplayName="강 공격 1타"),
+	HeavyAttack02 UMETA(DisplayName="강 공격 2타"),
+	HeavyAttackFinal01 UMETA(DisplayName="강 공격 마무리"),
+	HeavyAttackFinal02 UMETA(DisplayName="강 공격 마무리"),
+	HeavyAttackFinal03 UMETA(DisplayName="강  공격 마무리"),
+	RapidTakeDownAttack UMETA(DisplayName="약 내려찍기"),
+	HeavyTakeDownAttack UMETA(DisplayName="강 내려찍기"),
+	RapidRunningAttack UMETA(DisplayName="달리기 약 공격"),
+	HeavyRunningAttack UMETA(DisplayName="달리기 강 공격"),
+};
 
 /**
  * 
@@ -90,16 +109,22 @@ protected:
 protected:
 	virtual void GoForward() override;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UPhysicsControlComponent> PhysicsControlComponent;
 /* AI Section */
-private:
+protected:
 	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSource;
-
 	void SetupStimuliSource();
 
 /* Auto Targeting */
-private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AutoTargeting, Meta = (AllowPrivateAccess = true))
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AutoTargeting, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UAutoTargetingComponent> AutoTargetingComponent;
+
+/* Skill Section */
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TMap<TEnumAsByte<ESkillType>, TSubclassOf<UUPSkillBase>> SkillMap;
+
+	void InitSkillMap();
 };

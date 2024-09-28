@@ -72,6 +72,9 @@ void UAutoTargetingComponent::RotateToTarget(FVector targetLocation)
 	TargetLocation = targetLocation;
 	LookAtRotation = UKismetMathLibrary::FindLookAtRotation(playerLocation, TargetLocation);
 	
+	LookAtRotation.Pitch = 0.0f;
+	LookAtRotation.Roll = 0.0f;
+	
 	GetOwner()->SetActorRotation(LookAtRotation);
 }
 
