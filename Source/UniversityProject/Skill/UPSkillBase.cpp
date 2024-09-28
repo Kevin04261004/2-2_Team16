@@ -3,7 +3,9 @@
 
 #include "Skill/UPSkillBase.h"
 
+#include "Animation/UPAnimInstance.h"
 #include "Character/UPCharacterBase.h"
+#include "Character/UPPlayerCharacter.h"
 
 UUPSkillBase::UUPSkillBase()
 {
@@ -34,9 +36,11 @@ float UUPSkillBase::GetSkillAttackDamage()
 
 bool UUPSkillBase::TryActivateSkill(AActor* TargetOrNull)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Blue, TEXT("Try Activate Skill"));
 	// 스킬 사용 가능 여부 판단
 	if (CurCoolTime > 0.0f || bIsSkillActive)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Fail To Use Skill"));
 		return false;
 	}
 
@@ -86,7 +90,18 @@ bool UUPSkillBase::TryStopSkill()
 
 void UUPSkillBase::CustomActivate_Implementation(AActor* TargetOrNull)
 {
-	
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("Use Skill Success"));
+
+	AUPPlayerCharacter* player = Cast<AUPPlayerCharacter>(GetOwner());
+	UAnimMontage* skillAnimation = SkillData->GetSkillAnimation();
+	if (player != nullptr && skillAnimation != nullptr)
+	{
+		UAnimInstance* AnimInstance = player->GetMesh()->GetAnimInstance();
+		if (AnimInstance != nullptr)
+		{
+			AnimInstance->Montage_Play(skillAnimation, SkillData->GetAnimationSpeed());	
+		}
+	}
 }
 
 void UUPSkillBase::CustomStop_Implementation()

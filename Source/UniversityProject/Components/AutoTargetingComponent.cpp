@@ -115,13 +115,11 @@ AActor* UAutoTargetingComponent::FindFarthestTarget(const FVector& center, TArra
 AActor* UAutoTargetingComponent::FindStrongestTarget(const FVector& center, TArray<AActor*> targets)
 {
 	// TODO: 전투력 시스템 넣으면 추가하면 좋을 듯? 근데 우리 게임에서는 굳이?
-
 	return FindNearestTarget(center, targets);
 }
 
 AActor* UAutoTargetingComponent::FindWeakestTarget(const FVector& center, TArray<AActor*> targets)
 {
 	// TODO: 전투력 시스템 넣으면 추가하면 좋을 듯? 근데 우리 게임에서는 굳이?
-
 	return FindNearestTarget(center, targets);
 }

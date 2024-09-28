@@ -22,7 +22,7 @@ EBTNodeResult::Type UUPBTTask_Pattern1::ExecuteTask(UBehaviorTreeComponent& Owne
 		if (AnimInstance)
 		{
 			Pettu->PlayPatternMontage(PatternMontage);
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Pattern1"));
+			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Pattern1"));
 			AnimInstance->OnMontageEnded.AddDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
 			return EBTNodeResult::InProgress;
 		}

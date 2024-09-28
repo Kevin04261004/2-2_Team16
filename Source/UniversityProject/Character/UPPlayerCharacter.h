@@ -14,7 +14,7 @@
 #include "UPPlayerCharacter.generated.h"
 
 UENUM(BlueprintType)
-enum ESkillType : uint8
+enum class ESkillType : uint8
 {
 	RapidAttack01 UMETA(DisplayName="약 공격 1타"),
 	RapidAttack02 UMETA(DisplayName="약 공격 2타"),
@@ -124,7 +124,10 @@ protected:
 /* Skill Section */
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	TMap<TEnumAsByte<ESkillType>, TSubclassOf<UUPSkillBase>> SkillMap;
-
+	TMap<ESkillType, TSubclassOf<UUPSkillBase>> SkillMapInitializer;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TMap<ESkillType, UUPSkillBase*> SkillMap;
 	void InitSkillMap();
+	void CreateDefaultObjectSkill();
 };

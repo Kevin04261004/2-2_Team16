@@ -4,6 +4,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
+#include "MovieSceneTracksComponentTypes.h"
 #include "Camera/CameraComponent.h"
 #include "Components/AutoTargetingComponent.h"
 #include "Components/PhysicsControlComponent.h"
@@ -77,6 +78,8 @@ void AUPPlayerCharacter::BeginPlay()
 		ComboAttack->OnComboAttackFinish.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 		ComboAttack->OnComboStepEnd.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 	}
+
+	CreateDefaultObjectSkill();
 }
 
 void AUPPlayerCharacter::SetDead()
@@ -136,7 +139,11 @@ void AUPPlayerCharacter::AttackInputAction(const FInputActionValue& Value)
 		AutoTargetingComponent->RotateToTarget(TargetLocation);
 	}
 
-	ComboAttack->ProcessComboCommand();
+	// TODO: 아래 함수는 Test, 커맨드 시스템을 사용하여 받을 수 있게 만들어야함!!
+	UUPSkillBase** skill = SkillMap.Find(ESkillType::RapidAttack01);
+	(*skill)->TryActivateSkill(Target);
+	
+	// ComboAttack->ProcessComboCommand();
 }
 
 void AUPPlayerCharacter::DashInputAction(const FInputActionValue& Value)
@@ -202,15 +209,39 @@ void AUPPlayerCharacter::InitSkillMap()
 	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESkillType"), true);
 	if (!EnumPtr)
 	{
-		return; // If the ESkillType enum is not found, return early
+		return;
 	}
+	
 	for (int32 i = 0; i < EnumPtr->NumEnums() - 1; ++i)
 	{
-		// Exclude the MAX value usually present in the enum
 		if (!EnumPtr->HasMetaData(TEXT("Hidden"), i))
 		{
 			ESkillType EnumValue = static_cast<ESkillType>(EnumPtr->GetValueByIndex(i));
-			SkillMap.Add(EnumValue, nullptr); // Add each enum value to the map with a nullptr as the value
+			SkillMapInitializer.Add(EnumValue, nullptr);
+		}
+	}
+}
+
+void AUPPlayerCharacter::CreateDefaultObjectSkill()
+{
+	for (auto skillMapTuple : SkillMapInitializer)
+	{
+		if (skillMapTuple.Value == nullptr)
+		{
+			continue;
+		}
+		FString ComponentName = TEXT("SKill Component");
+
+		if (UUPSkillBase* NewSkillComponent = NewObject<UUPSkillBase>(this, skillMapTuple.Value, *ComponentName))
+		{
+			// 컴포넌트를 월드에 등록합니다.
+			NewSkillComponent->RegisterComponent();
+
+			// SkillMap에 새로 생성된 컴포넌트를 추가합니다.
+			ESkillType Type = skillMapTuple.Key;
+			SkillMap.Add(Type, NewSkillComponent);
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Skill Map Created"));
 		}
 	}
 }
