@@ -18,21 +18,6 @@ void UUPDashComponent::BeginPlay()
 	if (DashCurve)
 	{
 		TimelineCallback.BindUFunction(this, FName("UpdateDash"));
-		TimelineFinishedCallback.BindUFunction(this, FName("FinishDash"));
-
-		DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
-		DashTimeline.AddInterpFloat(DashCurve, TimelineCallback);
-
-		UE_LOG(LogTemp, Warning, TEXT("Dash Timeline Initialized with Curve"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Dash Curve is not loaded"));
-	}
-	
-	if (DashCurve)
-	{
-		TimelineCallback.BindUFunction(this, FName("UpdateDash"));
 		DashTimeline.AddInterpFloat(DashCurve, TimelineCallback);
 
 		TimelineFinishedCallback.BindUFunction(this, FName("FinishDash"));

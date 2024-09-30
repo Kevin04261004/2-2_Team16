@@ -4,14 +4,14 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
-#include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "MovieSceneTracksComponentTypes.h"
 #include "Camera/CameraComponent.h"
+#include "Components/AutoTargetingComponent.h"
 #include "Components/PhysicsControlComponent.h"
 #include "Components/UPComboAttackComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
-#include "Components/TimelineComponent.h"
 #include "Components/UPAfterImageComponent.h"
 #include "Components/UPCharacterMovementComponent.h"
 #include "Components/UPDashComponent.h"
@@ -19,7 +19,6 @@
 #include "Interface/UPGameInterface.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
-#include "Physics/Collision.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -37,11 +36,15 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 
 	CameraComponent = CreateDefaultSubobject<UUPCameraComponent>(TEXT("CameraComponent"));
 	
-	// Set Combo
+	// CDO
 	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
 	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
 	DashComponent = CreateDefaultSubobject<UUPDashComponent>(TEXT("DashComponent"));
+	AutoTargetingComponent = CreateDefaultSubobject<UAutoTargetingComponent>(TEXT("AutoTargeting"));
+
+	// Skill
+	InitSkillMap();
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -75,6 +78,8 @@ void AUPPlayerCharacter::BeginPlay()
 		ComboAttack->OnComboAttackFinish.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 		ComboAttack->OnComboStepEnd.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 	}
+
+	CreateDefaultObjectSkill();
 }
 
 void AUPPlayerCharacter::SetDead()
@@ -92,15 +97,15 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Move);
-	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Attack);
-	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Dash);
-	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Jump);
-	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::Look);
-	EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::ZoomCamera);
+	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::MoveInputAction);
+	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::AttackInputAction);
+	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::DashInputAction);
+	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::JumpInputAction);
+	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::LookInputAction);
+	EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::ZoomCameraInputAction);
 }
 
-void AUPPlayerCharacter::Move(const FInputActionValue& Value)
+void AUPPlayerCharacter::MoveInputAction(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 	
@@ -114,7 +119,7 @@ void AUPPlayerCharacter::Move(const FInputActionValue& Value)
 	AddMovementInput(RightDirection, MovementVector.Y);
 }
 
-void AUPPlayerCharacter::Look(const FInputActionValue& Value)
+void AUPPlayerCharacter::LookInputAction(const FInputActionValue& Value)
 {
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -122,28 +127,42 @@ void AUPPlayerCharacter::Look(const FInputActionValue& Value)
 	AddControllerPitchInput(LookAxisVector.Y);
 }
 
-void AUPPlayerCharacter::Attack(const FInputActionValue& Value)
+void AUPPlayerCharacter::AttackInputAction(const FInputActionValue& Value)
 {
-	ComboAttack->ProcessComboCommand();
+	// TODO: 스킬을 사용할 때 인자로 Target을 넘기기.
+	// 캐릭터가 오토 타겟팅을 한다.
+	AActor* Target = AutoTargetingComponent->FindDamageableTargetOrNull(GetActorLocation(), EAutoTargetingMode::ATM_Nearest);
+
+	if (Target != nullptr)
+	{
+		FVector TargetLocation = Target->GetActorLocation();
+		AutoTargetingComponent->RotateToTarget(TargetLocation);
+	}
+
+	// TODO: 아래 함수는 Test, 커맨드 시스템을 사용하여 받을 수 있게 만들어야함!!
+	UUPSkillBase** skill = SkillMap.Find(ESkillType::RapidAttack01);
+	(*skill)->TryActivateSkill(Target);
+	
+	// ComboAttack->ProcessComboCommand();
 }
 
-void AUPPlayerCharacter::Dash(const FInputActionValue& Value)
+void AUPPlayerCharacter::DashInputAction(const FInputActionValue& Value)
 {
 	DashComponent->Dash();
 }
 
-void AUPPlayerCharacter::Jump(const FInputActionValue& Value)
+void AUPPlayerCharacter::JumpInputAction(const FInputActionValue& Value)
 {
 	bool Jump = Value.Get<bool>();
 	GetCharacterMovement()->DoJump(Jump);
 }
 
-void AUPPlayerCharacter::Walk(const FInputActionValue& Value)
+void AUPPlayerCharacter::WalkInputAction(const FInputActionValue& Value)
 {
 	MovementComponent->SetIsSprinting(false);
 }
 
-void AUPPlayerCharacter::ZoomCamera(const FInputActionValue& Value)
+void AUPPlayerCharacter::ZoomCameraInputAction(const FInputActionValue& Value)
 {
 	float zoomAxis = Value.Get<float>();
 	CameraComponent->ZoomCamera(zoomAxis);
@@ -182,5 +201,47 @@ void AUPPlayerCharacter::SetupStimuliSource()
 	{
 		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
 		StimuliSource->RegisterWithPerceptionSystem();
+	}
+}
+
+void AUPPlayerCharacter::InitSkillMap()
+{
+	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESkillType"), true);
+	if (!EnumPtr)
+	{
+		return;
+	}
+	
+	for (int32 i = 0; i < EnumPtr->NumEnums() - 1; ++i)
+	{
+		if (!EnumPtr->HasMetaData(TEXT("Hidden"), i))
+		{
+			ESkillType EnumValue = static_cast<ESkillType>(EnumPtr->GetValueByIndex(i));
+			SkillMapInitializer.Add(EnumValue, nullptr);
+		}
+	}
+}
+
+void AUPPlayerCharacter::CreateDefaultObjectSkill()
+{
+	for (auto skillMapTuple : SkillMapInitializer)
+	{
+		if (skillMapTuple.Value == nullptr)
+		{
+			continue;
+		}
+		FString ComponentName = TEXT("SKill Component");
+
+		if (UUPSkillBase* NewSkillComponent = NewObject<UUPSkillBase>(this, skillMapTuple.Value, *ComponentName))
+		{
+			// 컴포넌트를 월드에 등록합니다.
+			NewSkillComponent->RegisterComponent();
+
+			// SkillMap에 새로 생성된 컴포넌트를 추가합니다.
+			ESkillType Type = skillMapTuple.Key;
+			SkillMap.Add(Type, NewSkillComponent);
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Skill Map Created"));
+		}
 	}
 }
