@@ -29,6 +29,8 @@ enum class ESkillType : uint8
 	HeavyTakeDownAttack UMETA(DisplayName="강 내려찍기"),
 	RapidRunningAttack UMETA(DisplayName="달리기 약 공격"),
 	HeavyRunningAttack UMETA(DisplayName="달리기 강 공격"),
+	RSkill UMETA(DisplayName="테스트 R 스킬"),
+	ESkill UMETA(DisplayName="테스트 E 스킬"),
 };
 
 /**
@@ -63,6 +65,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> HeavyAttackAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> ESkillAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> RSkillAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> DashAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> JumpAction;
@@ -75,6 +81,8 @@ protected:
 	void LookInputAction(const FInputActionValue& Value);
 	void RapidAttackInputAction(const FInputActionValue& Value);
 	void HeavyAttackInputAction(const FInputActionValue& Value);
+	void ESkillInputAction(const FInputActionValue& Value);
+	void RSkillInputAction(const FInputActionValue& Value);
 	void DashInputAction(const FInputActionValue& Value);
 	void JumpInputAction(const FInputActionValue& Value);
 	void WalkInputAction(const FInputActionValue& Value);

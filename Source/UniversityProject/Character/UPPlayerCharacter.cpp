@@ -100,6 +100,8 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::MoveInputAction);
 	EnhancedInputComponent->BindAction(RapidAttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::RapidAttackInputAction);
 	EnhancedInputComponent->BindAction(HeavyAttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::HeavyAttackInputAction);
+	EnhancedInputComponent->BindAction(ESkillAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::ESkillInputAction);
+	EnhancedInputComponent->BindAction(RSkillAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::RSkillInputAction);
 	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::DashInputAction);
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::JumpInputAction);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::LookInputAction);
@@ -136,6 +138,16 @@ void AUPPlayerCharacter::RapidAttackInputAction(const FInputActionValue& Value)
 void AUPPlayerCharacter::HeavyAttackInputAction(const FInputActionValue& Value)
 {
 	UseSkill(ESkillType::RapidAttack02);
+}
+
+void AUPPlayerCharacter::ESkillInputAction(const FInputActionValue& Value)
+{
+	UseSkill(ESkillType::ESkill);
+}
+
+void AUPPlayerCharacter::RSkillInputAction(const FInputActionValue& Value)
+{
+	UseSkill(ESkillType::RSkill);
 }
 
 void AUPPlayerCharacter::DashInputAction(const FInputActionValue& Value)
