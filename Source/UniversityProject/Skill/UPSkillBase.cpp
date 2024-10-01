@@ -12,6 +12,17 @@ UUPSkillBase::UUPSkillBase()
 	
 }
 
+bool UUPSkillBase::CanUseSkill()
+{
+	// 스킬 사용 가능 여부 판단
+	if (CurCoolTime > 0.0f || bIsSkillActive)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void UUPSkillBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -36,14 +47,10 @@ float UUPSkillBase::GetSkillAttackDamage()
 
 bool UUPSkillBase::TryActivateSkill(AActor* TargetOrNull)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Blue, TEXT("Try Activate Skill"));
-	// 스킬 사용 가능 여부 판단
-	if (CurCoolTime > 0.0f || bIsSkillActive)
+	if (!CanUseSkill())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Fail To Use Skill"));
 		return false;
 	}
-
 	// 스킬 실행!
 	CustomActivate(TargetOrNull);
 
@@ -59,7 +66,7 @@ bool UUPSkillBase::TryActivateSkill(AActor* TargetOrNull)
 	DeActivateSkillTimerDelegate.BindUFunction(this, FunctionName, TargetOrNull);
 	
 	// 타이머 시작! (스킬이 끝나면 DeactivateSkill 호출, 인자가 전달됨)
-	GetWorld()->GetTimerManager().SetTimer(SkillDurationHandle, DeActivateSkillTimerDelegate, SkillData->GetSkillDuration(), false);
+	GetWorld()->GetTimerManager().SetTimer(SkillDurationHandle, DeActivateSkillTimerDelegate, GetSkillDuration(), false);
 	
 	return true;
 }
@@ -99,9 +106,12 @@ void UUPSkillBase::CustomActivate_Implementation(AActor* TargetOrNull)
 		UAnimInstance* AnimInstance = player->GetMesh()->GetAnimInstance();
 		if (AnimInstance != nullptr)
 		{
-			AnimInstance->Montage_Play(skillAnimation, SkillData->GetAnimationSpeed());	
+			float animSpeed = SkillData->GetAnimationSpeed(player->GetStatComponent()->GetTotalStat().AttackSpeed);
+			AnimInstance->Montage_Play(skillAnimation, animSpeed);	
 		}
 	}
+
+	SetOwnerMovementMode(MOVE_None);
 }
 
 void UUPSkillBase::CustomStop_Implementation()
@@ -126,5 +136,24 @@ void UUPSkillBase::CustomStop_Implementation()
 void UUPSkillBase::CustomDeActivate_Implementation(AActor* TargetOrNull)
 {
 	CurCoolTime = SkillData->GetCoolTime();
+
+	SetOwnerMovementMode(MOVE_Walking);
+	
 	bIsSkillActive = false;
+}
+
+float UUPSkillBase::GetSkillDuration() const
+{
+	AUPCharacterBase* character = Cast<AUPCharacterBase>(GetOwner());
+	float skillDuration = SkillData->GetSkillDuration(character->GetStatComponent()->GetTotalStat().AttackSpeed);
+	return skillDuration;
+}
+
+void UUPSkillBase::SetOwnerMovementMode(EMovementMode mode)
+{
+	AUPCharacterBase* character = Cast<AUPCharacterBase>(GetOwner());
+	if (character != nullptr)
+	{
+		character->MovementComponent->MovementMode = mode;
+	}
 }

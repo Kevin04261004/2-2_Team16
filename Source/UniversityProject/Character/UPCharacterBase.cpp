@@ -42,6 +42,7 @@ AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) 
 	StatComponent = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
 
 	bIsDead = false;
+	CurAttackDamage = 0.0f;
 }
 
 void AUPCharacterBase::BeginPlay()
@@ -119,7 +120,7 @@ void AUPCharacterBase::Attack(FHitResult& InHit)
 		return;
 	}
 	FDamageEvent DamageEvent;
-	Damageable->UPTakeDamage(StatComponent->GetTotalStat().AttackDamage, DamageEvent, GetController(), this);
+	Damageable->UPTakeDamage(CurAttackDamage, DamageEvent, GetController(), this);
 }
 
 void AUPCharacterBase::SetDead()

@@ -98,7 +98,8 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::MoveInputAction);
-	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::AttackInputAction);
+	EnhancedInputComponent->BindAction(RapidAttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::RapidAttackInputAction);
+	EnhancedInputComponent->BindAction(HeavyAttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::HeavyAttackInputAction);
 	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::DashInputAction);
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::JumpInputAction);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::LookInputAction);
@@ -127,23 +128,14 @@ void AUPPlayerCharacter::LookInputAction(const FInputActionValue& Value)
 	AddControllerPitchInput(LookAxisVector.Y);
 }
 
-void AUPPlayerCharacter::AttackInputAction(const FInputActionValue& Value)
+void AUPPlayerCharacter::RapidAttackInputAction(const FInputActionValue& Value)
 {
-	// TODO: 스킬을 사용할 때 인자로 Target을 넘기기.
-	// 캐릭터가 오토 타겟팅을 한다.
-	AActor* Target = AutoTargetingComponent->FindDamageableTargetOrNull(GetActorLocation(), EAutoTargetingMode::ATM_Nearest);
+	UseSkill(ESkillType::RapidAttack01);
+}
 
-	if (Target != nullptr)
-	{
-		FVector TargetLocation = Target->GetActorLocation();
-		AutoTargetingComponent->RotateToTarget(TargetLocation);
-	}
-
-	// TODO: 아래 함수는 Test, 커맨드 시스템을 사용하여 받을 수 있게 만들어야함!!
-	UUPSkillBase** skill = SkillMap.Find(ESkillType::RapidAttack01);
-	(*skill)->TryActivateSkill(Target);
-	
-	// ComboAttack->ProcessComboCommand();
+void AUPPlayerCharacter::HeavyAttackInputAction(const FInputActionValue& Value)
+{
+	UseSkill(ESkillType::RapidAttack02);
 }
 
 void AUPPlayerCharacter::DashInputAction(const FInputActionValue& Value)
@@ -224,15 +216,13 @@ void AUPPlayerCharacter::InitSkillMap()
 
 void AUPPlayerCharacter::CreateDefaultObjectSkill()
 {
-	for (auto skillMapTuple : SkillMapInitializer)
+	for (TTuple<ESkillType, TSubclassOf<UUPSkillBase>> skillMapTuple : SkillMapInitializer)
 	{
 		if (skillMapTuple.Value == nullptr)
 		{
 			continue;
 		}
-		FString ComponentName = TEXT("SKill Component");
-
-		if (UUPSkillBase* NewSkillComponent = NewObject<UUPSkillBase>(this, skillMapTuple.Value, *ComponentName))
+		if (UUPSkillBase* NewSkillComponent = NewObject<UUPSkillBase>(this, skillMapTuple.Value))
 		{
 			// 컴포넌트를 월드에 등록합니다.
 			NewSkillComponent->RegisterComponent();
@@ -243,5 +233,40 @@ void AUPPlayerCharacter::CreateDefaultObjectSkill()
 
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Skill Map Created"));
 		}
+	}
+}
+
+void AUPPlayerCharacter::UseSkill(ESkillType skillType)
+{
+	UUPSkillBase** skill_pp = SkillMap.Find(skillType);
+	if (skill_pp == nullptr)
+	{
+		return;
+	}
+	UUPSkillBase* skill = *skill_pp;
+	if (skill == nullptr)
+	{
+		return;
+	}
+	
+	// 타겟팅, 오토타겟팅이면 상대를 바라보게!
+	AActor* Target = nullptr;
+	if (skill->CanUseSkill() && skill->GetSkillData()->IsAutoTargetingSkill())
+	{
+		Target = AutoTargetingComponent->FindDamageableTargetOrNull(GetActorLocation(), EAutoTargetingMode::ATM_Nearest);
+
+		if (Target != nullptr)
+		{
+			FVector TargetLocation = Target->GetActorLocation();
+			AutoTargetingComponent->RotateToTarget(TargetLocation);
+		}
+	}
+	if (skill->CanUseSkill())
+	{
+		// TODO: 모듈화
+		AUPPlayerCharacterWeapon* playerWeapon = Cast<AUPPlayerCharacterWeapon>(Weapon);
+		playerWeapon->ComboStepEnd();
+		CurAttackDamage = skill->GetSkillData()->GetSkillDamage(StatComponent->GetTotalStat().AttackDamage);
+		skill->TryActivateSkill(Target);
 	}
 }

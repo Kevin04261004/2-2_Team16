@@ -59,7 +59,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> MoveAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> AttackAction;
+	TObjectPtr<class UInputAction> RapidAttackAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> HeavyAttackAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> DashAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
@@ -71,7 +73,8 @@ protected:
 	
 	void MoveInputAction(const FInputActionValue& Value);
 	void LookInputAction(const FInputActionValue& Value);
-	void AttackInputAction(const FInputActionValue& Value);
+	void RapidAttackInputAction(const FInputActionValue& Value);
+	void HeavyAttackInputAction(const FInputActionValue& Value);
 	void DashInputAction(const FInputActionValue& Value);
 	void JumpInputAction(const FInputActionValue& Value);
 	void WalkInputAction(const FInputActionValue& Value);
@@ -130,4 +133,5 @@ protected:
 	TMap<ESkillType, UUPSkillBase*> SkillMap;
 	void InitSkillMap();
 	void CreateDefaultObjectSkill();
+	void UseSkill(ESkillType skillType);
 };
