@@ -92,7 +92,7 @@ void UUPSkillBase::CustomActivate_Implementation(AActor* TargetOrNull)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("Use Skill Success"));
 
-	AUPPlayerCharacter* player = Cast<AUPPlayerCharacter>(GetOwner());
+	AUPCharacterBase* player = Cast<AUPCharacterBase>(GetOwner());
 	UAnimMontage* skillAnimation = SkillData->GetSkillAnimation();
 	if (player != nullptr && skillAnimation != nullptr)
 	{

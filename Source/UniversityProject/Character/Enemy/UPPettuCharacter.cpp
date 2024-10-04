@@ -4,8 +4,10 @@
 #include "Character/Enemy/UPPettuCharacter.h"
 #include "AI/UPPettuAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Character/Weapon/UPPettuWeapon.h"
 #include "Components/UPCharacterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Skill/UPSkillBase.h"
 
 AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
@@ -22,6 +24,8 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 	bIsDead = false;
 
 	PettuAIController = Cast<AUPPettuAIController>(GetController());
+
+	InitSkillMap();
 }
 
 void AUPPettuCharacter::PostInitializeComponents()
@@ -37,6 +41,7 @@ void AUPPettuCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetBaseStat().WalkSpeed;
+	CreateDefaultObjectSkill();
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -89,6 +94,58 @@ void AUPPettuCharacter::PlayPatternMontage(UAnimMontage* Montage)
 void AUPPettuCharacter::PatternMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPPettuCharacter::PatternMontageEnd);
+}
+
+void AUPPettuCharacter::InitSkillMap()
+{
+	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESkillType"), true);
+	if (!EnumPtr)
+	{
+		return;
+	}
+	
+	for (int32 i = 0; i < EnumPtr->NumEnums() - 1; ++i)
+	{
+		if (!EnumPtr->HasMetaData(TEXT("Hidden"), i))
+		{
+			EPettuSkillType EnumValue = static_cast<EPettuSkillType>(EnumPtr->GetValueByIndex(i));
+			SkillMapInitializer.Add(EnumValue, nullptr);
+		}
+	}
+}
+
+void AUPPettuCharacter::CreateDefaultObjectSkill()
+{
+	for (auto skillMapTuple : SkillMapInitializer)
+	{
+		if (skillMapTuple.Value == nullptr)
+		{
+			continue;
+		}
+		FString ComponentName = TEXT("SKill Component");
+
+		if (UUPSkillBase* NewSkillComponent = NewObject<UUPSkillBase>(this, skillMapTuple.Value, *ComponentName))
+		{
+			// 컴포넌트를 월드에 등록합니다.
+			NewSkillComponent->RegisterComponent();
+
+			// SkillMap에 새로 생성된 컴포넌트를 추가합니다.
+			EPettuSkillType Type = skillMapTuple.Key;
+			SkillMap.Add(Type, NewSkillComponent);
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Skill Map Created"));
+		}
+	}
+}
+
+void AUPPettuCharacter::AttackHitCheck()
+{
+	check(Weapon != nullptr);
+	AUPPettuWeapon* PettuWeapon = Cast<AUPPettuWeapon>(Weapon);
+	if (PettuWeapon)
+	{
+		PettuWeapon->CheckAttackRange();
+	}
 }
 
 void AUPPettuCharacter::StunEnd(UAnimMontage* Montage, bool bInterrupted)

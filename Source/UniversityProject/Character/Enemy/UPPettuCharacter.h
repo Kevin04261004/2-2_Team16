@@ -5,12 +5,21 @@
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
 #include "BehaviorTree/BehaviorTree.h"
-#include "Interface/UPDamageableInterface.h"
+#include "Skill/UPSkillBase.h"
 #include "AI/UPPettuAIController.h"
+#include "Interface/UPAnimationAttackCheckInterface.h"
 #include "UPPettuCharacter.generated.h"
 
+UENUM(BlueprintType)
+enum class EPettuSkillType : uint8
+{
+	SmashAttack UMETA(DisplayName = "내려찍기"),
+	SmashAttack2 UMETA(DisplayName = "내려찍기2"),
+	SmashAttack3 UMETA(DisplayName = "내려찍기3"),
+};
+
 UCLASS()
-class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPCharacterBase
+class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPCharacterBase, public IUPAnimationAttackCheckInterface
 {
 	GENERATED_BODY()
 public:
@@ -80,4 +89,18 @@ public:
 
 	UFUNCTION()
 	void PatternMontageEnd(UAnimMontage* Montage, bool bInterrupted);
+
+/* Skill Section */
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TMap<EPettuSkillType, TSubclassOf<UUPSkillBase>> SkillMapInitializer;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TMap<EPettuSkillType, UUPSkillBase*> SkillMap;
+	void InitSkillMap();
+	void CreateDefaultObjectSkill();
+/* Attack Section */
+protected:
+	virtual void AttackHitCheck() override;
+	
 };
