@@ -13,9 +13,9 @@ UUPAfterImageComponent::UUPAfterImageComponent()
 	RotationOffset = FRotator(0.f,-100.f,0.f);
 }
 
-void UUPAfterImageComponent::Initialize(ACharacter& Character)
+void UUPAfterImageComponent::Initialize()
 {
-	OwningCharacter = Character;
+	OwningCharacter = Cast<ACharacter>(GetOwner());
 }
 
 void UUPAfterImageComponent::CreateAfterImage() // IUPAfterImageableInterface

@@ -72,10 +72,10 @@ protected:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true", Tooltip = "스텟 컴포넌트"))
 	TObjectPtr<class UUPCharacterStatComponent> StatComponent;
-// Stat Section
-public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "게임 시작 시 초기화 될 캐릭터의 스텟"))
 	TObjectPtr<UUPCharacterStatData> CharacterInitalizeStatData;
+// Stat Section
+public:
 	
 	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return StatComponent.Get(); }
 	void ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);

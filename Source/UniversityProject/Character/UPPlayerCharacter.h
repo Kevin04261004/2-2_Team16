@@ -14,23 +14,16 @@
 #include "UPPlayerCharacter.generated.h"
 
 UENUM(BlueprintType)
-enum class ESkillType : uint8
+enum class EPlayerSkillType : uint8
 {
-	RapidAttack01 UMETA(DisplayName="약 공격 1타"),
-	RapidAttack02 UMETA(DisplayName="약 공격 2타"),
-	RapidAttack03 UMETA(DisplayName="약 공격 3타"),
-	RapidAttackFinal UMETA(DisplayName="약 공격 마무리"),
-	HeavyAttack01 UMETA(DisplayName="강 공격 1타"),
-	HeavyAttack02 UMETA(DisplayName="강 공격 2타"),
-	HeavyAttackFinal01 UMETA(DisplayName="강 공격 마무리"),
-	HeavyAttackFinal02 UMETA(DisplayName="강 공격 마무리"),
-	HeavyAttackFinal03 UMETA(DisplayName="강  공격 마무리"),
-	RapidTakeDownAttack UMETA(DisplayName="약 내려찍기"),
-	HeavyTakeDownAttack UMETA(DisplayName="강 내려찍기"),
-	RapidRunningAttack UMETA(DisplayName="달리기 약 공격"),
-	HeavyRunningAttack UMETA(DisplayName="달리기 강 공격"),
-	RSkill UMETA(DisplayName="테스트 R 스킬"),
-	ESkill UMETA(DisplayName="테스트 E 스킬"),
+	None UMETA(DisplayName = "Hidden"),
+	Attack01 UMETA(DisplayName="공격 1타"),
+	Attack02 UMETA(DisplayName="공격 2타"),
+	Attack03 UMETA(DisplayName="공격 3타"),
+	UpperCut UMETA(DisplayName="어퍼컷"),
+	TakeDown UMETA(DisplayName="내려 찍기"),
+	KnockOver UMETA(DisplayName="넘어뜨리기"),
+	Throw UMETA(DisplayName="투척"),
 };
 
 /**
@@ -80,9 +73,6 @@ protected:
 	void MoveInputAction(const FInputActionValue& Value);
 	void LookInputAction(const FInputActionValue& Value);
 	void RapidAttackInputAction(const FInputActionValue& Value);
-	void HeavyAttackInputAction(const FInputActionValue& Value);
-	void ESkillInputAction(const FInputActionValue& Value);
-	void RSkillInputAction(const FInputActionValue& Value);
 	void DashInputAction(const FInputActionValue& Value);
 	void JumpInputAction(const FInputActionValue& Value);
 	void WalkInputAction(const FInputActionValue& Value);
@@ -110,7 +100,7 @@ protected:
 /* ComboAttack Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true", Tooltip = "콤보 공격 컴포넌트"))
-	TObjectPtr<class UUPComboAttackComponent> ComboAttack;
+	TObjectPtr<class UUPSkillManager> SkillManager;
 	
 	virtual void AttackHitCheck() override;
 	
@@ -126,20 +116,4 @@ protected:
 protected:
 	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSource;
 	void SetupStimuliSource();
-
-/* Auto Targeting */
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AutoTargeting, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UAutoTargetingComponent> AutoTargetingComponent;
-
-/* Skill Section */
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	TMap<ESkillType, TSubclassOf<UUPSkillBase>> SkillMapInitializer;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	TMap<ESkillType, UUPSkillBase*> SkillMap;
-	void InitSkillMap();
-	void CreateDefaultObjectSkill();
-	void UseSkill(ESkillType skillType);
 };

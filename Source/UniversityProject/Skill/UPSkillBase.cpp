@@ -107,7 +107,7 @@ void UUPSkillBase::CustomActivate_Implementation(AActor* TargetOrNull)
 		if (AnimInstance != nullptr)
 		{
 			float animSpeed = SkillData->GetAnimationSpeed(player->GetStatComponent()->GetTotalStat().AttackSpeed);
-			AnimInstance->Montage_Play(skillAnimation, animSpeed);	
+			AnimInstance->Montage_Play(skillAnimation, animSpeed);
 		}
 	}
 

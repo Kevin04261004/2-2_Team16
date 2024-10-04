@@ -51,6 +51,7 @@ void AUPWeaponBase::AttackSuccess(FHitResult& result, IUPDamageableInterface* Da
 	}
 	if (DamageSound != nullptr)
 	{
+		// TODO: Change to Sound3D
 		UGameplayStatics::SpawnSound2D(GetWorld(), DamageSound);
 	}
 }

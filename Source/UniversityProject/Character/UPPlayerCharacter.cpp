@@ -4,11 +4,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
-#include "MovieSceneTracksComponentTypes.h"
 #include "Camera/CameraComponent.h"
-#include "Components/AutoTargetingComponent.h"
 #include "Components/PhysicsControlComponent.h"
-#include "Components/UPComboAttackComponent.h"
+#include "Components/UPSkillManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
@@ -37,23 +35,20 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	CameraComponent = CreateDefaultSubobject<UUPCameraComponent>(TEXT("CameraComponent"));
 	
 	// CDO
-	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
+	SkillManager = CreateDefaultSubobject<UUPSkillManager>(TEXT("SkillManager"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
 	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
 	DashComponent = CreateDefaultSubobject<UUPDashComponent>(TEXT("DashComponent"));
-	AutoTargetingComponent = CreateDefaultSubobject<UAutoTargetingComponent>(TEXT("AutoTargeting"));
-
-	// Skill
-	InitSkillMap();
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	CameraComponent->Initialize(*CameraBoom, *FollowCamera);
-	AfterImageComponent->Initialize(*this);
+	AfterImageComponent->Initialize();
 	PhysicsControlComponent->Initialize();
 	DashComponent->Initialize(MovementComponent, this);
+	SkillManager->Initialize(Weapon, &CurAttackDamage);
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -75,11 +70,9 @@ void AUPPlayerCharacter::BeginPlay()
 	AUPPlayerCharacterWeapon* PlayerWeapon = Cast<AUPPlayerCharacterWeapon>(Weapon);
 	if (PlayerWeapon)
 	{
-		ComboAttack->OnComboAttackFinish.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
-		ComboAttack->OnComboStepEnd.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
+		SkillManager->OnComboAttackFinish.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
+		// ComboAttack->OnComboStepEnd.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
 	}
-
-	CreateDefaultObjectSkill();
 }
 
 void AUPPlayerCharacter::SetDead()
@@ -99,9 +92,6 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::MoveInputAction);
 	EnhancedInputComponent->BindAction(RapidAttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::RapidAttackInputAction);
-	EnhancedInputComponent->BindAction(HeavyAttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::HeavyAttackInputAction);
-	EnhancedInputComponent->BindAction(ESkillAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::ESkillInputAction);
-	EnhancedInputComponent->BindAction(RSkillAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::RSkillInputAction);
 	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::DashInputAction);
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::JumpInputAction);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::LookInputAction);
@@ -132,22 +122,7 @@ void AUPPlayerCharacter::LookInputAction(const FInputActionValue& Value)
 
 void AUPPlayerCharacter::RapidAttackInputAction(const FInputActionValue& Value)
 {
-	UseSkill(ESkillType::RapidAttack01);
-}
-
-void AUPPlayerCharacter::HeavyAttackInputAction(const FInputActionValue& Value)
-{
-	UseSkill(ESkillType::RapidAttack02);
-}
-
-void AUPPlayerCharacter::ESkillInputAction(const FInputActionValue& Value)
-{
-	UseSkill(ESkillType::ESkill);
-}
-
-void AUPPlayerCharacter::RSkillInputAction(const FInputActionValue& Value)
-{
-	UseSkill(ESkillType::RSkill);
+	SkillManager->ProcessAttackCommand();
 }
 
 void AUPPlayerCharacter::DashInputAction(const FInputActionValue& Value)
@@ -208,77 +183,3 @@ void AUPPlayerCharacter::SetupStimuliSource()
 	}
 }
 
-void AUPPlayerCharacter::InitSkillMap()
-{
-	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESkillType"), true);
-	if (!EnumPtr)
-	{
-		return;
-	}
-	
-	for (int32 i = 0; i < EnumPtr->NumEnums() - 1; ++i)
-	{
-		if (!EnumPtr->HasMetaData(TEXT("Hidden"), i))
-		{
-			ESkillType EnumValue = static_cast<ESkillType>(EnumPtr->GetValueByIndex(i));
-			SkillMapInitializer.Add(EnumValue, nullptr);
-		}
-	}
-}
-
-void AUPPlayerCharacter::CreateDefaultObjectSkill()
-{
-	for (TTuple<ESkillType, TSubclassOf<UUPSkillBase>> skillMapTuple : SkillMapInitializer)
-	{
-		if (skillMapTuple.Value == nullptr)
-		{
-			continue;
-		}
-		if (UUPSkillBase* NewSkillComponent = NewObject<UUPSkillBase>(this, skillMapTuple.Value))
-		{
-			// 컴포넌트를 월드에 등록합니다.
-			NewSkillComponent->RegisterComponent();
-
-			// SkillMap에 새로 생성된 컴포넌트를 추가합니다.
-			ESkillType Type = skillMapTuple.Key;
-			SkillMap.Add(Type, NewSkillComponent);
-
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Skill Map Created"));
-		}
-	}
-}
-
-void AUPPlayerCharacter::UseSkill(ESkillType skillType)
-{
-	UUPSkillBase** skill_pp = SkillMap.Find(skillType);
-	if (skill_pp == nullptr)
-	{
-		return;
-	}
-	UUPSkillBase* skill = *skill_pp;
-	if (skill == nullptr)
-	{
-		return;
-	}
-	
-	// 타겟팅, 오토타겟팅이면 상대를 바라보게!
-	AActor* Target = nullptr;
-	if (skill->CanUseSkill() && skill->GetSkillData()->IsAutoTargetingSkill())
-	{
-		Target = AutoTargetingComponent->FindDamageableTargetOrNull(GetActorLocation(), EAutoTargetingMode::ATM_Nearest);
-
-		if (Target != nullptr)
-		{
-			FVector TargetLocation = Target->GetActorLocation();
-			AutoTargetingComponent->RotateToTarget(TargetLocation);
-		}
-	}
-	if (skill->CanUseSkill())
-	{
-		// TODO: 모듈화
-		AUPPlayerCharacterWeapon* playerWeapon = Cast<AUPPlayerCharacterWeapon>(Weapon);
-		playerWeapon->ComboStepEnd();
-		CurAttackDamage = skill->GetSkillData()->GetSkillDamage(StatComponent->GetTotalStat().AttackDamage);
-		skill->TryActivateSkill(Target);
-	}
-}
