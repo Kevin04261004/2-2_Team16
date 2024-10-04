@@ -41,6 +41,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetDead() override;
+	
 public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
@@ -86,6 +87,7 @@ protected:
 	TObjectPtr<UCameraComponent> FollowCamera;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<UUPCameraComponent> CameraComponent;
+	
 /* dash Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
@@ -97,23 +99,24 @@ protected:
 	TObjectPtr<class UUPAfterImageComponent> AfterImageComponent;
 	
 	virtual void CreateAfterImage() override;
-/* ComboAttack Section */
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true", Tooltip = "콤보 공격 컴포넌트"))
-	TObjectPtr<class UUPSkillManager> SkillManager;
-	
 	virtual void AttackHitCheck() override;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= Init, Meta = (AllowPrivateAccess = "true", Tooltip = "공격 시 얼마나 앞으로 이동하는가"))
-	float GoForwardDistance;
+
 /* Physics Section */
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= Init, Meta = (AllowPrivateAccess = "true", Tooltip = "공격 시 얼마나 앞으로 이동하는가"))
+	float GoForwardDistance;
 	virtual void GoForward() override;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UPhysicsControlComponent> PhysicsControlComponent;
+	
 /* AI Section */
 protected:
 	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSource;
 	void SetupStimuliSource();
+
+/* State Section */
+protected:
+	
+
 };

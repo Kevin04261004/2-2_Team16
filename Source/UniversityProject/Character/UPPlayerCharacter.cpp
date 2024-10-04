@@ -6,7 +6,6 @@
 #include "InputMappingContext.h"
 #include "Camera/CameraComponent.h"
 #include "Components/PhysicsControlComponent.h"
-#include "Components/UPSkillManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
@@ -35,7 +34,6 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	CameraComponent = CreateDefaultSubobject<UUPCameraComponent>(TEXT("CameraComponent"));
 	
 	// CDO
-	SkillManager = CreateDefaultSubobject<UUPSkillManager>(TEXT("SkillManager"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
 	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
 	DashComponent = CreateDefaultSubobject<UUPDashComponent>(TEXT("DashComponent"));
@@ -48,7 +46,6 @@ void AUPPlayerCharacter::PostInitializeComponents()
 	AfterImageComponent->Initialize();
 	PhysicsControlComponent->Initialize();
 	DashComponent->Initialize(MovementComponent, this);
-	SkillManager->Initialize(Weapon, &CurAttackDamage);
 }
 
 void AUPPlayerCharacter::BeginPlay()
@@ -70,8 +67,7 @@ void AUPPlayerCharacter::BeginPlay()
 	AUPPlayerCharacterWeapon* PlayerWeapon = Cast<AUPPlayerCharacterWeapon>(Weapon);
 	if (PlayerWeapon)
 	{
-		SkillManager->OnComboAttackFinish.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
-		// ComboAttack->OnComboStepEnd.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
+
 	}
 }
 
@@ -122,7 +118,7 @@ void AUPPlayerCharacter::LookInputAction(const FInputActionValue& Value)
 
 void AUPPlayerCharacter::RapidAttackInputAction(const FInputActionValue& Value)
 {
-	SkillManager->ProcessAttackCommand();
+	
 }
 
 void AUPPlayerCharacter::DashInputAction(const FInputActionValue& Value)
