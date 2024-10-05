@@ -55,8 +55,7 @@ void UUPInputHandlerComponent::DashInputAction(const FInputActionValue& Value)
 
 void UUPInputHandlerComponent::JumpInputAction(const FInputActionValue& Value)
 {
-	bIsJump = Value.Get<bool>();
-	// GetCharacterMovement()->DoJump(Jump);
+	OnJumpInputed.Broadcast();
 }
 
 void UUPInputHandlerComponent::SprintInputAction(const FInputActionValue& Value)

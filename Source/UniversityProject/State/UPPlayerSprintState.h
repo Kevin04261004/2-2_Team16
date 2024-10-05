@@ -5,18 +5,18 @@
 #include "CoreMinimal.h"
 #include "Interface/UPJumpableStateInterface.h"
 #include "State/UPPlayerBaseState.h"
-#include "UPPlayerIdleState.generated.h"
+#include "UPPlayerSprintState.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerIdleState : public UUPPlayerBaseState, public IUPJumpableStateInterface
+class UNIVERSITYPROJECT_API UUPPlayerSprintState : public UUPPlayerBaseState, public IUPJumpableStateInterface
 {
 	GENERATED_BODY()
-
+		
 public:
-	UUPPlayerIdleState();
+	UUPPlayerSprintState();
 
 	virtual void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler) override;
 
@@ -24,7 +24,7 @@ public:
 	virtual void EnterState() override;
 	virtual void ExitState() override;
 	virtual void UpdateState() override;
-
+	
 protected:
 	virtual void TryJump() override;
 };

@@ -10,6 +10,8 @@ UUPPlayerWalkState::UUPPlayerWalkState()
 void UUPPlayerWalkState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)
 {
 	Super::Initialize(InOwnerCharacter, InInputHandler);
+
+	InInputHandler->OnJumpInputed.AddUObject(this, &UUPPlayerWalkState::TryJump);
 }
 
 void UUPPlayerWalkState::EnterState()
@@ -46,4 +48,13 @@ void UUPPlayerWalkState::UpdateState()
 
 	/* Logic Update */
 	OwnerCharacter->MovementComponent->Move(InputHandler->GetMovementVector());
+}
+
+void UUPPlayerWalkState::TryJump()
+{
+	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Walk)
+	{
+		return;
+	}
+	ChangeState(EPlayerStateType::Jump);
 }

@@ -13,6 +13,8 @@ UUPPlayerIdleState::UUPPlayerIdleState()
 void UUPPlayerIdleState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)
 {
 	Super::Initialize(InOwnerCharacter, InInputHandler);
+
+	InputHandler->OnJumpInputed.AddUObject(this, &UUPPlayerIdleState::TryJump);
 }
 
 void UUPPlayerIdleState::EnterState()
@@ -35,4 +37,13 @@ void UUPPlayerIdleState::UpdateState()
 	{
 		ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
 	}
+}
+
+void UUPPlayerIdleState::TryJump()
+{
+	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Idle)
+	{
+		return;
+	}
+	ChangeState(EPlayerStateType::Jump);
 }

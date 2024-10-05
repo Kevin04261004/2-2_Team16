@@ -18,7 +18,7 @@ class UNIVERSITYPROJECT_API UUPPlayerBaseState : public UObject
 
 public:
 	UUPPlayerBaseState();
-	void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler);
+	virtual void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler);
 	
 public:
 	virtual void EnterState();

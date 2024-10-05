@@ -9,7 +9,7 @@
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnCameraZoomed, float /* zoomValue */);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnCameraLookInputed, FVector2D /* LookAxisVector */);
-
+DECLARE_MULTICAST_DELEGATE(FOnJumpInputed);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNIVERSITYPROJECT_API UUPInputHandlerComponent : public UActorComponent
 {
@@ -53,15 +53,14 @@ protected:
 
 protected:
 	FVector2D MovementVector;
-	bool bIsJump;
 	bool bIsSprint;
 	
 public:
 	FOnCameraZoomed OnCameraZoomed;
 	FOnCameraLookInputed OnCameraLookInputed;
+	FOnJumpInputed OnJumpInputed;
 	
 	FORCEINLINE FVector2D GetMovementVector() const { return MovementVector; }
 	FORCEINLINE bool IsMoving() const { return MovementVector != FVector2D::ZeroVector; }
-	FORCEINLINE bool IsJump() const { return bIsJump; }
 	FORCEINLINE bool IsSprint() const { return bIsSprint; }
 };

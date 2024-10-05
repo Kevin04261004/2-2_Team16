@@ -1,21 +1,23 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "State/UPPlayerRunState.h"
+#include "State/UPPlayerSprintState.h"
 
 #include "Character/UPPlayerCharacter.h"
 #include "Components/UPInputHandlerComponent.h"
 
-UUPPlayerRunState::UUPPlayerRunState()
+UUPPlayerSprintState::UUPPlayerSprintState()
 {
 }
 
-void UUPPlayerRunState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)
+void UUPPlayerSprintState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)
 {
 	Super::Initialize(InOwnerCharacter, InInputHandler);
+
+	InputHandler->OnJumpInputed.AddUObject(this, &UUPPlayerSprintState::TryJump);
 }
 
-void UUPPlayerRunState::EnterState()
+void UUPPlayerSprintState::EnterState()
 {
 	Super::EnterState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Run Enter");
@@ -23,14 +25,14 @@ void UUPPlayerRunState::EnterState()
 	OwnerCharacter->MovementComponent->SetIsSprinting(true);
 }
 
-void UUPPlayerRunState::ExitState()
+void UUPPlayerSprintState::ExitState()
 {
 	Super::ExitState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Player Run Exit");
 
 }
 
-void UUPPlayerRunState::UpdateState()
+void UUPPlayerSprintState::UpdateState()
 {
 	Super::UpdateState();
 
@@ -49,4 +51,13 @@ void UUPPlayerRunState::UpdateState()
 
 	/* Logic Update */
 	OwnerCharacter->MovementComponent->Move(InputHandler->GetMovementVector());
+}
+
+void UUPPlayerSprintState::TryJump()
+{
+	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Sprint)
+	{
+		return;
+	}
+	ChangeState(EPlayerStateType::Jump);
 }
