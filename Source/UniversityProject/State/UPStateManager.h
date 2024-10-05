@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UPPlayerBaseState.h"
 #include "Components/ActorComponent.h"
 #include "UPStateManager.generated.h"
+
 
 UENUM(BlueprintType)
 enum class EPlayerStateType : uint8
@@ -39,10 +39,20 @@ class UNIVERSITYPROJECT_API UUPStateManager : public UActorComponent
 
 public:	
 	UUPStateManager();
-
-	void UpdateState(EPlayerStateType NewState);
+	
+	void Initialize(EPlayerStateType InitState);
+	
+	void UpdateState();
+	void ChangeState(EPlayerStateType NextState);
 	FORCEINLINE EPlayerStateType GetCurrentState() const { return CurrentState; }
 protected:
 	EPlayerStateType CurrentState;
-	TMap<EPlayerStateType, UUPPlayerBaseState*> StateMap;
+	TMap<EPlayerStateType, class UUPPlayerBaseState*> StateMap;
+
+protected:
+	TObjectPtr<class AUPPlayerCharacter> OwningCharacter;
+
+protected:
+	void InitializeStateMap();
+	void InitializeState();
 };

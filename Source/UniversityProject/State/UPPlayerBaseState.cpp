@@ -3,3 +3,24 @@
 
 #include "State/UPPlayerBaseState.h"
 
+UUPPlayerBaseState::UUPPlayerBaseState()
+{
+	
+}
+
+void UUPPlayerBaseState::Initialize(AUPPlayerCharacter* InOwnerCharacter)
+{
+	this->OwnerCharacter = InOwnerCharacter;
+}
+
+void UUPPlayerBaseState::EnterState()
+{
+}
+
+void UUPPlayerBaseState::ExitState()
+{
+}
+
+void UUPPlayerBaseState::UpdateState()
+{
+}

@@ -4,13 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
-#include "InputActionValue.h"
-#include "Components/UPCameraComponent.h"
+#include "Components/UPInputHandlerComponent.h"
 #include "Interface/UPAfterImageableInterface.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterGoForwardInterface.h"
 #include "Player/UPPlayerController.h"
-#include "Skill/UPSkillBase.h"
+#include "State/UPStateManager.h"
 #include "UPPlayerCharacter.generated.h"
 
 UENUM(BlueprintType)
@@ -26,6 +25,8 @@ enum class EPlayerSkillType : uint8
 	Throw UMETA(DisplayName="투척"),
 };
 
+class UUPStateManager;
+
 /**
  * 
  */
@@ -39,54 +40,29 @@ public:
 	virtual void PostInitializeComponents() override;
 
 protected:
+	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
 	virtual void SetDead() override;
-	
-public:
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
 	TObjectPtr<AUPPlayerController> PlayerController;
 	
-// Input Section
+/* Input Section */
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputMappingContext> IMC_BackView;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> MoveAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> RapidAttackAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> HeavyAttackAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> ESkillAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> RSkillAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> DashAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> JumpAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> LookAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> CameraZoomAction;
-	
-	void MoveInputAction(const FInputActionValue& Value);
-	void LookInputAction(const FInputActionValue& Value);
-	void RapidAttackInputAction(const FInputActionValue& Value);
-	void DashInputAction(const FInputActionValue& Value);
-	void JumpInputAction(const FInputActionValue& Value);
-	void WalkInputAction(const FInputActionValue& Value);
-	void ZoomCameraInputAction(const FInputActionValue& Value);
-		
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = InputHandler, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UUPInputHandlerComponent> InputHandler;
+
+public:
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
 /* Camera Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<USpringArmComponent> CameraBoom;
+	TObjectPtr<class USpringArmComponent> CameraBoom;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UCameraComponent> FollowCamera;
+	TObjectPtr<class UCameraComponent> FollowCamera;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UUPCameraComponent> CameraComponent;
+	TObjectPtr<class UUPCameraComponent> CameraComponent;
 	
 /* dash Section */
 protected:
@@ -117,6 +93,9 @@ protected:
 
 /* State Section */
 protected:
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UUPStateManager> StateManager;
 
+public:
+	FORCEINLINE UUPStateManager* GetStateManager() { return StateManager; }
 };

@@ -3,11 +3,14 @@
 
 #include "Components/UPCameraComponent.h"
 
+#include <ThirdParty/ShaderConductor/ShaderConductor/External/SPIRV-Headers/include/spirv/unified1/spirv.h>
+
+#include "Character/UPPlayerCharacter.h"
 #include "Player/UPPlayerController.h"
 
 UUPCameraComponent::UUPCameraComponent()
 {
-	
+	OwningCharacter = Cast<AUPPlayerCharacter>(GetOwner());
 }
 
 void UUPCameraComponent::Initialize(USpringArmComponent& SpringArmComponent, UCameraComponent& CameraComponent)
@@ -22,17 +25,7 @@ void UUPCameraComponent::Initialize(USpringArmComponent& SpringArmComponent, UCa
 
 void UUPCameraComponent::ShakeCamera(FHitResult& HitResult)
 {
-	AActor* OwnerActor = GetOwner();
-	if (OwnerActor == nullptr || HitCameraShake == nullptr)
-	{
-		return;
-	}
-
-	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(OwnerActor->GetInstigatorController());
-	if (PlayerController == nullptr || HitCameraShake == nullptr)
-	{
-		return;
-	}
+	PlayerController = Cast<AUPPlayerController>(GetOwner()->GetInstigatorController());
 	PlayerController->ClientStartCameraShake(HitCameraShake);
 }
 
@@ -43,4 +36,10 @@ void UUPCameraComponent::ZoomCamera(float Value)
 		CurrentZoom = FMath::Clamp(CurrentZoom - (Value * ZoomStep), MinZoom, MaxZoom);
 		CameraBoom->TargetArmLength = CurrentZoom;
 	}
+}
+
+void UUPCameraComponent::LookCamera(FVector2D LookAxisVector)
+{
+	OwningCharacter->AddControllerYawInput(LookAxisVector.X);
+	OwningCharacter->AddControllerPitchInput(LookAxisVector.Y);
 }
