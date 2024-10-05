@@ -2,6 +2,8 @@
 
 #pragma once
 #include "CoreMinimal.h"
+#include "UPStateManager.h"
+#include "Character/UPPlayerCharacter.h"
 #include "UPPlayerBaseState.generated.h"
 
 class AUPPlayerCharacter;
@@ -16,7 +18,7 @@ class UNIVERSITYPROJECT_API UUPPlayerBaseState : public UObject
 
 public:
 	UUPPlayerBaseState();
-	void Initialize(AUPPlayerCharacter* InOwnerCharacter);
+	void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler);
 	
 public:
 	virtual void EnterState();
@@ -25,4 +27,8 @@ public:
 
 protected:
 	AUPPlayerCharacter* OwnerCharacter;
+	UUPInputHandlerComponent* InputHandler;
+
+protected:
+	FORCEINLINE void ChangeState(EPlayerStateType NextState) { OwnerCharacter->GetStateManager()->ChangeState(NextState); }
 };

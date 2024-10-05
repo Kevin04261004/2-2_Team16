@@ -8,19 +8,23 @@ UUPPlayerBaseState::UUPPlayerBaseState()
 	
 }
 
-void UUPPlayerBaseState::Initialize(AUPPlayerCharacter* InOwnerCharacter)
+void UUPPlayerBaseState::Initialize(AUPPlayerCharacter* InOwnerCharacter, UUPInputHandlerComponent* InInputHandler)
 {
 	this->OwnerCharacter = InOwnerCharacter;
+	this->InputHandler = InInputHandler;
 }
 
 void UUPPlayerBaseState::EnterState()
 {
+	
 }
 
 void UUPPlayerBaseState::ExitState()
 {
+	
 }
 
 void UUPPlayerBaseState::UpdateState()
 {
+	
 }

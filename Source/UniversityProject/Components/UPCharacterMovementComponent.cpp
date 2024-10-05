@@ -3,10 +3,18 @@
 
 #include "UPCharacterMovementComponent.h"
 
+#include "Character/UPCharacterBase.h"
+
 UUPCharacterMovementComponent::UUPCharacterMovementComponent()
 {
 	bIsSprinting = false;
 }
+
+void UUPCharacterMovementComponent::Initialize()
+{
+	OwningCharacter = Cast<AUPCharacterBase>(GetOwner());
+}
+
 
 void UUPCharacterMovementComponent::SetIsSprinting(bool isSprinting)
 {
@@ -28,6 +36,18 @@ void UUPCharacterMovementComponent::SetCharacterStat(UUPCharacterStatComponent* 
 {
 	this->StatComponent = InStatComponent;
 	check(StatComponent != nullptr);
+}
+
+void UUPCharacterMovementComponent::Move(FVector2D MovementVector)
+{
+	const FRotator Rotation = GetController()->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+	
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	
+	OwningCharacter->AddMovementInput(ForwardDirection, MovementVector.X);
+	OwningCharacter->AddMovementInput(RightDirection, MovementVector.Y);
 }
 
 void UUPCharacterMovementComponent::UpdateSpeed()

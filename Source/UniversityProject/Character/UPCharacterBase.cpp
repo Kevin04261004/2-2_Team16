@@ -56,10 +56,12 @@ void AUPCharacterBase::BeginPlay()
 	// Set AnimInstance
 	GetMesh()->SetAnimInstanceClass(AnimInstanceClass);
 
+
 	// Set StatComponent Value
 	check(StatComponent != nullptr);
 	check(CharacterInitalizeStatData != nullptr);	
 	StatComponent->SetBaseStat(CharacterInitalizeStatData->Stat);
+	MovementComponent->Initialize();
 	MovementComponent->SetCharacterStat(StatComponent);
     MovementComponent->SetIsSprinting(false);
 	

@@ -13,7 +13,7 @@ enum class EPlayerStateType : uint8
 	/* Movement */
 	Idle UMETA(DisplayName = "Idle"),
 	Walk UMETA(DisplayName = "걷기"),
-	Run UMETA(DisplayName = "달리기"),
+	Sprint UMETA(DisplayName = "달리기"),
 	Jump UMETA(DisplayName = "점프"),
 	InAir UMETA(DisplayName = "공중"),
 	Land  UMETA(DisplayName = "착지"),
@@ -40,10 +40,12 @@ class UNIVERSITYPROJECT_API UUPStateManager : public UActorComponent
 public:	
 	UUPStateManager();
 	
-	void Initialize(EPlayerStateType InitState);
+	void Initialize(class UUPInputHandlerComponent* InInputHandler);
+	void InitializeStates(EPlayerStateType InitState);
 	
 	void UpdateState();
 	void ChangeState(EPlayerStateType NextState);
+
 	FORCEINLINE EPlayerStateType GetCurrentState() const { return CurrentState; }
 protected:
 	EPlayerStateType CurrentState;
@@ -51,8 +53,8 @@ protected:
 
 protected:
 	TObjectPtr<class AUPPlayerCharacter> OwningCharacter;
-
+	TObjectPtr<class UUPInputHandlerComponent> InputHandler;
+	
 protected:
 	void InitializeStateMap();
-	void InitializeState();
 };

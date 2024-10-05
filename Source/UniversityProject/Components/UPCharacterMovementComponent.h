@@ -17,17 +17,23 @@ class UNIVERSITYPROJECT_API UUPCharacterMovementComponent : public UCharacterMov
 
 public:
 	UUPCharacterMovementComponent();
+
+	void Initialize();
 	
 	FORCEINLINE bool GetIsSprinting() const { return bIsSprinting; }
 	void SetIsSprinting(bool isSprinting);
 	void SetCharacterStat(UUPCharacterStatComponent* InStatComponent);
+	void Move(FVector2D MovementVector);
 protected:
 	bool bIsSprinting;
 	UUPCharacterStatComponent* StatComponent;
 	
 	FTimerHandle SpeedChangeTimerHandle;
 	float DesiredSpeed;
-	float SpeedChangeRate = 200.0f; // 속도가 변화하는 비율
+	float SpeedChangeRate = 10.0f; // 속도가 변화하는 비율
 
 	void UpdateSpeed();
+
+protected:
+	TObjectPtr<class AUPCharacterBase> OwningCharacter;
 };

@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "UPPlayerBaseState.h"
 #include "UPStateManager.h"
 
 #include "UPPlayerIdleState.h"
 #include "UPPlayerRunState.h"
 #include "UPPlayerWalkState.h"
+#include "UPPlayerBaseState.h"
 #include "Character/UPPlayerCharacter.h"
 
 UUPStateManager::UUPStateManager()
@@ -13,27 +13,28 @@ UUPStateManager::UUPStateManager()
 	InitializeStateMap();
 }
 
-void UUPStateManager::Initialize(EPlayerStateType InitState)
+void UUPStateManager::Initialize(UUPInputHandlerComponent* InInputHandler)
 {
 	OwningCharacter = Cast<AUPPlayerCharacter>(GetOwner());
-	InitializeState();
-	
-	CurrentState = InitState;
-	StateMap[CurrentState]->EnterState();
+	this->InputHandler = InInputHandler;
 }
 
 void UUPStateManager::InitializeStateMap()
 {
 	StateMap.Add(EPlayerStateType::Idle, NewObject<UUPPlayerIdleState>());
 	StateMap.Add(EPlayerStateType::Walk, NewObject<UUPPlayerWalkState>());
-	StateMap.Add(EPlayerStateType::Run, NewObject<UUPPlayerRunState>());
+	StateMap.Add(EPlayerStateType::Sprint, NewObject<UUPPlayerRunState>());
 }
 
-void UUPStateManager::InitializeState()
+void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
 {
-	StateMap[EPlayerStateType::Idle]->Initialize(OwningCharacter);
-	StateMap[EPlayerStateType::Walk]->Initialize(OwningCharacter);
-	StateMap[EPlayerStateType::Run]->Initialize(OwningCharacter);
+	StateMap[EPlayerStateType::Idle]->Initialize(OwningCharacter, InputHandler);
+	StateMap[EPlayerStateType::Walk]->Initialize(OwningCharacter, InputHandler);
+	StateMap[EPlayerStateType::Sprint]->Initialize(OwningCharacter, InputHandler);
+
+
+	CurrentState = InitState;
+	StateMap[CurrentState]->EnterState();
 }
 
 void UUPStateManager::UpdateState()

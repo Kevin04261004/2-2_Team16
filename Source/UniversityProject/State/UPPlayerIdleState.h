@@ -17,7 +17,7 @@ class UNIVERSITYPROJECT_API UUPPlayerIdleState : public UUPPlayerBaseState
 public:
 	UUPPlayerIdleState();
 
-	void Initialize(AUPPlayerCharacter* InOwnerCharacter);
+	void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler);
 
 public:
 	virtual void EnterState() override;

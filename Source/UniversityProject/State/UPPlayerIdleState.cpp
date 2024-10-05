@@ -3,13 +3,16 @@
 
 #include "State/UPPlayerIdleState.h"
 
+#include "Character/UPPlayerCharacter.h"
+#include "Components/UPInputHandlerComponent.h"
+
 UUPPlayerIdleState::UUPPlayerIdleState()
 {
 }
 
-void UUPPlayerIdleState::Initialize(AUPPlayerCharacter* InOwnerCharacter)
+void UUPPlayerIdleState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)
 {
-	Super::Initialize(InOwnerCharacter);
+	Super::Initialize(InOwnerCharacter, InInputHandler);
 }
 
 void UUPPlayerIdleState::EnterState()
@@ -22,11 +25,14 @@ void UUPPlayerIdleState::ExitState()
 {
 	Super::ExitState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Player Idle Exit");
-
 }
 
 void UUPPlayerIdleState::UpdateState()
 {
 	Super::UpdateState();
-	
+
+	if (InputHandler->IsMoving())
+	{
+		ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
+	}
 }

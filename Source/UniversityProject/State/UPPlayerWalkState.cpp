@@ -7,15 +7,17 @@ UUPPlayerWalkState::UUPPlayerWalkState()
 {
 }
 
-void UUPPlayerWalkState::Initialize(AUPPlayerCharacter* InOwnerCharacter)
+void UUPPlayerWalkState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)
 {
-	Super::Initialize(InOwnerCharacter);
+	Super::Initialize(InOwnerCharacter, InInputHandler);
 }
 
 void UUPPlayerWalkState::EnterState()
 {
 	Super::EnterState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Walk Enter");
+
+	OwnerCharacter->MovementComponent->SetIsSprinting(false);
 }
 
 void UUPPlayerWalkState::ExitState()
@@ -28,4 +30,20 @@ void UUPPlayerWalkState::ExitState()
 void UUPPlayerWalkState::UpdateState()
 {
 	Super::UpdateState();
+
+	/* if Check */
+	if (InputHandler->IsMoving())
+	{
+		if (InputHandler->IsSprint())
+		{
+			ChangeState(EPlayerStateType::Sprint);
+		}
+	}
+	else
+	{
+		ChangeState(EPlayerStateType::Idle);
+	}
+
+	/* Logic Update */
+	OwnerCharacter->MovementComponent->Move(InputHandler->GetMovementVector());
 }

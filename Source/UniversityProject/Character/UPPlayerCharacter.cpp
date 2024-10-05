@@ -46,25 +46,18 @@ void AUPPlayerCharacter::PostInitializeComponents()
 	AfterImageComponent->Initialize();
 	PhysicsControlComponent->Initialize();
 	DashComponent->Initialize(MovementComponent, this);
-
+	StateManager->Initialize(InputHandler);
+	
 	// Input Delegate
 	InputHandler->OnCameraZoomed.AddUObject(CameraComponent, &UUPCameraComponent::ZoomCamera);
 	InputHandler->OnCameraLookInputed.AddUObject(CameraComponent, &UUPCameraComponent::LookCamera);
 }
 
-void AUPPlayerCharacter::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	StateManager->UpdateState();
-}
-
 void AUPPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	StateManager->InitializeStates(EPlayerStateType::Idle);
 	
-	StateManager->Initialize(EPlayerStateType::Idle);
-
 	PlayerController = Cast<AUPPlayerController>(GetController());
 	check(PlayerController != nullptr);
 	EnableInput(PlayerController);
@@ -72,6 +65,13 @@ void AUPPlayerCharacter::BeginPlay()
 	InputHandler->SetMappingContext(PlayerController);
 	
 	Weapon->OnWeaponHit.AddUObject(CameraComponent, &UUPCameraComponent::ShakeCamera);
+}
+
+void AUPPlayerCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	StateManager->UpdateState();
 }
 
 void AUPPlayerCharacter::SetDead()

@@ -53,15 +53,15 @@ protected:
 
 protected:
 	FVector2D MovementVector;
-	bool Jump;
-	bool Sprint;
+	bool bIsJump;
+	bool bIsSprint;
 	
 public:
 	FOnCameraZoomed OnCameraZoomed;
 	FOnCameraLookInputed OnCameraLookInputed;
 	
-	FORCEINLINE FVector2D GetMovementVector() { return MovementVector; }
-	FORCEINLINE bool IsMoving() { return MovementVector.Size() > 0; }
-	FORCEINLINE bool IsJump() { return Jump; }
-	FORCEINLINE bool IsSprint() { return Sprint; }
+	FORCEINLINE FVector2D GetMovementVector() const { return MovementVector; }
+	FORCEINLINE bool IsMoving() const { return MovementVector != FVector2D::ZeroVector; }
+	FORCEINLINE bool IsJump() const { return bIsJump; }
+	FORCEINLINE bool IsSprint() const { return bIsSprint; }
 };

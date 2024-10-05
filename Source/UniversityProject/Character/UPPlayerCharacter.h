@@ -75,12 +75,16 @@ protected:
 	TObjectPtr<class UUPAfterImageComponent> AfterImageComponent;
 	
 	virtual void CreateAfterImage() override;
+
+/* Check Hit Collision */
+protected:
 	virtual void AttackHitCheck() override;
 
 /* Physics Section */
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= Init, Meta = (AllowPrivateAccess = "true", Tooltip = "공격 시 얼마나 앞으로 이동하는가"))
 	float GoForwardDistance;
+
 	virtual void GoForward() override;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = true))

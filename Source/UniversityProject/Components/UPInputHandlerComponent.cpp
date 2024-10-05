@@ -35,15 +35,6 @@ void UUPInputHandlerComponent::BindActions(UEnhancedInputComponent* EnhancedInpu
 void UUPInputHandlerComponent::MoveInputAction(const FInputActionValue& Value)
 {
 	MovementVector = Value.Get<FVector2D>();
-	
-	// const FRotator Rotation = Controller->GetControlRotation();
-	// const FRotator YawRotation(0, Rotation.Yaw, 0);
-	//
-	// const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	// const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-	//
-	// AddMovementInput(ForwardDirection, MovementVector.X);
-	// AddMovementInput(RightDirection, MovementVector.Y);
 }
 
 void UUPInputHandlerComponent::LookInputAction(const FInputActionValue& Value)
@@ -64,13 +55,13 @@ void UUPInputHandlerComponent::DashInputAction(const FInputActionValue& Value)
 
 void UUPInputHandlerComponent::JumpInputAction(const FInputActionValue& Value)
 {
-	Jump = Value.Get<bool>();
+	bIsJump = Value.Get<bool>();
 	// GetCharacterMovement()->DoJump(Jump);
 }
 
 void UUPInputHandlerComponent::SprintInputAction(const FInputActionValue& Value)
 {
-	Sprint = Value.Get<bool>();
+	bIsSprint = Value.Get<bool>();
 	// MovementComponent->SetIsSprinting(Sprint);
 }
 
@@ -78,6 +69,5 @@ void UUPInputHandlerComponent::ZoomCameraInputAction(const FInputActionValue& Va
 {
 	float zoomAxis = Value.Get<float>();
 	OnCameraZoomed.Broadcast(zoomAxis);
-	// CameraComponent->ZoomCamera(zoomAxis);
 }
 
