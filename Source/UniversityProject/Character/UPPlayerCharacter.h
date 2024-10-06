@@ -22,6 +22,7 @@ enum class EPlayerSkillType : uint8
 	UpperCut UMETA(DisplayName="어퍼컷"),
 	TakeDown UMETA(DisplayName="내려 찍기"),
 	KnockOver UMETA(DisplayName="넘어뜨리기"),
+	Dash UMETA(DisplayName="대시"),
 	Throw UMETA(DisplayName="투척"),
 };
 
@@ -64,11 +65,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UUPCameraComponent> CameraComponent;
 	
-/* dash Section */
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UUPDashComponent> DashComponent;
-	
 /* After Image */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
@@ -98,8 +94,16 @@ protected:
 /* State Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UUPStateManager> StateManager;
+	TObjectPtr<class UUPStateManager> StateManager;
 
 public:
 	FORCEINLINE UUPStateManager* GetStateManager() { return StateManager; }
+
+/* Skill Section */
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Skill, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UUPSkillManagerComponent> SkillManager;
+
+public:
+	FORCEINLINE UUPSkillManagerComponent* GetSkillManager() { return SkillManager; }
 };

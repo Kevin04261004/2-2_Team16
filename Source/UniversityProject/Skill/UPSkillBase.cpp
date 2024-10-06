@@ -12,6 +12,12 @@ UUPSkillBase::UUPSkillBase()
 	
 }
 
+void UUPSkillBase::Initialize(UUPCharacterMovementComponent* InCharacterMovementComponent, AUPPlayerCharacter* InPlayerCharacter)
+{
+	CharacterMovementComponent = InCharacterMovementComponent;
+	PlayerCharacter = InPlayerCharacter;
+}
+
 bool UUPSkillBase::CanUseSkill()
 {
 	// 스킬 사용 가능 여부 판단

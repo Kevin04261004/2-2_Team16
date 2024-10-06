@@ -13,6 +13,7 @@
 #include "Interface/UPGameInterface.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
+#include "Skill/Player/UPSkillManagerComponent.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -35,8 +36,7 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
 	StateManager = CreateDefaultSubobject<UUPStateManager>(TEXT("StateManager"));
 	InputHandler = CreateDefaultSubobject<UUPInputHandlerComponent>(TEXT("InputHandler"));
-	DashComponent = CreateDefaultSubobject<UUPDashComponent>(TEXT("DashComponent"));
-	
+	SkillManager = CreateDefaultSubobject<UUPSkillManagerComponent>(TEXT("SkillManager"));
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -45,9 +45,8 @@ void AUPPlayerCharacter::PostInitializeComponents()
 	CameraComponent->Initialize(*CameraBoom, *FollowCamera);
 	AfterImageComponent->Initialize();
 	PhysicsControlComponent->Initialize();
-	DashComponent->Initialize(MovementComponent, this);
 	StateManager->Initialize(InputHandler);
-	
+
 	// Input Delegate
 	InputHandler->OnCameraZoomed.AddUObject(CameraComponent, &UUPCameraComponent::ZoomCamera);
 	InputHandler->OnCameraLookInputed.AddUObject(CameraComponent, &UUPCameraComponent::LookCamera);
@@ -56,7 +55,9 @@ void AUPPlayerCharacter::PostInitializeComponents()
 void AUPPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	SkillManager->Initialize(Weapon, &CurAttackDamage);
 	StateManager->InitializeStates(EPlayerStateType::Idle);
+	SkillManager->CreateDefaultObjectSkill();
 	
 	PlayerController = Cast<AUPPlayerController>(GetController());
 	check(PlayerController != nullptr);

@@ -6,6 +6,7 @@
 #include "UPPlayerSprintState.h"
 #include "UPPlayerWalkState.h"
 #include "UPPlayerBaseState.h"
+#include "UPPlayerDashState.h"
 #include "UPPlayerJumpState.h"
 #include "Character/UPPlayerCharacter.h"
 
@@ -26,6 +27,7 @@ void UUPStateManager::InitializeStateMap()
 	StateMap.Add(EPlayerStateType::Walk, NewObject<UUPPlayerWalkState>());
 	StateMap.Add(EPlayerStateType::Sprint, NewObject<UUPPlayerSprintState>());
 	StateMap.Add(EPlayerStateType::Jump, NewObject<UUPPlayerJumpState>());
+	StateMap.Add(EPlayerStateType::Dash, NewObject<UUPPlayerDashState>());
 }
 
 void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
@@ -34,7 +36,7 @@ void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
 	StateMap[EPlayerStateType::Walk]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Sprint]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Jump]->Initialize(OwningCharacter, InputHandler);
-
+	StateMap[EPlayerStateType::Dash]->Initialize(OwningCharacter, InputHandler);
 	CurrentState = InitState;
 	StateMap[CurrentState]->EnterState();
 }

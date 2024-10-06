@@ -5,6 +5,7 @@
 
 #include "Character/UPPlayerCharacter.h"
 #include "Components/UPInputHandlerComponent.h"
+#include "Skill/Player/UPSkillManagerComponent.h"
 
 UUPPlayerIdleState::UUPPlayerIdleState()
 {
@@ -15,6 +16,7 @@ void UUPPlayerIdleState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class 
 	Super::Initialize(InOwnerCharacter, InInputHandler);
 
 	InputHandler->OnJumpInputed.AddUObject(this, &UUPPlayerIdleState::TryJump);
+	InputHandler->OnDashInputed.AddUObject(this, &UUPPlayerIdleState::TryDash);
 }
 
 void UUPPlayerIdleState::EnterState()
@@ -41,9 +43,18 @@ void UUPPlayerIdleState::UpdateState()
 
 void UUPPlayerIdleState::TryJump()
 {
-	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Idle)
+	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Idle || !OwnerCharacter->CanJump())
 	{
 		return;
 	}
 	ChangeState(EPlayerStateType::Jump);
+}
+
+void UUPPlayerIdleState::TryDash()
+{
+	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Idle || !OwnerCharacter->GetSkillManager()->CanUseSkill(EPlayerSkillType::Dash))
+	{
+		return;
+	}
+	ChangeState(EPlayerStateType::Dash);
 }
