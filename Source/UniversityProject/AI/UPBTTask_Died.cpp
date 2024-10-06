@@ -19,9 +19,8 @@ EBTNodeResult::Type UUPBTTask_Died::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		if (Pettu)
 		{
 			// 죽음 처리
-			Pettu->SetPettuDead();
+			Pettu->SetDead();
 			OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("IsDead"), true);
-			//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded); 완료 안해도 될듯?
 			return EBTNodeResult::Succeeded;
 		}
 	}

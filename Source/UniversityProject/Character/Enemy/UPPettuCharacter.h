@@ -5,23 +5,21 @@
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "Skill/UPSkillBase.h"
 #include "AI/UPPettuAIController.h"
+#include "Interface/UPAnimationAttackCheckInterface.h"
 #include "UPPettuCharacter.generated.h"
 
 UENUM(BlueprintType)
-enum class PettuStatus : uint8
+enum class EPettuSkillType : uint8
 {
-	Idle UMETA(DisplayName = "Idle"),
-	Move UMETA(DisplayName = "Move"),
-	Pattern_1 UMETA(DisplayName = "Pattern_1"),
-	Pattern_2 UMETA(DisplayName = "Pattern_2"),
-	Pattern_3 UMETA(DisplayName = "Pattern_3"),
-	Stiffend UMETA(DisplayName = "Stiffend"),
-	Stunned UMETA(DisplayName = "Stunned"),
-	Dead UMETA(DisplayName = "Dead"),
+	SmashAttack UMETA(DisplayName = "내려찍기"),
+	SmashAttack2 UMETA(DisplayName = "내려찍기2"),
+	SmashAttack3 UMETA(DisplayName = "내려찍기3"),
 };
+
 UCLASS()
-class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPCharacterBase
+class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPCharacterBase, public IUPAnimationAttackCheckInterface
 {
 	GENERATED_BODY()
 public:
@@ -32,10 +30,9 @@ public:
 	virtual void BeginPlay() override;
 	
 protected:
-	
-
 	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	/* AI Section */
+	
+/* AI Section */
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UBehaviorTree> BTree;
@@ -44,13 +41,15 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class AAIController> PettuAIController;
+
+	AAIController* GetPettuAIController() const { return PettuAIController; }
 	
 /* State Section */
 public:
 	
 /* Dead Section */
 	FORCEINLINE bool IsPettuDead() const { return IsDead(); }
-	void SetPettuDead();
+	virtual void SetDead() override;
 
 /* Stun Section */
 	FORCEINLINE bool IsPettuStun() const { return IsStun(); }
@@ -59,6 +58,7 @@ public:
 	void StunEnd(UAnimMontage* Montage, bool bInterrupted);
 
 /* Stiffen Section */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State", Meta = (AllowPrivateAccess = "true"))
 	bool bIsStiffen;
 	void SetStiffen();
 	UFUNCTION()
@@ -72,12 +72,10 @@ private:
 	///////////// 상수 //////////////
 	float MaxComboCount;
 	float BaseComboFrameRate;
-	float LastComboFrameRate;
+	float LastComboFrameRate; 
 
 	///////////// 변수 //////////////
-	float CurrentHp;
 	float DamageReceived;
-	PettuStatus hasStatus;
 
 	UFUNCTION()
 	void TestFunc();
@@ -93,4 +91,19 @@ public:
 
 	UFUNCTION()
 	void PatternMontageEnd(UAnimMontage* Montage, bool bInterrupted);
+
+/* Skill Section */
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TMap<EPettuSkillType, TSubclassOf<UUPSkillBase>> SkillMapInitializer;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TMap<EPettuSkillType, UUPSkillBase*> SkillMap;
+	void InitSkillMap();
+	void CreateDefaultObjectSkill();
+/* Attack Section */
+protected:
+	virtual void AttackHitCheck() override;
+public:
+	virtual void SkillAttack(EPettuSkillType SkillType);
 };

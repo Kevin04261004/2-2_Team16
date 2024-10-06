@@ -31,12 +31,12 @@ int32 UUPBTComposite_RandomSelector::GetNextChildHandler(FBehaviorTreeSearchData
  
 	if (PrevChild == BTSpecialChild::NotInitialized)
 	{
-		// First execution, choose a random child
+		// 랜덤 인덱스 생성
 		NextChildIdx = FMath::RandRange(0, GetChildrenNum() - 1);
 	}
 	else
 	{
-		// Handle last result
+		// 마지막 결과 처리
 		if (LastResult == EBTNodeResult::Succeeded)
 		{
 			ExecutedChildren.Empty();
@@ -47,14 +47,14 @@ int32 UUPBTComposite_RandomSelector::GetNextChildHandler(FBehaviorTreeSearchData
 			// If last child failed, mark it as executed
 			ExecutedChildren.Add(PrevChild);
  
-			// If all children have failed, return failure
+			// 모든 자식이 실패하면 Fail 반환
 			if (ExecutedChildren.Num() >= GetChildrenNum())
 			{
 				ExecutedChildren.Empty();
 				return BTSpecialChild::ReturnToParent;
 			}
  
-			// Choose a new random child that has not been executed yet
+			// 아직 실행되지 않은 자식 노드들 검사
 			TArray<int32> AvailableChildren;
 			for (int32 ChildIdx = 0; ChildIdx < GetChildrenNum(); ++ChildIdx)
 			{
@@ -64,7 +64,7 @@ int32 UUPBTComposite_RandomSelector::GetNextChildHandler(FBehaviorTreeSearchData
 				}
 			}
  
-			// Choose a random child index from available children
+			// 실행 가능한 랜덤 자식 노드 선택
 			NextChildIdx = AvailableChildren[FMath::RandRange(0, AvailableChildren.Num() - 1)];
 		}
 	}

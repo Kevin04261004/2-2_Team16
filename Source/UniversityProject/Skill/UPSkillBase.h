@@ -45,7 +45,7 @@ protected:
 
 	UFUNCTION(BlueprintType, BlueprintCallable, Category="Skill")
 	// 기획자가 커스터마이징을 하지 않으면 아래 함수(<커스텀 함수명>_Implementation)가 호출이 되어요!!
-	void CustomActivate_Implementation(AActor* TargetOrNull);
+	virtual void CustomActivate_Implementation(AActor* TargetOrNull);
 
 	// 기획자가 블루프린트에서 커스터마이징 가능한 함수
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Skill", meta = (Tooltip = "스킬이 스탑되었을 때 구현"))
@@ -61,7 +61,7 @@ protected:
 	
 	UFUNCTION(BlueprintType, BlueprintCallable, Category="Skill")
 	// 기획자가 커스터마이징을 하지 않으면 아래 함수(<커스텀 함수명>_Implementation)가 호출이 되어요!!
-	void CustomDeActivate_Implementation(AActor* TargetOrNull);
+	virtual void CustomDeActivate_Implementation(AActor* TargetOrNull);
 
 	UFUNCTION(BlueprintType, BlueprintCallable, Category="Skill")
 	FORCEINLINE FVector GetOwnerLocation() const { return GetOwner()->GetActorLocation(); }

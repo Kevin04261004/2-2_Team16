@@ -22,6 +22,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timer")
 	float ElapsedTime = 0.0f;
 
+	bool bIsStun = false;
+	bool bIsDead = false;
+	
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
 	void ResetTimer();

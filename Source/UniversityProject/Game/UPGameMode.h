@@ -20,7 +20,12 @@ public:
 
 	virtual void OnPlayerDead() override;
 	virtual bool IsGameCleared() override;
+	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Game)
 	uint8 bIsCleared : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Game)
+	TSubclassOf<UUserWidget> HudWidget;
+	
 };
