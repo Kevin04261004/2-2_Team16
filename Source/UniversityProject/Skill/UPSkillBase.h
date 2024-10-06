@@ -25,6 +25,10 @@ public:
 	// 외부에서(캐릭터에서) 스킬을 중지!
 	bool TryStopSkill();
 
+	// SkillData
+	FORCEINLINE UUPSkillData* GetSkillData() { return SkillData; }
+
+	bool CanUseSkill();
 protected:
 	// 게임 시작될 때 한번 호출이 됩니다.
 	virtual void BeginPlay() override;
@@ -59,10 +63,19 @@ protected:
 	// 기획자가 커스터마이징을 하지 않으면 아래 함수(<커스텀 함수명>_Implementation)가 호출이 되어요!!
 	virtual void CustomDeActivate_Implementation(AActor* TargetOrNull);
 
+	UFUNCTION(BlueprintType, BlueprintCallable, Category="Skill")
+	FORCEINLINE FVector GetOwnerLocation() const { return GetOwner()->GetActorLocation(); }
+/* Util */
+protected:
+	float GetSkillDuration() const;
+	
 /* Current Skill Data Section */
 protected:
 	float CurCoolTime;
 	bool bIsSkillActive;
 	FTimerHandle SkillDurationHandle;
 	FTimerDelegate DeActivateSkillTimerDelegate;
+
+private:
+	void SetOwnerMovementMode(EMovementMode mode);
 };

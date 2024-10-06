@@ -15,7 +15,7 @@ class UNIVERSITYPROJECT_API UUPAfterImageComponent : public UActorComponent
 public:	
 	UUPAfterImageComponent();
 
-	void Initialize(ACharacter& Character);
+	void Initialize();
 	void CreateAfterImage();
 protected:
 	TObjectPtr<ACharacter> OwningCharacter;

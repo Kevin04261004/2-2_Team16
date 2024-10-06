@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
+#include "Character/UPPlayerCharacter.h"
 #include "Components/ActorComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "UPCameraComponent.generated.h"
@@ -22,6 +23,8 @@ public:
 	void ShakeCamera(FHitResult& HitResult);
 
 	void ZoomCamera(float Value);
+
+	void LookCamera(FVector2D LookAxisVector);
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class USpringArmComponent> CameraBoom;
@@ -43,4 +46,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category="Camera")
 	float CurrentZoom;
+
+	TObjectPtr<AUPPlayerCharacter> OwningCharacter;
+	TObjectPtr<AUPPlayerController> PlayerController;
 };

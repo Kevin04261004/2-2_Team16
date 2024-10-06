@@ -42,6 +42,7 @@ AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) 
 	StatComponent = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
 
 	bIsDead = false;
+	CurAttackDamage = 0.0f;
 }
 
 void AUPCharacterBase::BeginPlay()
@@ -55,10 +56,12 @@ void AUPCharacterBase::BeginPlay()
 	// Set AnimInstance
 	GetMesh()->SetAnimInstanceClass(AnimInstanceClass);
 
+
 	// Set StatComponent Value
 	check(StatComponent != nullptr);
 	check(CharacterInitalizeStatData != nullptr);	
 	StatComponent->SetBaseStat(CharacterInitalizeStatData->Stat);
+	MovementComponent->Initialize();
 	MovementComponent->SetCharacterStat(StatComponent);
     MovementComponent->SetIsSprinting(false);
 	
@@ -119,7 +122,7 @@ void AUPCharacterBase::Attack(FHitResult& InHit)
 		return;
 	}
 	FDamageEvent DamageEvent;
-	Damageable->UPTakeDamage(StatComponent->GetTotalStat().AttackDamage, DamageEvent, GetController(), this);
+	Damageable->UPTakeDamage(CurAttackDamage, DamageEvent, GetController(), this);
 }
 
 void AUPCharacterBase::SetDead()

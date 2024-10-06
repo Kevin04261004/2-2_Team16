@@ -4,32 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
-#include "InputActionValue.h"
-#include "Components/UPCameraComponent.h"
+#include "Components/UPInputHandlerComponent.h"
 #include "Interface/UPAfterImageableInterface.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterGoForwardInterface.h"
 #include "Player/UPPlayerController.h"
-#include "Skill/UPSkillBase.h"
+#include "State/UPStateManager.h"
 #include "UPPlayerCharacter.generated.h"
 
 UENUM(BlueprintType)
-enum class ESkillType : uint8
+enum class EPlayerSkillType : uint8
 {
-	RapidAttack01 UMETA(DisplayName="약 공격 1타"),
-	RapidAttack02 UMETA(DisplayName="약 공격 2타"),
-	RapidAttack03 UMETA(DisplayName="약 공격 3타"),
-	RapidAttackFinal UMETA(DisplayName="약 공격 마무리"),
-	HeavyAttack01 UMETA(DisplayName="강 공격 1타"),
-	HeavyAttack02 UMETA(DisplayName="강 공격 2타"),
-	HeavyAttackFinal01 UMETA(DisplayName="강 공격 마무리"),
-	HeavyAttackFinal02 UMETA(DisplayName="강 공격 마무리"),
-	HeavyAttackFinal03 UMETA(DisplayName="강  공격 마무리"),
-	RapidTakeDownAttack UMETA(DisplayName="약 내려찍기"),
-	HeavyTakeDownAttack UMETA(DisplayName="강 내려찍기"),
-	RapidRunningAttack UMETA(DisplayName="달리기 약 공격"),
-	HeavyRunningAttack UMETA(DisplayName="달리기 강 공격"),
+	None UMETA(DisplayName = "Hidden"),
+	Attack01 UMETA(DisplayName="공격 1타"),
+	Attack02 UMETA(DisplayName="공격 2타"),
+	Attack03 UMETA(DisplayName="공격 3타"),
+	UpperCut UMETA(DisplayName="어퍼컷"),
+	TakeDown UMETA(DisplayName="내려 찍기"),
+	KnockOver UMETA(DisplayName="넘어뜨리기"),
+	Throw UMETA(DisplayName="투척"),
 };
+
+class UUPStateManager;
 
 /**
  * 
@@ -44,47 +40,30 @@ public:
 	virtual void PostInitializeComponents() override;
 
 protected:
+	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
 	virtual void SetDead() override;
-public:
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
 	TObjectPtr<AUPPlayerController> PlayerController;
 	
-// Input Section
+/* Input Section */
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputMappingContext> IMC_BackView;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> MoveAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> AttackAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> DashAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> JumpAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> LookAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> CameraZoomAction;
-	
-	void MoveInputAction(const FInputActionValue& Value);
-	void LookInputAction(const FInputActionValue& Value);
-	void AttackInputAction(const FInputActionValue& Value);
-	void DashInputAction(const FInputActionValue& Value);
-	void JumpInputAction(const FInputActionValue& Value);
-	void WalkInputAction(const FInputActionValue& Value);
-	void ZoomCameraInputAction(const FInputActionValue& Value);
-		
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = InputHandler, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UUPInputHandlerComponent> InputHandler;
+
+public:
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
 /* Camera Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<USpringArmComponent> CameraBoom;
+	TObjectPtr<class USpringArmComponent> CameraBoom;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UCameraComponent> FollowCamera;
+	TObjectPtr<class UCameraComponent> FollowCamera;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UUPCameraComponent> CameraComponent;
+	TObjectPtr<class UUPCameraComponent> CameraComponent;
+	
 /* dash Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
@@ -96,38 +75,31 @@ protected:
 	TObjectPtr<class UUPAfterImageComponent> AfterImageComponent;
 	
 	virtual void CreateAfterImage() override;
-/* ComboAttack Section */
+
+/* Check Hit Collision */
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true", Tooltip = "콤보 공격 컴포넌트"))
-	TObjectPtr<class UUPComboAttackComponent> ComboAttack;
-	
 	virtual void AttackHitCheck() override;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= Init, Meta = (AllowPrivateAccess = "true", Tooltip = "공격 시 얼마나 앞으로 이동하는가"))
-	float GoForwardDistance;
+
 /* Physics Section */
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= Init, Meta = (AllowPrivateAccess = "true", Tooltip = "공격 시 얼마나 앞으로 이동하는가"))
+	float GoForwardDistance;
+
 	virtual void GoForward() override;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UPhysicsControlComponent> PhysicsControlComponent;
+	
 /* AI Section */
 protected:
 	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSource;
 	void SetupStimuliSource();
 
-/* Auto Targeting */
+/* State Section */
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AutoTargeting, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UAutoTargetingComponent> AutoTargetingComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UUPStateManager> StateManager;
 
-/* Skill Section */
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	TMap<ESkillType, TSubclassOf<UUPSkillBase>> SkillMapInitializer;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	TMap<ESkillType, UUPSkillBase*> SkillMap;
-	void InitSkillMap();
-	void CreateDefaultObjectSkill();
+public:
+	FORCEINLINE UUPStateManager* GetStateManager() { return StateManager; }
 };

@@ -48,11 +48,11 @@ protected:
 public:
 	FORCEINLINE float GetCoolTime() const { return CoolTime; }
 	FORCEINLINE float GetStunStack() const { return StunStack; }
-	FORCEINLINE float GetAnimationSpeed() const { return AnimationSpeed; }
+	FORCEINLINE float GetAnimationSpeed(float BaseAttackSpeed) const { return AnimationSpeed * BaseAttackSpeed; }
 	FORCEINLINE UAnimMontage* GetSkillAnimation() const { return SkillAnimation.Get(); }
 	FORCEINLINE float GetSkillDamage(float BaseAttackDamage) const { return CustomDamageCalculation(BaseAttackDamage); }
-	FORCEINLINE float GetCoolDuration() const { return CoolTime + GetSkillDuration(); }
-	FORCEINLINE float GetSkillDuration() const { return SkillAnimation->GetPlayLength() * AnimationSpeed + SkillAdditionalTime; }
+	FORCEINLINE float GetCoolDuration(float BaseAttackSpeed) const { return CoolTime + GetSkillDuration(BaseAttackSpeed); }
+	FORCEINLINE float GetSkillDuration(float BaseAttackSpeed) const { return SkillAnimation->GetPlayLength() * (1.0f / GetAnimationSpeed(BaseAttackSpeed)) + SkillAdditionalTime; }
 	FORCEINLINE bool CanStopSkill() const { return bCanStopSkill; }
 	FORCEINLINE bool IsAutoTargetingSkill() const { return bIsAutoTargetingSkill; }
 };

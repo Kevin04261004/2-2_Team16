@@ -2,18 +2,12 @@
 
 #include "Character/UPPlayerCharacter.h"
 #include "EnhancedInputComponent.h"
-#include "EnhancedInputSubsystems.h"
-#include "InputMappingContext.h"
-#include "MovieSceneTracksComponentTypes.h"
 #include "Camera/CameraComponent.h"
-#include "Components/AutoTargetingComponent.h"
 #include "Components/PhysicsControlComponent.h"
-#include "Components/UPComboAttackComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "Components/UPAfterImageComponent.h"
-#include "Components/UPCharacterMovementComponent.h"
+#include "Components/UPCameraComponent.h"
 #include "Components/UPDashComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
@@ -37,49 +31,47 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	CameraComponent = CreateDefaultSubobject<UUPCameraComponent>(TEXT("CameraComponent"));
 	
 	// CDO
-	ComboAttack = CreateDefaultSubobject<UUPComboAttackComponent>(TEXT("Combo Attack"));
 	AfterImageComponent = CreateDefaultSubobject<UUPAfterImageComponent>(TEXT("AfterImage"));
 	PhysicsControlComponent = CreateDefaultSubobject<UPhysicsControlComponent>(TEXT("PhysicsControl"));
+	StateManager = CreateDefaultSubobject<UUPStateManager>(TEXT("StateManager"));
+	InputHandler = CreateDefaultSubobject<UUPInputHandlerComponent>(TEXT("InputHandler"));
 	DashComponent = CreateDefaultSubobject<UUPDashComponent>(TEXT("DashComponent"));
-	AutoTargetingComponent = CreateDefaultSubobject<UAutoTargetingComponent>(TEXT("AutoTargeting"));
-
-	// Skill
-	InitSkillMap();
+	
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	CameraComponent->Initialize(*CameraBoom, *FollowCamera);
-	AfterImageComponent->Initialize(*this);
+	AfterImageComponent->Initialize();
 	PhysicsControlComponent->Initialize();
 	DashComponent->Initialize(MovementComponent, this);
+	StateManager->Initialize(InputHandler);
+	
+	// Input Delegate
+	InputHandler->OnCameraZoomed.AddUObject(CameraComponent, &UUPCameraComponent::ZoomCamera);
+	InputHandler->OnCameraLookInputed.AddUObject(CameraComponent, &UUPCameraComponent::LookCamera);
 }
 
 void AUPPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	StateManager->InitializeStates(EPlayerStateType::Idle);
+	
 	PlayerController = Cast<AUPPlayerController>(GetController());
 	check(PlayerController != nullptr);
 	EnableInput(PlayerController);
 
-	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-	{
-		Subsystem->ClearAllMappings();
-		Subsystem->AddMappingContext(IMC_BackView, 0);
-	}
+	InputHandler->SetMappingContext(PlayerController);
+	
 	Weapon->OnWeaponHit.AddUObject(CameraComponent, &UUPCameraComponent::ShakeCamera);
+}
 
-	/* Actor Delegate */
-	AUPPlayerCharacterWeapon* PlayerWeapon = Cast<AUPPlayerCharacterWeapon>(Weapon);
-	if (PlayerWeapon)
-	{
-		ComboAttack->OnComboAttackFinish.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
-		ComboAttack->OnComboStepEnd.AddUObject(PlayerWeapon, &AUPPlayerCharacterWeapon::ComboStepEnd);
-	}
+void AUPPlayerCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
 
-	CreateDefaultObjectSkill();
+	StateManager->UpdateState();
 }
 
 void AUPPlayerCharacter::SetDead()
@@ -96,76 +88,10 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
-
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::MoveInputAction);
-	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::AttackInputAction);
-	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::DashInputAction);
-	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::JumpInputAction);
-	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::LookInputAction);
-	EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &AUPPlayerCharacter::ZoomCameraInputAction);
-}
-
-void AUPPlayerCharacter::MoveInputAction(const FInputActionValue& Value)
-{
-	FVector2D MovementVector = Value.Get<FVector2D>();
-	
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-	
-	AddMovementInput(ForwardDirection, MovementVector.X);
-	AddMovementInput(RightDirection, MovementVector.Y);
-}
-
-void AUPPlayerCharacter::LookInputAction(const FInputActionValue& Value)
-{
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
-	AddControllerYawInput(LookAxisVector.X);
-	AddControllerPitchInput(LookAxisVector.Y);
-}
-
-void AUPPlayerCharacter::AttackInputAction(const FInputActionValue& Value)
-{
-	// TODO: 스킬을 사용할 때 인자로 Target을 넘기기.
-	// 캐릭터가 오토 타겟팅을 한다.
-	AActor* Target = AutoTargetingComponent->FindDamageableTargetOrNull(GetActorLocation(), EAutoTargetingMode::ATM_Nearest);
-
-	if (Target != nullptr)
+	if (EnhancedInputComponent != nullptr)
 	{
-		FVector TargetLocation = Target->GetActorLocation();
-		AutoTargetingComponent->RotateToTarget(TargetLocation);
+		InputHandler->BindActions(EnhancedInputComponent);
 	}
-
-	// TODO: 아래 함수는 Test, 커맨드 시스템을 사용하여 받을 수 있게 만들어야함!!
-	UUPSkillBase** skill = SkillMap.Find(ESkillType::RapidAttack01);
-	(*skill)->TryActivateSkill(Target);
-	
-	// ComboAttack->ProcessComboCommand();
-}
-
-void AUPPlayerCharacter::DashInputAction(const FInputActionValue& Value)
-{
-	DashComponent->Dash();
-}
-
-void AUPPlayerCharacter::JumpInputAction(const FInputActionValue& Value)
-{
-	bool Jump = Value.Get<bool>();
-	GetCharacterMovement()->DoJump(Jump);
-}
-
-void AUPPlayerCharacter::WalkInputAction(const FInputActionValue& Value)
-{
-	MovementComponent->SetIsSprinting(false);
-}
-
-void AUPPlayerCharacter::ZoomCameraInputAction(const FInputActionValue& Value)
-{
-	float zoomAxis = Value.Get<float>();
-	CameraComponent->ZoomCamera(zoomAxis);
 }
 
 void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
@@ -204,44 +130,3 @@ void AUPPlayerCharacter::SetupStimuliSource()
 	}
 }
 
-void AUPPlayerCharacter::InitSkillMap()
-{
-	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESkillType"), true);
-	if (!EnumPtr)
-	{
-		return;
-	}
-	
-	for (int32 i = 0; i < EnumPtr->NumEnums() - 1; ++i)
-	{
-		if (!EnumPtr->HasMetaData(TEXT("Hidden"), i))
-		{
-			ESkillType EnumValue = static_cast<ESkillType>(EnumPtr->GetValueByIndex(i));
-			SkillMapInitializer.Add(EnumValue, nullptr);
-		}
-	}
-}
-
-void AUPPlayerCharacter::CreateDefaultObjectSkill()
-{
-	for (auto skillMapTuple : SkillMapInitializer)
-	{
-		if (skillMapTuple.Value == nullptr)
-		{
-			continue;
-		}
-		FString ComponentName = TEXT("SKill Component");
-
-		if (UUPSkillBase* NewSkillComponent = NewObject<UUPSkillBase>(this, skillMapTuple.Value, *ComponentName))
-		{
-			// 컴포넌트를 월드에 등록합니다.
-			NewSkillComponent->RegisterComponent();
-
-			// SkillMap에 새로 생성된 컴포넌트를 추가합니다.
-			ESkillType Type = skillMapTuple.Key;
-			SkillMap.Add(Type, NewSkillComponent);
-
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Skill Map Created"));
-		}
-	}
-}
