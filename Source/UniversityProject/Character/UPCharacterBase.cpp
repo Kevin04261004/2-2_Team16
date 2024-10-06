@@ -67,7 +67,7 @@ void AUPCharacterBase::BeginPlay()
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = GetInstigator();
 	check(WeaponClass != nullptr);
-	Weapon = GetWorld()->SpawnActor<AUPPlayerCharacterWeapon>(WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+	Weapon = GetWorld()->SpawnActor<AUPWeaponBase>(WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 	check(Weapon != nullptr);
 	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("hand_rSocket"));
 

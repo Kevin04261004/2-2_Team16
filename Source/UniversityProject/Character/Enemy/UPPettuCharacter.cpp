@@ -98,7 +98,7 @@ void AUPPettuCharacter::PatternMontageEnd(UAnimMontage* Montage, bool bInterrupt
 
 void AUPPettuCharacter::InitSkillMap()
 {
-	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ESkillType"), true);
+	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EPettuSkillType"), true);
 	if (!EnumPtr)
 	{
 		return;
@@ -116,15 +116,15 @@ void AUPPettuCharacter::InitSkillMap()
 
 void AUPPettuCharacter::CreateDefaultObjectSkill()
 {
+	
 	for (auto skillMapTuple : SkillMapInitializer)
 	{
 		if (skillMapTuple.Value == nullptr)
 		{
 			continue;
 		}
-		FString ComponentName = TEXT("SKill Component");
-
-		if (UUPSkillBase* NewSkillComponent = NewObject<UUPSkillBase>(this, skillMapTuple.Value, *ComponentName))
+		
+		if (UUPSkillBase* NewSkillComponent = NewObject<UUPSkillBase>(this, skillMapTuple.Value))
 		{
 			// 컴포넌트를 월드에 등록합니다.
 			NewSkillComponent->RegisterComponent();
@@ -146,6 +146,12 @@ void AUPPettuCharacter::AttackHitCheck()
 	{
 		PettuWeapon->CheckAttackRange();
 	}
+}
+
+void AUPPettuCharacter::SkillAttack(EPettuSkillType SkillType)
+{
+	UUPSkillBase** Skill = SkillMap.Find(SkillType);
+	(*Skill)->TryActivateSkill(nullptr);
 }
 
 void AUPPettuCharacter::StunEnd(UAnimMontage* Montage, bool bInterrupted)

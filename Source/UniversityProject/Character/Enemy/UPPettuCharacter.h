@@ -41,6 +41,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class AAIController> PettuAIController;
+
+	AAIController* GetPettuAIController() const { return PettuAIController; }
 	
 /* State Section */
 public:
@@ -102,5 +104,6 @@ protected:
 /* Attack Section */
 protected:
 	virtual void AttackHitCheck() override;
-	
+public:
+	virtual void SkillAttack(EPettuSkillType SkillType);
 };
