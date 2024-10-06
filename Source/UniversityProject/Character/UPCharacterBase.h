@@ -16,7 +16,7 @@ class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDama
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MovementComponent, meta = (AllowPrivateAccess = "true"))
-	UUPCharacterMovementComponent* MovementComponent;
+	TObjectPtr<UUPCharacterMovementComponent> MovementComponent;
 	
 // Init Section
 public:

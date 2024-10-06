@@ -43,12 +43,23 @@ void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
 
 void UUPStateManager::UpdateState()
 {
-	StateMap[CurrentState]->UpdateState();
+	if (StateMap.Find(CurrentState) && StateMap[CurrentState] != nullptr)
+	{
+		IsValid(StateMap[CurrentState]);
+		StateMap[CurrentState]->UpdateState();
+	}
 }
 
 void UUPStateManager::ChangeState(EPlayerStateType NextState)
 {
-	StateMap[CurrentState]->ExitState();
+	if (!StateMap.Find(NextState))
+	{
+		return;
+	}
+	if (StateMap.Find(CurrentState) && StateMap[CurrentState] != nullptr)
+	{
+		StateMap[CurrentState]->ExitState();
+	}
 	CurrentState = NextState;
-	StateMap[CurrentState]->EnterState();
+	StateMap[CurrentState]->EnterState();	
 } // 좀 멋지네요 (by. 지나가는 똥)

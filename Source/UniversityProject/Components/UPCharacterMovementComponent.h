@@ -26,7 +26,9 @@ public:
 	void Move(FVector2D MovementVector);
 protected:
 	bool bIsSprinting;
-	UUPCharacterStatComponent* StatComponent;
+
+	UPROPERTY()
+	TObjectPtr<UUPCharacterStatComponent> StatComponent;
 	
 	FTimerHandle SpeedChangeTimerHandle;
 	float DesiredSpeed;

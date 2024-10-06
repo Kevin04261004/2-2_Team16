@@ -48,11 +48,16 @@ public:
 
 	FORCEINLINE EPlayerStateType GetCurrentState() const { return CurrentState; }
 protected:
+	UPROPERTY()
 	EPlayerStateType CurrentState;
+
+	UPROPERTY()
 	TMap<EPlayerStateType, class UUPPlayerBaseState*> StateMap;
 
 protected:
+	UPROPERTY()
 	TObjectPtr<class AUPPlayerCharacter> OwningCharacter;
+	UPROPERTY()
 	TObjectPtr<class UUPInputHandlerComponent> InputHandler;
 	
 protected:
