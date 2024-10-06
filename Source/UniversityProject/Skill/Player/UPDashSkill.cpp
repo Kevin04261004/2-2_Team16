@@ -62,9 +62,10 @@ void UUPDashSkill::Dash()
 	}
 	
 	FHitResult HitResult;
-
-	bool bHit = PlayerCharacter->TryCheckForwardCollision(DashDistance, HitResult);
-	
+	FVector ActorLocation;
+	bool bHit = PlayerCharacter->TryCheckForwardCollision(DashDistance, HitResult, ActorLocation);
+	HitResult.Location.Z = ActorLocation.Z;
+	HitResult.TraceEnd.Z = ActorLocation.Z;
 	if (bHit && FVector::Distance(GetOwner()->GetActorLocation(), HitResult.Location) < 150.0f)
     {
     	return;

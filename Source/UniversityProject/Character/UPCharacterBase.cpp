@@ -88,24 +88,40 @@ void AUPCharacterBase::PostInitializeComponents()
 	StatComponent->OnStatChanged.AddUObject(this, &AUPCharacterBase::ApplyStat);
 }
 
-bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit) // 캐릭터 앞에 콜라이더가 존재하는지 확인합니다. 존재하면 true를 리턴합니다.
+bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit, FVector& ActorLocation) // 캐릭터 앞에 콜라이더가 존재하는지 확인합니다. 존재하면 true를 리턴합니다.
 {
-	FVector Start = GetActorLocation();
-	FVector ForwardVector = GetActorForwardVector();
-	FVector End = (Start + (ForwardVector * InLineTraceDistance));
+	ActorLocation = GetActorLocation();
+	FVector ActorForwardVector = GetActorForwardVector();
+
+	float CapsuleHalfHeight = GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 	
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this);
 
-	bool bHit = GetWorld()->LineTraceSingleByChannel(
-		OutHit,
-		Start,
-		End,
-		ECC_Visibility,
-		CollisionParams
-	);
+	bool bHit = false;
 
-	return bHit;
+	for (int32 i = 0; i < 10; ++i)
+	{
+		float zPos = FMath::Lerp(ActorLocation.Z - CapsuleHalfHeight, ActorLocation.Z + CapsuleHalfHeight, (i / 10.f));
+		FVector StartPos = ActorLocation;
+		StartPos.Z = zPos;
+		FVector EndPos = (ActorLocation + (ActorForwardVector * InLineTraceDistance));
+		EndPos.Z = zPos;
+
+		bHit = GetWorld()->LineTraceSingleByChannel(
+			OutHit,
+			StartPos,
+			EndPos,
+			ECC_Visibility,
+			CollisionParams
+		);
+		if (bHit)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)

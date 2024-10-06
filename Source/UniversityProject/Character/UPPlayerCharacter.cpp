@@ -114,8 +114,8 @@ void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 {
 	IUPCharacterGoForwardInterface::GoForward();
 	FHitResult OutHit;
-	
-	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f, OutHit))
+	FVector ActorLocation;
+	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f, OutHit, ActorLocation))
 	{
 		PhysicsControlComponent->GoForward(GoForwardDistance);
 	}
