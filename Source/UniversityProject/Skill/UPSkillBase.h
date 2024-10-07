@@ -17,6 +17,7 @@ class UNIVERSITYPROJECT_API UUPSkillBase : public UActorComponent
 public:
 	UUPSkillBase();
 
+
 	virtual void Initialize(class UUPCharacterMovementComponent* InCharacterMovementComponent, class AUPPlayerCharacter* InPlayerCharacter);
 	float GetSkillAttackDamage();
 
@@ -33,7 +34,7 @@ public:
 protected:
 	// 게임 시작될 때 한번 호출이 됩니다.
 	virtual void BeginPlay() override;
-
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 protected:
 	class UUPCharacterMovementComponent* CharacterMovementComponent;
 	class AUPPlayerCharacter* PlayerCharacter;

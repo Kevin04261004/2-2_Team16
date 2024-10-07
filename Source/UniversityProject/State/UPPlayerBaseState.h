@@ -7,9 +7,10 @@
 #include "UPPlayerBaseState.generated.h"
 
 class AUPPlayerCharacter;
-
+// base -> concrete
+// base(interface, transition (조건)
 /**
- * 
+ * t
  */
 UCLASS(Abstract)
 class UNIVERSITYPROJECT_API UUPPlayerBaseState : public UObject

@@ -31,7 +31,7 @@ protected:
 
 // Utils...
 public:
-	bool TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit, FVector& ActorLocation);
+	bool TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit, FVector& OutActorLocation);
 
 	FORCEINLINE UUPCharacterStatComponent* GetStatComponent() const { return StatComponent.Get(); }
 // Weapon Section

@@ -46,10 +46,10 @@ public:
 	void UpdateState();
 	void ChangeState(EPlayerStateType NextState);
 
-	FORCEINLINE EPlayerStateType GetCurrentState() const { return CurrentState; }
+	FORCEINLINE EPlayerStateType GetCurrentState() const { return CurrentStateType; }
 protected:
 	UPROPERTY()
-	EPlayerStateType CurrentState;
+	EPlayerStateType CurrentStateType;
 
 	UPROPERTY()
 	TMap<EPlayerStateType, class UUPPlayerBaseState*> StateMap;

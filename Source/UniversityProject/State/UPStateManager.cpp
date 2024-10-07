@@ -37,16 +37,16 @@ void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
 	StateMap[EPlayerStateType::Sprint]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Jump]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Dash]->Initialize(OwningCharacter, InputHandler);
-	CurrentState = InitState;
-	StateMap[CurrentState]->EnterState();
+	CurrentStateType = InitState;
+	StateMap[CurrentStateType]->EnterState();
 }
 
 void UUPStateManager::UpdateState()
 {
-	if (StateMap.Find(CurrentState) && StateMap[CurrentState] != nullptr)
+	if (StateMap.Find(CurrentStateType) && StateMap[CurrentStateType] != nullptr)
 	{
-		IsValid(StateMap[CurrentState]);
-		StateMap[CurrentState]->UpdateState();
+		IsValid(StateMap[CurrentStateType]);
+		StateMap[CurrentStateType]->UpdateState();
 	}
 }
 
@@ -56,10 +56,10 @@ void UUPStateManager::ChangeState(EPlayerStateType NextState)
 	{
 		return;
 	}
-	if (StateMap.Find(CurrentState) && StateMap[CurrentState] != nullptr)
+	if (StateMap.Find(CurrentStateType) && StateMap[CurrentStateType] != nullptr)
 	{
-		StateMap[CurrentState]->ExitState();
+		StateMap[CurrentStateType]->ExitState();
 	}
-	CurrentState = NextState;
-	StateMap[CurrentState]->EnterState();	
+	CurrentStateType = NextState;
+	StateMap[CurrentStateType]->EnterState();	
 } // 좀 멋지네요 (by. 지나가는 똥)
