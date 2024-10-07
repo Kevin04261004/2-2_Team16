@@ -3,6 +3,7 @@
 
 #include "UPGameMode.h"
 
+#include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/UPPlayerController.h"
 
@@ -29,4 +30,16 @@ void AUPGameMode::OnPlayerDead()
 bool AUPGameMode::IsGameCleared()
 {
 	return bIsCleared;
+}
+
+void AUPGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (HudWidget)
+	{
+		UUserWidget* Hud = CreateWidget<UUserWidget>(GetWorld(), HudWidget);
+		check(Hud != nullptr);
+		Hud->AddToViewport();
+	}
 }

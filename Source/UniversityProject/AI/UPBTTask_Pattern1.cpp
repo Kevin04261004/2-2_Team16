@@ -16,16 +16,13 @@ EBTNodeResult::Type UUPBTTask_Pattern1::ExecuteTask(UBehaviorTreeComponent& Owne
 	CurrentOwnerComp = &OwnerComp;
 	auto* const PettuController = Cast<AUPPettuAIController>(OwnerComp.GetAIOwner());
 	auto* const Pettu = Cast<AUPPettuCharacter>(PettuController->GetPawn());
+	AnimInstance = Pettu->GetMesh()->GetAnimInstance();
 	if (Pettu)
 	{
-		AnimInstance = Pettu->GetMesh()->GetAnimInstance();
-		if (AnimInstance)
-		{
-			Pettu->PlayPatternMontage(PatternMontage);
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Pattern1"));
-			AnimInstance->OnMontageEnded.AddDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
-			return EBTNodeResult::InProgress;
-		}
+		Pettu->SkillAttack(SkillType);
+		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Pattern1"));
+		AnimInstance->OnMontageEnded.AddDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
+		return EBTNodeResult::InProgress;
 	}
 	return EBTNodeResult::Failed;
 }

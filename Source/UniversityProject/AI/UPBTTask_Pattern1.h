@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
+#include "Character/Enemy/UPPettuCharacter.h"
 #include "UPBTTask_Pattern1.generated.h"
 
 /**
@@ -16,9 +17,6 @@ class UNIVERSITYPROJECT_API UUPBTTask_Pattern1 : public UBTTaskNode
 public:
 	UUPBTTask_Pattern1(const FObjectInitializer& ObjectInitializer);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pattern")
-	TObjectPtr<UAnimMontage> PatternMontage;
-	
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	
@@ -29,5 +27,8 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UAnimInstance> AnimInstance;
+
+	UPROPERTY(EditAnywhere, Category = "Pattern")
+	EPettuSkillType SkillType;
 	
 };
