@@ -22,7 +22,10 @@ public:
 	void Initialize(class AUPWeaponBase* Weapon, float* CurAttackDamage);
 	void UseSkill(EPlayerSkillType InSkillType);
 	FORCEINLINE UUPSkillBase* GetSkill(EPlayerSkillType InSkillType) { return SkillMap[InSkillType]; }
-	FORCEINLINE bool CanUseSkill(EPlayerSkillType InSkillType) { return SkillMap[InSkillType]->CanUseSkill(); }
+	FORCEINLINE bool CanUseSkill(EPlayerSkillType InSkillType)
+	{
+		return SkillMap[InSkillType]->CanUseSkill();
+	}
 	void CreateDefaultObjectSkill();
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init)

@@ -23,8 +23,8 @@ enum class EPlayerStateType : uint8
 	BaseAttack02 UMETA(DisplayName = "기본 공격02"),
 	BaseAttack03 UMETA(DisplayName = "기본 공격03"),
 	UpperCut UMETA(DisplayName = "어퍼컷 (달리기 공격)"),
-	TakeDown UMETA(DisplayName = "넘어뜨리기 (상대가 기절상태일 때 공격)"),
-	KnockOver UMETA(DisplayName = "내려찍기 (공중에서 공격)"),
+	TakeDown UMETA(DisplayName = "내려찍기 (공중에서 공격)"),
+	KnockOver UMETA(DisplayName = "넘어뜨리기 (상대가 기절상태일 때 공격)"),
 	
 	/* Skill */
 	Dash UMETA(DisplayName = "대시"),

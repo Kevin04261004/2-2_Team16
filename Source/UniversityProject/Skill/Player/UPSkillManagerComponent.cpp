@@ -61,6 +61,7 @@ void UUPSkillManagerComponent::CreateDefaultObjectSkill()
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Skill Map Created"));
 		}
 	}
+	
 }
 
 void UUPSkillManagerComponent::UseSkill(EPlayerSkillType InSkillType)
