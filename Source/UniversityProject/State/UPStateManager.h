@@ -46,13 +46,18 @@ public:
 	void UpdateState();
 	void ChangeState(EPlayerStateType NextState);
 
-	FORCEINLINE EPlayerStateType GetCurrentState() const { return CurrentState; }
+	FORCEINLINE EPlayerStateType GetCurrentState() const { return CurrentStateType; }
 protected:
-	EPlayerStateType CurrentState;
+	UPROPERTY()
+	EPlayerStateType CurrentStateType;
+
+	UPROPERTY()
 	TMap<EPlayerStateType, class UUPPlayerBaseState*> StateMap;
 
 protected:
+	UPROPERTY()
 	TObjectPtr<class AUPPlayerCharacter> OwningCharacter;
+	UPROPERTY()
 	TObjectPtr<class UUPInputHandlerComponent> InputHandler;
 	
 protected:

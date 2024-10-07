@@ -50,7 +50,7 @@ void UUPInputHandlerComponent::BaseAttackInputAction(const FInputActionValue& Va
 
 void UUPInputHandlerComponent::DashInputAction(const FInputActionValue& Value)
 {
-	// DashComponent->Dash();
+	OnDashInputed.Broadcast();
 }
 
 void UUPInputHandlerComponent::JumpInputAction(const FInputActionValue& Value)
@@ -61,7 +61,6 @@ void UUPInputHandlerComponent::JumpInputAction(const FInputActionValue& Value)
 void UUPInputHandlerComponent::SprintInputAction(const FInputActionValue& Value)
 {
 	bIsSprint = Value.Get<bool>();
-	// MovementComponent->SetIsSprinting(Sprint);
 }
 
 void UUPInputHandlerComponent::ZoomCameraInputAction(const FInputActionValue& Value)

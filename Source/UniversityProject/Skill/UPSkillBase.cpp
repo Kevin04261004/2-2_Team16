@@ -2,14 +2,18 @@
 
 
 #include "Skill/UPSkillBase.h"
-
-#include "Animation/UPAnimInstance.h"
 #include "Character/UPCharacterBase.h"
 #include "Character/UPPlayerCharacter.h"
 
 UUPSkillBase::UUPSkillBase()
 {
-	
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
+void UUPSkillBase::Initialize(UUPCharacterMovementComponent* InCharacterMovementComponent, AUPPlayerCharacter* InPlayerCharacter)
+{
+	CharacterMovementComponent = InCharacterMovementComponent;
+	PlayerCharacter = InPlayerCharacter;
 }
 
 bool UUPSkillBase::CanUseSkill()
@@ -33,6 +37,20 @@ void UUPSkillBase::BeginPlay()
 	// 현재 쿨타임을 0으로 초기화.
 	CurCoolTime = 0.0f;
 	bIsSkillActive = false;
+}
+
+void UUPSkillBase::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if (CurCoolTime > 0.0f)
+	{
+		CurCoolTime -= DeltaTime;
+	}
+	else
+	{
+		SetComponentTickEnabled(false);
+	}
 }
 
 float UUPSkillBase::GetSkillAttackDamage()
@@ -136,7 +154,8 @@ void UUPSkillBase::CustomStop_Implementation()
 void UUPSkillBase::CustomDeActivate_Implementation(AActor* TargetOrNull)
 {
 	CurCoolTime = SkillData->GetCoolTime();
-
+	SetComponentTickEnabled(true);
+	
 	SetOwnerMovementMode(MOVE_Walking);
 	
 	bIsSkillActive = false;

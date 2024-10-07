@@ -1,17 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Components/UPDashComponent.h"
+#include "Skill/Player/UPDashSkill.h"
 
+#include "UPSkillManagerComponent.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Character/UPPlayerCharacter.h"
+#include "Components/UPCharacterMovementComponent.h"
 
-UUPDashComponent::UUPDashComponent()
+UUPDashSkill::UUPDashSkill()
 {
-	
 }
 
-void UUPDashComponent::BeginPlay()
+void UUPDashSkill::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -19,21 +20,46 @@ void UUPDashComponent::BeginPlay()
 	{
 		TimelineCallback.BindUFunction(this, FName("UpdateDash"));
 		DashTimeline.AddInterpFloat(DashCurve, TimelineCallback);
-
+	
 		TimelineFinishedCallback.BindUFunction(this, FName("FinishDash"));
 		DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
 	}
 }
 
-void UUPDashComponent::Initialize(UUPCharacterMovementComponent* InCharacterMovementComponent, AUPPlayerCharacter* InPlayerCharacter)
+void UUPDashSkill::CustomActivate_Implementation(AActor* TargetOrNull)
 {
-	CharacterMovementComponent = InCharacterMovementComponent;
-	PlayerCharacter = InPlayerCharacter;
+	Super::CustomActivate_Implementation(TargetOrNull);
+
+	Dash();
 }
 
-void UUPDashComponent::Dash()
+void UUPDashSkill::CustomStop_Implementation()
+{
+	Super::CustomStop_Implementation();
+}
+
+void UUPDashSkill::CustomDeActivate_Implementation(AActor* TargetOrNull)
+{
+	Super::CustomDeActivate_Implementation(TargetOrNull);
+
+	OnDashFinished.Broadcast();
+}
+
+void UUPDashSkill::Initialize(class UUPCharacterMovementComponent* InCharacterMovementComponent,
+	class AUPPlayerCharacter* InPlayerCharacter)
+{
+	Super::Initialize(InCharacterMovementComponent, InPlayerCharacter);
+	
+}
+
+void UUPDashSkill::Dash()
 {
 	FVector LastInputVector = CharacterMovementComponent->GetLastInputVector();
+	if (!LastInputVector.IsNearlyZero())
+	{
+		FRotator NewRotation = LastInputVector.Rotation();
+		GetOwner()->SetActorRotation(NewRotation);
+	}
 	
 	FHitResult HitResult;
 	FVector ActorLocation;
@@ -53,30 +79,31 @@ void UUPDashComponent::Dash()
 	DashStart(DashLocation, DashVelocity);
 }
 
-void UUPDashComponent::DashStart(FVector InDashEndLocation, FVector InDashVelocity)
+void UUPDashSkill::DashStart(FVector InDashEndLocation, FVector InDashVelocity)
 {
 	check(DashCurve != nullptr);
 
 	DashStartLocation = GetOwner()->GetActorLocation();
 	DashEndLocation = InDashEndLocation;
 	DashEndVelocity = InDashVelocity;
-
+	
+	DashTimeline.SetPlayRate(1.0f / SkillData->GetSkillDuration(1.0f));
 	DashTimeline.PlayFromStart();
 
 	if (!GetOwner()->GetWorldTimerManager().IsTimerActive(DashTimerHandle))
 	{
-		GetOwner()->GetWorldTimerManager().SetTimer(DashTimerHandle, this, &UUPDashComponent::UpdateDashTimeline, 0.01f, true);
+		GetOwner()->GetWorldTimerManager().SetTimer(DashTimerHandle, this, &UUPDashSkill::UpdateDashTimeline, 0.01f, true);
 	}
 }
 
-void UUPDashComponent::UpdateDash(float Value)
+void UUPDashSkill::UpdateDash(float Value)
 {
 	// 위치 보간
 	FVector NewLocation = FMath::Lerp(DashStartLocation, DashEndLocation, Value);
 	GetOwner()->SetActorLocation(NewLocation);
 }
 
-void UUPDashComponent::UpdateDashTimeline()
+void UUPDashSkill::UpdateDashTimeline()
 {
 	if (DashTimeline.IsPlaying())
 	{
@@ -94,13 +121,8 @@ void UUPDashComponent::UpdateDashTimeline()
 	}
 }
 
-void UUPDashComponent::FinishDash()
+void UUPDashSkill::FinishDash()
 {
 	GetOwner()->GetWorldTimerManager().ClearTimer(DashTimerHandle);
 	CharacterMovementComponent->Velocity = DashEndVelocity * 500.0f;
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, TEXT("Dash End"));
-	}
 }
