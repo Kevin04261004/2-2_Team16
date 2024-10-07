@@ -11,6 +11,7 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnCameraZoomed, float /* zoomValue */);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnCameraLookInputed, FVector2D /* LookAxisVector */);
 DECLARE_MULTICAST_DELEGATE(FOnJumpInputed);
 DECLARE_MULTICAST_DELEGATE(FOnDashInputed);
+DECLARE_MULTICAST_DELEGATE(FOnBaseAttackInputed);
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -63,6 +64,7 @@ public:
 	FOnCameraLookInputed OnCameraLookInputed;
 	FOnJumpInputed OnJumpInputed;
 	FOnDashInputed OnDashInputed;
+	FOnBaseAttackInputed OnBaseAttackInputed;
 	
 	FORCEINLINE FVector2D GetMovementVector() const { return MovementVector; }
 	FORCEINLINE bool IsMoving() const { return MovementVector != FVector2D::ZeroVector; }

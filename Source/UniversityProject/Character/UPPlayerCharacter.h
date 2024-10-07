@@ -16,14 +16,13 @@ UENUM(BlueprintType)
 enum class EPlayerSkillType : uint8
 {
 	None UMETA(DisplayName = "Hidden"),
-	Attack01 UMETA(DisplayName="공격 1타"),
-	Attack02 UMETA(DisplayName="공격 2타"),
-	Attack03 UMETA(DisplayName="공격 3타"),
+	BaseAttack01 UMETA(DisplayName="공격 1타"),
+	BaseAttack02 UMETA(DisplayName="공격 2타"),
+	BaseAttack03 UMETA(DisplayName="공격 3타"),
 	UpperCut UMETA(DisplayName="어퍼컷"),
 	TakeDown UMETA(DisplayName="내려 찍기"),
 	KnockOver UMETA(DisplayName="넘어뜨리기"),
 	Dash UMETA(DisplayName="대시"),
-	Throw UMETA(DisplayName="투척"),
 };
 
 class UUPStateManager;

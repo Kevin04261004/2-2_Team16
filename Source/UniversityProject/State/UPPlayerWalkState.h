@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interface/UPBaseAttackableStateInterface.h"
 #include "Interface/UPDashableStateInterface.h"
 #include "Interface/UPJumpableStateInterface.h"
 #include "State/UPPlayerBaseState.h"
@@ -12,7 +13,7 @@
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerWalkState : public UUPPlayerBaseState, public IUPJumpableStateInterface, public IUPDashableStateInterface
+class UNIVERSITYPROJECT_API UUPPlayerWalkState : public UUPPlayerBaseState, public IUPJumpableStateInterface, public IUPDashableStateInterface, public IUPBaseAttackableStateInterface
 {
 	GENERATED_BODY()
 	
@@ -29,4 +30,5 @@ public:
 protected:
 	virtual void TryJump() override;
 	virtual void TryDash() override;
+	virtual void TryBaseAttack() override;
 };

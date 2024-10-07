@@ -19,7 +19,9 @@ enum class EPlayerStateType : uint8
 	Land  UMETA(DisplayName = "착지"),
 
 	/* Attack */
-	Attack UMETA(DisplayName = "연속 공격"),
+	BaseAttack01 UMETA(DisplayName = "기본 공격01"),
+	BaseAttack02 UMETA(DisplayName = "기본 공격02"),
+	BaseAttack03 UMETA(DisplayName = "기본 공격03"),
 	UpperCut UMETA(DisplayName = "어퍼컷 (달리기 공격)"),
 	TakeDown UMETA(DisplayName = "넘어뜨리기 (상대가 기절상태일 때 공격)"),
 	KnockOver UMETA(DisplayName = "내려찍기 (공중에서 공격)"),
@@ -42,7 +44,8 @@ public:
 	
 	void Initialize(class UUPInputHandlerComponent* InInputHandler);
 	void InitializeStates(EPlayerStateType InitState);
-	
+	void InitializeStateMap();
+
 	void UpdateState();
 	void ChangeState(EPlayerStateType NextState);
 
@@ -61,5 +64,4 @@ protected:
 	TObjectPtr<class UUPInputHandlerComponent> InputHandler;
 	
 protected:
-	void InitializeStateMap();
 };

@@ -3,22 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Interface/UPBaseAttackableStateInterface.h"
 #include "Interface/UPDashableStateInterface.h"
-#include "Interface/UPJumpableStateInterface.h"
 #include "State/UPPlayerBaseState.h"
-#include "UPPlayerIdleState.generated.h"
+#include "UPPlayerBaseAttack01State.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerIdleState : public UUPPlayerBaseState, public IUPJumpableStateInterface, public IUPDashableStateInterface, public IUPBaseAttackableStateInterface
+class UNIVERSITYPROJECT_API UUPPlayerBaseAttack01State : public UUPPlayerBaseState, public IUPDashableStateInterface
 {
 	GENERATED_BODY()
-
+	
 public:
-	UUPPlayerIdleState();
+	UUPPlayerBaseAttack01State();
 
 	virtual void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler) override;
 
@@ -28,7 +26,7 @@ public:
 	virtual void UpdateState() override;
 
 protected:
-	virtual void TryJump() override;
 	virtual void TryDash() override;
-	virtual void TryBaseAttack() override;
+	void Attack01End();
+	FTimerHandle SkillEndTimerHandle;
 };

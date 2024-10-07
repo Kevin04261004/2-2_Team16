@@ -42,6 +42,7 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 void AUPPlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+	StateManager->InitializeStateMap();
 	CameraComponent->Initialize(*CameraBoom, *FollowCamera);
 	AfterImageComponent->Initialize();
 	PhysicsControlComponent->Initialize();
@@ -58,7 +59,7 @@ void AUPPlayerCharacter::BeginPlay()
 	SkillManager->Initialize(Weapon, &CurAttackDamage);
 	StateManager->InitializeStates(EPlayerStateType::Idle);
 	SkillManager->CreateDefaultObjectSkill();
-	
+
 	PlayerController = Cast<AUPPlayerController>(GetController());
 	check(PlayerController != nullptr);
 	EnableInput(PlayerController);
@@ -115,7 +116,9 @@ void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 	IUPCharacterGoForwardInterface::GoForward();
 	FHitResult OutHit;
 	FVector ActorLocation;
-	if (!TryCheckForwardCollision(GoForwardDistance / 2.5f, OutHit, ActorLocation))
+
+	// TODO: 무기 길이 구해서 300 말고 길이 넣기.
+	if (!TryCheckForwardCollision(200, OutHit, ActorLocation))
 	{
 		PhysicsControlComponent->GoForward(GoForwardDistance);
 	}
