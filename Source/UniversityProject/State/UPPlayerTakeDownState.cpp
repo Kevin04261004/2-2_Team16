@@ -15,7 +15,6 @@ void UUPPlayerTakeDownState::Initialize(AUPPlayerCharacter* InOwnerCharacter,
 	class UUPInputHandlerComponent* InInputHandler)
 {
 	Super::Initialize(InOwnerCharacter, InInputHandler);
-	OwnerCharacter->GetSkillManager()->UseSkill(EPlayerSkillType::BaseAttack01);
 }
 
 void UUPPlayerTakeDownState::EnterState()
@@ -24,12 +23,12 @@ void UUPPlayerTakeDownState::EnterState()
 	
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player TakeDown Enter");
 
-	UUPSkillBase* BaseAttack01 = OwnerCharacter->GetSkillManager()->GetSkill(EPlayerSkillType::TakeDown);
-	check(BaseAttack01 != nullptr);
+	UUPSkillBase* TakeDownAttack = OwnerCharacter->GetSkillManager()->GetSkill(EPlayerSkillType::TakeDown);
+	check(TakeDownAttack != nullptr);
 
 	OwnerCharacter->GetSkillManager()->UseSkill(EPlayerSkillType::TakeDown);
 	
-	float skillDuration = BaseAttack01->GetSkillData()->GetSkillDuration(OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed);
+	float skillDuration = TakeDownAttack->GetSkillData()->GetSkillDuration(OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed);
 
 	OwnerCharacter->GetWorld()->GetTimerManager().SetTimer(SkillEndTimerHandle, this, &UUPPlayerTakeDownState::TakeDownEnd, skillDuration, false);
 }

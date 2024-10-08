@@ -10,6 +10,7 @@
 #include "UPPlayerDashState.h"
 #include "UPPlayerJumpState.h"
 #include "UPPlayerTakeDownState.h"
+#include "UPPlayerUpperCutState.h"
 #include "Character/UPPlayerCharacter.h"
 
 UUPStateManager::UUPStateManager()
@@ -32,6 +33,7 @@ void UUPStateManager::InitializeStateMap()
 	StateMap.Add(EPlayerStateType::Dash, NewObject<UUPPlayerDashState>());
 	StateMap.Add(EPlayerStateType::BaseAttack01, NewObject<UUPPlayerBaseAttack01State>());
 	StateMap.Add(EPlayerStateType::TakeDown, NewObject<UUPPlayerTakeDownState>());
+	StateMap.Add(EPlayerStateType::UpperCut, NewObject<UUPPlayerUpperCutState>());
 }
 
 void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
@@ -43,6 +45,7 @@ void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
 	StateMap[EPlayerStateType::Dash]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::BaseAttack01]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::TakeDown]->Initialize(OwningCharacter, InputHandler);
+	StateMap[EPlayerStateType::UpperCut]->Initialize(OwningCharacter, InputHandler);
 	CurrentStateType = InitState;
 	StateMap[CurrentStateType]->EnterState();
 }
