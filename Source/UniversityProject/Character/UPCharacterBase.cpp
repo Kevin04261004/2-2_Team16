@@ -72,7 +72,7 @@ void AUPCharacterBase::BeginPlay()
 	check(WeaponClass != nullptr);
 	Weapon = GetWorld()->SpawnActor<AUPWeaponBase>(WeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 	check(Weapon != nullptr);
-	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("hand_rSocket"));
+	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("WeaponSocket"));
 
 	/* Actor Delegate */
 	Weapon->OnWeaponHit.AddUObject(this, &AUPCharacterBase::Attack);
