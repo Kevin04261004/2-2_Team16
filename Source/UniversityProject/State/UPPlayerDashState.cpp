@@ -15,19 +15,17 @@ void UUPPlayerDashState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class 
 	Super::Initialize(InOwnerCharacter, InInputHandler);
 }
 
+void UUPPlayerDashState::InitSkillData()
+{
+	Super::InitSkillData();
+
+	ThisSkillType = EPlayerSkillType::Dash;
+}
+
 void UUPPlayerDashState::EnterState()
 {
 	Super::EnterState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Dash Enter");
-	OwnerCharacter->GetSkillManager()->UseSkill(EPlayerSkillType::Dash);
-
-	UUPDashSkill* DashSkill = Cast<UUPDashSkill>(OwnerCharacter->GetSkillManager()->GetSkill(EPlayerSkillType::Dash));
-	check(DashSkill != nullptr);
-
-	if (!DashSkill->OnDashFinished.IsBoundToObject(this))
-	{
-		DashSkill->OnDashFinished.AddUObject(this, &UUPPlayerDashState::DashFinished);
-	}
 }
 
 void UUPPlayerDashState::ExitState()
@@ -46,8 +44,9 @@ void UUPPlayerDashState::UpdateState()
 
 }
 
-void UUPPlayerDashState::DashFinished()
+void UUPPlayerDashState::SkillFinished()
 {
+	Super::SkillFinished();
 	if (InputHandler->IsMoving())
 	{
 		ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
@@ -55,5 +54,5 @@ void UUPPlayerDashState::DashFinished()
 	else
 	{
 		ChangeState(EPlayerStateType::Idle);
-	}
+	}	
 }

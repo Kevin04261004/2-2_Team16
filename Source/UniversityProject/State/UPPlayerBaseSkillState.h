@@ -3,32 +3,32 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UPPlayerBaseSkillState.h"
-#include "Interface/UPDashableStateInterface.h"
 #include "State/UPPlayerBaseState.h"
-#include "UPPlayerTakeDownState.generated.h"
+#include "UPPlayerBaseSkillState.generated.h"
 
 /**
  * 
  */
-UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerTakeDownState : public UUPPlayerBaseSkillState, public IUPDashableStateInterface
+UCLASS(Abstract)
+class UNIVERSITYPROJECT_API UUPPlayerBaseSkillState : public UUPPlayerBaseState
 {
 	GENERATED_BODY()
-		
 public:
-	UUPPlayerTakeDownState();
+	UUPPlayerBaseSkillState();
 
 	virtual void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler) override;
 
 public:
-	virtual void InitSkillData() override;
+	virtual void InitSkillData();
 	virtual void EnterState() override;
 	virtual void ExitState() override;
 	virtual void UpdateState() override;
 
 protected:
-	virtual void TryDash() override;
-	virtual void SkillFinished() override;
+	EPlayerSkillType ThisSkillType;
+	
+	UFUNCTION()
+	virtual void SkillFinished();
+	
 	FTimerHandle SkillEndTimerHandle;
 };

@@ -18,31 +18,24 @@ void UUPPlayerUpperCutState::Initialize(AUPPlayerCharacter* InOwnerCharacter,
 	Super::Initialize(InOwnerCharacter, InInputHandler);
 }
 
+void UUPPlayerUpperCutState::InitSkillData()
+{
+	Super::InitSkillData();
+
+	ThisSkillType = EPlayerSkillType::UpperCut;
+}
+
 void UUPPlayerUpperCutState::EnterState()
 {
 	Super::EnterState();
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Upper Cut Enter");
-
-	UUPSkillBase* UpperCutAttack = OwnerCharacter->GetSkillManager()->GetSkill(EPlayerSkillType::UpperCut);
-	check(UpperCutAttack != nullptr);
-
-	OwnerCharacter->GetSkillManager()->UseSkill(EPlayerSkillType::UpperCut);
-	
-	float skillDuration = UpperCutAttack->GetSkillData()->GetSkillDuration(OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed);
-
-	OwnerCharacter->GetWorld()->GetTimerManager().SetTimer(SkillEndTimerHandle, this, &UUPPlayerUpperCutState::UpperAttackEnd, skillDuration, false);
 }
 
 void UUPPlayerUpperCutState::ExitState()
 {
 	Super::ExitState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Player UpperCut Exit");
-
-	if (SkillEndTimerHandle.IsValid())
-	{
-		OwnerCharacter->GetWorld()->GetTimerManager().ClearTimer(SkillEndTimerHandle);
-	}
 }
 
 void UUPPlayerUpperCutState::UpdateState()
@@ -50,8 +43,9 @@ void UUPPlayerUpperCutState::UpdateState()
 	Super::UpdateState();
 }
 
-void UUPPlayerUpperCutState::UpperAttackEnd()
+void UUPPlayerUpperCutState::SkillFinished()
 {
+	Super::SkillFinished();
 	if (InputHandler->IsMoving())
 	{
 		ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
