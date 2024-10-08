@@ -5,7 +5,7 @@
 
 #include "Skill/Player/UPSkillManagerComponent.h"
 
-UUPPlayerBaseAttack01State::UUPPlayerBaseAttack01State() : Super()
+UUPPlayerBaseAttack01State::UUPPlayerBaseAttack01State()
 {
 }
 
