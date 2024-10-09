@@ -29,6 +29,7 @@ void UUPPettuHudWidget::UpdateStat(const FUPCharacterStat& BaseStat, const FUPCh
 void UUPPettuHudWidget::UpdateHp(float NewCurrentHp)
 {
 	//Super::UpdateHp(NewCurrentHp);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("UUPPettuHudWidget::UpdateHp"));
 	CurrentHp = NewCurrentHp;
 	ensure(MaxHp > 0.0f);
 	if (HealthBar)
