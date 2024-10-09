@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameData/UPCharacterStat.h"
 #include "UI/UPUserWidget.h"
 #include "UPHudWidget.generated.h"
 
@@ -14,16 +15,23 @@ class UNIVERSITYPROJECT_API UUPHudWidget : public UUPUserWidget
 {
 	GENERATED_BODY()
 public:
+	UUPHudWidget(const FObjectInitializer& ObjectInitializer);
+	
 	UFUNCTION(BlueprintCallable, Category = "HUD")
-	void SetPlayerHealth(float CurrentHP, float MaxHP);
+	virtual void SetHealth(float CurrentHP, float MaxHP);
 
-	UFUNCTION(BlueprintCallable, Category = "HUD")
-	void SetPettuHealth(float CurrentHP, float MaxHP);
+	virtual void UpdateStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);
+	virtual void UpdateHp(float NewCurrentHp);
 
 protected:
+	virtual void NativeConstruct() override;
+	
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	TObjectPtr<class UProgressBar> PlayerHealthBar;
+	TObjectPtr<class UProgressBar> HealthBar;
 
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	TObjectPtr<class UProgressBar> PettuHealthBar;
+	UPROPERTY()
+	float CurrentHp;
+
+	UPROPERTY()
+	float MaxHp;
 };

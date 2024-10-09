@@ -8,6 +8,8 @@
 #include "Components/UPCharacterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Skill/UPSkillBase.h"
+#include "UI/UPHudWidget.h"
+#include "UI/UPPettuHudWidget.h"
 
 AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
@@ -41,6 +43,7 @@ void AUPPettuCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetBaseStat().WalkSpeed;
+	
 	CreateDefaultObjectSkill();
 }
 
@@ -152,6 +155,19 @@ void AUPPettuCharacter::SkillAttack(EPettuSkillType SkillType)
 {
 	UUPSkillBase** Skill = SkillMap.Find(SkillType);
 	(*Skill)->TryActivateSkill(nullptr);
+	CurAttackDamage = (*Skill)->GetSkillAttackDamage();
+}
+
+void AUPPettuCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
+{
+	if (InHUDWidget)
+	{
+		InHUDWidget->UpdateStat(StatComponent->GetBaseStat(), StatComponent->GetModifierStat());
+		InHUDWidget->UpdateHp(StatComponent->GetCurrentHp());
+
+		StatComponent->OnStatChanged.AddUObject(InHUDWidget, &UUPHudWidget::UpdateStat);
+		StatComponent->OnHpChanged.AddUObject(InHUDWidget, &UUPHudWidget::UpdateHp);
+	}
 }
 
 void AUPPettuCharacter::StunEnd(UAnimMontage* Montage, bool bInterrupted)

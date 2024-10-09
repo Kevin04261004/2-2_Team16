@@ -1,37 +1,34 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/UPHudWidget.h"
+#include "UI/UPPettuHudWidget.h"
 #include "Components/ProgressBar.h"
 #include "Interface/UPCharacterHUDInterface.h"
 
 
-UUPHudWidget::UUPHudWidget(const FObjectInitializer& ObjectInitializer)
+void UUPPettuHudWidget::SetHealth(float CurrentHP, float MaxHP)
 {
-}
-
-void UUPHudWidget::SetHealth(float CurrentHP, float MaxHP)
-{
+	//Super::SetHealth(CurrentHP, MaxHP);
 	if (HealthBar)
 	{
 		HealthBar->SetPercent(CurrentHP / MaxHP);
 	}
 }
 
-void UUPHudWidget::UpdateStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat)
+void UUPPettuHudWidget::UpdateStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat)
 {
+	//Super::UpdateStat(BaseStat, ModifierStat);
 	MaxHp = (BaseStat + ModifierStat).MaxHp;
 	CurrentHp = (BaseStat + ModifierStat).MaxHp;
-	// 플레이어랑 보스 둘다 UpdateStat이 존재하면 둘다 호출되는데, 이게 보스인지 플레이어인지 구분할 수 있는 방법이 없다.
-	// HUDWidget을 보스랑 캐릭터 둘다 만들고 합쳐야될듯
 	if (HealthBar)
 	{
 		HealthBar->SetPercent(CurrentHp / MaxHp);
 	}
 }
 
-void UUPHudWidget::UpdateHp(float NewCurrentHp)
+void UUPPettuHudWidget::UpdateHp(float NewCurrentHp)
 {
+	//Super::UpdateHp(NewCurrentHp);
 	CurrentHp = NewCurrentHp;
 	ensure(MaxHp > 0.0f);
 	if (HealthBar)
@@ -40,14 +37,12 @@ void UUPHudWidget::UpdateHp(float NewCurrentHp)
 	}
 }
 
-void UUPHudWidget::NativeConstruct()
+void UUPPettuHudWidget::NativeConstruct()
 {
-	Super::NativeConstruct();
-
+	//Super::NativeConstruct();
 	IUPCharacterHUDInterface* HUDPawn = Cast<IUPCharacterHUDInterface>(GetOwningPlayerPawn());
 	if (HUDPawn)
 	{
 		HUDPawn->SetupHUDWidget(this);
 	}
 }
-
