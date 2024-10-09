@@ -24,6 +24,7 @@ void UUPPlayerIdleState::EnterState()
 {
 	Super::EnterState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Idle Enter");
+	OwnerCharacter->MovementComponent->SetCharacterCanMove(false);
 }
 
 void UUPPlayerIdleState::ExitState()

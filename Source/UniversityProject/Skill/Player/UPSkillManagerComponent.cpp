@@ -22,19 +22,16 @@ void UUPSkillManagerComponent::Initialize(AUPWeaponBase* Weapon, float* CurAttac
 
 void UUPSkillManagerComponent::InitSkillMap()
 {
-	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EPlayerSkillType"), true);
+	const UEnum* EnumPtr = StaticEnum<EPlayerSkillType>();
 	if (!EnumPtr)
 	{
 		return;
 	}
-	
-	for (int32 i = 0; i < EnumPtr->NumEnums() - 1; ++i)
+
+	for (int32 i = 0; i < EnumPtr->GetMaxEnumValue(); ++i)  // GetMaxEnumValue()를 사용
 	{
-		if (!EnumPtr->HasMetaData(TEXT("Hidden"), i))
-		{
-			EPlayerSkillType EnumValue = static_cast<EPlayerSkillType>(EnumPtr->GetValueByIndex(i));
-			SkillMapInitializer.Add(EnumValue, nullptr);
-		}
+		EPlayerSkillType EnumValue = static_cast<EPlayerSkillType>(EnumPtr->GetValueByIndex(i));  // GetValueByIndex() 사용
+		SkillMapInitializer.Add(EnumValue, nullptr);
 	}
 }
 

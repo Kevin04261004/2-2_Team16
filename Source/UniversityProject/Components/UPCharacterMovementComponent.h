@@ -22,6 +22,7 @@ public:
 	
 	FORCEINLINE bool GetIsSprinting() const { return bIsSprinting; }
 	void SetIsSprinting(bool isSprinting);
+	void SetCharacterCanMove(bool bCanMove);
 	void SetCharacterStat(UUPCharacterStatComponent* InStatComponent);
 	void Move(FVector2D MovementVector);
 protected:
