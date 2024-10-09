@@ -10,6 +10,7 @@
 UENUM(BlueprintType)
 enum class EPlayerStateType : uint8
 {
+	None UMETA(DisplayName = "Hidden"),
 	/* Movement */
 	Idle UMETA(DisplayName = "Idle"),
 	Walk UMETA(DisplayName = "걷기"),

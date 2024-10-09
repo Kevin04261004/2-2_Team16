@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UPPlayerBaseSkillState.h"
+#include "UPPlayerComboAttackState.h"
 #include "Interface/UPDashableStateInterface.h"
 #include "State/UPPlayerBaseState.h"
 #include "UPPlayerBaseAttack01State.generated.h"
@@ -12,7 +12,7 @@
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerBaseAttack01State : public UUPPlayerBaseSkillState, public IUPDashableStateInterface
+class UNIVERSITYPROJECT_API UUPPlayerBaseAttack01State : public UUPPlayerComboAttackState
 {
 	GENERATED_BODY()
 	
@@ -28,7 +28,5 @@ public:
 	virtual void UpdateState() override;
 
 protected:
-	virtual void TryDash() override;
 	virtual void SkillFinished() override;
-	FTimerHandle SkillEndTimerHandle;
 };

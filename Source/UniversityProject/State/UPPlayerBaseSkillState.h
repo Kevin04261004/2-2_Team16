@@ -26,9 +26,7 @@ public:
 
 protected:
 	EPlayerSkillType ThisSkillType;
-	
-	UFUNCTION()
 	virtual void SkillFinished();
-	
+	float SkillDuration;
 	FTimerHandle SkillEndTimerHandle;
 };

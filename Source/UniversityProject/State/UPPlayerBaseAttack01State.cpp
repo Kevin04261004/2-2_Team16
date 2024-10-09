@@ -19,6 +19,7 @@ void UUPPlayerBaseAttack01State::InitSkillData()
 	Super::InitSkillData();
 
 	ThisSkillType = EPlayerSkillType::BaseAttack01;
+	NextAttackStateType = EPlayerStateType::BaseAttack02;
 }
 
 void UUPPlayerBaseAttack01State::EnterState()
@@ -36,11 +37,6 @@ void UUPPlayerBaseAttack01State::ExitState()
 void UUPPlayerBaseAttack01State::UpdateState()
 {
 	Super::UpdateState();
-	
-}
-
-void UUPPlayerBaseAttack01State::TryDash()
-{
 	
 }
 

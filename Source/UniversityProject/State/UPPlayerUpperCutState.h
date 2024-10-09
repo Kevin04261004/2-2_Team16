@@ -28,5 +28,4 @@ public:
 
 protected:
 	virtual void SkillFinished() override;
-	FTimerHandle SkillEndTimerHandle;
 };

@@ -3,6 +3,8 @@
 #include "UPStateManager.h"
 
 #include "UPPlayerBaseAttack01State.h"
+#include "UPPlayerBaseAttack02State.h"
+#include "UPPlayerBaseAttack03State.h"
 #include "UPPlayerIdleState.h"
 #include "UPPlayerSprintState.h"
 #include "UPPlayerWalkState.h"
@@ -26,12 +28,15 @@ void UUPStateManager::Initialize(UUPInputHandlerComponent* InInputHandler)
 
 void UUPStateManager::InitializeStateMap()
 {
+	// TODO: 코드 최적화 엔진에서 추가 가능하게
 	StateMap.Add(EPlayerStateType::Idle, NewObject<UUPPlayerIdleState>());
 	StateMap.Add(EPlayerStateType::Walk, NewObject<UUPPlayerWalkState>());
 	StateMap.Add(EPlayerStateType::Sprint, NewObject<UUPPlayerSprintState>());
 	StateMap.Add(EPlayerStateType::Jump, NewObject<UUPPlayerJumpState>());
 	StateMap.Add(EPlayerStateType::Dash, NewObject<UUPPlayerDashState>());
 	StateMap.Add(EPlayerStateType::BaseAttack01, NewObject<UUPPlayerBaseAttack01State>());
+	StateMap.Add(EPlayerStateType::BaseAttack02, NewObject<UUPPlayerBaseAttack02State>());
+	StateMap.Add(EPlayerStateType::BaseAttack03, NewObject<UUPPlayerBaseAttack03State>());
 	StateMap.Add(EPlayerStateType::TakeDown, NewObject<UUPPlayerTakeDownState>());
 	StateMap.Add(EPlayerStateType::UpperCut, NewObject<UUPPlayerUpperCutState>());
 }
@@ -44,8 +49,11 @@ void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
 	StateMap[EPlayerStateType::Jump]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Dash]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::BaseAttack01]->Initialize(OwningCharacter, InputHandler);
+	StateMap[EPlayerStateType::BaseAttack02]->Initialize(OwningCharacter, InputHandler);
+	StateMap[EPlayerStateType::BaseAttack03]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::TakeDown]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::UpperCut]->Initialize(OwningCharacter, InputHandler);
+	
 	CurrentStateType = InitState;
 	StateMap[CurrentStateType]->EnterState();
 }

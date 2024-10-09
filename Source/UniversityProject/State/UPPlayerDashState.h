@@ -18,7 +18,7 @@ class UNIVERSITYPROJECT_API UUPPlayerDashState : public UUPPlayerBaseSkillState
 public:
 	UUPPlayerDashState();
 
-	void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler);
+	virtual void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler) override;
 
 public:
 	virtual void InitSkillData() override;
@@ -28,5 +28,4 @@ public:
 
 protected:
 	virtual void SkillFinished() override;
-	FTimerHandle SkillEndTimerHandle;
 };

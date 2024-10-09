@@ -29,9 +29,9 @@ void UUPPlayerBaseSkillState::EnterState()
 
 	OwnerCharacter->GetSkillManager()->UseSkill(ThisSkillType);
 	
-	float skillDuration = ThisSkill->GetSkillData()->GetSkillDuration(OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed);
+	SkillDuration = ThisSkill->GetSkillData()->GetSkillDuration(OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed);
 
-	OwnerCharacter->GetWorld()->GetTimerManager().SetTimer(SkillEndTimerHandle, this, &UUPPlayerBaseSkillState::SkillFinished, skillDuration, false);
+	OwnerCharacter->GetWorld()->GetTimerManager().SetTimer(SkillEndTimerHandle, this, &UUPPlayerBaseSkillState::SkillFinished, SkillDuration, false);
 }
 
 void UUPPlayerBaseSkillState::ExitState()
