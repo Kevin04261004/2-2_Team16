@@ -16,7 +16,7 @@ class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDama
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MovementComponent, meta = (AllowPrivateAccess = "true"))
-	UUPCharacterMovementComponent* MovementComponent;
+	TObjectPtr<UUPCharacterMovementComponent> MovementComponent;
 	
 // Init Section
 public:
@@ -31,7 +31,7 @@ protected:
 
 // Utils...
 public:
-	bool TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit);
+	bool TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit, FVector& OutActorLocation);
 
 	FORCEINLINE UUPCharacterStatComponent* GetStatComponent() const { return StatComponent.Get(); }
 // Weapon Section

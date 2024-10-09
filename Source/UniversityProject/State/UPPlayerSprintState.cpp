@@ -5,6 +5,7 @@
 
 #include "Character/UPPlayerCharacter.h"
 #include "Components/UPInputHandlerComponent.h"
+#include "Skill/Player/UPSkillManagerComponent.h"
 
 UUPPlayerSprintState::UUPPlayerSprintState()
 {
@@ -15,6 +16,8 @@ void UUPPlayerSprintState::Initialize(AUPPlayerCharacter* InOwnerCharacter, clas
 	Super::Initialize(InOwnerCharacter, InInputHandler);
 
 	InputHandler->OnJumpInputed.AddUObject(this, &UUPPlayerSprintState::TryJump);
+	InputHandler->OnDashInputed.AddUObject(this, &UUPPlayerSprintState::TryDash);
+	InputHandler->OnBaseAttackInputed.AddUObject(this, &UUPPlayerSprintState::TryBaseAttack);
 }
 
 void UUPPlayerSprintState::EnterState()
@@ -55,9 +58,27 @@ void UUPPlayerSprintState::UpdateState()
 
 void UUPPlayerSprintState::TryJump()
 {
-	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Sprint)
+	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Sprint || !OwnerCharacter->CanJump())
 	{
 		return;
 	}
 	ChangeState(EPlayerStateType::Jump);
+}
+
+void UUPPlayerSprintState::TryDash()
+{
+	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Sprint || !OwnerCharacter->GetSkillManager()->CanUseSkill(EPlayerSkillType::Dash))
+	{
+		return;
+	}
+	ChangeState(EPlayerStateType::Dash);
+}
+
+void UUPPlayerSprintState::TryBaseAttack()
+{
+	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Sprint || !OwnerCharacter->GetSkillManager()->CanUseSkill(EPlayerSkillType::UpperCut))
+	{
+		return;
+	}
+	ChangeState(EPlayerStateType::UpperCut);
 }

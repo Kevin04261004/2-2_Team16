@@ -18,7 +18,10 @@ void UPhysicsControlComponent::GoForward(float distance)
 {
 	// SimulatePhysics가 true이면, 캐릭터가 인풋으로 이동이 불가능함. 그래서, 0.2초정도 활성화 후 되돌리기.
 	CollisionComponent->SetSimulatePhysics(true);
-	CollisionComponent->AddImpulse(GetOwner()->GetActorForwardVector() * distance,"", true);
+	CollisionComponent->SetEnableGravity(false);
+	FVector impulseDirection = GetOwner()->GetActorForwardVector() * distance;
+	impulseDirection.Z = 0;
+	CollisionComponent->AddImpulse(impulseDirection * distance,"", true);
 	GetWorld()->GetTimerManager().SetTimer(PhysicsTimerHandle, this, &UPhysicsControlComponent::SetPhysicsFalse, 0.2f, false);
 }
 
@@ -27,5 +30,6 @@ void UPhysicsControlComponent::SetPhysicsFalse()
 	if (CollisionComponent != nullptr)
 	{
 		CollisionComponent->SetSimulatePhysics(false);
+		CollisionComponent->SetEnableGravity(true);
 	}
 }

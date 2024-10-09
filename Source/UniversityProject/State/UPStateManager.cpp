@@ -2,16 +2,20 @@
 
 #include "UPStateManager.h"
 
+#include "UPPlayerBaseAttack01State.h"
 #include "UPPlayerIdleState.h"
 #include "UPPlayerSprintState.h"
 #include "UPPlayerWalkState.h"
 #include "UPPlayerBaseState.h"
+#include "UPPlayerDashState.h"
 #include "UPPlayerJumpState.h"
+#include "UPPlayerTakeDownState.h"
+#include "UPPlayerUpperCutState.h"
 #include "Character/UPPlayerCharacter.h"
 
 UUPStateManager::UUPStateManager()
 {
-	InitializeStateMap();
+	// InitializeStateMap();
 }
 
 void UUPStateManager::Initialize(UUPInputHandlerComponent* InInputHandler)
@@ -26,6 +30,10 @@ void UUPStateManager::InitializeStateMap()
 	StateMap.Add(EPlayerStateType::Walk, NewObject<UUPPlayerWalkState>());
 	StateMap.Add(EPlayerStateType::Sprint, NewObject<UUPPlayerSprintState>());
 	StateMap.Add(EPlayerStateType::Jump, NewObject<UUPPlayerJumpState>());
+	StateMap.Add(EPlayerStateType::Dash, NewObject<UUPPlayerDashState>());
+	StateMap.Add(EPlayerStateType::BaseAttack01, NewObject<UUPPlayerBaseAttack01State>());
+	StateMap.Add(EPlayerStateType::TakeDown, NewObject<UUPPlayerTakeDownState>());
+	StateMap.Add(EPlayerStateType::UpperCut, NewObject<UUPPlayerUpperCutState>());
 }
 
 void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
@@ -34,19 +42,33 @@ void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
 	StateMap[EPlayerStateType::Walk]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Sprint]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Jump]->Initialize(OwningCharacter, InputHandler);
-
-	CurrentState = InitState;
-	StateMap[CurrentState]->EnterState();
+	StateMap[EPlayerStateType::Dash]->Initialize(OwningCharacter, InputHandler);
+	StateMap[EPlayerStateType::BaseAttack01]->Initialize(OwningCharacter, InputHandler);
+	StateMap[EPlayerStateType::TakeDown]->Initialize(OwningCharacter, InputHandler);
+	StateMap[EPlayerStateType::UpperCut]->Initialize(OwningCharacter, InputHandler);
+	CurrentStateType = InitState;
+	StateMap[CurrentStateType]->EnterState();
 }
 
 void UUPStateManager::UpdateState()
 {
-	StateMap[CurrentState]->UpdateState();
+	if (StateMap.Find(CurrentStateType) && StateMap[CurrentStateType] != nullptr)
+	{
+		IsValid(StateMap[CurrentStateType]);
+		StateMap[CurrentStateType]->UpdateState();
+	}
 }
 
 void UUPStateManager::ChangeState(EPlayerStateType NextState)
 {
-	StateMap[CurrentState]->ExitState();
-	CurrentState = NextState;
-	StateMap[CurrentState]->EnterState();
+	if (!StateMap.Find(NextState))
+	{
+		return;
+	}
+	if (StateMap.Find(CurrentStateType) && StateMap[CurrentStateType] != nullptr)
+	{
+		StateMap[CurrentStateType]->ExitState();
+	}
+	CurrentStateType = NextState;
+	StateMap[CurrentStateType]->EnterState();
 } // 좀 멋지네요 (by. 지나가는 똥)

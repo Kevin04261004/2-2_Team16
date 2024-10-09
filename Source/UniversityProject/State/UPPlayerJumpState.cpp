@@ -3,6 +3,8 @@
 
 #include "State/UPPlayerJumpState.h"
 
+#include "Skill/Player/UPSkillManagerComponent.h"
+
 UUPPlayerJumpState::UUPPlayerJumpState()
 {
 	
@@ -11,6 +13,8 @@ UUPPlayerJumpState::UUPPlayerJumpState()
 void UUPPlayerJumpState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)
 {
 	Super::Initialize(InOwnerCharacter, InInputHandler);
+
+	InputHandler->OnBaseAttackInputed.AddUObject(this, &UUPPlayerJumpState::TryBaseAttack);
 }
 
 void UUPPlayerJumpState::EnterState()
@@ -46,4 +50,13 @@ void UUPPlayerJumpState::UpdateState()
 	
 	/* Logic Update */
 	OwnerCharacter->MovementComponent->Move(InputHandler->GetMovementVector());
+}
+
+void UUPPlayerJumpState::TryBaseAttack()
+{
+	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Jump || !OwnerCharacter->GetSkillManager()->CanUseSkill(EPlayerSkillType::TakeDown))
+	{
+		return;
+	}
+	ChangeState(EPlayerStateType::TakeDown);
 }

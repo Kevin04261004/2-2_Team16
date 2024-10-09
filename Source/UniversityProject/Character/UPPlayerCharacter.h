@@ -16,13 +16,13 @@ UENUM(BlueprintType)
 enum class EPlayerSkillType : uint8
 {
 	None UMETA(DisplayName = "Hidden"),
-	Attack01 UMETA(DisplayName="공격 1타"),
-	Attack02 UMETA(DisplayName="공격 2타"),
-	Attack03 UMETA(DisplayName="공격 3타"),
+	BaseAttack01 UMETA(DisplayName="공격 1타"),
+	BaseAttack02 UMETA(DisplayName="공격 2타"),
+	BaseAttack03 UMETA(DisplayName="공격 3타"),
 	UpperCut UMETA(DisplayName="어퍼컷"),
 	TakeDown UMETA(DisplayName="내려 찍기"),
 	KnockOver UMETA(DisplayName="넘어뜨리기"),
-	Throw UMETA(DisplayName="투척"),
+	Dash UMETA(DisplayName="대시"),
 };
 
 class UUPStateManager;
@@ -64,11 +64,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UUPCameraComponent> CameraComponent;
 	
-/* dash Section */
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UUPDashComponent> DashComponent;
-	
 /* After Image */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=AfterImage, Meta = (AllowPrivateAccess = true))
@@ -98,8 +93,16 @@ protected:
 /* State Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UUPStateManager> StateManager;
+	TObjectPtr<class UUPStateManager> StateManager;
 
 public:
 	FORCEINLINE UUPStateManager* GetStateManager() { return StateManager; }
+
+/* Skill Section */
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Skill, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UUPSkillManagerComponent> SkillManager;
+
+public:
+	FORCEINLINE UUPSkillManagerComponent* GetSkillManager() { return SkillManager; }
 };
