@@ -92,4 +92,7 @@ protected:
 	void PlayStunAnimation();
 	UFUNCTION()
 	virtual void StunAnimEnd(UAnimMontage* Montage, bool bInterrupted);
+
+	// UI Section
+protected:
 };

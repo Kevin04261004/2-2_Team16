@@ -8,6 +8,7 @@
 #include "Interface/UPAfterImageableInterface.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterGoForwardInterface.h"
+#include "Interface/UPCharacterHUDInterface.h"
 #include "Player/UPPlayerController.h"
 #include "State/UPStateManager.h"
 #include "UPPlayerCharacter.generated.h"
@@ -31,7 +32,7 @@ class UUPStateManager;
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterGoForwardInterface, public IUPAfterImageableInterface
+class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterGoForwardInterface, public IUPAfterImageableInterface, public IUPCharacterHUDInterface
 {
 	GENERATED_BODY()
 
@@ -105,4 +106,8 @@ protected:
 
 public:
 	FORCEINLINE UUPSkillManagerComponent* GetSkillManager() { return SkillManager; }
+
+/* UI Section */
+protected:
+	virtual void SetupHUDWidget(UUPHudWidget* InHUDWidget) override;
 };

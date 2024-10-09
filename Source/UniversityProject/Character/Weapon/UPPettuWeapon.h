@@ -26,9 +26,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
 	float AttackRange = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
-	float AttackRadius = 100.0f;
+	float AttackRadius = 500.0f;
 	
 protected:
+	UFUNCTION()
 	void CheckCollision();
 	virtual void AttackSuccess(FHitResult& result, class IUPDamageableInterface* Damageable) override;
 };

@@ -14,6 +14,7 @@
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
+#include "UI/UPHudWidget.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -131,6 +132,18 @@ void AUPPlayerCharacter::SetupStimuliSource()
 	{
 		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
 		StimuliSource->RegisterWithPerceptionSystem();
+	}
+}
+
+void AUPPlayerCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
+{
+	if (InHUDWidget)
+	{
+		InHUDWidget->UpdateStat(StatComponent->GetBaseStat(), StatComponent->GetModifierStat());
+		InHUDWidget->UpdateHp(StatComponent->GetCurrentHp());
+
+		StatComponent->OnStatChanged.AddUObject(InHUDWidget, &UUPHudWidget::UpdateStat);
+		StatComponent->OnHpChanged.AddUObject(InHUDWidget, &UUPHudWidget::UpdateHp);
 	}
 }
 

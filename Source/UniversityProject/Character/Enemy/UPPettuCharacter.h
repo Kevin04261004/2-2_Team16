@@ -8,6 +8,8 @@
 #include "Skill/UPSkillBase.h"
 #include "AI/UPPettuAIController.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
+#include "Interface/UPCharacterHUDInterface.h"
+#include "UI/UPPettuHudWidget.h"
 #include "UPPettuCharacter.generated.h"
 
 UENUM(BlueprintType)
@@ -106,4 +108,8 @@ protected:
 	virtual void AttackHitCheck() override;
 public:
 	virtual void SkillAttack(EPettuSkillType SkillType);
+
+	/* UI Section */
+protected:
+	void SetupHUDWidget(UUPHudWidget* InHUDWidget);
 };
