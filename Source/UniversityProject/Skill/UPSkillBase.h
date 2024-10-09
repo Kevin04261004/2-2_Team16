@@ -82,6 +82,7 @@ protected:
 	FTimerHandle SkillDurationHandle;
 	FTimerDelegate DeActivateSkillTimerDelegate;
 
-private:
+protected:
+	UFUNCTION(BlueprintType, BlueprintCallable, Category="Skill")
 	void SetOwnerMovementMode(EMovementMode mode);
 };

@@ -17,6 +17,7 @@ void UUPPlayerIdleState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class 
 
 	InputHandler->OnJumpInputed.AddUObject(this, &UUPPlayerIdleState::TryJump);
 	InputHandler->OnDashInputed.AddUObject(this, &UUPPlayerIdleState::TryDash);
+	InputHandler->OnBaseAttackInputed.AddUObject(this, &UUPPlayerIdleState::TryBaseAttack);
 }
 
 void UUPPlayerIdleState::EnterState()
@@ -57,4 +58,13 @@ void UUPPlayerIdleState::TryDash()
 		return;
 	}
 	ChangeState(EPlayerStateType::Dash);
+}
+
+void UUPPlayerIdleState::TryBaseAttack()
+{
+	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Idle || !OwnerCharacter->GetSkillManager()->CanUseSkill(EPlayerSkillType::BaseAttack01))
+	{
+		return;
+	}
+	ChangeState(EPlayerStateType::BaseAttack01);
 }

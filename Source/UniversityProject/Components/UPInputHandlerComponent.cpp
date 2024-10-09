@@ -45,7 +45,7 @@ void UUPInputHandlerComponent::LookInputAction(const FInputActionValue& Value)
 
 void UUPInputHandlerComponent::BaseAttackInputAction(const FInputActionValue& Value)
 {
-	
+	OnBaseAttackInputed.Broadcast();
 }
 
 void UUPInputHandlerComponent::DashInputAction(const FInputActionValue& Value)

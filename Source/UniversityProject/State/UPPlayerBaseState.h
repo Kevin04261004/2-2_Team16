@@ -27,9 +27,9 @@ public:
 	virtual void UpdateState();
 
 protected:
-	AUPPlayerCharacter* OwnerCharacter;
-	UUPInputHandlerComponent* InputHandler;
+	TObjectPtr<AUPPlayerCharacter> OwnerCharacter;
+	TObjectPtr<UUPInputHandlerComponent> InputHandler;
 
 protected:
-	FORCEINLINE void ChangeState(EPlayerStateType NextState) { OwnerCharacter->GetStateManager()->ChangeState(NextState); }
+	FORCEINLINE void ChangeState(EPlayerStateType NextState) const { OwnerCharacter->GetStateManager()->ChangeState(NextState); }
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interface/UPBaseAttackableStateInterface.h"
 #include "State/UPPlayerBaseState.h"
 #include "UPPlayerJumpState.generated.h"
 
@@ -10,18 +11,20 @@
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerJumpState : public UUPPlayerBaseState
+class UNIVERSITYPROJECT_API UUPPlayerJumpState : public UUPPlayerBaseState, public IUPBaseAttackableStateInterface
 {
 	GENERATED_BODY()
 	
 public:
 	UUPPlayerJumpState();
 
-	void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler);
+	virtual void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler) override;
 
 public:
 	virtual void EnterState() override;
 	virtual void ExitState() override;
 	virtual void UpdateState() override;
 
+protected:
+	virtual void TryBaseAttack() override;
 };
