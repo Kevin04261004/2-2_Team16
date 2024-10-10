@@ -14,6 +14,7 @@ DECLARE_MULTICAST_DELEGATE(FOnStiffenDelegate);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHpChangeDelegate, float /* CurrentHp */);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStunStackChangeDelegate, float /* CurrentStunStack */);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnStatChangedDelegate, const FUPCharacterStat& /* BaseStat */, const FUPCharacterStat& /* ModifierStat */);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnPettuHpChangeDelegate, const FUPCharacterStat& /* BaseStat */, const FUPCharacterStat& /* ModifierStat */);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNIVERSITYPROJECT_API UUPCharacterStatComponent : public UActorComponent
@@ -32,6 +33,7 @@ protected:
 public:
 	FOnHpZeroDelegate OnHpZero;
 	FOnHpChangeDelegate OnHpChanged;
+	FOnPettuHpChangeDelegate OnPettuHpChanged;
 	FOnStatChangedDelegate OnStatChanged;
 	FOnStunStackZeroDelegate OnStunStackZero;
 	FOnStunStackChangeDelegate OnStunStackChanged;

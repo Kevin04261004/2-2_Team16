@@ -9,7 +9,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Skill/UPSkillBase.h"
 #include "UI/UPHudWidget.h"
-#include "UI/UPPettuHudWidget.h"
 
 AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
@@ -56,7 +55,7 @@ float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& Da
 void AUPPettuCharacter::SetDead()
 {
 	Super::SetDead();
-	Destroy();
+	//Destroy();
 }
 
 void AUPPettuCharacter::SetStun()
@@ -162,11 +161,8 @@ void AUPPettuCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
 {
 	if (InHUDWidget)
 	{
-		InHUDWidget->UpdateStat(StatComponent->GetBaseStat(), StatComponent->GetModifierStat());
-		InHUDWidget->UpdateHp(StatComponent->GetCurrentHp());
-
-		StatComponent->OnStatChanged.AddUObject(InHUDWidget, &UUPHudWidget::UpdateStat);
-		StatComponent->OnHpChanged.AddUObject(InHUDWidget, &UUPHudWidget::UpdateHp);
+		InHUDWidget->SetPettuCharacter(this);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("PettuHUDWidget"));
 	}
 }
 
