@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Character/UPPlayerCharacter.h"
+
+#include "EngineUtils.h"
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/PhysicsControlComponent.h"
@@ -139,11 +141,16 @@ void AUPPlayerCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
 {
 	if (InHUDWidget)
 	{
-		InHUDWidget->UpdateStat(StatComponent->GetBaseStat(), StatComponent->GetModifierStat());
-		InHUDWidget->UpdateHp(StatComponent->GetCurrentHp());
-
-		StatComponent->OnStatChanged.AddUObject(InHUDWidget, &UUPHudWidget::UpdateStat);
-		StatComponent->OnHpChanged.AddUObject(InHUDWidget, &UUPHudWidget::UpdateHp);
+		AUPPettuCharacter* Pettu = nullptr;
+		for (TActorIterator<AUPPettuCharacter> It(GetWorld()); It; ++It)
+		{
+			Pettu = *It;
+			if (Pettu)
+			{
+				InHUDWidget->SetPettuCharacter(Pettu);
+			}
+		}
+		InHUDWidget->SetPlayerCharacter(this);
 	}
 }
 

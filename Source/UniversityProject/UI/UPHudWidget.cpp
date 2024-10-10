@@ -2,42 +2,13 @@
 
 
 #include "UI/UPHudWidget.h"
+#include "Character/Enemy/UPPettuCharacter.h"
 #include "Components/ProgressBar.h"
 #include "Interface/UPCharacterHUDInterface.h"
 
 
 UUPHudWidget::UUPHudWidget(const FObjectInitializer& ObjectInitializer)
 {
-}
-
-void UUPHudWidget::SetHealth(float CurrentHP, float MaxHP)
-{
-	if (HealthBar)
-	{
-		HealthBar->SetPercent(CurrentHP / MaxHP);
-	}
-}
-
-void UUPHudWidget::UpdateStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat)
-{
-	MaxHp = (BaseStat + ModifierStat).MaxHp;
-	CurrentHp = (BaseStat + ModifierStat).MaxHp;
-	// 플레이어랑 보스 둘다 UpdateStat이 존재하면 둘다 호출되는데, 이게 보스인지 플레이어인지 구분할 수 있는 방법이 없다.
-	// HUDWidget을 보스랑 캐릭터 둘다 만들고 합쳐야될듯
-	if (HealthBar)
-	{
-		HealthBar->SetPercent(CurrentHp / MaxHp);
-	}
-}
-
-void UUPHudWidget::UpdateHp(float NewCurrentHp)
-{
-	CurrentHp = NewCurrentHp;
-	ensure(MaxHp > 0.0f);
-	if (HealthBar)
-	{
-		HealthBar->SetPercent(CurrentHp / MaxHp);
-	}
 }
 
 void UUPHudWidget::NativeConstruct()
@@ -47,7 +18,27 @@ void UUPHudWidget::NativeConstruct()
 	IUPCharacterHUDInterface* HUDPawn = Cast<IUPCharacterHUDInterface>(GetOwningPlayerPawn());
 	if (HUDPawn)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetOwningPlayerPawn()->GetName());
 		HUDPawn->SetupHUDWidget(this);
 	}
 }
+
+float UUPHudWidget::GetPlayerHpPercent_Implementation() const
+{
+	if (PlayerCharacter)
+		return PlayerCharacter->GetStatComponent()->GetCurrentHp() / PlayerCharacter->GetStatComponent()->GetBaseStat().MaxHp;
+	return 0.0f;
+}
+
+float UUPHudWidget::GetPettuHpPercent_Implementation() const
+{
+	if (PettuCharacter)
+	{
+		return PettuCharacter->GetStatComponent()->GetCurrentHp() / PettuCharacter->GetStatComponent()->GetBaseStat().MaxHp;
+	}
+	return 0.0f;
+}
+
+
+
 

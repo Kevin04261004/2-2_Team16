@@ -33,6 +33,8 @@ void AUPPettuWeapon::CheckCollision()
 	FVector EndLocation = StartLocation + GetOwner()->GetActorForwardVector() * AttackRange;
 	ETraceTypeQuery TraceChannel = UEngineTypes::ConvertToTraceType(CCHANEL_UPACTION);
 	FCollisionQueryParams CollisionParams = FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, GetOwner());
+
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("CheckCollision"));
 	
 	bool bHit = UKismetSystemLibrary::SphereTraceSingle(GetWorld(),
 		StartLocation,
