@@ -22,7 +22,6 @@ void UUPPlayerWalkState::EnterState()
 {
 	Super::EnterState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Walk Enter");
-
 	OwnerCharacter->MovementComponent->SetIsSprinting(false);
 }
 

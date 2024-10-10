@@ -41,7 +41,7 @@ protected:
 	UPROPERTY()
 	bool bIsAttackKeyDown = false;
 	UPROPERTY()
-	float OneFrameSec;
+	float OneFrameSec = 0.f;
 	UPROPERTY()
 	float CurrentTime;
 };
