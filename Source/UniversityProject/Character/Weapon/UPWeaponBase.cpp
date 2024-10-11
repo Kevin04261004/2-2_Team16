@@ -11,6 +11,11 @@ AUPWeaponBase::AUPWeaponBase()
 
 }
 
+void AUPWeaponBase::ClearAttackedActors()
+{
+	AttackedActors.Empty();
+}
+
 void AUPWeaponBase::Attack(FHitResult& result)
 {
 	if (AttackedActors.Contains(result.GetActor()))

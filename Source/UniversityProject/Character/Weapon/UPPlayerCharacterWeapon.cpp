@@ -26,9 +26,9 @@ void AUPPlayerCharacterWeapon::CheckAttackRange()
 	CheckCollisionSockets();
 }
 
-void AUPPlayerCharacterWeapon::ComboStepEnd()
+void AUPPlayerCharacterWeapon::ClearAttackedActors()
 {
-	AttackedActors.Empty();
+	Super::ClearAttackedActors();
 	for (int32 i = 0; i < CollisionSocketNameArray.Num(); i++)
 	{
 		check(WeaponMesh->DoesSocketExist(CollisionSocketNameArray[i]));
@@ -38,7 +38,6 @@ void AUPPlayerCharacterWeapon::ComboStepEnd()
 		SocketLocationArray[i] = FVector::ZeroVector;
 	}
 }
-
 void AUPPlayerCharacterWeapon::CheckCollisionSockets()
 {
     check(WeaponMesh != nullptr);

@@ -17,6 +17,8 @@ class UNIVERSITYPROJECT_API AUPWeaponBase : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AUPWeaponBase();
+	
+	virtual void ClearAttackedActors();
 
 	// delegate
 	FOnWeaponHit OnWeaponHit;

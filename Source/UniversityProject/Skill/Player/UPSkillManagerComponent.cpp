@@ -89,7 +89,7 @@ void UUPSkillManagerComponent::UseSkill(EPlayerSkillType InSkillType)
 	{
 		// TODO: 모듈화
 		AUPPlayerCharacterWeapon* playerWeapon = Cast<AUPPlayerCharacterWeapon>(PlayerWeapon);
-		playerWeapon->ComboStepEnd();
+		playerWeapon->ClearAttackedActors();
 		*AttackDamagePtr = skill->GetSkillData()->GetSkillDamage(OwningCharacter->GetStat()->GetTotalStat().AttackDamage);
 		skill->TryActivateSkill(Target);
 	}
