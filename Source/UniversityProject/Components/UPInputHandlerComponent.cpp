@@ -5,6 +5,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Manager/UPTimeManager.h"
 
 UUPInputHandlerComponent::UUPInputHandlerComponent()
 {
@@ -29,6 +30,9 @@ void UUPInputHandlerComponent::BindActions(UEnhancedInputComponent* EnhancedInpu
 	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::SprintInputAction);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::LookInputAction);
 	EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::ZoomCameraInputAction);
+	EnhancedInputComponent->BindAction(GlobalTimeUp, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::GlobalTimeUpInputAction);
+	EnhancedInputComponent->BindAction(GlobalTimeDown, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::GlobalTimeDownInputAction);
+	EnhancedInputComponent->BindAction(GlobalTimeReset, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::GlobalTimeResetInputAction);
 }
 
 
@@ -67,5 +71,35 @@ void UUPInputHandlerComponent::ZoomCameraInputAction(const FInputActionValue& Va
 {
 	float zoomAxis = Value.Get<float>();
 	OnCameraZoomed.Broadcast(zoomAxis);
+}
+
+void UUPInputHandlerComponent::GlobalTimeUpInputAction(const FInputActionValue& Value)
+{
+#if WITH_EDITOR || UE_BUILD_DEVELOPMENT
+	if (UUPTimeManager* TimeManager = GetWorld()->GetGameInstance()->GetSubsystem<UUPTimeManager>())
+	{
+		TimeManager->WorldTimeUp();
+	}
+#endif
+}
+
+void UUPInputHandlerComponent::GlobalTimeDownInputAction(const FInputActionValue& Value)
+{
+#if WITH_EDITOR || UE_BUILD_DEVELOPMENT
+	if (UUPTimeManager* TimeManager = GetWorld()->GetGameInstance()->GetSubsystem<UUPTimeManager>())
+	{
+		TimeManager->WorldTimeDown();
+	}
+#endif
+}
+
+void UUPInputHandlerComponent::GlobalTimeResetInputAction(const FInputActionValue& Value)
+{
+#if WITH_EDITOR || UE_BUILD_DEVELOPMENT
+	if (UUPTimeManager* TimeManager = GetWorld()->GetGameInstance()->GetSubsystem<UUPTimeManager>())
+	{
+		TimeManager->WorldTimeReset();
+	}
+#endif
 }
 

@@ -15,16 +15,18 @@ public:
 	// Sets default values for this actor's properties
 	AUPAfterImage();
 	void Init(USkeletalMeshComponent* Mesh);
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
 	class UPoseableMeshComponent* PoseableMesh;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Material, Meta = (AllowPrivateAccess = "true"))
-	UMaterialInstance* GhostMaterial;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Init, Meta=(AllowPrivateAccess=true))
+	TObjectPtr<UMaterialInstance> GhostMaterial;
 	UMaterialInstanceDynamic* Material;
 
 	bool IsSpawned = false;
 	float FadeCountDown;
-	float FadeOutTime = 0.2f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Init, Meta=(AllowPrivateAccess=true))
+	float FadeOutTime = 0.3f;
 };
