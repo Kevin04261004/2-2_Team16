@@ -15,9 +15,6 @@ class UNIVERSITYPROJECT_API AUPPlayerCharacterWeapon : public AUPWeaponBase
 public:
 	AUPPlayerCharacterWeapon();
 
-protected:
-	virtual void Tick(float DeltaSeconds) override;
-
 public:
 	// 애니메이션에서 매 프레임마다 호출하는 Notify함수
 	void CheckAttackRange();
@@ -42,9 +39,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Time")
 	float StopTimeVolume = 0.01f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Time")
-	float StopTimeDuration = 0.05f;
-	float RealTimeAtStart;
-	bool bIsTimeStopped;
-	
+	float StopTimeDuration = 0.1f;
+
+	FTimerHandle GlobalTimeTimerHandler;
 	void ResetTimeDilation();
 };

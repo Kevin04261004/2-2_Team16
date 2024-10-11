@@ -21,21 +21,6 @@ AUPPlayerCharacterWeapon::AUPPlayerCharacterWeapon()
 	BeforeSocketLocationArray.Init(FVector::ZeroVector, CollisionSocketNameArray.Num());
 }
 
-void AUPPlayerCharacterWeapon::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	if (bIsTimeStopped)
-	{
-		float CurrentRealTime = GetWorld()->GetRealTimeSeconds();
-		if (CurrentRealTime - RealTimeAtStart >= StopTimeDuration)
-		{
-			ResetTimeDilation();
-			bIsTimeStopped = false;
-		}
-	}
-}
-
 void AUPPlayerCharacterWeapon::CheckAttackRange()
 {
 	CheckCollisionSockets();
@@ -147,9 +132,9 @@ void AUPPlayerCharacterWeapon::AttackSuccess(FHitResult& result, IUPDamageableIn
 	/* Game Time Stop */
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), StopTimeVolume);
 
-	RealTimeAtStart = GetWorld()->GetRealTimeSeconds();
-	bIsTimeStopped = true;
-
+	float StopTime = StopTimeDuration * StopTimeVolume;
+	GetOwner()->GetWorldTimerManager().SetTimer(GlobalTimeTimerHandler, this, &AUPPlayerCharacterWeapon::ResetTimeDilation, StopTime,false);
+	
 	/* Volume */
 	UUPPostProcessManager* PostProcessManager = GetGameInstance()->GetSubsystem<UUPPostProcessManager>();
 	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::Blur, true, 0.1f);
