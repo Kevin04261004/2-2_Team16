@@ -21,8 +21,7 @@ protected:
 
 public:
 	void CheckAttackRange();
-	void AttackedActorsClear();
-
+	virtual void ClearAttackedActors() override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
 	float AttackRange = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
