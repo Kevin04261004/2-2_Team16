@@ -41,6 +41,7 @@ void UUPPlayerUpperCutState::ExitState()
 void UUPPlayerUpperCutState::UpdateState()
 {
 	Super::UpdateState();
+	
 }
 
 void UUPPlayerUpperCutState::SkillFinished()

@@ -23,7 +23,7 @@ class UNIVERSITYPROJECT_API UUPPostProcessManager : public UGameInstanceSubsyste
 	GENERATED_BODY()
 
 public:
-	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+	virtual auto Initialize(FSubsystemCollectionBase& Collection) -> void override;
 	
 	void TogglePostProcessMaterial(EPostProcessMaterialType MaterialType, bool bEnable = true, float activeTime = -1.f);
 private:
