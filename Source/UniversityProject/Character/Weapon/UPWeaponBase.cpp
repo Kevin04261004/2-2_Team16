@@ -33,14 +33,14 @@ void AUPWeaponBase::Attack(FHitResult& result)
 void AUPWeaponBase::AttackSuccess(FHitResult& result, IUPDamageableInterface* Damageable)
 {
 	/* Effect */
-	UParticleSystem* DamageParticle = BaseHitEffect;
+	UNiagaraSystem* DamageParticle = BaseEffect;
 	if (Damageable->GetHitEffect() != nullptr)
 	{
 		DamageParticle = Damageable->GetHitEffect();
 	}
 	if (DamageParticle != nullptr)
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DamageParticle, result.ImpactPoint);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), DamageParticle, result.ImpactPoint, FRotator::ZeroRotator, FVector(1.f), true, true);
 	}
 	
 	/* Sound */
