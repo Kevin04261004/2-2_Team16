@@ -85,7 +85,8 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UPhysicsControlComponent> PhysicsControlComponent;
-	
+
+	virtual bool CanJumpInternal_Implementation() const override;
 /* AI Section */
 protected:
 	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSource;

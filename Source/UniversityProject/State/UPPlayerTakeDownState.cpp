@@ -50,7 +50,7 @@ void UUPPlayerTakeDownState::TryDash()
 void UUPPlayerTakeDownState::SkillFinished()
 {
 	Super::SkillFinished();
-	
+
 	if (InputHandler->IsMoving())
 	{
 		ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
