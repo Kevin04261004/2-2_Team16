@@ -9,7 +9,6 @@
 #include "AI/UPPettuAIController.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
-#include "UI/UPPettuHudWidget.h"
 #include "UPPettuCharacter.generated.h"
 
 UENUM(BlueprintType)
@@ -21,7 +20,7 @@ enum class EPettuSkillType : uint8
 };
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPCharacterBase, public IUPAnimationAttackCheckInterface
+class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPCharacterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterHUDInterface
 {
 	GENERATED_BODY()
 public:
@@ -111,5 +110,5 @@ public:
 
 	/* UI Section */
 protected:
-	void SetupHUDWidget(UUPHudWidget* InHUDWidget);
+	virtual void SetupHUDWidget(UUPHudWidget* InHUDWidget) override;
 };

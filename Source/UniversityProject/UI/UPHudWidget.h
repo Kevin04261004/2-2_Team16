@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Character/UPPlayerCharacter.h"
+#include "Character/Enemy/UPPettuCharacter.h"
 #include "GameData/UPCharacterStat.h"
 #include "UI/UPUserWidget.h"
 #include "UPHudWidget.generated.h"
@@ -16,22 +18,28 @@ class UNIVERSITYPROJECT_API UUPHudWidget : public UUPUserWidget
 	GENERATED_BODY()
 public:
 	UUPHudWidget(const FObjectInitializer& ObjectInitializer);
-	
-	UFUNCTION(BlueprintCallable, Category = "HUD")
-	virtual void SetHealth(float CurrentHP, float MaxHP);
 
-	virtual void UpdateStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);
-	virtual void UpdateHp(float NewCurrentHp);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "UI")
+	float GetPlayerHpPercent() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "UI")
+	float GetPettuHpPercent() const;
+
+	void SetPlayerCharacter(AUPPlayerCharacter* InPlayerCharacter) { PlayerCharacter = InPlayerCharacter; }
+	void SetPettuCharacter(AUPPettuCharacter* InPettuCharacter) { PettuCharacter = InPettuCharacter; }
 
 protected:
 	virtual void NativeConstruct() override;
 	
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	TObjectPtr<class UProgressBar> HealthBar;
+	float PlayerHP = 0.0f;
+	float PlayerMaxHP = 0.0f;
+
+	float PettuHP = 0.0f;
+	float PettuMaxHP = 0.0f;
 
 	UPROPERTY()
-	float CurrentHp;
+	TObjectPtr<AUPPlayerCharacter> PlayerCharacter;
 
 	UPROPERTY()
-	float MaxHp;
+	TObjectPtr<AUPPettuCharacter> PettuCharacter;
 };
