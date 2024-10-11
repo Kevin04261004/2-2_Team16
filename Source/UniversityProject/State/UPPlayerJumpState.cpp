@@ -13,8 +13,6 @@ UUPPlayerJumpState::UUPPlayerJumpState()
 void UUPPlayerJumpState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)
 {
 	Super::Initialize(InOwnerCharacter, InInputHandler);
-
-	InputHandler->OnBaseAttackInputed.AddUObject(this, &UUPPlayerJumpState::TryBaseAttack);
 }
 
 void UUPPlayerJumpState::EnterState()
@@ -38,13 +36,13 @@ void UUPPlayerJumpState::UpdateState()
 	/* if Check */
 	if (OwnerCharacter->CanJump())
 	{
-		if (InputHandler->IsMoving())
+		ChangeState(EPlayerStateType::Land);
+	}
+	else
+	{
+		if (OwnerCharacter->MovementComponent->Velocity.Z < 0)
 		{
-			ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
-		}
-		else
-		{
-			ChangeState(EPlayerStateType::Idle);
+			ChangeState(EPlayerStateType::InAir);
 		}
 	}
 	
@@ -52,11 +50,3 @@ void UUPPlayerJumpState::UpdateState()
 	OwnerCharacter->MovementComponent->Move(InputHandler->GetMovementVector());
 }
 
-void UUPPlayerJumpState::TryBaseAttack()
-{
-	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Jump || !OwnerCharacter->GetSkillManager()->CanUseSkill(EPlayerSkillType::TakeDown))
-	{
-		return;
-	}
-	ChangeState(EPlayerStateType::TakeDown);
-}
