@@ -24,6 +24,7 @@ public class UniversityProject : ModuleRules
 			"NavigationSystem",
 			"AIModule",
 			"GameplayTasks",
+			"Niagara",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

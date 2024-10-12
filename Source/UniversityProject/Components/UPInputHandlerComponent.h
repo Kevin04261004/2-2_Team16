@@ -46,6 +46,13 @@ protected:
 	TObjectPtr<class UInputAction> QSkillAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> CameraZoomAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> GlobalTimeUp;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> GlobalTimeDown;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> GlobalTimeReset;
 	
 	void MoveInputAction(const FInputActionValue& Value);
 	void LookInputAction(const FInputActionValue& Value);
@@ -54,7 +61,9 @@ protected:
 	void JumpInputAction(const FInputActionValue& Value);
 	void SprintInputAction(const FInputActionValue& Value);
 	void ZoomCameraInputAction(const FInputActionValue& Value);
-
+	void GlobalTimeUpInputAction(const FInputActionValue& Value);
+	void GlobalTimeDownInputAction(const FInputActionValue& Value);
+	void GlobalTimeResetInputAction(const FInputActionValue& Value);
 protected:
 	FVector2D MovementVector;
 	bool bIsSprint;

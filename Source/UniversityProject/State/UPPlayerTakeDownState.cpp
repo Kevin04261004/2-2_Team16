@@ -40,7 +40,7 @@ void UUPPlayerTakeDownState::ExitState()
 void UUPPlayerTakeDownState::UpdateState()
 {
 	Super::UpdateState();
-
+	
 }
 
 void UUPPlayerTakeDownState::TryDash()

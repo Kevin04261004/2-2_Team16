@@ -14,9 +14,11 @@
 UENUM(BlueprintType)
 enum class EPettuSkillType : uint8
 {
-	SmashAttack UMETA(DisplayName = "내려찍기"),
-	SmashAttack2 UMETA(DisplayName = "내려찍기2"),
-	SmashAttack3 UMETA(DisplayName = "내려찍기3"),
+	SmashAttack UMETA(DisplayName = "휘두르기1"),
+	SmashAttack2 UMETA(DisplayName = "휘두르기2"),
+	TakeTurnGroundAttack UMETA(DisplayName = "두 손 번갈아 내려찍기"),
+	JumpGroundAttack UMETA(DisplayName = "점프 내려찍기"),
+	TwoHandGroundAttack UMETA(DisplayName = "두 손 내려찍기"),
 };
 
 UCLASS()

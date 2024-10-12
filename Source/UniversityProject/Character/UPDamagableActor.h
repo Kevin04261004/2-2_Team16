@@ -29,10 +29,10 @@ protected:
 // Attack Hit Section
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Effect, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UParticleSystem> HitEffect;
+	TObjectPtr<UNiagaraSystem> HitEffect;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Effect, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USoundBase> HitSound;
-	FORCEINLINE virtual UParticleSystem* GetHitEffect() override { return HitEffect.Get(); }
+	FORCEINLINE virtual UNiagaraSystem* GetHitEffect() override { return HitEffect; }
 	FORCEINLINE virtual USoundBase* GetHitSound() override { return HitSound.Get(); }
 	
 // Stat Section

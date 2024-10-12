@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NiagaraFunctionLibrary.h"
 #include "UPWeaponBase.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnWeaponHit, FHitResult& /* Result */);
@@ -16,6 +17,8 @@ class UNIVERSITYPROJECT_API AUPWeaponBase : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AUPWeaponBase();
+	
+	virtual void ClearAttackedActors();
 
 	// delegate
 	FOnWeaponHit OnWeaponHit;
@@ -25,7 +28,7 @@ protected:
 
 	/* 상대방에 Effect가 없으면 실행되는 기본 이펙트 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Effects")
-	UParticleSystem* BaseHitEffect;
+	TObjectPtr<UNiagaraSystem> BaseEffect;
 
 	/* 상대방에 Effect가 없으면 실행되는 기본 이펙트 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sounds")
