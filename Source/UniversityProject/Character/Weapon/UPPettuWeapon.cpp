@@ -17,14 +17,14 @@ void AUPPettuWeapon::CheckAttackRange()
 	CheckCollision();
 }
 
-void AUPPettuWeapon::AttackedActorsClear()
+void AUPPettuWeapon::ClearAttackedActors()
 {
-	AttackedActors.Empty();
+	Super::ClearAttackedActors();
 }
 
 void AUPPettuWeapon::CheckCollision()
 {
-	AttackedActorsClear();
+	ClearAttackedActors();
 	FHitResult HitResult;
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
@@ -55,8 +55,6 @@ void AUPPettuWeapon::CheckCollision()
 		Attack(HitResult);
 		AUPPlayerCharacter* PlayerCharacter = Cast<AUPPlayerCharacter>(HitResult.GetActor());
 	}
-
-	//DrawDebugSphere(GetWorld(), StartLocation, AttackRadius, 10.0f, FColor::Red, false, 2.0f);
 }
 
 void AUPPettuWeapon::AttackSuccess(FHitResult& result, IUPDamageableInterface* Damageable)

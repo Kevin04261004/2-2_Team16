@@ -114,6 +114,11 @@ void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface
 	}
 }
 
+void AUPPlayerCharacter::ResetAttackedActorList()
+{
+	Weapon->ClearAttackedActors();
+}
+
 void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 {
 	IUPCharacterGoForwardInterface::GoForward();
