@@ -103,7 +103,12 @@ protected:
 
 public:
 	FORCEINLINE UUPStateManager* GetStateManager() { return StateManager; }
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo1;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo2;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo3;
 /* Skill Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Skill, Meta = (AllowPrivateAccess = true))
