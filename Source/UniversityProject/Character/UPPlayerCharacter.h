@@ -7,10 +7,8 @@
 #include "Components/UPInputHandlerComponent.h"
 #include "Interface/UPAfterImageableInterface.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
-#include "Interface/UPCharacterGoForwardInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
 #include "Interface/UPResetAttackedActorList.h"
-#include "Interface/UPTakeGoUpInterface.h"
 #include "Player/UPPlayerController.h"
 #include "State/UPStateManager.h"
 #include "UPPlayerCharacter.generated.h"
@@ -35,9 +33,8 @@ class UUPStateManager;
  */
 UCLASS()
 class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase,
-public IUPAnimationAttackCheckInterface, public IUPCharacterGoForwardInterface,
-public IUPAfterImageableInterface, public IUPCharacterHUDInterface, public IUPResetAttackedActorList,
-public IUPTakeGoUpInterface
+public IUPAnimationAttackCheckInterface, public IUPAfterImageableInterface,
+public IUPCharacterHUDInterface, public IUPResetAttackedActorList
 {
 	GENERATED_BODY()
 
@@ -86,10 +83,6 @@ protected:
 	
 /* Physics Section */
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= Init, Meta = (AllowPrivateAccess = "true", Tooltip = "공격 시 얼마나 앞으로 이동하는가"))
-	float GoForwardDistance;
-
-	virtual void GoForward() override;
 	virtual bool CanJumpInternal_Implementation() const override;
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = true))
@@ -114,10 +107,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo3;
 
-/* TakeDown Section */
-protected:
-	virtual void TryGoUp(float amount) override;
-	
 /* Skill Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Skill, Meta = (AllowPrivateAccess = true))

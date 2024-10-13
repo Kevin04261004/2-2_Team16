@@ -120,18 +120,6 @@ void AUPPlayerCharacter::ResetAttackedActorList()
 	Weapon->ClearAttackedActors();
 }
 
-void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
-{
-	IUPCharacterGoForwardInterface::GoForward();
-	FHitResult OutHit;
-	FVector ActorLocation;
-
-	// TODO: 무기 길이 구해서 길이 넣기.
-	if (!TryCheckForwardCollision(200, OutHit, ActorLocation))
-	{
-		PhysicsControlComponent->GoForward(GoForwardDistance);
-	}
-}
 
 bool AUPPlayerCharacter::CanJumpInternal_Implementation() const
 {
@@ -146,11 +134,6 @@ void AUPPlayerCharacter::SetupStimuliSource()
 		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
 		StimuliSource->RegisterWithPerceptionSystem();
 	}
-}
-
-void AUPPlayerCharacter::TryGoUp(float amount)
-{
-	PhysicsControlComponent->GoUp(amount);
 }
 
 void AUPPlayerCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
