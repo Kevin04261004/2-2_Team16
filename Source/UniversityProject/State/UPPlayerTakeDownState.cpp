@@ -3,6 +3,7 @@
 
 #include "State/UPPlayerTakeDownState.h"
 
+#include "Components/PhysicsControlComponent.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
 
 class UUPSkillBase;

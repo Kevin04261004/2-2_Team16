@@ -86,3 +86,8 @@ void UUPStateManager::ChangeState(EPlayerStateType NextState)
 	CurrentStateType = NextState;
 	StateMap[CurrentStateType]->EnterState();
 } // 좀 멋지네요 (by. 지나가는 똥)
+
+UUPPlayerBaseState* UUPStateManager::GetState(EPlayerStateType InState)
+{
+	return StateMap[InState];
+}

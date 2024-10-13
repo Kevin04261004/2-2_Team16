@@ -13,6 +13,7 @@ UCLASS(Abstract)
 class UNIVERSITYPROJECT_API UUPPlayerBaseSkillState : public UUPPlayerBaseState
 {
 	GENERATED_BODY()
+	
 public:
 	UUPPlayerBaseSkillState();
 

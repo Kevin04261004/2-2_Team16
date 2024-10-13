@@ -27,6 +27,7 @@ public:
 	virtual void ExitState() override;
 	virtual void UpdateState() override;
 
+	void GoUp();
 protected:
 	virtual void TryDash() override;
 	virtual void SkillFinished() override;

@@ -49,6 +49,7 @@ public:
 
 	void UpdateState();
 	void ChangeState(EPlayerStateType NextState);
+	class UUPPlayerBaseState* GetState(EPlayerStateType InState);
 
 	FORCEINLINE EPlayerStateType GetCurrentState() const { return CurrentStateType; }
 protected:

@@ -10,6 +10,7 @@
 #include "Interface/UPCharacterGoForwardInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
 #include "Interface/UPResetAttackedActorList.h"
+#include "Interface/UPTakeGoUpInterface.h"
 #include "Player/UPPlayerController.h"
 #include "State/UPStateManager.h"
 #include "UPPlayerCharacter.generated.h"
@@ -33,7 +34,10 @@ class UUPStateManager;
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterGoForwardInterface, public IUPAfterImageableInterface, public IUPCharacterHUDInterface, public IUPResetAttackedActorList
+class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase,
+public IUPAnimationAttackCheckInterface, public IUPCharacterGoForwardInterface,
+public IUPAfterImageableInterface, public IUPCharacterHUDInterface, public IUPResetAttackedActorList,
+public IUPTakeGoUpInterface
 {
 	GENERATED_BODY()
 
@@ -86,11 +90,11 @@ protected:
 	float GoForwardDistance;
 
 	virtual void GoForward() override;
-	
+	virtual bool CanJumpInternal_Implementation() const override;
+public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UPhysicsControlComponent> PhysicsControlComponent;
-
-	virtual bool CanJumpInternal_Implementation() const override;
+	
 /* AI Section */
 protected:
 	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSource;
@@ -109,6 +113,11 @@ public:
 	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo2;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo3;
+
+/* TakeDown Section */
+protected:
+	virtual void TryGoUp(float amount) override;
+	
 /* Skill Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Skill, Meta = (AllowPrivateAccess = true))

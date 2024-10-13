@@ -55,6 +55,7 @@ void UUPCharacterMovementComponent::Move(FVector2D MovementVector)
 	OwningCharacter->AddMovementInput(RightDirection, MovementVector.Y);
 }
 
+
 void UUPCharacterMovementComponent::UpdateSpeed()
 {
 	float CurrentSpeed = MaxWalkSpeed;

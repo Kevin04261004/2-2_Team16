@@ -16,6 +16,7 @@
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
+#include "State/UPPlayerTakeDownState.h"
 #include "UI/UPHudWidget.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
@@ -145,6 +146,11 @@ void AUPPlayerCharacter::SetupStimuliSource()
 		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
 		StimuliSource->RegisterWithPerceptionSystem();
 	}
+}
+
+void AUPPlayerCharacter::TryGoUp(float amount)
+{
+	PhysicsControlComponent->GoUp(amount);
 }
 
 void AUPPlayerCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
