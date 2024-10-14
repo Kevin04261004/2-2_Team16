@@ -32,7 +32,6 @@ void UUPPlayerSprintState::ExitState()
 {
 	Super::ExitState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Player Run Exit");
-	OwnerCharacter->MovementComponent->SetCharacterCanMove(false);
 }
 
 void UUPPlayerSprintState::UpdateState()

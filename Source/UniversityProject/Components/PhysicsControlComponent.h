@@ -17,6 +17,7 @@ public:
 
 	void Initialize();
 	void GoForward(float distance);
+	void GoUp(float amount);
 protected:
 	UPrimitiveComponent* CollisionComponent;
 	FTimerHandle PhysicsTimerHandle;
