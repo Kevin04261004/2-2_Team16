@@ -30,4 +30,7 @@ public:
 protected:
 	virtual void SkillFinished() override;
 	void PlayAttackToIdleMontage();
+	bool IsAnimationStoped() const;
+
+	bool bIsAlreadyStoped;
 };

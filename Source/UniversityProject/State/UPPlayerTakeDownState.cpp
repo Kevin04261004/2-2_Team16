@@ -2,6 +2,9 @@
 
 
 #include "State/UPPlayerTakeDownState.h"
+
+#include "Character/Weapon/UPPlayerCharacterWeapon.h"
+#include "Character/Weapon/UPWeaponBase.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
 
 class UUPSkillBase;
@@ -32,6 +35,7 @@ void UUPPlayerTakeDownState::EnterState()
 	{
 		OwnerCharacter->GetWorld()->GetTimerManager().ClearTimer(SkillEndTimerHandle);
 	}
+	bIsAlreadyStoped = false;
 }
 
 void UUPPlayerTakeDownState::ExitState()
@@ -46,23 +50,45 @@ void UUPPlayerTakeDownState::UpdateState()
 
 	UAnimInstance* AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
 	UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
-	if (CurrentMontage != nullptr)
+	if (CurrentMontage == nullptr)
 	{
-		if (CurrentMontage == OwnerCharacter->GetSkillManager()->GetSkill(ThisSkillType)->GetSkillData()->GetSkillAnimation() && !AnimInstance->Montage_GetIsStopped(CurrentMontage))
-		{
-			float CurrentPosition = AnimInstance->Montage_GetPosition(CurrentMontage);
-			float MontageLength = OwnerCharacter->GetSkillManager()->GetSkill(ThisSkillType)->GetSkillData()->GetSkillAnimation()->GetPlayLength();
+		return;
+	}
 
-			if (CurrentPosition >= MontageLength - 0.01f)
-			{
-				AnimInstance->Montage_Pause(CurrentMontage);
-			}
-		}
+	/* 공격 애니메이션 시작 */
+	if (CurrentMontage == OwnerCharacter->GetSkillManager()->GetSkill(ThisSkillType)->GetSkillData()->GetSkillAnimation() && !bIsAlreadyStoped)
+	{
+		float CurrentPosition = AnimInstance->Montage_GetPosition(CurrentMontage);
+		float MontageLength = OwnerCharacter->GetSkillManager()->GetSkill(ThisSkillType)->GetSkillData()->GetSkillAnimation()->GetPlayLength();
 
-		if (OwnerCharacter->CanJump())
+		if (CurrentPosition >= MontageLength - 0.01f)
 		{
-			PlayAttackToIdleMontage();
+			AnimInstance->Montage_SetPlayRate(CurrentMontage, 0.0f);
+			bIsAlreadyStoped = true;
 		}
+	}
+
+	/* 공격 애니메이션이 중지됨, 콜리전 체크 및 물리 필요. */
+	if (CurrentMontage == OwnerCharacter->GetSkillManager()->GetSkill(ThisSkillType)->GetSkillData()->GetSkillAnimation() && IsAnimationStoped())
+	{
+		OwnerCharacter->MovementComponent->Velocity = FVector(0, 0, -5000);
+		FHitResult HitResult;
+		AUPPlayerCharacterWeapon* playerWeapon = Cast<AUPPlayerCharacterWeapon>(OwnerCharacter->GetWeapon());
+
+		playerWeapon->CheckAttackRange();
+	}
+
+	/* 바닥에 닿음. 이제, ToIdle 실행. */
+	if (OwnerCharacter->CanJump() && IsAnimationStoped())
+	{
+		AnimInstance->Montage_Resume(CurrentMontage);
+		AnimInstance->Montage_SetPlayRate(CurrentMontage, 1.0f);
+		if (IsAnimationStoped())
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, "ERROR!!!!!!!!!!!!!");
+		}
+		PlayAttackToIdleMontage();
+		SkillFinished();
 	}
 }
 void UUPPlayerTakeDownState::SkillFinished()
@@ -92,8 +118,16 @@ void UUPPlayerTakeDownState::PlayAttackToIdleMontage()
 	if (OwnerCharacter->TakeDownToIdleMontage != nullptr && AnimInstance != nullptr)
 	{
 		AnimInstance->Montage_Play(OwnerCharacter->TakeDownToIdleMontage);
-		// float aniDuration = OwnerCharacter->TakeDownToIdleMontage->GetPlayLength() * OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed;
-		// FTimerHandle SkillEndTimerHandle2;
-		// OwnerCharacter->GetWorld()->GetTimerManager().SetTimer(SkillEndTimerHandle2, this, &UUPPlayerTakeDownState::SkillFinished, aniDuration, false);
+		float aniDuration = OwnerCharacter->TakeDownToIdleMontage->GetPlayLength() * OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed;
+		FTimerHandle SkillEndTimerHandle2;
+		OwnerCharacter->GetWorld()->GetTimerManager().SetTimer(SkillEndTimerHandle2, this, &UUPPlayerTakeDownState::SkillFinished, aniDuration, false);
 	}
 }
+
+bool UUPPlayerTakeDownState::IsAnimationStoped() const
+{
+	UAnimInstance* AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
+	UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
+	return (AnimInstance->Montage_GetPlayRate(CurrentMontage) == 0.0f);
+}
+
