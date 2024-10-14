@@ -21,6 +21,9 @@ public:
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float InTotalDuration) override;
 	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime) override;
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Lerp")
+	UCurveFloat* LerpCurve;
 private:
 	FVector StartLocation; // 캐릭터의 초기 위치
 	FVector TargetLocation;

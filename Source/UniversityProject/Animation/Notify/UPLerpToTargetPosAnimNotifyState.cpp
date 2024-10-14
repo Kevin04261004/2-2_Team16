@@ -29,6 +29,12 @@ void UUPLerpToTargetPosAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshC
 		float ElapsedTime = CurrentTime - StartTime; // Notify가 시작된 후 경과한 시간
 		float Progress = FMath::Clamp(ElapsedTime / TotalDuration, 0.f, 1.f); // 0에서 1까지의 진행 비율 계산
 
+		// 커브가 설정되어 있으면 커브의 값을 사용
+		if (LerpCurve)
+		{
+			Progress = LerpCurve->GetFloatValue(Progress);
+		}
+
 		// 진행 비율에 따라 캐릭터의 위치를 업데이트
 		FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, Progress);
 		Owner->SetActorLocation(NewLocation);
