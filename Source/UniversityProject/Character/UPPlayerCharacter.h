@@ -106,7 +106,8 @@ public:
 	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo2;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo3;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UAnimMontage> TakeDownToIdleMontage;
 /* Skill Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Skill, Meta = (AllowPrivateAccess = true))

@@ -12,7 +12,7 @@
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerTakeDownState : public UUPPlayerBaseSkillState, public IUPDashableStateInterface
+class UNIVERSITYPROJECT_API UUPPlayerTakeDownState : public UUPPlayerBaseSkillState
 {
 	GENERATED_BODY()
 		
@@ -27,8 +27,7 @@ public:
 	virtual void ExitState() override;
 	virtual void UpdateState() override;
 
-	void GoUp();
 protected:
-	virtual void TryDash() override;
 	virtual void SkillFinished() override;
+	void PlayAttackToIdleMontage();
 };

@@ -46,30 +46,6 @@ void UUPPlayerBaseSkillState::ExitState()
 void UUPPlayerBaseSkillState::UpdateState()
 {
 	Super::UpdateState();
-
-	UAnimInstance* AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
-	UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
-	if (CurrentMontage && AnimInstance->Montage_IsPlaying(CurrentMontage))
-	{
-		FName CurrentSection = AnimInstance->Montage_GetCurrentSection();
-
-		if (CurrentSection == FName("Default"))
-		{
-			;
-		}
-		else if (CurrentSection == FName("AttackReady"))
-		{
-			
-		}
-		else if (CurrentSection == FName("ToIdle"))
-		{
-			
-		}
-		else
-		{
-			
-		}
-	}
 }
 
 void UUPPlayerBaseSkillState::SkillFinished()
