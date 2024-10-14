@@ -2,8 +2,6 @@
 
 
 #include "State/UPPlayerDashState.h"
-
-#include "Skill/Player/UPDashSkill.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
 
 UUPPlayerDashState::UUPPlayerDashState()
@@ -56,7 +54,7 @@ void UUPPlayerDashState::SkillFinished()
 		else
 		{
 			ChangeState(EPlayerStateType::Idle);
-		}	
+		}
 	}
 	else
 	{
