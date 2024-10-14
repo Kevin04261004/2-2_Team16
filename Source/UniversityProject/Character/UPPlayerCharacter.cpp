@@ -114,17 +114,27 @@ void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface
 	}
 }
 
+void AUPPlayerCharacter::ResetAttackedActorList()
+{
+	Weapon->ClearAttackedActors();
+}
+
 void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
 {
 	IUPCharacterGoForwardInterface::GoForward();
 	FHitResult OutHit;
 	FVector ActorLocation;
 
-	// TODO: 무기 길이 구해서 300 말고 길이 넣기.
+	// TODO: 무기 길이 구해서 길이 넣기.
 	if (!TryCheckForwardCollision(200, OutHit, ActorLocation))
 	{
 		PhysicsControlComponent->GoForward(GoForwardDistance);
 	}
+}
+
+bool AUPPlayerCharacter::CanJumpInternal_Implementation() const
+{
+	return MovementComponent->IsMovingOnGround();
 }
 
 void AUPPlayerCharacter::SetupStimuliSource()

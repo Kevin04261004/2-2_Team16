@@ -40,6 +40,7 @@ void UUPPlayerTakeDownState::ExitState()
 void UUPPlayerTakeDownState::UpdateState()
 {
 	Super::UpdateState();
+	
 }
 
 void UUPPlayerTakeDownState::TryDash()
@@ -50,13 +51,20 @@ void UUPPlayerTakeDownState::TryDash()
 void UUPPlayerTakeDownState::SkillFinished()
 {
 	Super::SkillFinished();
-	
-	if (InputHandler->IsMoving())
+
+	if (OwnerCharacter->CanJump())
 	{
-		ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
+		if (InputHandler->IsMoving())
+		{
+			ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
+		}
+		else
+		{
+			ChangeState(EPlayerStateType::Idle);
+		}	
 	}
 	else
 	{
-		ChangeState(EPlayerStateType::Idle);
+		ChangeState(EPlayerStateType::InAir);
 	}
 }

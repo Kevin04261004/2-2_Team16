@@ -21,29 +21,14 @@ AUPPlayerCharacterWeapon::AUPPlayerCharacterWeapon()
 	BeforeSocketLocationArray.Init(FVector::ZeroVector, CollisionSocketNameArray.Num());
 }
 
-void AUPPlayerCharacterWeapon::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	if (bIsTimeStopped)
-	{
-		float CurrentRealTime = GetWorld()->GetRealTimeSeconds();
-		if (CurrentRealTime - RealTimeAtStart >= StopTimeDuration)
-		{
-			ResetTimeDilation();
-			bIsTimeStopped = false;
-		}
-	}
-}
-
 void AUPPlayerCharacterWeapon::CheckAttackRange()
 {
 	CheckCollisionSockets();
 }
 
-void AUPPlayerCharacterWeapon::ComboStepEnd()
+void AUPPlayerCharacterWeapon::ClearAttackedActors()
 {
-	AttackedActors.Empty();
+	Super::ClearAttackedActors();
 	for (int32 i = 0; i < CollisionSocketNameArray.Num(); i++)
 	{
 		check(WeaponMesh->DoesSocketExist(CollisionSocketNameArray[i]));
@@ -53,7 +38,6 @@ void AUPPlayerCharacterWeapon::ComboStepEnd()
 		SocketLocationArray[i] = FVector::ZeroVector;
 	}
 }
-
 void AUPPlayerCharacterWeapon::CheckCollisionSockets()
 {
     check(WeaponMesh != nullptr);
@@ -134,9 +118,9 @@ void AUPPlayerCharacterWeapon::CheckCollisionSockets()
         }
 
         // 디버그 라인 그리기
-        // DrawDebugLine(GetWorld(), InterpolatedPosition0, InterpolatedPosition1, FColor::Green, false, 0.3f, 0, 2.0f);
-    	// DrawDebugLine(GetWorld(), InterpolatedPosition1, InterpolatedPosition2, FColor::Green, false, 0.3f, 0, 2.0f);
-        // DrawDebugLine(GetWorld(), InterpolatedPosition2, InterpolatedPosition0, FColor::Green, false, 0.3f, 0, 2.0f);
+        DrawDebugLine(GetWorld(), InterpolatedPosition0, InterpolatedPosition1, FColor::Green, false, 0.3f, 0, 2.0f);
+        DrawDebugLine(GetWorld(), InterpolatedPosition1, InterpolatedPosition2, FColor::Green, false, 0.3f, 0, 2.0f);
+        DrawDebugLine(GetWorld(), InterpolatedPosition2, InterpolatedPosition0, FColor::Green, false, 0.3f, 0, 2.0f);
     }
 }
 
@@ -147,9 +131,9 @@ void AUPPlayerCharacterWeapon::AttackSuccess(FHitResult& result, IUPDamageableIn
 	/* Game Time Stop */
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), StopTimeVolume);
 
-	RealTimeAtStart = GetWorld()->GetRealTimeSeconds();
-	bIsTimeStopped = true;
-
+	float StopTime = StopTimeDuration * StopTimeVolume;
+	GetOwner()->GetWorldTimerManager().SetTimer(GlobalTimeTimerHandler, this, &AUPPlayerCharacterWeapon::ResetTimeDilation, StopTime,false);
+	
 	/* Volume */
 	UUPPostProcessManager* PostProcessManager = GetGameInstance()->GetSubsystem<UUPPostProcessManager>();
 	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::Blur, true, 0.1f);

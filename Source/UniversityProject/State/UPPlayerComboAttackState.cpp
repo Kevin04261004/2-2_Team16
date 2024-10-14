@@ -25,7 +25,7 @@ void UUPPlayerComboAttackState::InitSkillData()
 void UUPPlayerComboAttackState::EnterState()
 {
 	Super::EnterState();
-	float sec =  SkillDuration / DefaultFrameCount;
+	float sec =  SkillDuration / ComboInputableData->DefaultFrameCount;
 	OneFrameSec = sec;
 	bIsAttackKeyDown = false;
 	CurrentTime = 0.0f;
@@ -42,7 +42,7 @@ void UUPPlayerComboAttackState::UpdateState()
 	
 	CurrentTime += OwnerCharacter->GetWorld()->GetDeltaSeconds();
 
-	float AnimationStartTime = OneFrameSec * AnimationChangeStartFrameCount;
+	float AnimationStartTime = OneFrameSec * ComboInputableData->AnimationChangeStartFrameCount;
 	if (CurrentTime >= AnimationStartTime && bIsAttackKeyDown == true && NextAttackStateType != EPlayerStateType::None)
 	{
 		ChangeState(NextAttackStateType);
@@ -56,7 +56,7 @@ void UUPPlayerComboAttackState::SkillFinished()
 
 void UUPPlayerComboAttackState::TryBaseAttack()
 {
-	if (CurrentTime <= OneFrameSec * InputAllowFrameCount)
+	if (CurrentTime <= OneFrameSec * ComboInputableData->InputAllowFrameCount)
 	{
 		bIsAttackKeyDown = true;
 	}

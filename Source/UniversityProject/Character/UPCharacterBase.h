@@ -43,7 +43,7 @@ protected:
 // Attack Hit Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true", Tooltip = "피격시 생성되는 파티클"))
-	TObjectPtr<UParticleSystem> HitEffect;
+	TObjectPtr<UNiagaraSystem> HitEffect;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true", Tooltip = "피격시 생성되는 사운드"))
 	TObjectPtr<USoundBase> HitSound;
 
@@ -53,7 +53,7 @@ protected:
 	virtual void Attack(FHitResult& InHit);
 // Attack Hit Section
 public:
-	FORCEINLINE virtual UParticleSystem* GetHitEffect() override { return HitEffect.Get(); }
+	FORCEINLINE virtual UNiagaraSystem* GetHitEffect() override { return HitEffect.Get(); }
 	FORCEINLINE virtual USoundBase* GetHitSound() override { return HitSound.Get(); }
 // Dead Section
 protected:

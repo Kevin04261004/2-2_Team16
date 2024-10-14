@@ -32,7 +32,7 @@ void UUPPlayerSprintState::ExitState()
 {
 	Super::ExitState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Player Run Exit");
-
+	OwnerCharacter->MovementComponent->SetCharacterCanMove(false);
 }
 
 void UUPPlayerSprintState::UpdateState()
@@ -40,16 +40,23 @@ void UUPPlayerSprintState::UpdateState()
 	Super::UpdateState();
 
 	/* if Check */
-	if (InputHandler->IsMoving())
+	if (OwnerCharacter->CanJump())
 	{
-		if (!InputHandler->IsSprint())
+		if (InputHandler->IsMoving())
 		{
-			ChangeState(EPlayerStateType::Walk);
+			if (!InputHandler->IsSprint())
+			{
+				ChangeState(EPlayerStateType::Walk);
+			}
 		}
+		else
+		{
+			ChangeState(EPlayerStateType::Idle);
+		}	
 	}
 	else
 	{
-		ChangeState(EPlayerStateType::Idle);
+		ChangeState(EPlayerStateType::InAir);
 	}
 
 	/* Logic Update */

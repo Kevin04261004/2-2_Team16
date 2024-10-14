@@ -11,6 +11,7 @@ UUPPlayerBaseAttack03State::UUPPlayerBaseAttack03State()
 void UUPPlayerBaseAttack03State::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)
 {
 	Super::Initialize(InOwnerCharacter, InInputHandler);
+	ComboInputableData = OwnerCharacter->ComboInputableData_Combo3;
 }
 
 void UUPPlayerBaseAttack03State::InitSkillData()
@@ -40,12 +41,19 @@ void UUPPlayerBaseAttack03State::UpdateState()
 
 void UUPPlayerBaseAttack03State::SkillFinished()
 {
-	if (InputHandler->IsMoving())
+	if (OwnerCharacter->CanJump())
 	{
-		ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
+		if (InputHandler->IsMoving())
+		{
+			ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
+		}
+		else
+		{
+			ChangeState(EPlayerStateType::Idle);
+		}	
 	}
 	else
 	{
-		ChangeState(EPlayerStateType::Idle);
+		ChangeState(EPlayerStateType::InAir);
 	}
 }

@@ -32,6 +32,11 @@ void UUPCharacterMovementComponent::SetIsSprinting(bool isSprinting)
 	}
 }
 
+void UUPCharacterMovementComponent::SetCharacterCanMove(bool bCanMove)
+{
+	MaxWalkSpeed = bCanMove ? MaxWalkSpeed : 0;
+}
+
 void UUPCharacterMovementComponent::SetCharacterStat(UUPCharacterStatComponent* InStatComponent)
 {
 	this->StatComponent = InStatComponent;

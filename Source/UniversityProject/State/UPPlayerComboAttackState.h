@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameData/UPComboInputableData.h"
 #include "Interface/UPBaseAttackableStateInterface.h"
 #include "State/UPPlayerBaseSkillState.h"
 #include "UPPlayerComboAttackState.generated.h"
@@ -34,14 +35,12 @@ protected:
 /* Combo Check Section */
 protected:
 	// TODO: make this Values to DataAsset;
-	float DefaultFrameCount = 30.0f;
-	float InputAllowFrameCount = 18.0f;
-	float AnimationChangeStartFrameCount = 12.0f;
+	TObjectPtr<UUPComboInputableData> ComboInputableData;
 
 	UPROPERTY()
 	bool bIsAttackKeyDown = false;
 	UPROPERTY()
-	float OneFrameSec;
+	float OneFrameSec = 0.f;
 	UPROPERTY()
 	float CurrentTime;
 };

@@ -6,10 +6,19 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "Character/UPPlayerCharacter.h"
+#include "Components/SphereComponent.h"
 
 AUPPettuWeapon::AUPPettuWeapon()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollision"));
+	SphereCollision->InitSphereRadius(50.0f);
+	SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SphereCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
+	SphereCollision->SetCollisionResponseToChannel(CCHANEL_UPACTION, ECR_Overlap);
+	
+	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AUPPettuWeapon::OnWeaponOverlapBegin);
+	
+	RootComponent = SphereCollision;
 }
 
 void AUPPettuWeapon::CheckAttackRange()
@@ -17,14 +26,36 @@ void AUPPettuWeapon::CheckAttackRange()
 	CheckCollision();
 }
 
-void AUPPettuWeapon::AttackedActorsClear()
+void AUPPettuWeapon::CheckAttackSocket(FName SocketName, EPettuSkillType SkillType,  USkeletalMeshComponent* MeshComp)
 {
-	AttackedActors.Empty();
+	AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
+	SphereCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	SphereCollision->SetHiddenInGame(false);
+	switch (SkillType)
+	{
+	case EPettuSkillType::SmashAttack:
+		SphereCollision->SetSphereRadius(300.0f);
+		break;
+	case EPettuSkillType::SmashAttack2:
+		SphereCollision->SetSphereRadius(300.0f);
+		break;
+	}
+}
+
+void AUPPettuWeapon::SetCollision()
+{
+	SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SphereCollision->SetHiddenInGame(true);
+}
+
+void AUPPettuWeapon::ClearAttackedActors()
+{
+	Super::ClearAttackedActors();
 }
 
 void AUPPettuWeapon::CheckCollision()
 {
-	AttackedActorsClear();
+	ClearAttackedActors();
 	FHitResult HitResult;
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
@@ -53,10 +84,7 @@ void AUPPettuWeapon::CheckCollision()
 	if (bHit && HitResult.GetActor() && !AttackedActors.Contains(HitResult.GetActor()))
 	{
 		Attack(HitResult);
-		AUPPlayerCharacter* PlayerCharacter = Cast<AUPPlayerCharacter>(HitResult.GetActor());
 	}
-
-	//DrawDebugSphere(GetWorld(), StartLocation, AttackRadius, 10.0f, FColor::Red, false, 2.0f);
 }
 
 void AUPPettuWeapon::AttackSuccess(FHitResult& result, IUPDamageableInterface* Damageable)
@@ -64,4 +92,15 @@ void AUPPettuWeapon::AttackSuccess(FHitResult& result, IUPDamageableInterface* D
 	Super::AttackSuccess(result, Damageable);
 
 	// TODO: 공격 성공 시 추가로 처리할 내용을 작성
+}
+
+void AUPPettuWeapon::OnWeaponOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor && OtherActor != this && OtherActor != GetOwner())
+	{
+		GEngine->AddOnScreenDebugMessage( -1, 1.0f, FColor::Red, TEXT("OnWeaponOverlapBegin") );
+		FHitResult HitResult = SweepResult;
+		Attack(HitResult);
+	}
 }

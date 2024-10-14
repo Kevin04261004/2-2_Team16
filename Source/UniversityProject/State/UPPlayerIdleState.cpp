@@ -24,6 +24,7 @@ void UUPPlayerIdleState::EnterState()
 {
 	Super::EnterState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Idle Enter");
+	OwnerCharacter->MovementComponent->SetCharacterCanMove(false);
 }
 
 void UUPPlayerIdleState::ExitState()
@@ -36,9 +37,16 @@ void UUPPlayerIdleState::UpdateState()
 {
 	Super::UpdateState();
 
-	if (InputHandler->IsMoving())
+	if (OwnerCharacter->CanJump())
 	{
-		ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
+		if (InputHandler->IsMoving())
+		{
+			ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
+		}
+	}
+	else
+	{
+		ChangeState(EPlayerStateType::InAir);
 	}
 }
 

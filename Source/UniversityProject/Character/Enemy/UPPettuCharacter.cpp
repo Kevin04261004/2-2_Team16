@@ -100,19 +100,16 @@ void AUPPettuCharacter::PatternMontageEnd(UAnimMontage* Montage, bool bInterrupt
 
 void AUPPettuCharacter::InitSkillMap()
 {
-	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EPettuSkillType"), true);
+	const UEnum* EnumPtr = StaticEnum<EPettuSkillType>();
 	if (!EnumPtr)
 	{
 		return;
 	}
 	
-	for (int32 i = 0; i < EnumPtr->NumEnums() - 1; ++i)
+	for (int32 i = 0; i < EnumPtr->GetMaxEnumValue(); ++i)  // GetMaxEnumValue()를 사용
 	{
-		if (!EnumPtr->HasMetaData(TEXT("Hidden"), i))
-		{
-			EPettuSkillType EnumValue = static_cast<EPettuSkillType>(EnumPtr->GetValueByIndex(i));
-			SkillMapInitializer.Add(EnumValue, nullptr);
-		}
+		EPettuSkillType EnumValue = static_cast<EPettuSkillType>(EnumPtr->GetValueByIndex(i));  // GetValueByIndex() 사용
+		SkillMapInitializer.Add(EnumValue, nullptr);
 	}
 }
 
@@ -147,6 +144,20 @@ void AUPPettuCharacter::AttackHitCheck()
 	if (PettuWeapon)
 	{
 		PettuWeapon->CheckAttackRange();
+	}
+}
+
+void AUPPettuCharacter::AttackHitCheck(bool bIsAttached, FName SocketName, USkeletalMeshComponent* MeshComp)
+{
+	check(Weapon != nullptr);
+	AUPPettuWeapon* PettuWeapon = Cast<AUPPettuWeapon>(Weapon);
+	if (PettuWeapon && !bIsAttached)
+	{
+		PettuWeapon->CheckAttackRange();
+	}
+	else if (PettuWeapon && bIsAttached && SocketName != NAME_None)
+	{
+		PettuWeapon->CheckAttackSocket(SocketName, CurrentSkillType, MeshComp);
 	}
 }
 
