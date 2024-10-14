@@ -4,7 +4,9 @@
 #include "Components/AutoTargetingComponent.h"
 #include <limits>
 #include "Interface/UPDamageableInterface.h"
+#include "Physics/Collision.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values for this component's properties
 UAutoTargetingComponent::UAutoTargetingComponent()
@@ -20,7 +22,7 @@ AActor* UAutoTargetingComponent::FindDamageableTargetOrNull(const FVector& cente
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(TargetSearchRadius);
 	FCollisionQueryParams Parameters;
 	Parameters.AddIgnoredActor(GetOwner());
-
+	
 	DrawDebugSphere(GetWorld(), center, TargetSearchRadius, 12, FColor::Blue, false, 1.5f);
 	bool bHit = GetWorld()->SweepMultiByChannel(
 		HitResults,
@@ -32,6 +34,25 @@ AActor* UAutoTargetingComponent::FindDamageableTargetOrNull(const FVector& cente
 		Parameters
 	);
 
+	// TArray<AActor*> ActorsToIgnore;
+	// ActorsToIgnore.Add(GetOwner());
+	// ETraceTypeQuery TraceChannel = UEngineTypes::ConvertToTraceType(CCHANEL_UPACTION);
+	//
+	// bool bHit = UKismetSystemLibrary::SphereTraceMulti(
+	// 	GetWorld(),
+	// 	center,
+	// 	center,
+	// 	5000,
+	// 	TraceChannel,
+	// 	false,
+	// 	ActorsToIgnore,
+	// 	EDrawDebugTrace::None,
+	//   HitResults,
+	//   true,
+	//   FLinearColor::Red,
+	//   FLinearColor::Green,
+	//   1.0f);
+	
 	if (!bHit)
 	{
 		return nullptr;
