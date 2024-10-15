@@ -147,6 +147,20 @@ void AUPPettuCharacter::AttackHitCheck()
 	}
 }
 
+void AUPPettuCharacter::AttackHitCheck(bool bIsAttached, FName SocketName, USkeletalMeshComponent* MeshComp)
+{
+	check(Weapon != nullptr);
+	AUPPettuWeapon* PettuWeapon = Cast<AUPPettuWeapon>(Weapon);
+	if (PettuWeapon && !bIsAttached)
+	{
+		PettuWeapon->CheckAttackRange();
+	}
+	else if (PettuWeapon && bIsAttached && SocketName != NAME_None)
+	{
+		PettuWeapon->CheckAttackSocket(SocketName, CurrentSkillType, MeshComp);
+	}
+}
+
 void AUPPettuCharacter::SkillAttack(EPettuSkillType SkillType)
 {
 	UUPSkillBase** Skill = SkillMap.Find(SkillType);

@@ -40,6 +40,9 @@ protected:
 	TObjectPtr<UClass> WeaponClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ComboAttack, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터가 사용하는 무기"))
 	TObjectPtr<class AUPWeaponBase> Weapon;
+
+public:
+	FORCEINLINE AUPWeaponBase* GetWeapon() { return Weapon; }
 // Attack Hit Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true", Tooltip = "피격시 생성되는 파티클"))

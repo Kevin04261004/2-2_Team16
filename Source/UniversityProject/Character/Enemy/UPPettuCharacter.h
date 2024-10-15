@@ -104,9 +104,13 @@ protected:
 	TMap<EPettuSkillType, UUPSkillBase*> SkillMap;
 	void InitSkillMap();
 	void CreateDefaultObjectSkill();
+
+	UPROPERTY()
+	EPettuSkillType CurrentSkillType;
 /* Attack Section */
-protected:
+public:
 	virtual void AttackHitCheck() override;
+	void AttackHitCheck(bool bIsAttached, FName SocketName, USkeletalMeshComponent* MeshComp);
 public:
 	virtual void SkillAttack(EPettuSkillType SkillType);
 

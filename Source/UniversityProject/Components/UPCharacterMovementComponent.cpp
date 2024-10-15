@@ -53,7 +53,10 @@ void UUPCharacterMovementComponent::Move(FVector2D MovementVector)
 	
 	OwningCharacter->AddMovementInput(ForwardDirection, MovementVector.X);
 	OwningCharacter->AddMovementInput(RightDirection, MovementVector.Y);
+
+	LastInputVector = (ForwardDirection * MovementVector.X) + (RightDirection * MovementVector.Y);
 }
+
 
 void UUPCharacterMovementComponent::UpdateSpeed()
 {

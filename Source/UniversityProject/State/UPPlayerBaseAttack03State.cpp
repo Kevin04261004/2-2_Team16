@@ -19,6 +19,7 @@ void UUPPlayerBaseAttack03State::InitSkillData()
 	Super::InitSkillData();
 
 	ThisSkillType = EPlayerSkillType::BaseAttack03;
+	NextAttackStateType = EPlayerStateType::BaseAttack01;
 }
 
 void UUPPlayerBaseAttack03State::EnterState()
