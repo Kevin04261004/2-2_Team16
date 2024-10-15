@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/UPPlayerController.h"
+#include "UI/UPHudWidget.h"
 
 AUPGameMode::AUPGameMode()
 {
@@ -39,6 +40,7 @@ void AUPGameMode::BeginPlay()
 	if (HudWidget)
 	{
 		UUserWidget* Hud = CreateWidget<UUserWidget>(GetWorld(), HudWidget);
+		HudWidgetObject = Cast<UUPHudWidget>(Hud);
 		check(Hud != nullptr);
 		Hud->AddToViewport();
 	}

@@ -5,12 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Interface/UPGameInterface.h"
+#include "UI/UPHudWidget.h"
 #include "UPGameMode.generated.h"
 
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class UNIVERSITYPROJECT_API AUPGameMode : public AGameModeBase, public IUPGameInterface
 {
 	GENERATED_BODY()
@@ -27,5 +28,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Game)
 	TSubclassOf<UUserWidget> HudWidget;
-	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Game)
+	TObjectPtr<UUPHudWidget> HudWidgetObject;
 };

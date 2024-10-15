@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/Weapon/UPWeaponBase.h"
 #include "Character/Enemy/UPPettuCharacter.h"
+#include "Components/SphereComponent.h"
 #include "UPPettuWeapon.generated.h"
 
 /**
@@ -20,7 +21,7 @@ public:
 protected:
 
 public:
-	void CheckAttackRange();
+	void CheckAttackRange(EPettuSkillType SkillType);
 	void CheckAttackSocket(FName SocketName, EPettuSkillType SkillType, USkeletalMeshComponent* MeshComp);
 
 	UFUNCTION(BlueprintCallable, Category = "Collision")
@@ -35,7 +36,7 @@ public:
 	float AttackRadius = 500.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Collision")
-	class USphereComponent* SphereCollision;
+	TObjectPtr<USphereComponent> SphereCollision;
 
 	UFUNCTION()
 	void OnWeaponOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
@@ -44,7 +45,7 @@ public:
 	
 protected:
 	UFUNCTION()
-	void CheckCollision();
+	void CheckCollision(FVector Start, FVector End);
 	virtual void AttackSuccess(FHitResult& result, class IUPDamageableInterface* Damageable) override;
 
 	
