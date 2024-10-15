@@ -4,6 +4,7 @@
 #include "Animation/Notify/UPLerpToForwardAnimNotifyState.h"
 
 #include "Character/UPCharacterBase.h"
+#include "Character/UPPlayerCharacter.h"
 
 void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
                                                   float InTotalDuration)
@@ -12,6 +13,18 @@ void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCo
 
 	if (AActor* Owner = MeshComp->GetOwner())
 	{
+		AUPPlayerCharacter* PlayerCharacter = Cast<AUPPlayerCharacter>(Owner);
+		FVector LastInputVector = PlayerCharacter->GetLastInputVector();
+
+		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Input Vector: %s"), *LastInputVector.ToString()));
+
+		// 입력 벡터가 유효하면 회전 적용
+		if (!LastInputVector.IsNearlyZero())
+		{
+			FRotator LookRotation = LastInputVector.Rotation();
+			Owner->SetActorRotation(LookRotation);
+		}
+		
 		StartLocation = Owner->GetActorLocation();
 
 		AUPCharacterBase* base = Cast<AUPCharacterBase>(Owner);
