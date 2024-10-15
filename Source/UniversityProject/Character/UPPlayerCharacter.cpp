@@ -75,7 +75,7 @@ void AUPPlayerCharacter::BeginPlay()
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
+	
 	StateManager->UpdateState();
 }
 
@@ -97,6 +97,11 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	{
 		InputHandler->BindActions(EnhancedInputComponent);
 	}
+}
+
+FVector AUPPlayerCharacter::GetLastInputVector() const
+{
+	return MovementComponent->GetLastInputVector();
 }
 
 void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface

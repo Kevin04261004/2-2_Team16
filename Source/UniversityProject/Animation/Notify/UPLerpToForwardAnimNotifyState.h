@@ -17,6 +17,9 @@ class UNIVERSITYPROJECT_API UUPLerpToForwardAnimNotifyState : public UAnimNotify
 public:
 	UPROPERTY(EditAnywhere, Category="Init")
 	float Amount;
+
+	UPROPERTY(EditAnywhere, Category="Init")
+	bool bIsLookLastInput;
 	
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float InTotalDuration) override;
 	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime) override;
