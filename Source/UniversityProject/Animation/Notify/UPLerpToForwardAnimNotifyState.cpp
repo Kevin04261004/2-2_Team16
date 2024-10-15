@@ -13,7 +13,11 @@ void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCo
 
 	if (AActor* Owner = MeshComp->GetOwner())
 	{
-		FVector LastInputVector = Cast<AUPPlayerCharacter>(Owner)->MovementComponent->GetLastInputVector();
+		FVector LastInputVector = FVector::ZeroVector;
+		if (AUPPlayerCharacter* PlayerCharacter = Cast<AUPPlayerCharacter>(Owner))
+		{
+			LastInputVector = PlayerCharacter->MovementComponent->GetLastInputVector();
+		}
 		if (!LastInputVector.IsNearlyZero())
 		{
 			FRotator NewRotation = LastInputVector.Rotation();
