@@ -39,4 +39,10 @@ protected:
 
 protected:
 	TObjectPtr<class AUPCharacterBase> OwningCharacter;
+
+private:
+	FVector LastInputVector; // 마지막 입력 벡터를 저장
+
+public:
+	FORCEINLINE FVector GetLastInputVector() const { return LastInputVector; }
 };

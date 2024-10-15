@@ -13,16 +13,11 @@ void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCo
 
 	if (AActor* Owner = MeshComp->GetOwner())
 	{
-		AUPPlayerCharacter* PlayerCharacter = Cast<AUPPlayerCharacter>(Owner);
-		FVector LastInputVector = PlayerCharacter->GetLastInputVector();
-
-		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Input Vector: %s"), *LastInputVector.ToString()));
-
-		// 입력 벡터가 유효하면 회전 적용
+		FVector LastInputVector = Cast<AUPPlayerCharacter>(Owner)->MovementComponent->GetLastInputVector();
 		if (!LastInputVector.IsNearlyZero())
 		{
-			FRotator LookRotation = LastInputVector.Rotation();
-			Owner->SetActorRotation(LookRotation);
+			FRotator NewRotation = LastInputVector.Rotation();
+			Owner->SetActorRotation(NewRotation);
 		}
 		
 		StartLocation = Owner->GetActorLocation();
