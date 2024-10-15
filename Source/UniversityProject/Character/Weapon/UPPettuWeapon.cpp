@@ -10,7 +10,7 @@
 
 AUPPettuWeapon::AUPPettuWeapon()
 {
-	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollision"));
+	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("AttackCollision"));
 	SphereCollision->InitSphereRadius(50.0f);
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SphereCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
@@ -21,9 +21,26 @@ AUPPettuWeapon::AUPPettuWeapon()
 	RootComponent = SphereCollision;
 }
 
-void AUPPettuWeapon::CheckAttackRange()
+void AUPPettuWeapon::CheckAttackRange(EPettuSkillType SkillType)
 {
-	CheckCollision();
+	FVector StartLocation = GetOwner()->GetActorLocation();
+	FVector EndLocation = StartLocation + GetOwner()->GetActorForwardVector();
+	switch (SkillType)
+	{
+	case EPettuSkillType::TakeTurnGroundAttack:
+		AttackRange = 1.0f;
+		AttackRadius = 400.0f;
+		break;
+	case EPettuSkillType::JumpGroundAttack:
+		AttackRange = 1.0f;
+		AttackRadius = 500.0f;
+		break;
+	case EPettuSkillType::TwoHandGroundAttack:
+		AttackRange = 1.0f;
+		AttackRadius = 500.0f;
+		break;
+	}
+	CheckCollision(StartLocation, EndLocation);
 }
 
 void AUPPettuWeapon::CheckAttackSocket(FName SocketName, EPettuSkillType SkillType,  USkeletalMeshComponent* MeshComp)
@@ -53,15 +70,15 @@ void AUPPettuWeapon::ClearAttackedActors()
 	Super::ClearAttackedActors();
 }
 
-void AUPPettuWeapon::CheckCollision()
+void AUPPettuWeapon::CheckCollision(FVector Start, FVector End)
 {
 	ClearAttackedActors();
 	FHitResult HitResult;
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
 	ActorsToIgnore.Add(GetOwner());
-	FVector StartLocation = GetOwner()->GetActorLocation();
-	FVector EndLocation = StartLocation + GetOwner()->GetActorForwardVector() * AttackRange;
+	FVector StartLocation = Start;
+	FVector EndLocation = End;
 	ETraceTypeQuery TraceChannel = UEngineTypes::ConvertToTraceType(CCHANEL_UPACTION);
 	FCollisionQueryParams CollisionParams = FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, GetOwner());
 
@@ -99,6 +116,7 @@ void AUPPettuWeapon::OnWeaponOverlapBegin(UPrimitiveComponent* OverlappedCompone
 {
 	if (OtherActor && OtherActor != this && OtherActor != GetOwner())
 	{
+		ClearAttackedActors();
 		GEngine->AddOnScreenDebugMessage( -1, 1.0f, FColor::Red, TEXT("OnWeaponOverlapBegin") );
 		FHitResult HitResult = SweepResult;
 		Attack(HitResult);

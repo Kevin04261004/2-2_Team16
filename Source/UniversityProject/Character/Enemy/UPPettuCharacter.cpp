@@ -143,7 +143,7 @@ void AUPPettuCharacter::AttackHitCheck()
 	AUPPettuWeapon* PettuWeapon = Cast<AUPPettuWeapon>(Weapon);
 	if (PettuWeapon)
 	{
-		PettuWeapon->CheckAttackRange();
+		PettuWeapon->CheckAttackRange(CurrentSkillType);
 	}
 }
 
@@ -151,11 +151,7 @@ void AUPPettuCharacter::AttackHitCheck(bool bIsAttached, FName SocketName, USkel
 {
 	check(Weapon != nullptr);
 	AUPPettuWeapon* PettuWeapon = Cast<AUPPettuWeapon>(Weapon);
-	if (PettuWeapon && !bIsAttached)
-	{
-		PettuWeapon->CheckAttackRange();
-	}
-	else if (PettuWeapon && bIsAttached && SocketName != NAME_None)
+	if (PettuWeapon && bIsAttached && SocketName != NAME_None)
 	{
 		PettuWeapon->CheckAttackSocket(SocketName, CurrentSkillType, MeshComp);
 	}
