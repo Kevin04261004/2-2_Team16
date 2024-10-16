@@ -95,7 +95,7 @@ void UUPPlayerTakeDownState::SkillFinished()
 {
 	Super::SkillFinished();
 
-	if (OwnerCharacter->CanJump())
+	if (OwnerCharacter->MovementComponent->IsMovingOnGround())
 	{
 		if (InputHandler->IsMoving())
 		{
@@ -118,9 +118,6 @@ void UUPPlayerTakeDownState::PlayAttackToIdleMontage()
 	if (OwnerCharacter->TakeDownToIdleMontage != nullptr && AnimInstance != nullptr)
 	{
 		AnimInstance->Montage_Play(OwnerCharacter->TakeDownToIdleMontage);
-		float aniDuration = OwnerCharacter->TakeDownToIdleMontage->GetPlayLength() * OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed;
-		FTimerHandle SkillEndTimerHandle2;
-		OwnerCharacter->GetWorld()->GetTimerManager().SetTimer(SkillEndTimerHandle2, this, &UUPPlayerTakeDownState::SkillFinished, aniDuration, false);
 	}
 }
 
