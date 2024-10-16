@@ -10,12 +10,12 @@
 #include "GameFramework/GameModeBase.h"
 #include "Components/UPAfterImageComponent.h"
 #include "Components/UPCameraComponent.h"
-#include "Components/UPDashComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
+#include "State/UPPlayerTakeDownState.h"
 #include "UI/UPHudWidget.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
@@ -75,7 +75,7 @@ void AUPPlayerCharacter::BeginPlay()
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
+	
 	StateManager->UpdateState();
 }
 
@@ -99,6 +99,11 @@ void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	}
 }
 
+FVector AUPPlayerCharacter::GetLastInputVector() const
+{
+	return MovementComponent->GetLastInputVector();
+}
+
 void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
 {
 	AfterImageComponent->CreateAfterImage();
@@ -119,18 +124,6 @@ void AUPPlayerCharacter::ResetAttackedActorList()
 	Weapon->ClearAttackedActors();
 }
 
-void AUPPlayerCharacter::GoForward() // IUPCharacterGoForwardInterface
-{
-	IUPCharacterGoForwardInterface::GoForward();
-	FHitResult OutHit;
-	FVector ActorLocation;
-
-	// TODO: 무기 길이 구해서 길이 넣기.
-	if (!TryCheckForwardCollision(200, OutHit, ActorLocation))
-	{
-		PhysicsControlComponent->GoForward(GoForwardDistance);
-	}
-}
 
 bool AUPPlayerCharacter::CanJumpInternal_Implementation() const
 {

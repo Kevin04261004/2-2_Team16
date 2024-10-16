@@ -7,7 +7,6 @@
 #include "Components/UPInputHandlerComponent.h"
 #include "Interface/UPAfterImageableInterface.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
-#include "Interface/UPCharacterGoForwardInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
 #include "Interface/UPResetAttackedActorList.h"
 #include "Player/UPPlayerController.h"
@@ -33,7 +32,9 @@ class UUPStateManager;
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterGoForwardInterface, public IUPAfterImageableInterface, public IUPCharacterHUDInterface, public IUPResetAttackedActorList
+class UNIVERSITYPROJECT_API AUPPlayerCharacter : public AUPCharacterBase,
+public IUPAnimationAttackCheckInterface, public IUPAfterImageableInterface,
+public IUPCharacterHUDInterface, public IUPResetAttackedActorList
 {
 	GENERATED_BODY()
 
@@ -57,6 +58,7 @@ protected:
 public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	FVector GetLastInputVector() const;
 /* Camera Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
@@ -82,15 +84,11 @@ protected:
 	
 /* Physics Section */
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= Init, Meta = (AllowPrivateAccess = "true", Tooltip = "공격 시 얼마나 앞으로 이동하는가"))
-	float GoForwardDistance;
-
-	virtual void GoForward() override;
-	
+	virtual bool CanJumpInternal_Implementation() const override;
+public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AfterImage, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UPhysicsControlComponent> PhysicsControlComponent;
-
-	virtual bool CanJumpInternal_Implementation() const override;
+	
 /* AI Section */
 protected:
 	TObjectPtr<class UAIPerceptionStimuliSourceComponent> StimuliSource;
@@ -109,6 +107,8 @@ public:
 	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo2;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo3;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UAnimMontage> TakeDownToIdleMontage;
 /* Skill Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Skill, Meta = (AllowPrivateAccess = true))

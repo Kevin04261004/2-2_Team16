@@ -5,6 +5,8 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Character/UPCharacterBase.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Manager/UPTimeManager.h"
 
 UUPInputHandlerComponent::UUPInputHandlerComponent()
@@ -33,6 +35,7 @@ void UUPInputHandlerComponent::BindActions(UEnhancedInputComponent* EnhancedInpu
 	EnhancedInputComponent->BindAction(GlobalTimeUp, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::GlobalTimeUpInputAction);
 	EnhancedInputComponent->BindAction(GlobalTimeDown, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::GlobalTimeDownInputAction);
 	EnhancedInputComponent->BindAction(GlobalTimeReset, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::GlobalTimeResetInputAction);
+	EnhancedInputComponent->BindAction(GameExitAction, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::ExitGameInputAction);
 }
 
 
@@ -101,5 +104,15 @@ void UUPInputHandlerComponent::GlobalTimeResetInputAction(const FInputActionValu
 		TimeManager->WorldTimeReset();
 	}
 #endif
+}
+
+void UUPInputHandlerComponent::ExitGameInputAction(const FInputActionValue& Value)
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (PlayerController == nullptr)
+	{
+		return;
+	}
+	UKismetSystemLibrary::QuitGame(GetWorld(), PlayerController, EQuitPreference::Quit, false);
 }
 
