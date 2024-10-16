@@ -11,6 +11,7 @@
 UUPBTTask_FindPlayerLocation::UUPBTTask_FindPlayerLocation(const FObjectInitializer& ObjectInitializer)
 {
 	NodeName = TEXT("Find Player Location");
+	PreLocation = FVector::ZeroVector;
 }
 
 EBTNodeResult::Type UUPBTTask_FindPlayerLocation::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -19,16 +20,14 @@ EBTNodeResult::Type UUPBTTask_FindPlayerLocation::ExecuteTask(UBehaviorTreeCompo
 	if (auto* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))
 	{
 		auto const PlayerLocation = Player->GetActorLocation();
-		FNavLocation Loc;
-		if (auto* const Naysys = UNavigationSystemV1::GetCurrent(GetWorld()))
+		if (PlayerLocation != PreLocation)
 		{
-			if (Naysys->GetRandomPointInNavigableRadius(PlayerLocation, SearchRadius, Loc))
-			{
-				OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), Loc.Location);
-				FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-				return EBTNodeResult::Succeeded;
-			}
+			PreLocation = PlayerLocation;
 		}
+
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), PreLocation);
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		return EBTNodeResult::Succeeded;
 	}
 	return EBTNodeResult::Failed;
 }

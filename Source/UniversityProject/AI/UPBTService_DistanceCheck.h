@@ -13,5 +13,12 @@ UCLASS()
 class UNIVERSITYPROJECT_API UUPBTService_DistanceCheck : public UBTService_BlackboardBase
 {
 	GENERATED_BODY()
-	
+public:
+	UUPBTService_DistanceCheck(const FObjectInitializer& ObjectInitializer);
+protected:
+	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Distance")
+	float Distance;
 };

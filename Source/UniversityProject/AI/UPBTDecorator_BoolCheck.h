@@ -13,5 +13,6 @@ UCLASS()
 class UNIVERSITYPROJECT_API UUPBTDecorator_BoolCheck : public UBTDecorator_BlackboardBase
 {
 	GENERATED_BODY()
-	
+public:
+	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
 };

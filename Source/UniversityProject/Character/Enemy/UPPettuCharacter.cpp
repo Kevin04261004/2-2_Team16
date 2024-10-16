@@ -18,11 +18,12 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 	MaxComboCount = 3.0f;
 	BaseComboFrameRate = 60.f;
 	LastComboFrameRate = 120.0f;
-	
 	DamageReceived = 1.0f;
 	bIsStiffen = false;
 	bIsStun = false;
 	bIsDead = false;
+
+	
 
 	PettuAIController = Cast<AUPPettuAIController>(GetController());
 

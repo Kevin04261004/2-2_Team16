@@ -13,5 +13,9 @@ UCLASS()
 class UNIVERSITYPROJECT_API UUPBTTask_ChasePlayer : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
+
+public:
+	UUPBTTask_ChasePlayer(const FObjectInitializer& ObjectInitializer);
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	
 };
