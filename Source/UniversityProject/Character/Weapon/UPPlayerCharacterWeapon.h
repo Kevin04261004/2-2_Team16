@@ -31,6 +31,10 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
 	TArray<FVector> SocketLocationArray;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Debug")
+	bool bIsDebugLineOn;
+
 	
 	// Socket위치를 통해 콜리전 체크.
 	void CheckCollisionSockets();
