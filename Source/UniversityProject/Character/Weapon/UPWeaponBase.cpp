@@ -3,8 +3,11 @@
 
 #include "Character/Weapon/UPWeaponBase.h"
 
+#include "Audio/UPAudioManager.h"
 #include "Interface/UPDamageableInterface.h"
 #include "Kismet/GameplayStatics.h"
+
+class UUPAudioManager;
 
 AUPWeaponBase::AUPWeaponBase()
 {
@@ -56,7 +59,10 @@ void AUPWeaponBase::AttackSuccess(FHitResult& result, IUPDamageableInterface* Da
 	}
 	if (DamageSound != nullptr)
 	{
-		// TODO: Change to Sound3D
-		UGameplayStatics::SpawnSound2D(GetWorld(), DamageSound);
+		UUPAudioManager* AudioManager = GetGameInstance()->GetSubsystem<UUPAudioManager>();
+		if (AudioManager != nullptr)
+		{
+			AudioManager->PlaySoundAtLocation(DamageSound, result.Location);
+		}
 	}
 }

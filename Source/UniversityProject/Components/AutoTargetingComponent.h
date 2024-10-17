@@ -24,8 +24,7 @@ public:
 	UAutoTargetingComponent();
 	
 	AActor* FindDamageableTargetOrNull(const FVector& center, EAutoTargetingMode TargetingMode);
-	void RotateToTarget(FVector targetLocation);
-	void RotateToTarget(AActor* target);
+	void RotateToTarget(const FVector& targetLocation);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Init", meta = (AllowPrivateAccess = "true"))
