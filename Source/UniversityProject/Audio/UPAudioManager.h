@@ -29,6 +29,7 @@ class UNIVERSITYPROJECT_API UUPAudioManager : public UGameInstanceSubsystem
 	GENERATED_BODY()
 public:
 	UUPAudioManager();
+
 protected:
 	TObjectPtr<class UUPAudioManagerData> AudioManagerData;
 public:
