@@ -6,6 +6,7 @@
 #include "Character/Weapon/UPWeaponBase.h"
 #include "Character/Enemy/UPPettuCharacter.h"
 #include "Components/SphereComponent.h"
+#include "Skill/UPPettuSkillData.h"
 #include "UPPettuWeapon.generated.h"
 
 /**
@@ -21,8 +22,8 @@ public:
 protected:
 
 public:
-	void CheckAttackRange(EPettuSkillType SkillType);
-	void CheckAttackSocket(FName SocketName, EPettuSkillType SkillType, USkeletalMeshComponent* MeshComp);
+	void CheckAttackRange(UUPPettuSkillData* SkillData);
+	void CheckAttackSocket(FName SocketName, UUPPettuSkillData* SkillData, USkeletalMeshComponent* MeshComp);
 
 	UFUNCTION(BlueprintCallable, Category = "Collision")
 	void SetCollision();

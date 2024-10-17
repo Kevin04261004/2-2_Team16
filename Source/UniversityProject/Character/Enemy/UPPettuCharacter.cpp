@@ -144,7 +144,7 @@ void AUPPettuCharacter::AttackHitCheck()
 	AUPPettuWeapon* PettuWeapon = Cast<AUPPettuWeapon>(Weapon);
 	if (PettuWeapon)
 	{
-		PettuWeapon->CheckAttackRange(CurrentSkillType);
+		PettuWeapon->CheckAttackRange(CurrentSkillData);
 	}
 }
 
@@ -154,13 +154,14 @@ void AUPPettuCharacter::AttackHitCheck(bool bIsAttached, FName SocketName, USkel
 	AUPPettuWeapon* PettuWeapon = Cast<AUPPettuWeapon>(Weapon);
 	if (PettuWeapon && bIsAttached && SocketName != NAME_None)
 	{
-		PettuWeapon->CheckAttackSocket(SocketName, CurrentSkillType, MeshComp);
+		PettuWeapon->CheckAttackSocket(SocketName, CurrentSkillData, MeshComp);
 	}
 }
 
 void AUPPettuCharacter::SkillAttack(EPettuSkillType SkillType)
 {
 	UUPSkillBase** Skill = SkillMap.Find(SkillType);
+	CurrentSkillData = Cast<UUPPettuSkillData>((*Skill)->GetSkillData());
 	(*Skill)->TryActivateSkill(nullptr);
 	CurAttackDamage = (*Skill)->GetSkillAttackDamage();
 }
