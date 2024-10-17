@@ -19,7 +19,7 @@ EBTNodeResult::Type UUPBTTask_Died::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		if (Pettu)
 		{
 			// 죽음 처리
-			Pettu->SetDead();
+			//Pettu->SetDead();
 			OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("IsDead"), true);
 			return EBTNodeResult::Succeeded;
 		}

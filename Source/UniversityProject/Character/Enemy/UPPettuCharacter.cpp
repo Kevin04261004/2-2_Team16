@@ -23,10 +23,6 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 	bIsStun = false;
 	bIsDead = false;
 
-	
-
-	PettuAIController = Cast<AUPPettuAIController>(GetController());
-
 	InitSkillMap();
 }
 
@@ -34,9 +30,10 @@ void AUPPettuCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	StatComponent->OnHpZero.AddUObject(this, &AUPPettuCharacter::SetDead);
+	//StatComponent->OnHpZero.AddUObject(this, &AUPPettuCharacter::SetDead);
 	StatComponent->OnStunStackZero.AddUObject(this, &AUPPettuCharacter::SetStun);
 	StatComponent->OnStiffen.AddUObject(this, &AUPPettuCharacter::SetStiffen);
+	PettuAIController = Cast<AUPPettuAIController>(GetController());
 }
 
 void AUPPettuCharacter::BeginPlay()
@@ -57,19 +54,25 @@ void AUPPettuCharacter::SetDead()
 {
 	Super::SetDead();
 	MovementComponent->DisableMovement();
-	if (PettuAIController->BrainComponent)
+	//PettuAIController = Cast<AUPPettuAIController>(GetController());
+	if (PettuAIController)
 	{
-		PettuAIController->BrainComponent->StopLogic(TEXT("Death"));
+		if (PettuAIController->BrainComponent)
+		{
+			PettuAIController->BrainComponent->StopLogic(TEXT("Death"));
+		}
+		PettuAIController->StopMovement();
 	}
-	PettuAIController->StopMovement();
+	
 	//Destroy();
 }
 
 void AUPPettuCharacter::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	Super::DeadAnimEnd(Montage, bInterrupted);
-	GetMesh()->bPauseAnims = true; 
-	GetMesh()->bNoSkeletonUpdate = true; 
+	GetMesh()->bNoSkeletonUpdate = true;
+	GetMesh()->bPauseAnims = true;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Pettu Dead"));
 }
 
 void AUPPettuCharacter::SetStun()
