@@ -67,6 +67,9 @@ protected:
 	TObjectPtr<class UCameraComponent> FollowCamera;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UUPCameraComponent> CameraComponent;
+
+public:
+	FORCEINLINE UUPCameraComponent* GetCameraComponent() const { return CameraComponent.Get(); }
 	
 /* After Image */
 protected:
@@ -77,6 +80,7 @@ protected:
 
 /* Check Hit Collision */
 protected:
+	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void AttackHitCheck() override;
 
 protected:
