@@ -23,27 +23,10 @@ void UUPCameraComponent::Initialize(USpringArmComponent& SpringArmComponent, UCa
 }
 
 
-void UUPCameraComponent::HitShakeCamera(FHitResult& HitResult)
+void UUPCameraComponent::ShakeCamera(FHitResult& HitResult)
 {
 	PlayerController = Cast<AUPPlayerController>(GetOwner()->GetInstigatorController());
-	check(HitCameraShake != nullptr);
 	PlayerController->ClientStartCameraShake(HitCameraShake);
-}
-
-void UUPCameraComponent::DamagedShakeCamera()
-{
-	PlayerController = Cast<AUPPlayerController>(GetOwner()->GetInstigatorController());
-
-	check(DamagedCameraShake != nullptr);
-	PlayerController->ClientStartCameraShake(DamagedCameraShake);
-}
-
-void UUPCameraComponent::DashShakeCamera()
-{
-	PlayerController = Cast<AUPPlayerController>(GetOwner()->GetInstigatorController());
-
-	check(DashCameraShake != nullptr);
-	PlayerController->ClientStartCameraShake(DashCameraShake);
 }
 
 void UUPCameraComponent::ZoomCamera(float Value)
