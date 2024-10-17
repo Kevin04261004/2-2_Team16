@@ -22,8 +22,10 @@ EBTNodeResult::Type UUPBTTask_Pattern1::ExecuteTask(UBehaviorTreeComponent& Owne
 	if (Pettu)
 	{
 		Pettu->SkillAttack(SkillType);
-		Pettu->SetActorRotation(UKismetMathLibrary::FindLookAtRotation(Pettu->GetActorLocation(),
-			UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorLocation()));
+		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(Pettu->GetActorLocation(),
+			UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorLocation());
+		FRotator NewRotation = FRotator(0.0f, LookAtRotation.Yaw, 0.0f);
+		Pettu->SetActorRotation(NewRotation);
 		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Pattern1"));
 		AnimInstance->OnMontageEnded.AddDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
 		return EBTNodeResult::InProgress;
