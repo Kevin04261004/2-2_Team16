@@ -14,30 +14,27 @@ UUPAudioManager::UUPAudioManager()
 	{
 		AudioManagerData = AudioManagerDataRef.Object;
 	}
+
+	SFXVolume = 0.5f;
+	BGMVolume = 0.5f;
 }
 
 void UUPAudioManager::PlaySoundAtLocation(ESFXAudioType sfx, FVector location)
 {
-	if (!AudioManagerData->SFXAudioMap.Contains(sfx))
+	if (!AudioManagerData->SFXAudioMap.Contains(sfx) || AudioManagerData->SFXAudioMap[sfx] == nullptr)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, "Playing SFX Failed!!!!!!!");
 		return;
 	}
-	UAudioComponent* createdSound = AudioManagerData->SFXAudioMap[sfx]->PlaySoundAtLocation(GetWorld(), location);
-	if (createdSound != nullptr)
-	{
-		createdSound->OnAudioFinishedNative.AddUObject(this, &UUPAudioManager::OnSFXFinished);
-
-		ActivatedSFXSounds.Add(createdSound);
-	}
+	PlaySoundAtLocation(AudioManagerData->SFXAudioMap[sfx]->Sound, location);
 }
 
 void UUPAudioManager::PlaySoundAtLocation(USoundBase* sfx, FVector location)
 {
-	UAudioComponent* createdSound = UGameplayStatics::SpawnSoundAtLocation(GetWorld(), sfx, location);
+	UAudioComponent* createdSound = UGameplayStatics::SpawnSoundAtLocation(GetWorld(), sfx, location, FRotator::ZeroRotator, SFXVolume);
 	if (createdSound != nullptr)
 	{
 		createdSound->OnAudioFinishedNative.AddUObject(this, &UUPAudioManager::OnSFXFinished);
-
 		ActivatedSFXSounds.Add(createdSound);
 	}
 }
@@ -57,6 +54,7 @@ void UUPAudioManager::PlayBGM(EBGMAudioType bgm)
 	if (createdSound != nullptr)
 	{
 		createdSound->bIsUISound = true;
+		createdSound->SetVolumeMultiplier(BGMVolume);
 		ActivatedBGMSound = createdSound;
 	}
 }
@@ -68,20 +66,24 @@ void UUPAudioManager::OnSFXFinished(UAudioComponent* FinishedComponent)
 
 void UUPAudioManager::SetSFXVolume(float volume)
 {
+	SFXVolume = volume;
+
 	for (UAudioComponent* SFX : ActivatedSFXSounds)
 	{
 		if (SFX != nullptr)
 		{
-			SFX->SetVolumeMultiplier(volume);
+			SFX->SetVolumeMultiplier(SFXVolume);
 		}
 	}
 }
 
 void UUPAudioManager::SetBGMVolume(float volume)
 {
+	BGMVolume = volume;
+
 	if (ActivatedBGMSound != nullptr)
 	{
-		ActivatedBGMSound->SetVolumeMultiplier(volume);
+		ActivatedBGMSound->SetVolumeMultiplier(BGMVolume);
 	}
 }
 

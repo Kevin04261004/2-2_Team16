@@ -55,33 +55,42 @@ void AUPPettuWeapon::ClearAttackedActors()
 void AUPPettuWeapon::CheckCollision(FVector Start, FVector End)
 {
 	ClearAttackedActors();
-	FHitResult HitResult;
+	TArray<FHitResult> HitResults;
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
 	ActorsToIgnore.Add(GetOwner());
-	FVector StartLocation = Start;
-	FVector EndLocation = End;
+	FVector StartLocation = Start; 
+	FVector EndLocation = End;     
 	ETraceTypeQuery TraceChannel = UEngineTypes::ConvertToTraceType(CCHANEL_UPACTION);
-	FCollisionQueryParams CollisionParams = FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, GetOwner());
+	FCollisionQueryParams CollisionParams(FName(TEXT("WeaponTrace")), false, GetOwner());
 	
-	
-	bool bHit = UKismetSystemLibrary::SphereTraceSingle(GetWorld(),
+	bool bHit = UKismetSystemLibrary::SphereTraceMulti(
+		GetWorld(),
 		StartLocation,
 		EndLocation,
 		AttackRadius,
 		TraceChannel,
 		false,
 		ActorsToIgnore,
-		EDrawDebugTrace::ForDuration,
-		HitResult,
-		true,
+		EDrawDebugTrace::ForDuration, 
+		HitResults,
+		true, 
 		FLinearColor::Red,
 		FLinearColor::Green,
-		1.0f);
+		1.0f
+	);
 
-	if (bHit && HitResult.GetActor() && !AttackedActors.Contains(HitResult.GetActor()))
+	
+	for (FHitResult& Hit : HitResults)
 	{
-		Attack(HitResult);
+		if (Hit.GetActor() && Hit.GetActor()->IsA(AUPPlayerCharacter::StaticClass())) 
+		{
+			if (!AttackedActors.Contains(Hit.GetActor()))
+			{
+				Attack(Hit); 
+				AttackedActors.Add(Hit.GetActor()); 
+			}
+		}
 	}
 }
 
