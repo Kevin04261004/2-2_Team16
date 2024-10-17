@@ -29,7 +29,6 @@ EBTNodeResult::Type UUPBTTask_FindPlayerLocation::ExecuteTask(UBehaviorTreeCompo
 		{
 			FNavLocation NavLocation;
 			bool bIsOnNavMesh = NavSys->ProjectPointToNavigation(PreLocation, NavLocation);
-
 			// 플레이어가 네비 메시 바운더리 밖으로 나갔다면 특정 위치로 이동하도록 설정
 			if (!bIsOnNavMesh)
 			{
