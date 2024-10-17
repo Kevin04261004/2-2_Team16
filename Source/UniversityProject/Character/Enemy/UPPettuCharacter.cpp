@@ -4,9 +4,11 @@
 #include "Character/Enemy/UPPettuCharacter.h"
 #include "AI/UPPettuAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "GameFramework/GameModeBase.h"
 #include "Character/Weapon/UPPettuWeapon.h"
 #include "Components/UPCharacterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Interface/UPGameInterface.h"
 #include "Skill/UPSkillBase.h"
 #include "UI/UPHudWidget.h"
 
@@ -70,9 +72,6 @@ void AUPPettuCharacter::SetDead()
 void AUPPettuCharacter::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	Super::DeadAnimEnd(Montage, bInterrupted);
-	GetMesh()->bNoSkeletonUpdate = true;
-	GetMesh()->bPauseAnims = true;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Pettu Dead"));
 }
 
 void AUPPettuCharacter::SetStun()
