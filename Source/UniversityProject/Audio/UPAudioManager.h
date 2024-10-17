@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UPAudioBaseInfo.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "UPAudioManager.generated.h"
 
@@ -32,6 +33,7 @@ protected:
 	TObjectPtr<class UUPAudioManagerData> AudioManagerData;
 public:
 	void PlaySoundAtLocation(ESFXAudioType sfx, FVector location);
+	void PlaySoundAtLocation(USoundBase* sfx, FVector location);
 	void PlayBGM(EBGMAudioType bgm);
 
 private:

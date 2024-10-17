@@ -31,6 +31,17 @@ void UUPAudioManager::PlaySoundAtLocation(ESFXAudioType sfx, FVector location)
 	}
 }
 
+void UUPAudioManager::PlaySoundAtLocation(USoundBase* sfx, FVector location)
+{
+	UAudioComponent* createdSound = UGameplayStatics::SpawnSoundAtLocation(GetWorld(), sfx, location);
+	if (createdSound != nullptr)
+	{
+		createdSound->OnAudioFinishedNative.AddUObject(this, &UUPAudioManager::OnSFXFinished);
+
+		ActivatedSFXSounds.Add(createdSound);
+	}
+}
+
 void UUPAudioManager::PlayBGM(EBGMAudioType bgm)
 {
 	if (!AudioManagerData->BGMAudioMap.Contains(bgm) || AudioManagerData->BGMAudioMap[bgm] == nullptr)
