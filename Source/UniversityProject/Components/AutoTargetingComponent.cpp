@@ -62,6 +62,10 @@ AActor* UAutoTargetingComponent::FindDamageableTargetOrNull(const FVector& cente
 
 	for (const FHitResult& HitResult : HitResults)
 	{
+		if (HitResult.GetActor() == GetOwner())
+		{
+			continue;
+		}
 		IUPDamageableInterface* curTarget = Cast<IUPDamageableInterface>(HitResult.GetActor());
 		if (curTarget == nullptr)
 		{
@@ -89,8 +93,16 @@ AActor* UAutoTargetingComponent::FindDamageableTargetOrNull(const FVector& cente
 
 void UAutoTargetingComponent::RotateToTarget(FVector targetLocation)
 {
-	FVector playerLocation = GetOwner()->GetActorLocation();
+	AActor* owner = GetOwner();
+	check(owner != nullptr);
+	FVector playerLocation = owner->GetActorLocation();
 	TargetLocation = targetLocation;
+
+	if (TargetLocation == playerLocation)
+	{
+		return;
+	}
+	
 	LookAtRotation = UKismetMathLibrary::FindLookAtRotation(playerLocation, TargetLocation);
 	
 	LookAtRotation.Pitch = 0.0f;
@@ -98,6 +110,28 @@ void UAutoTargetingComponent::RotateToTarget(FVector targetLocation)
 	
 	GetOwner()->SetActorRotation(LookAtRotation);
 }
+
+#pragma optimize("", off)
+void UAutoTargetingComponent::RotateToTarget(AActor* target)
+{
+	AActor* owner = GetOwner();
+	check(owner != nullptr);
+	FVector playerLocation = owner->GetActorLocation();
+	TargetLocation = target->GetActorLocation();
+
+	if (TargetLocation == playerLocation)
+	{
+		return;
+	}
+	
+	LookAtRotation = UKismetMathLibrary::FindLookAtRotation(playerLocation, TargetLocation);
+	
+	LookAtRotation.Pitch = 0.0f;
+	LookAtRotation.Roll = 0.0f;
+	
+	owner->SetActorRotation(LookAtRotation);
+}
+#pragma optimize("", on)
 
 AActor* UAutoTargetingComponent::FindNearestTarget(const FVector& center, TArray<AActor*> targets)
 {

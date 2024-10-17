@@ -33,7 +33,7 @@ void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCo
 			FHitResult Hit;
 			FVector HitLocation;
 			// TODO: 무기의 길이를 구하는 코드 만들기.
-			if (base->TryCheckForwardCollision(150, Hit, HitLocation))
+			if (base->TryCheckForwardCollision(Amount >= 0 ? 150 : -150, Hit, HitLocation))
 			{
 				TargetLocation = StartLocation;
 			}

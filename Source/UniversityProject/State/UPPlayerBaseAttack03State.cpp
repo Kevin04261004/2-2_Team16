@@ -42,7 +42,7 @@ void UUPPlayerBaseAttack03State::UpdateState()
 
 void UUPPlayerBaseAttack03State::SkillFinished()
 {
-	if (OwnerCharacter->CanJump())
+	if (OwnerCharacter->MovementComponent->IsMovingOnGround())
 	{
 		if (InputHandler->IsMoving())
 		{

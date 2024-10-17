@@ -22,4 +22,7 @@ private:
 	float SearchRadius = 150.0f;
 
 	FVector PreLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Search", meta = (AllowPrivateAccess = "true"))
+	FVector FallbackLocation = FVector(0.0f, 0.0f, 0.0f);
 };

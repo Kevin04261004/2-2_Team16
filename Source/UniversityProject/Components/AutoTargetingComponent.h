@@ -25,6 +25,8 @@ public:
 	
 	AActor* FindDamageableTargetOrNull(const FVector& center, EAutoTargetingMode TargetingMode);
 	void RotateToTarget(FVector targetLocation);
+	void RotateToTarget(AActor* target);
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Init", meta = (AllowPrivateAccess = "true"))
 	float TargetSearchRadius;
