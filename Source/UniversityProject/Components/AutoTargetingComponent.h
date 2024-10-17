@@ -24,7 +24,7 @@ public:
 	UAutoTargetingComponent();
 	
 	AActor* FindDamageableTargetOrNull(const FVector& center, EAutoTargetingMode TargetingMode);
-	void RotateToTarget(FVector targetLocation);
+	void RotateToTarget(const FVector& targetLocation);
 	void RotateToTarget(AActor* target);
 
 protected:

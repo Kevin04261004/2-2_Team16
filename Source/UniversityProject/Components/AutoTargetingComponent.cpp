@@ -91,7 +91,7 @@ AActor* UAutoTargetingComponent::FindDamageableTargetOrNull(const FVector& cente
 	return nullptr;
 }
 
-void UAutoTargetingComponent::RotateToTarget(FVector targetLocation)
+void UAutoTargetingComponent::RotateToTarget(const FVector& targetLocation)
 {
 	AActor* owner = GetOwner();
 	check(owner != nullptr);
