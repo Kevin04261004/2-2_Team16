@@ -9,6 +9,7 @@
 #include "AI/UPPettuAIController.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
+#include "Skill/UPPettuSkillData.h"
 #include "UPPettuCharacter.generated.h"
 
 UENUM(BlueprintType)
@@ -102,6 +103,10 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
 	TMap<EPettuSkillType, UUPSkillBase*> SkillMap;
+
+	UPROPERTY()
+	TObjectPtr<UUPPettuSkillData> CurrentSkillData;
+	
 	void InitSkillMap();
 	void CreateDefaultObjectSkill();
 

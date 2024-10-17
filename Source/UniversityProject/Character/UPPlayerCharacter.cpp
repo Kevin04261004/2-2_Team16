@@ -12,7 +12,6 @@
 #include "Components/UPCameraComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
-#include "Manager/UPPostProcessManager.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
@@ -70,7 +69,7 @@ void AUPPlayerCharacter::BeginPlay()
 
 	InputHandler->SetMappingContext(PlayerController);
 	
-	Weapon->OnWeaponHit.AddUObject(CameraComponent, &UUPCameraComponent::HitShakeCamera);
+	Weapon->OnWeaponHit.AddUObject(CameraComponent, &UUPCameraComponent::ShakeCamera);
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -108,21 +107,6 @@ FVector AUPPlayerCharacter::GetLastInputVector() const
 void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
 {
 	AfterImageComponent->CreateAfterImage();
-}
-
-float AUPPlayerCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
-	AController* EventInstigator, AActor* DamageCauser)
-{
-	float super = Super::UPTakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-	check(CameraComponent != nullptr);
-
-	CameraComponent->DamagedShakeCamera();
-	
-	UUPPostProcessManager* PostProcessManager = GetGameInstance()->GetSubsystem<UUPPostProcessManager>();
-	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::EdgeFadeDesaturation, true, 0.1f);
-	
-	return super;
 }
 
 void AUPPlayerCharacter::AttackHitCheck() // IUPAnimationAttackCheckInterface

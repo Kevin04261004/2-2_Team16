@@ -2,8 +2,6 @@
 
 
 #include "State/UPPlayerDashState.h"
-
-#include "Components/UPCameraComponent.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
 
 UUPPlayerDashState::UUPPlayerDashState()
@@ -26,8 +24,6 @@ void UUPPlayerDashState::EnterState()
 {
 	Super::EnterState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Dash Enter");
-
-	OwnerCharacter->GetCameraComponent()->DashShakeCamera();
 }
 
 void UUPPlayerDashState::ExitState()

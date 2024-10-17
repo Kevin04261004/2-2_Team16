@@ -118,9 +118,9 @@ void AUPPlayerCharacterWeapon::CheckCollisionSockets()
         }
 
         // 디버그 라인 그리기
-        //DrawDebugLine(GetWorld(), InterpolatedPosition0, InterpolatedPosition1, FColor::Green, false, 0.3f, 0, 2.0f);
-        //DrawDebugLine(GetWorld(), InterpolatedPosition1, InterpolatedPosition2, FColor::Green, false, 0.3f, 0, 2.0f);
-        //DrawDebugLine(GetWorld(), InterpolatedPosition2, InterpolatedPosition0, FColor::Green, false, 0.3f, 0, 2.0f);
+        DrawDebugLine(GetWorld(), InterpolatedPosition0, InterpolatedPosition1, FColor::Green, false, 0.3f, 0, 2.0f);
+        DrawDebugLine(GetWorld(), InterpolatedPosition1, InterpolatedPosition2, FColor::Green, false, 0.3f, 0, 2.0f);
+        DrawDebugLine(GetWorld(), InterpolatedPosition2, InterpolatedPosition0, FColor::Green, false, 0.3f, 0, 2.0f);
     }
 }
 
@@ -136,7 +136,7 @@ void AUPPlayerCharacterWeapon::AttackSuccess(FHitResult& result, IUPDamageableIn
 	
 	/* Volume */
 	UUPPostProcessManager* PostProcessManager = GetGameInstance()->GetSubsystem<UUPPostProcessManager>();
-	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::Blur, true, 0.1f);
+	// PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::Blur, true, 0.1f);
 	// PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::SpeedLine, true, 0.1f);
 	// PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::EdgeFadeDesaturation, true, 0.1f);
 }
