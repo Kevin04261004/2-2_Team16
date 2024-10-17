@@ -29,15 +29,15 @@ void AUPPettuWeapon::CheckAttackRange(EPettuSkillType SkillType)
 	{
 	case EPettuSkillType::TakeTurnGroundAttack:
 		AttackRange = 1.0f;
-		AttackRadius = 400.0f;
+		AttackRadius = TakeTurnGorundRange;
 		break;
 	case EPettuSkillType::JumpGroundAttack:
 		AttackRange = 1.0f;
-		AttackRadius = 500.0f;
+		AttackRadius = JumpGroundRange;
 		break;
 	case EPettuSkillType::TwoHandGroundAttack:
 		AttackRange = 1.0f;
-		AttackRadius = 500.0f;
+		AttackRadius = TwoHandGroundRange;
 		break;
 	}
 	CheckCollision(StartLocation, EndLocation);
@@ -51,10 +51,10 @@ void AUPPettuWeapon::CheckAttackSocket(FName SocketName, EPettuSkillType SkillTy
 	switch (SkillType)
 	{
 	case EPettuSkillType::SmashAttack:
-		SphereCollision->SetSphereRadius(300.0f);
+		SphereCollision->SetSphereRadius(Smash1Range);
 		break;
 	case EPettuSkillType::SmashAttack2:
-		SphereCollision->SetSphereRadius(300.0f);
+		SphereCollision->SetSphereRadius(Smash2Range);
 		break;
 	}
 }
