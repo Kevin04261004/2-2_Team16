@@ -36,6 +36,16 @@ void UPhysicsControlComponent::GoUp(float amount)
 
 }
 
+void UPhysicsControlComponent::CollisionOff()
+{
+	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void UPhysicsControlComponent::CollisionOn()
+{
+	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+}
+
 void UPhysicsControlComponent::SetPhysicsFalse()
 {
 	if (CollisionComponent != nullptr)

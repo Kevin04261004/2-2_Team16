@@ -3,6 +3,7 @@
 
 #include "State/UPPlayerDashState.h"
 
+#include "Components/PhysicsControlComponent.h"
 #include "Components/UPCameraComponent.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
 
@@ -27,12 +28,14 @@ void UUPPlayerDashState::EnterState()
 	Super::EnterState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Dash Enter");
 	OwnerCharacter->GetCameraComponent()->DashShakeCamera();
+	OwnerCharacter->PhysicsControlComponent->CollisionOff();
 }
 
 void UUPPlayerDashState::ExitState()
 {
 	Super::ExitState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Player Dash Exit");
+	OwnerCharacter->PhysicsControlComponent->CollisionOn();
 }
 
 void UUPPlayerDashState::UpdateState()
