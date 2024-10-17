@@ -55,9 +55,9 @@ void AUPGameMode::BeginPlay()
 
 	if (SettingWidget != nullptr)
 	{
-		UUPUserWidget* SettingWDG = CreateWidget<UUPUserWidget>(GetWorld(), SettingWidget);
-		SettingWidgetObject = Cast<UUPSettingWidget>(SettingWDG);
-		check(SettingWDG != nullptr);
-		SettingWDG->AddToViewport();
+		//UUPUserWidget* SettingWDG = CreateWidget<UUPUserWidget>(GetWorld(), SettingWidget);
+		//SettingWidgetObject = Cast<UUPSettingWidget>(SettingWDG);
+		//check(SettingWDG != nullptr);
+		//SettingWDG->AddToViewport();
 	}
 }
