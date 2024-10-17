@@ -20,6 +20,10 @@ public:
 	AUPGameMode();
 
 	virtual void OnPlayerDead() override;
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void OnGameClear() override;
+	
 	virtual bool IsGameCleared() override;
 	virtual void BeginPlay() override;
 

@@ -24,4 +24,5 @@ class UNIVERSITYPROJECT_API IUPGameInterface
 public:
 	virtual void OnPlayerDead() = 0;
 	virtual bool IsGameCleared() = 0;
+	virtual void OnGameClear() = 0;
 };
