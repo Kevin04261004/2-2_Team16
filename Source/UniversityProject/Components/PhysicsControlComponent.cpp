@@ -33,7 +33,6 @@ void UPhysicsControlComponent::GoUp(float amount)
 	CollisionComponent->SetEnableGravity(false);
 	CollisionComponent->AddImpulse(FVector::DownVector * amount,"", true);
 	GetWorld()->GetTimerManager().SetTimer(PhysicsTimerHandle, this, &UPhysicsControlComponent::SetPhysicsFalse, 0.2f, false);
-
 }
 
 void UPhysicsControlComponent::CollisionOff()
