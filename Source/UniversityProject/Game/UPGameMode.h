@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "Interface/UPGameInterface.h"
 #include "UI/UPHudWidget.h"
+#include "UI/UPSettingWidget.h"
 #include "UPGameMode.generated.h"
 
 /**
@@ -20,9 +21,13 @@ public:
 	AUPGameMode();
 
 	virtual void OnPlayerDead() override;
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void OnGameClear() override;
+	
 	virtual bool IsGameCleared() override;
 	virtual void BeginPlay() override;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Game)
 	uint8 bIsCleared : 1;
 
@@ -31,4 +36,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Game)
 	TObjectPtr<UUPHudWidget> HudWidgetObject;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Game)
+	TSubclassOf<UUPUserWidget> SettingWidget;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Game)
+	TObjectPtr<UUPSettingWidget> SettingWidgetObject;
 };

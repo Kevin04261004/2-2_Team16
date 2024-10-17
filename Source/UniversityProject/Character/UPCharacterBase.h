@@ -66,11 +66,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=STAT)
 	bool bIsDead;
 
-	FORCEINLINE bool IsDead() const { return bIsDead; }
 	virtual void SetDead();
 	void PlayDeadAnimation();
 	UFUNCTION()
 	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted);
+	
+public:
+	FORCEINLINE bool IsDead() const { return bIsDead; }
+	
 // Stat Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true", Tooltip = "스텟 컴포넌트"))

@@ -4,9 +4,11 @@
 #include "Character/Enemy/UPPettuCharacter.h"
 #include "AI/UPPettuAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "GameFramework/GameModeBase.h"
 #include "Character/Weapon/UPPettuWeapon.h"
 #include "Components/UPCharacterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Interface/UPGameInterface.h"
 #include "Skill/UPSkillBase.h"
 #include "UI/UPHudWidget.h"
 
@@ -18,13 +20,10 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 	MaxComboCount = 3.0f;
 	BaseComboFrameRate = 60.f;
 	LastComboFrameRate = 120.0f;
-	
 	DamageReceived = 1.0f;
 	bIsStiffen = false;
 	bIsStun = false;
 	bIsDead = false;
-
-	PettuAIController = Cast<AUPPettuAIController>(GetController());
 
 	InitSkillMap();
 }
@@ -33,9 +32,10 @@ void AUPPettuCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	StatComponent->OnHpZero.AddUObject(this, &AUPPettuCharacter::SetDead);
+	//StatComponent->OnHpZero.AddUObject(this, &AUPPettuCharacter::SetDead);
 	StatComponent->OnStunStackZero.AddUObject(this, &AUPPettuCharacter::SetStun);
 	StatComponent->OnStiffen.AddUObject(this, &AUPPettuCharacter::SetStiffen);
+	PettuAIController = Cast<AUPPettuAIController>(GetController());
 }
 
 void AUPPettuCharacter::BeginPlay()
@@ -55,7 +55,23 @@ float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& Da
 void AUPPettuCharacter::SetDead()
 {
 	Super::SetDead();
+	MovementComponent->DisableMovement();
+	//PettuAIController = Cast<AUPPettuAIController>(GetController());
+	if (PettuAIController)
+	{
+		if (PettuAIController->BrainComponent)
+		{
+			PettuAIController->BrainComponent->StopLogic(TEXT("Death"));
+		}
+		PettuAIController->StopMovement();
+	}
+	
 	//Destroy();
+}
+
+void AUPPettuCharacter::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	Super::DeadAnimEnd(Montage, bInterrupted);
 }
 
 void AUPPettuCharacter::SetStun()
@@ -143,7 +159,7 @@ void AUPPettuCharacter::AttackHitCheck()
 	AUPPettuWeapon* PettuWeapon = Cast<AUPPettuWeapon>(Weapon);
 	if (PettuWeapon)
 	{
-		PettuWeapon->CheckAttackRange(CurrentSkillType);
+		PettuWeapon->CheckAttackRange(CurrentSkillData);
 	}
 }
 
@@ -153,13 +169,14 @@ void AUPPettuCharacter::AttackHitCheck(bool bIsAttached, FName SocketName, USkel
 	AUPPettuWeapon* PettuWeapon = Cast<AUPPettuWeapon>(Weapon);
 	if (PettuWeapon && bIsAttached && SocketName != NAME_None)
 	{
-		PettuWeapon->CheckAttackSocket(SocketName, CurrentSkillType, MeshComp);
+		PettuWeapon->CheckAttackSocket(SocketName, CurrentSkillData, MeshComp);
 	}
 }
 
 void AUPPettuCharacter::SkillAttack(EPettuSkillType SkillType)
 {
 	UUPSkillBase** Skill = SkillMap.Find(SkillType);
+	CurrentSkillData = Cast<UUPPettuSkillData>((*Skill)->GetSkillData());
 	(*Skill)->TryActivateSkill(nullptr);
 	CurAttackDamage = (*Skill)->GetSkillAttackDamage();
 }
@@ -169,7 +186,6 @@ void AUPPettuCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
 	if (InHUDWidget)
 	{
 		InHUDWidget->SetPettuCharacter(this);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("PettuHUDWidget"));
 	}
 }
 

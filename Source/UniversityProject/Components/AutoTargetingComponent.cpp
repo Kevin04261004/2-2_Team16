@@ -34,25 +34,6 @@ AActor* UAutoTargetingComponent::FindDamageableTargetOrNull(const FVector& cente
 		Parameters
 	);
 
-	// TArray<AActor*> ActorsToIgnore;
-	// ActorsToIgnore.Add(GetOwner());
-	// ETraceTypeQuery TraceChannel = UEngineTypes::ConvertToTraceType(CCHANEL_UPACTION);
-	//
-	// bool bHit = UKismetSystemLibrary::SphereTraceMulti(
-	// 	GetWorld(),
-	// 	center,
-	// 	center,
-	// 	5000,
-	// 	TraceChannel,
-	// 	false,
-	// 	ActorsToIgnore,
-	// 	EDrawDebugTrace::None,
-	//   HitResults,
-	//   true,
-	//   FLinearColor::Red,
-	//   FLinearColor::Green,
-	//   1.0f);
-	
 	if (!bHit)
 	{
 		return nullptr;
@@ -62,6 +43,10 @@ AActor* UAutoTargetingComponent::FindDamageableTargetOrNull(const FVector& cente
 
 	for (const FHitResult& HitResult : HitResults)
 	{
+		if (HitResult.GetActor() == GetOwner())
+		{
+			continue;
+		}
 		IUPDamageableInterface* curTarget = Cast<IUPDamageableInterface>(HitResult.GetActor());
 		if (curTarget == nullptr)
 		{
@@ -87,10 +72,18 @@ AActor* UAutoTargetingComponent::FindDamageableTargetOrNull(const FVector& cente
 	return nullptr;
 }
 
-void UAutoTargetingComponent::RotateToTarget(FVector targetLocation)
+void UAutoTargetingComponent::RotateToTarget(const FVector& targetLocation)
 {
-	FVector playerLocation = GetOwner()->GetActorLocation();
+	AActor* owner = GetOwner();
+	check(owner != nullptr);
+	FVector playerLocation = owner->GetActorLocation();
 	TargetLocation = targetLocation;
+
+	if (TargetLocation == playerLocation)
+	{
+		return;
+	}
+	
 	LookAtRotation = UKismetMathLibrary::FindLookAtRotation(playerLocation, TargetLocation);
 	
 	LookAtRotation.Pitch = 0.0f;

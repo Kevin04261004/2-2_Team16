@@ -20,4 +20,9 @@ private:
 	// 플레이어 위치 감지반경 나중에 수정할 것
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Search", meta = (AllowPrivateAccess = "true"))
 	float SearchRadius = 150.0f;
+
+	FVector PreLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Search", meta = (AllowPrivateAccess = "true"))
+	FVector FallbackLocation = FVector(0.0f, 0.0f, 0.0f);
 };

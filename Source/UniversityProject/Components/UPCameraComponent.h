@@ -20,8 +20,10 @@ public:
 
 	void Initialize(USpringArmComponent&, UCameraComponent&);
 	
-	void ShakeCamera(FHitResult& HitResult);
-
+	void HitShakeCamera(FHitResult& HitResult);
+	void DamagedShakeCamera();
+	void DashShakeCamera();
+    
 	void ZoomCamera(float Value);
 
 	void LookCamera(FVector2D LookAxisVector);
@@ -35,6 +37,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TSubclassOf<UCameraShakeBase> HitCameraShake;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
+	TSubclassOf<UCameraShakeBase> DamagedCameraShake;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
+	TSubclassOf<UCameraShakeBase> DashCameraShake;
+	
 	UPROPERTY(EditAnywhere, Category="Camera")
 	float MinZoom = 300.0f;
 
@@ -49,4 +57,7 @@ protected:
 
 	TObjectPtr<AUPPlayerCharacter> OwningCharacter;
 	TObjectPtr<AUPPlayerController> PlayerController;
+
+public:
+	float CameraSpeed;
 };

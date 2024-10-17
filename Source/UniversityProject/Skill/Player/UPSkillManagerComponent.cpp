@@ -81,8 +81,7 @@ void UUPSkillManagerComponent::UseSkill(EPlayerSkillType InSkillType)
 		Target = AutoTargetingComponent->FindDamageableTargetOrNull(OwningCharacter->GetActorLocation(), EAutoTargetingMode::ATM_Nearest);
 		if (Target != nullptr)
 		{
-			FVector TargetLocation = Target->GetActorLocation();
-			AutoTargetingComponent->RotateToTarget(TargetLocation);
+			AutoTargetingComponent->RotateToTarget(Target->GetActorLocation());
 		}
 	}
 	if (skill->CanUseSkill())

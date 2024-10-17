@@ -6,6 +6,7 @@
 #include "Character/Weapon/UPWeaponBase.h"
 #include "Character/Enemy/UPPettuCharacter.h"
 #include "Components/SphereComponent.h"
+#include "Skill/UPPettuSkillData.h"
 #include "UPPettuWeapon.generated.h"
 
 /**
@@ -21,8 +22,8 @@ public:
 protected:
 
 public:
-	void CheckAttackRange(EPettuSkillType SkillType);
-	void CheckAttackSocket(FName SocketName, EPettuSkillType SkillType, USkeletalMeshComponent* MeshComp);
+	void CheckAttackRange(UUPPettuSkillData* SkillData);
+	void CheckAttackSocket(FName SocketName, UUPPettuSkillData* SkillData, USkeletalMeshComponent* MeshComp);
 
 	UFUNCTION(BlueprintCallable, Category = "Collision")
 	void SetCollision();
@@ -35,6 +36,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
 	float AttackRadius = 500.0f;
 
+/* 임시 스킬 범위 섹션 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
+	float TakeTurnGorundRange = 400.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
+	float JumpGroundRange = 500.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
+	float TwoHandGroundRange = 500.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
+	float Smash1Range = 300.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
+	float Smash2Range = 300.0f;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Collision")
 	TObjectPtr<USphereComponent> SphereCollision;
 

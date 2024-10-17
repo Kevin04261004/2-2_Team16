@@ -9,6 +9,7 @@
 #include "AI/UPPettuAIController.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
+#include "Skill/UPPettuSkillData.h"
 #include "UPPettuCharacter.generated.h"
 
 UENUM(BlueprintType)
@@ -53,6 +54,8 @@ public:
 /* Dead Section */
 	FORCEINLINE bool IsPettuDead() const { return IsDead(); }
 	virtual void SetDead() override;
+
+	void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted) override;
 
 /* Stun Section */
 	FORCEINLINE bool IsPettuStun() const { return IsStun(); }
@@ -102,6 +105,10 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
 	TMap<EPettuSkillType, UUPSkillBase*> SkillMap;
+
+	UPROPERTY()
+	TObjectPtr<UUPPettuSkillData> CurrentSkillData;
+	
 	void InitSkillMap();
 	void CreateDefaultObjectSkill();
 

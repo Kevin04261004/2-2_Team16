@@ -11,6 +11,8 @@
 UUPCameraComponent::UUPCameraComponent()
 {
 	OwningCharacter = Cast<AUPPlayerCharacter>(GetOwner());
+
+	CameraSpeed = 1.0f;
 }
 
 void UUPCameraComponent::Initialize(USpringArmComponent& SpringArmComponent, UCameraComponent& CameraComponent)
@@ -23,10 +25,27 @@ void UUPCameraComponent::Initialize(USpringArmComponent& SpringArmComponent, UCa
 }
 
 
-void UUPCameraComponent::ShakeCamera(FHitResult& HitResult)
+void UUPCameraComponent::HitShakeCamera(FHitResult& HitResult)
 {
 	PlayerController = Cast<AUPPlayerController>(GetOwner()->GetInstigatorController());
+	check(HitCameraShake != nullptr);
 	PlayerController->ClientStartCameraShake(HitCameraShake);
+}
+
+void UUPCameraComponent::DamagedShakeCamera()
+{
+	PlayerController = Cast<AUPPlayerController>(GetOwner()->GetInstigatorController());
+
+	check(DamagedCameraShake != nullptr);
+	PlayerController->ClientStartCameraShake(DamagedCameraShake);
+}
+
+void UUPCameraComponent::DashShakeCamera()
+{
+	PlayerController = Cast<AUPPlayerController>(GetOwner()->GetInstigatorController());
+
+	check(DashCameraShake != nullptr);
+	PlayerController->ClientStartCameraShake(DashCameraShake);
 }
 
 void UUPCameraComponent::ZoomCamera(float Value)
@@ -40,6 +59,6 @@ void UUPCameraComponent::ZoomCamera(float Value)
 
 void UUPCameraComponent::LookCamera(FVector2D LookAxisVector)
 {
-	OwningCharacter->AddControllerYawInput(LookAxisVector.X);
-	OwningCharacter->AddControllerPitchInput(LookAxisVector.Y);
+	OwningCharacter->AddControllerYawInput(LookAxisVector.X * CameraSpeed);
+	OwningCharacter->AddControllerPitchInput(LookAxisVector.Y * CameraSpeed);
 }

@@ -48,6 +48,8 @@ protected:
 	TObjectPtr<class UInputAction> CameraZoomAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> GameExitAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> SettingAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> GlobalTimeUp;
@@ -67,6 +69,8 @@ protected:
 	void GlobalTimeDownInputAction(const FInputActionValue& Value);
 	void GlobalTimeResetInputAction(const FInputActionValue& Value);
 	void ExitGameInputAction(const FInputActionValue& Value);
+	void SettingInputAction(const FInputActionValue& Value);
+	
 protected:
 	FVector2D MovementVector;
 	bool bIsSprint;

@@ -5,6 +5,9 @@
 #include "UPPettuAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/Enemy/UPPettuCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Physics/Collision.h"
 
 UUPBTTask_Pattern1::UUPBTTask_Pattern1(const FObjectInitializer& ObjectInitializer)
 {
@@ -15,12 +18,15 @@ EBTNodeResult::Type UUPBTTask_Pattern1::ExecuteTask(UBehaviorTreeComponent& Owne
 {
 	CurrentOwnerComp = &OwnerComp;
 	auto* const PettuController = Cast<AUPPettuAIController>(OwnerComp.GetAIOwner());
-	auto* const Pettu = Cast<AUPPettuCharacter>(PettuController->GetPawn());
-	AnimInstance = Pettu->GetMesh()->GetAnimInstance();
-	if (Pettu)
+	PettuCharacter = Cast<AUPPettuCharacter>(PettuController->GetPawn());
+	AnimInstance = PettuCharacter->GetMesh()->GetAnimInstance();
+	if (PettuCharacter)
 	{
-		Pettu->SkillAttack(SkillType);
-		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Pattern1"));
+		PettuCharacter->SkillAttack(SkillType);
+		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(PettuCharacter->GetActorLocation(),
+			UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorLocation());
+		FRotator NewRotation = FRotator(0.0f, LookAtRotation.Yaw, 0.0f);
+		PettuCharacter->SetActorRotation(NewRotation);
 		AnimInstance->OnMontageEnded.AddDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
 		return EBTNodeResult::InProgress;
 	}
@@ -31,6 +37,5 @@ void UUPBTTask_Pattern1::OnPatternMontageEnded(UAnimMontage* Montage, bool bInte
 {
 	AnimInstance->OnMontageEnded.RemoveDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
 	CurrentOwnerComp->GetBlackboardComponent()->SetValueAsBool(TEXT("CanExecutePattern"), false);
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Pattern1 End")));
 	FinishLatentTask(*CurrentOwnerComp, EBTNodeResult::Succeeded);
 }

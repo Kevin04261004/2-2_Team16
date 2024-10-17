@@ -28,6 +28,14 @@ void AUPGameMode::OnPlayerDead()
 	PlayerController->GameOver();
 }
 
+void AUPGameMode::OnGameClear()
+{
+	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetWorld()->GetFirstPlayerController());
+	check(PlayerController != nullptr);
+	PlayerController->GameClear();
+	bIsCleared = true;
+}
+
 bool AUPGameMode::IsGameCleared()
 {
 	return bIsCleared;
@@ -37,11 +45,19 @@ void AUPGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (HudWidget)
+	if (HudWidget != nullptr)
 	{
 		UUserWidget* Hud = CreateWidget<UUserWidget>(GetWorld(), HudWidget);
 		HudWidgetObject = Cast<UUPHudWidget>(Hud);
 		check(Hud != nullptr);
 		Hud->AddToViewport();
+	}
+
+	if (SettingWidget != nullptr)
+	{
+		//UUPUserWidget* SettingWDG = CreateWidget<UUPUserWidget>(GetWorld(), SettingWidget);
+		//SettingWidgetObject = Cast<UUPSettingWidget>(SettingWDG);
+		//check(SettingWDG != nullptr);
+		//SettingWDG->AddToViewport();
 	}
 }

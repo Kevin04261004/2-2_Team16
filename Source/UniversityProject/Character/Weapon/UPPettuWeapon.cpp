@@ -15,54 +15,35 @@ AUPPettuWeapon::AUPPettuWeapon()
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SphereCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
 	SphereCollision->SetCollisionResponseToChannel(CCHANEL_UPACTION, ECR_Overlap);
+	SphereCollision->SetHiddenInGame(true);
 	
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AUPPettuWeapon::OnWeaponOverlapBegin);
 	
 	RootComponent = SphereCollision;
 }
 
-void AUPPettuWeapon::CheckAttackRange(EPettuSkillType SkillType)
+void AUPPettuWeapon::CheckAttackRange(UUPPettuSkillData* SkillData)
 {
-	FVector StartLocation = GetOwner()->GetActorLocation();
-	FVector EndLocation = StartLocation + GetOwner()->GetActorForwardVector();
-	switch (SkillType)
-	{
-	case EPettuSkillType::TakeTurnGroundAttack:
-		AttackRange = 1.0f;
-		AttackRadius = 400.0f;
-		break;
-	case EPettuSkillType::JumpGroundAttack:
-		AttackRange = 1.0f;
-		AttackRadius = 500.0f;
-		break;
-	case EPettuSkillType::TwoHandGroundAttack:
-		AttackRange = 1.0f;
-		AttackRadius = 500.0f;
-		break;
-	}
+	AActor* OwnerActor = GetOwner();
+	FVector OwnerLocation = OwnerActor->GetActorLocation();
+	FVector StartLocation = OwnerLocation + SkillData->GetCollisionLocation() +
+		OwnerActor->GetActorForwardVector() * SkillData->GetAmount();
+	FVector EndLocation = StartLocation + FVector(0.0f, 0.0f, 1.0f);
+	AttackRadius = SkillData->GetSkillRange();
 	CheckCollision(StartLocation, EndLocation);
 }
 
-void AUPPettuWeapon::CheckAttackSocket(FName SocketName, EPettuSkillType SkillType,  USkeletalMeshComponent* MeshComp)
+void AUPPettuWeapon::CheckAttackSocket(FName SocketName, UUPPettuSkillData* SkillData,  USkeletalMeshComponent* MeshComp)
 {
 	AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	SphereCollision->SetHiddenInGame(false);
-	switch (SkillType)
-	{
-	case EPettuSkillType::SmashAttack:
-		SphereCollision->SetSphereRadius(300.0f);
-		break;
-	case EPettuSkillType::SmashAttack2:
-		SphereCollision->SetSphereRadius(300.0f);
-		break;
-	}
+	SphereCollision->SetSphereRadius(SkillData->GetSkillRange());
+	SphereCollision->SetRelativeLocation(SkillData->GetCollisionLocation());
 }
 
 void AUPPettuWeapon::SetCollision()
 {
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	SphereCollision->SetHiddenInGame(true);
 }
 
 void AUPPettuWeapon::ClearAttackedActors()
@@ -73,34 +54,42 @@ void AUPPettuWeapon::ClearAttackedActors()
 void AUPPettuWeapon::CheckCollision(FVector Start, FVector End)
 {
 	ClearAttackedActors();
-	FHitResult HitResult;
+	TArray<FHitResult> HitResults;
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
 	ActorsToIgnore.Add(GetOwner());
-	FVector StartLocation = Start;
-	FVector EndLocation = End;
+	FVector StartLocation = Start; 
+	FVector EndLocation = End;     
 	ETraceTypeQuery TraceChannel = UEngineTypes::ConvertToTraceType(CCHANEL_UPACTION);
-	FCollisionQueryParams CollisionParams = FCollisionQueryParams(FName(TEXT("WeaponTrace")), false, GetOwner());
-
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("CheckCollision"));
+	FCollisionQueryParams CollisionParams(FName(TEXT("WeaponTrace")), false, GetOwner());
 	
-	bool bHit = UKismetSystemLibrary::SphereTraceSingle(GetWorld(),
+	bool bHit = UKismetSystemLibrary::SphereTraceMulti(
+		GetWorld(),
 		StartLocation,
 		EndLocation,
 		AttackRadius,
 		TraceChannel,
 		false,
 		ActorsToIgnore,
-		EDrawDebugTrace::ForDuration,
-		HitResult,
-		true,
+		EDrawDebugTrace::None, 
+		HitResults,
+		true, 
 		FLinearColor::Red,
 		FLinearColor::Green,
-		1.0f);
+		1.0f
+	);
 
-	if (bHit && HitResult.GetActor() && !AttackedActors.Contains(HitResult.GetActor()))
+	
+	for (FHitResult& Hit : HitResults)
 	{
-		Attack(HitResult);
+		if (Hit.GetActor() && Hit.GetActor()->IsA(AUPPlayerCharacter::StaticClass())) 
+		{
+			if (!AttackedActors.Contains(Hit.GetActor()))
+			{
+				Attack(Hit); 
+				AttackedActors.Add(Hit.GetActor()); 
+			}
+		}
 	}
 }
 
@@ -117,7 +106,6 @@ void AUPPettuWeapon::OnWeaponOverlapBegin(UPrimitiveComponent* OverlappedCompone
 	if (OtherActor && OtherActor != this && OtherActor != GetOwner())
 	{
 		ClearAttackedActors();
-		GEngine->AddOnScreenDebugMessage( -1, 1.0f, FColor::Red, TEXT("OnWeaponOverlapBegin") );
 		FHitResult HitResult = SweepResult;
 		Attack(HitResult);
 	}
