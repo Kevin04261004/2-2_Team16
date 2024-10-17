@@ -30,5 +30,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Pattern")
 	EPettuSkillType SkillType;
+
+	UPROPERTY()
+	TObjectPtr<AUPPettuCharacter> PettuCharacter;
 	
 };

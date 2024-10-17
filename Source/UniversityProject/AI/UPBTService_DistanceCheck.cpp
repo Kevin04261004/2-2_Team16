@@ -44,7 +44,6 @@ void UUPBTService_DistanceCheck::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 	}
 
 	float DistanceToPlayer = FVector::Dist(AIPawn->GetActorLocation(), Player->GetActorLocation());
-	GEngine->AddOnScreenDebugMessage( -1, 5.f, FColor::Red, FString::Printf(TEXT("DistanceToPlayer: %f"), DistanceToPlayer));
 	bool bIsInRange = DistanceToPlayer <= Distance;
 	BlackboardComp->SetValueAsBool("IsInRange", bIsInRange);
 }
