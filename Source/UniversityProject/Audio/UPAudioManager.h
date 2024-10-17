@@ -49,4 +49,8 @@ protected:
 public:
 	void SetSFXVolume(float volume);
 	void SetBGMVolume(float volume);
+
+private:
+	float SFXVolume;
+	float BGMVolume;
 };

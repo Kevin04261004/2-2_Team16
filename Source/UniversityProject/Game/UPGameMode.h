@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "Interface/UPGameInterface.h"
 #include "UI/UPHudWidget.h"
+#include "UI/UPSettingWidget.h"
 #include "UPGameMode.generated.h"
 
 /**
@@ -31,4 +32,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Game)
 	TObjectPtr<UUPHudWidget> HudWidgetObject;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Game)
+	TSubclassOf<UUPUserWidget> SettingWidget;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Game)
+	TObjectPtr<UUPSettingWidget> SettingWidgetObject;
 };
