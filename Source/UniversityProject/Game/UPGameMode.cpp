@@ -51,5 +51,6 @@ void AUPGameMode::BeginPlay()
 		SettingWidgetObject = Cast<UUPSettingWidget>(SettingWDG);
 		check(SettingWDG != nullptr);
 		SettingWDG->AddToViewport();
+		SettingWidgetObject->SetVisibility(ESlateVisibility::Hidden);
 	}
 }

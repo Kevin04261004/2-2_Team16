@@ -18,7 +18,8 @@ public:
 	void WorldTimeUp();
 	void WorldTimeDown();
 	void WorldTimeReset();
-
+	void WorldTimeStop();
+	
 protected:
 	float timeScale = 1.0f;
 

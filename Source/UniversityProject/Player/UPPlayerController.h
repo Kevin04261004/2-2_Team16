@@ -6,6 +6,13 @@
 #include "GameFramework/PlayerController.h"
 #include "UPPlayerController.generated.h"
 
+UENUM(BlueprintType)
+enum class EInputMode : uint8
+{
+	Game,
+	UI,
+};
+
 /**
  * 
  */
@@ -26,4 +33,15 @@ public:
 	void GameClear();
 protected:
 	virtual void BeginPlay() override;
+
+public:
+	void SetUIMode();
+	void SetGameMode();
+	FORCEINLINE EInputMode GetInputMode() const { return CurInputMode; }
+	
+protected:
+	EInputMode CurInputMode;
+
+protected:
+	TObjectPtr<class UUPSettingWidget> SettingWidgetObject;
 };
