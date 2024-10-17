@@ -19,7 +19,7 @@ EBTNodeResult::Type UUPBTTask_FindPlayerLocation::ExecuteTask(UBehaviorTreeCompo
 	// 플레이어 위치 따옴
 	if (auto* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))
 	{
-		auto const PlayerLocation = Player->GetActorLocation();
+		FVector PlayerLocation = FVector3d(Player->GetActorLocation().X, Player->GetActorLocation().Y, 0.0f);
 		if (PlayerLocation != PreLocation)
 		{
 			PreLocation = PlayerLocation;
