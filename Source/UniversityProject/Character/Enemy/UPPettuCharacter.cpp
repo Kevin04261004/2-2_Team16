@@ -56,7 +56,20 @@ float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& Da
 void AUPPettuCharacter::SetDead()
 {
 	Super::SetDead();
+	MovementComponent->DisableMovement();
+	if (PettuAIController->BrainComponent)
+	{
+		PettuAIController->BrainComponent->StopLogic(TEXT("Death"));
+	}
+	PettuAIController->StopMovement();
 	//Destroy();
+}
+
+void AUPPettuCharacter::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	Super::DeadAnimEnd(Montage, bInterrupted);
+	GetMesh()->bPauseAnims = true; 
+	GetMesh()->bNoSkeletonUpdate = true; 
 }
 
 void AUPPettuCharacter::SetStun()

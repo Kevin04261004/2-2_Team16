@@ -55,6 +55,8 @@ public:
 	FORCEINLINE bool IsPettuDead() const { return IsDead(); }
 	virtual void SetDead() override;
 
+	void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted) override;
+
 /* Stun Section */
 	FORCEINLINE bool IsPettuStun() const { return IsStun(); }
 	virtual void SetStun() override;

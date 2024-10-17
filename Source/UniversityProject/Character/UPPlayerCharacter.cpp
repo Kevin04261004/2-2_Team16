@@ -40,6 +40,9 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	StateManager = CreateDefaultSubobject<UUPStateManager>(TEXT("StateManager"));
 	InputHandler = CreateDefaultSubobject<UUPInputHandlerComponent>(TEXT("InputHandler"));
 	SkillManager = CreateDefaultSubobject<UUPSkillManagerComponent>(TEXT("SkillManager"));
+
+	MovementComponent->bEnablePhysicsInteraction = true;
+	MovementComponent->bPushForceUsingZOffset = false;
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
