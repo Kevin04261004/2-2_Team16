@@ -186,7 +186,6 @@ void AUPPettuCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
 	if (InHUDWidget)
 	{
 		InHUDWidget->SetPettuCharacter(this);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("PettuHUDWidget"));
 	}
 }
 

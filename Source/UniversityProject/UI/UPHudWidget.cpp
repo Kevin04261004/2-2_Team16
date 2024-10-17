@@ -18,7 +18,6 @@ void UUPHudWidget::NativeConstruct()
 	IUPCharacterHUDInterface* HUDPawn = Cast<IUPCharacterHUDInterface>(GetOwningPlayerPawn());
 	if (HUDPawn)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetOwningPlayerPawn()->GetName());
 		HUDPawn->SetupHUDWidget(this);
 	}
 }
