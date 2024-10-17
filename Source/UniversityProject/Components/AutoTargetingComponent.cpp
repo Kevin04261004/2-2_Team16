@@ -34,25 +34,6 @@ AActor* UAutoTargetingComponent::FindDamageableTargetOrNull(const FVector& cente
 		Parameters
 	);
 
-	// TArray<AActor*> ActorsToIgnore;
-	// ActorsToIgnore.Add(GetOwner());
-	// ETraceTypeQuery TraceChannel = UEngineTypes::ConvertToTraceType(CCHANEL_UPACTION);
-	//
-	// bool bHit = UKismetSystemLibrary::SphereTraceMulti(
-	// 	GetWorld(),
-	// 	center,
-	// 	center,
-	// 	5000,
-	// 	TraceChannel,
-	// 	false,
-	// 	ActorsToIgnore,
-	// 	EDrawDebugTrace::None,
-	//   HitResults,
-	//   true,
-	//   FLinearColor::Red,
-	//   FLinearColor::Green,
-	//   1.0f);
-	
 	if (!bHit)
 	{
 		return nullptr;
