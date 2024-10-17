@@ -15,6 +15,7 @@ AUPPettuWeapon::AUPPettuWeapon()
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SphereCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
 	SphereCollision->SetCollisionResponseToChannel(CCHANEL_UPACTION, ECR_Overlap);
+	SphereCollision->SetHiddenInGame(true);
 	
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AUPPettuWeapon::OnWeaponOverlapBegin);
 	
@@ -36,7 +37,6 @@ void AUPPettuWeapon::CheckAttackSocket(FName SocketName, UUPPettuSkillData* Skil
 {
 	AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	SphereCollision->SetHiddenInGame(false);
 	SphereCollision->SetSphereRadius(SkillData->GetSkillRange());
 	SphereCollision->SetRelativeLocation(SkillData->GetCollisionLocation());
 }
@@ -44,7 +44,6 @@ void AUPPettuWeapon::CheckAttackSocket(FName SocketName, UUPPettuSkillData* Skil
 void AUPPettuWeapon::SetCollision()
 {
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	SphereCollision->SetHiddenInGame(true);
 }
 
 void AUPPettuWeapon::ClearAttackedActors()
@@ -72,7 +71,7 @@ void AUPPettuWeapon::CheckCollision(FVector Start, FVector End)
 		TraceChannel,
 		false,
 		ActorsToIgnore,
-		EDrawDebugTrace::ForDuration, 
+		EDrawDebugTrace::None, 
 		HitResults,
 		true, 
 		FLinearColor::Red,
