@@ -57,4 +57,7 @@ protected:
 
 	TObjectPtr<AUPPlayerCharacter> OwningCharacter;
 	TObjectPtr<AUPPlayerController> PlayerController;
+
+public:
+	float CameraSpeed;
 };
