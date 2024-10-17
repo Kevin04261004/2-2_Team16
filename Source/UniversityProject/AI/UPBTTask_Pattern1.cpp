@@ -5,6 +5,8 @@
 #include "UPPettuAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/Enemy/UPPettuCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 UUPBTTask_Pattern1::UUPBTTask_Pattern1(const FObjectInitializer& ObjectInitializer)
 {
@@ -20,6 +22,8 @@ EBTNodeResult::Type UUPBTTask_Pattern1::ExecuteTask(UBehaviorTreeComponent& Owne
 	if (Pettu)
 	{
 		Pettu->SkillAttack(SkillType);
+		Pettu->SetActorRotation(UKismetMathLibrary::FindLookAtRotation(Pettu->GetActorLocation(),
+			UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorLocation()));
 		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Pattern1"));
 		AnimInstance->OnMontageEnded.AddDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
 		return EBTNodeResult::InProgress;

@@ -24,6 +24,7 @@ void AUPPettuAIController::OnPossess(APawn* InPawn)
 			UBlackboardComponent* b;
 			UseBlackboard(tree->BlackboardAsset, b);
 			Blackboard = b;
+			BrainComponent = b->GetBrainComponent();
 			RunBehaviorTree(tree);
 		}
 	}
