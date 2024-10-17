@@ -18,8 +18,6 @@ EBTNodeResult::Type UUPBTTask_Died::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		auto* const Pettu = Cast<AUPPettuCharacter>(PettuController->GetPawn());
 		if (Pettu)
 		{
-			// 죽음 처리
-			//Pettu->SetDead();
 			OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("IsDead"), true);
 			return EBTNodeResult::Succeeded;
 		}
