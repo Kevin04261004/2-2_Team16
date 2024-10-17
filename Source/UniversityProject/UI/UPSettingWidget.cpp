@@ -3,9 +3,12 @@
 
 #include "UI/UPSettingWidget.h"
 
+#include "EngineUtils.h"
 #include "Audio/UPAudioManager.h"
+#include "Character/UPPlayerCharacter.h"
 #include "Components/Button.h"
 #include "Components/Slider.h"
+#include "Components/UPCameraComponent.h"
 #include "Components/WidgetSwitcher.h"
 #include "Player/UPPlayerController.h"
 
@@ -13,6 +16,18 @@ void UUPSettingWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	for (TActorIterator<AUPPlayerCharacter> It(GetWorld()); It; ++It)
+	{
+		AUPPlayerCharacter* player = *It;
+		if (player != nullptr)
+		{
+			PlayerCharacter = player;
+			break;
+		}
+	}
+	check (PlayerCharacter != nullptr);
+
+	/* Sound */
 	if (BGMVolumeSlider != nullptr)
 	{
 		BGMVolumeSlider->OnValueChanged.AddDynamic(this, &UUPSettingWidget::OnBGMVolumeChanged);
@@ -23,6 +38,7 @@ void UUPSettingWidget::NativeConstruct()
 		SFXVolumeSlider->OnValueChanged.AddDynamic(this, &UUPSettingWidget::OnSFXVolumeChanged);
 	}
 
+	/* Exit */
 	if (ExitSettingButton != nullptr)
 	{
 		ExitSettingButton->OnClicked.AddDynamic(this, &UUPSettingWidget::OnExitSetting);
@@ -33,6 +49,7 @@ void UUPSettingWidget::NativeConstruct()
 		ExitGameButton->OnClicked.AddDynamic(this, &UUPSettingWidget::OnExitSetting);
 	}
 
+	/* Switch */
 	if (SwitchSoundPanelButton != nullptr)
 	{
 		SwitchSoundPanelButton->OnClicked.AddDynamic(this, &UUPSettingWidget::OnSoundButtonPressed);
@@ -44,6 +61,16 @@ void UUPSettingWidget::NativeConstruct()
 	if (SwitchKeySettingPanelButton != nullptr)
 	{
 		SwitchKeySettingPanelButton->OnClicked.AddDynamic(this, &UUPSettingWidget::OnKeySettingButtonPressed);
+	}
+	if (SwitchOtherSettingPanelButton != nullptr)
+	{
+		SwitchOtherSettingPanelButton->OnClicked.AddDynamic(this, &UUPSettingWidget::OnOtherSettingButtonPressed);
+	}
+
+	/* Other */
+	if (CameraSpeedSlider != nullptr)
+	{
+		CameraSpeedSlider->OnValueChanged.AddDynamic(this, &UUPSettingWidget::OnCameraSpeedChanged);
 	}
 }
 
@@ -83,6 +110,11 @@ void UUPSettingWidget::OnKeySettingButtonPressed()
 	SettingWidgetSwitcher->SetActiveWidgetIndex(2);
 }
 
+void UUPSettingWidget::OnOtherSettingButtonPressed()
+{
+	SettingWidgetSwitcher->SetActiveWidgetIndex(3);
+}
+
 void UUPSettingWidget::OnBGMVolumeChanged(float Value)
 {
 	UUPAudioManager* AudioManager = GetGameInstance()->GetSubsystem<UUPAudioManager>();
@@ -101,4 +133,9 @@ void UUPSettingWidget::OnSFXVolumeChanged(float Value)
 		return;
 	}
 	AudioManager->SetSFXVolume(Value);
+}
+
+void UUPSettingWidget::OnCameraSpeedChanged(float Value)
+{
+	PlayerCharacter->GetCameraComponent()->CameraSpeed = Value;
 }

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Character/UPPlayerCharacter.h"
 #include "UI/UPUserWidget.h"
 #include "UPSettingWidget.generated.h"
 
@@ -17,6 +18,8 @@ class UNIVERSITYPROJECT_API UUPSettingWidget : public UUPUserWidget
 public:
 	virtual void NativeConstruct() override;
 
+private:
+	TObjectPtr<AUPPlayerCharacter> PlayerCharacter;
 
 /* Exit Setting */
 protected:
@@ -39,7 +42,9 @@ protected:
 	class UButton* SwitchGraphicPanelButton;
 	UPROPERTY(meta = (BindWidget))
 	class UButton* SwitchKeySettingPanelButton;
-
+	UPROPERTY(meta = (BindWidget))
+	class UButton* SwitchOtherSettingPanelButton;
+	
 	UPROPERTY(meta = (BindWidget))
 	class UWidgetSwitcher* SettingWidgetSwitcher;
 
@@ -49,6 +54,9 @@ protected:
 	void OnGraphicButtonPressed();
 	UFUNCTION()
 	void OnKeySettingButtonPressed();
+	UFUNCTION()
+	void OnOtherSettingButtonPressed();
+	
 /* Audio Setting */
 protected:
 	UPROPERTY(meta = (BindWidget))
@@ -61,4 +69,12 @@ protected:
 
 	UFUNCTION()
 	void OnSFXVolumeChanged(float Value);
+
+/* Other Setting */
+protected:
+	UPROPERTY(meta = (BindWidget))
+	class USlider* CameraSpeedSlider;
+
+	UFUNCTION()
+	void OnCameraSpeedChanged(float Value);
 };
