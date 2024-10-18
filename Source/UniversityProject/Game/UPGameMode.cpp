@@ -51,13 +51,15 @@ void AUPGameMode::BeginPlay()
 		HudWidgetObject = Cast<UUPHudWidget>(Hud);
 		check(Hud != nullptr);
 		Hud->AddToViewport();
+		HudWidgetObject->SetVisibility(ESlateVisibility::Hidden);
 	}
 
 	if (SettingWidget != nullptr)
 	{
-		//UUPUserWidget* SettingWDG = CreateWidget<UUPUserWidget>(GetWorld(), SettingWidget);
-		//SettingWidgetObject = Cast<UUPSettingWidget>(SettingWDG);
-		//check(SettingWDG != nullptr);
-		//SettingWDG->AddToViewport();
+		UUPUserWidget* SettingWDG = CreateWidget<UUPUserWidget>(GetWorld(), SettingWidget);
+		SettingWidgetObject = Cast<UUPSettingWidget>(SettingWDG);
+		check(SettingWDG != nullptr);
+		SettingWDG->AddToViewport();
+		SettingWidgetObject->SetVisibility(ESlateVisibility::Hidden);
 	}
 }

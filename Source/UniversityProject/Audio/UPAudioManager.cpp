@@ -29,6 +29,7 @@ void UUPAudioManager::PlaySoundAtLocation(ESFXAudioType sfx, FVector location)
 	PlaySoundAtLocation(AudioManagerData->SFXAudioMap[sfx]->Sound, location);
 }
 
+
 void UUPAudioManager::PlaySoundAtLocation(USoundBase* sfx, FVector location)
 {
 	UAudioComponent* createdSound = UGameplayStatics::SpawnSoundAtLocation(GetWorld(), sfx, location, FRotator::ZeroRotator, SFXVolume);

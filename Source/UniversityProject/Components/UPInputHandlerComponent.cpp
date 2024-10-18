@@ -8,6 +8,9 @@
 #include "Character/UPCharacterBase.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Manager/UPTimeManager.h"
+#include "Player/UPPlayerController.h"
+
+class AUPPlayerController;
 
 UUPInputHandlerComponent::UUPInputHandlerComponent()
 {
@@ -36,6 +39,7 @@ void UUPInputHandlerComponent::BindActions(UEnhancedInputComponent* EnhancedInpu
 	EnhancedInputComponent->BindAction(GlobalTimeDown, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::GlobalTimeDownInputAction);
 	EnhancedInputComponent->BindAction(GlobalTimeReset, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::GlobalTimeResetInputAction);
 	EnhancedInputComponent->BindAction(GameExitAction, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::ExitGameInputAction);
+	EnhancedInputComponent->BindAction(SettingAction, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::SettingInputAction);
 }
 
 
@@ -114,5 +118,18 @@ void UUPInputHandlerComponent::ExitGameInputAction(const FInputActionValue& Valu
 		return;
 	}
 	UKismetSystemLibrary::QuitGame(GetWorld(), PlayerController, EQuitPreference::Quit, false);
+}
+
+void UUPInputHandlerComponent::SettingInputAction(const FInputActionValue& Value)
+{
+	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetOwner()->GetInstigatorController());
+	if (PlayerController == nullptr)
+	{
+		return;
+	}
+	if (PlayerController->GetInputMode() == EInputMode::Game)
+	{
+		PlayerController->SetUIMode();
+	}
 }
 

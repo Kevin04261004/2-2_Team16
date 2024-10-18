@@ -27,6 +27,12 @@ void UUPTimeManager::WorldTimeReset()
 	SetGlobalTimeDilation(timeScale);
 }
 
+void UUPTimeManager::WorldTimeStop()
+{
+	timeScale = 0.0f;
+	SetGlobalTimeDilation(timeScale);
+}
+
 void UUPTimeManager::SetGlobalTimeDilation(float NewTimeScale)
 {
 	// Unreal Engine의 전역 시간 흐름 변경

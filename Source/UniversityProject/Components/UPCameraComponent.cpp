@@ -11,6 +11,8 @@
 UUPCameraComponent::UUPCameraComponent()
 {
 	OwningCharacter = Cast<AUPPlayerCharacter>(GetOwner());
+
+	CameraSpeed = 1.0f;
 }
 
 void UUPCameraComponent::Initialize(USpringArmComponent& SpringArmComponent, UCameraComponent& CameraComponent)
@@ -57,6 +59,6 @@ void UUPCameraComponent::ZoomCamera(float Value)
 
 void UUPCameraComponent::LookCamera(FVector2D LookAxisVector)
 {
-	OwningCharacter->AddControllerYawInput(LookAxisVector.X);
-	OwningCharacter->AddControllerPitchInput(LookAxisVector.Y);
+	OwningCharacter->AddControllerYawInput(LookAxisVector.X * CameraSpeed);
+	OwningCharacter->AddControllerPitchInput(LookAxisVector.Y * CameraSpeed);
 }
