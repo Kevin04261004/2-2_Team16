@@ -36,6 +36,8 @@ void AUPPettuCharacter::PostInitializeComponents()
 	StatComponent->OnStunStackZero.AddUObject(this, &AUPPettuCharacter::SetStun);
 	StatComponent->OnStiffen.AddUObject(this, &AUPPettuCharacter::SetStiffen);
 	PettuAIController = Cast<AUPPettuAIController>(GetController());
+
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AUPPettuCharacter::BeginPlay()
