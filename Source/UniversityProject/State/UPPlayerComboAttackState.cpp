@@ -21,34 +21,28 @@ void UUPPlayerComboAttackState::InitSkillData()
 	// TODO: Set Next State Here
 	NextAttackStateType = EPlayerStateType::None;
 }
-#pragma optimize("", off)
+
 void UUPPlayerComboAttackState::EnterState()
 {
 	Super::EnterState();
-	float sec =  SkillDuration / ComboInputableData->DefaultFrameCount;
-	OneFrameSec = sec;
-	bIsAttackKeyDown = false;
-	CurrentTime = 0.0f;
+
 }
-#pragma optimize("", on)
+
 void UUPPlayerComboAttackState::ExitState()
 {
 	Super::ExitState();
 }
-#pragma optimize("", off)
+
 void UUPPlayerComboAttackState::UpdateState()
 {
 	Super::UpdateState();
 	
-	CurrentTime += OwnerCharacter->GetWorld()->GetDeltaSeconds();
-
-	float AnimationStartTime = OneFrameSec * ComboInputableData->AnimationChangeStartFrameCount;
-	if (CurrentTime >= AnimationStartTime && bIsAttackKeyDown == true && NextAttackStateType != EPlayerStateType::None)
+	if (CurrentTime >= ComboAnimationStartTime && bIsAttackKeyDown == true && NextAttackStateType != EPlayerStateType::None)
 	{
 		ChangeState(NextAttackStateType);
 	}
 }
-#pragma optimize("", on)
+
 void UUPPlayerComboAttackState::SkillFinished()
 {
 	Super::SkillFinished();

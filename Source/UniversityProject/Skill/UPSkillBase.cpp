@@ -170,9 +170,9 @@ float UUPSkillBase::GetSkillDuration() const
 
 void UUPSkillBase::SetOwnerMovementMode(EMovementMode mode)
 {
-	AUPCharacterBase* character = Cast<AUPCharacterBase>(GetOwner());
-	if (character != nullptr)
-	{
-		character->MovementComponent->MovementMode = mode;
-	}
+	// AUPCharacterBase* character = Cast<AUPCharacterBase>(GetOwner());
+	// if (character != nullptr)
+	// {
+	// 	character->MovementComponent->MovementMode = mode;
+	// }
 }

@@ -41,7 +41,11 @@ protected:
 	UPROPERTY()
 	bool bIsAttackKeyDown = false;
 	UPROPERTY()
+	bool bIsDashKeyDown = false;
+	UPROPERTY()
 	float OneFrameSec = 0.f;
 	UPROPERTY()
 	float CurrentTime;
+	UPROPERTY()
+	float ComboAnimationStartTime;
 };

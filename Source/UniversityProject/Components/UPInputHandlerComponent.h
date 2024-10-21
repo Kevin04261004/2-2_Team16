@@ -9,6 +9,7 @@
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnCameraZoomed, float /* zoomValue */);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnCameraLookInputed, FVector2D /* LookAxisVector */);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnMoveInputed, FVector2D /* MoveAxisVector */);
 DECLARE_MULTICAST_DELEGATE(FOnJumpInputed);
 DECLARE_MULTICAST_DELEGATE(FOnDashInputed);
 DECLARE_MULTICAST_DELEGATE(FOnBaseAttackInputed);
@@ -75,6 +76,7 @@ protected:
 public:
 	FOnCameraZoomed OnCameraZoomed;
 	FOnCameraLookInputed OnCameraLookInputed;
+	FOnMoveInputed OnMoveInputed;
 	FOnJumpInputed OnJumpInputed;
 	FOnDashInputed OnDashInputed;
 	FOnBaseAttackInputed OnBaseAttackInputed;

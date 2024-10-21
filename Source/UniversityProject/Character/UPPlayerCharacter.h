@@ -56,6 +56,8 @@ protected:
 	TObjectPtr<UUPInputHandlerComponent> InputHandler;
 
 public:
+	FORCEINLINE UUPInputHandlerComponent* GetInputHandler() { return InputHandler; }
+public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	FVector GetLastInputVector() const;
