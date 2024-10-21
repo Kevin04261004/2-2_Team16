@@ -15,6 +15,7 @@ void UUPPlayerBaseSkillState::Initialize(AUPPlayerCharacter* InOwnerCharacter,
 {
 	Super::Initialize(InOwnerCharacter, InInputHandler);
 	InputHandler->OnDashInputed.AddUObject(this, &UUPPlayerBaseSkillState::TryDash);
+	InputHandler->OnJumpInputed.AddUObject(this, &UUPPlayerBaseSkillState::TryJump);
 	InitSkillData();
 }
 
@@ -43,6 +44,7 @@ void UUPPlayerBaseSkillState::EnterState()
 		OneFrameSec = sec;
 		bIsAttackKeyDown = false;
 		bIsDashKeyDown = false;
+		bIsJumpKeyDown = false;
 		CurrentTime = 0.0f;
 		ComboAnimationStartTime = OneFrameSec * ComboInputableData->AnimationChangeStartFrameCount;	
 	}
@@ -59,6 +61,7 @@ void UUPPlayerBaseSkillState::ExitState()
 	}
 	bIsDashKeyDown = false;
 	bIsAttackKeyDown = false;
+	bIsJumpKeyDown = false;
 }
 
 #pragma optimize("", off)
@@ -71,6 +74,10 @@ void UUPPlayerBaseSkillState::UpdateState()
 	{
 		ChangeState(EPlayerStateType::Dash);
 	}
+	if (ComboInputableData != nullptr && CurrentTime >= ComboAnimationStartTime && bIsJumpKeyDown == true)
+	{
+		ChangeState(EPlayerStateType::Jump);
+	}
 }
 #pragma optimize("", on)
 
@@ -82,4 +89,9 @@ void UUPPlayerBaseSkillState::SkillFinished()
 void UUPPlayerBaseSkillState::TryDash()
 {
 	bIsDashKeyDown = true;
+}
+
+void UUPPlayerBaseSkillState::TryJump()
+{
+	bIsJumpKeyDown = true;
 }

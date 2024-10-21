@@ -115,6 +115,9 @@ public:
 	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo3;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<UAnimMontage> TakeDownToIdleMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	float JumpToTakeDownMinVelocity = 1200.f;
+	
 /* Skill Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Skill, Meta = (AllowPrivateAccess = true))

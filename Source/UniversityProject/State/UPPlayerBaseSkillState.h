@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Interface/UPDashableStateInterface.h"
+#include "Interface/UPJumpableStateInterface.h"
 #include "State/UPPlayerBaseState.h"
 #include "UPPlayerBaseSkillState.generated.h"
 
@@ -11,7 +12,7 @@
  * 
  */
 UCLASS(Abstract)
-class UNIVERSITYPROJECT_API UUPPlayerBaseSkillState : public UUPPlayerBaseState, public IUPDashableStateInterface
+class UNIVERSITYPROJECT_API UUPPlayerBaseSkillState : public UUPPlayerBaseState, public IUPDashableStateInterface, public IUPJumpableStateInterface
 {
 	GENERATED_BODY()
 	
@@ -30,6 +31,7 @@ protected:
 	EPlayerSkillType ThisSkillType;
 	virtual void SkillFinished();
 	virtual void TryDash() override;
+	virtual void TryJump() override;
 	float SkillDuration;
 	FTimerHandle SkillEndTimerHandle;
 
@@ -42,6 +44,8 @@ protected:
 	bool bIsAttackKeyDown = false;
 	UPROPERTY()
 	bool bIsDashKeyDown = false;
+	UPROPERTY()
+	bool bIsJumpKeyDown = false;
 	UPROPERTY()
 	float OneFrameSec = 0.f;
 	UPROPERTY()
