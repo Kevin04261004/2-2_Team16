@@ -52,3 +52,8 @@ void UUPPlayerBaseSkillState::SkillFinished()
 {
 	// TODO: Set Skill Finish GOTO here!!!
 }
+
+void UUPPlayerBaseSkillState::TryDash()
+{
+	
+}

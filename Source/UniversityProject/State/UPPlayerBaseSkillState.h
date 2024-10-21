@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interface/UPDashableStateInterface.h"
 #include "State/UPPlayerBaseState.h"
 #include "UPPlayerBaseSkillState.generated.h"
 
@@ -10,7 +11,7 @@
  * 
  */
 UCLASS(Abstract)
-class UNIVERSITYPROJECT_API UUPPlayerBaseSkillState : public UUPPlayerBaseState
+class UNIVERSITYPROJECT_API UUPPlayerBaseSkillState : public UUPPlayerBaseState, public IUPDashableStateInterface
 {
 	GENERATED_BODY()
 	
@@ -28,6 +29,19 @@ public:
 protected:
 	EPlayerSkillType ThisSkillType;
 	virtual void SkillFinished();
+	virtual void TryDash() override;
 	float SkillDuration;
 	FTimerHandle SkillEndTimerHandle;
+
+/* Combo Check Section */
+protected:
+	// TODO: make this Values to DataAsset;
+	TObjectPtr<UUPComboInputableData> ComboInputableData;
+
+	UPROPERTY()
+	bool bIsAttackKeyDown = false;
+	UPROPERTY()
+	float OneFrameSec = 0.f;
+	UPROPERTY()
+	float CurrentTime;
 };
