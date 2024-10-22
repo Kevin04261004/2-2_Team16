@@ -118,6 +118,8 @@ protected:
 public:
 	virtual void AttackHitCheck() override;
 	void AttackHitCheck(bool bIsAttached, FName SocketName, USkeletalMeshComponent* MeshComp);
+	void AttackHitCheck(bool bIsAttached, FName SocketName, USkeletalMeshComponent* MeshComp,
+		float AttackRange, float Amount, FVector CollisionLocation);
 public:
 	virtual void SkillAttack(EPettuSkillType SkillType);
 

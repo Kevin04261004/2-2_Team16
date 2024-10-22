@@ -22,8 +22,10 @@ public:
 protected:
 
 public:
-	void CheckAttackRange(UUPPettuSkillData* SkillData);
+	void CheckAttackRange(float AttackRange, float Amount, FVector CollisionLocation);
 	void CheckAttackSocket(FName SocketName, UUPPettuSkillData* SkillData, USkeletalMeshComponent* MeshComp);
+	void CheckAttackRange(FName SocketName, USkeletalMeshComponent* MeshComp,
+		float AttackRange, FVector CollisionLocation);
 
 	UFUNCTION(BlueprintCallable, Category = "Collision")
 	void SetCollision();
@@ -31,8 +33,6 @@ public:
 	
 	
 	virtual void ClearAttackedActors() override;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
-	float AttackRange = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = "true"))
 	float AttackRadius = 500.0f;
 

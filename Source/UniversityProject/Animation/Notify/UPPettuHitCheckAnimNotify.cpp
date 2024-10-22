@@ -16,7 +16,7 @@ void UUPPettuHitCheckAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimS
 		if (AttackPawn)
 		{
 			USkeletalMeshComponent* Mesh = AttackPawn->GetMesh();
-			AttackPawn->AttackHitCheck(bAttached, SocketName, Mesh);
+			AttackPawn->AttackHitCheck(bAttached, SocketName, Mesh, AttackRange, Amount, CollisionLocation);
 			
 		}
 	}

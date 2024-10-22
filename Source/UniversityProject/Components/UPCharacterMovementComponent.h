@@ -42,7 +42,7 @@ protected:
 
 private:
 	FVector LastInputVector; // 마지막 입력 벡터를 저장
-
+	void SetLastInput(FVector2D MovementVector);
 public:
 	FORCEINLINE FVector GetLastInputVector() const { return LastInputVector; }
 };

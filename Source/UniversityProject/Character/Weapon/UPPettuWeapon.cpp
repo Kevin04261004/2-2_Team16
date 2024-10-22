@@ -22,14 +22,14 @@ AUPPettuWeapon::AUPPettuWeapon()
 	RootComponent = SphereCollision;
 }
 
-void AUPPettuWeapon::CheckAttackRange(UUPPettuSkillData* SkillData)
+void AUPPettuWeapon::CheckAttackRange(float AttackRange, float Amount, FVector CollisionLocation)
 {
 	AActor* OwnerActor = GetOwner();
 	FVector OwnerLocation = OwnerActor->GetActorLocation();
-	FVector StartLocation = OwnerLocation + SkillData->GetCollisionLocation() +
-		OwnerActor->GetActorForwardVector() * SkillData->GetAmount();
+	FVector StartLocation = OwnerLocation + CollisionLocation +
+		OwnerActor->GetActorForwardVector() * Amount;
 	FVector EndLocation = StartLocation + FVector(0.0f, 0.0f, 1.0f);
-	AttackRadius = SkillData->GetSkillRange();
+	AttackRadius = AttackRange;
 	CheckCollision(StartLocation, EndLocation);
 }
 
@@ -39,6 +39,14 @@ void AUPPettuWeapon::CheckAttackSocket(FName SocketName, UUPPettuSkillData* Skil
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SphereCollision->SetSphereRadius(SkillData->GetSkillRange());
 	SphereCollision->SetRelativeLocation(SkillData->GetCollisionLocation());
+}
+
+void AUPPettuWeapon::CheckAttackRange(FName SocketName, USkeletalMeshComponent* MeshComp, float AttackRange, FVector CollisionLocation)
+{
+	AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
+	SphereCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	SphereCollision->SetSphereRadius(AttackRange);
+	SphereCollision->SetRelativeLocation(CollisionLocation);
 }
 
 void AUPPettuWeapon::SetCollision()
