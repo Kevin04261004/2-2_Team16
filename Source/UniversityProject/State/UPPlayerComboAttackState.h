@@ -31,16 +31,4 @@ protected:
 	virtual void SkillFinished() override;
 	virtual void TryBaseAttack() override;
 	EPlayerStateType NextAttackStateType;
-
-/* Combo Check Section */
-protected:
-	// TODO: make this Values to DataAsset;
-	TObjectPtr<UUPComboInputableData> ComboInputableData;
-
-	UPROPERTY()
-	bool bIsAttackKeyDown = false;
-	UPROPERTY()
-	float OneFrameSec = 0.f;
-	UPROPERTY()
-	float CurrentTime;
 };

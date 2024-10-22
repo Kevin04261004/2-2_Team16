@@ -28,14 +28,14 @@ void UUPPlayerDashState::EnterState()
 	Super::EnterState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Dash Enter");
 	OwnerCharacter->GetCameraComponent()->DashShakeCamera();
-	OwnerCharacter->PhysicsControlComponent->CollisionOff();
+	// OwnerCharacter->PhysicsControlComponent->CollisionOff();
 }
 
 void UUPPlayerDashState::ExitState()
 {
 	Super::ExitState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Player Dash Exit");
-	OwnerCharacter->PhysicsControlComponent->CollisionOn();
+	// OwnerCharacter->PhysicsControlComponent->CollisionOn();
 }
 
 void UUPPlayerDashState::UpdateState()

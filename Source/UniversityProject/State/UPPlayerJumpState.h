@@ -11,7 +11,7 @@
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerJumpState : public UUPPlayerBaseState
+class UNIVERSITYPROJECT_API UUPPlayerJumpState : public UUPPlayerBaseState, public IUPBaseAttackableStateInterface
 {
 	GENERATED_BODY()
 	
@@ -24,4 +24,7 @@ public:
 	virtual void EnterState() override;
 	virtual void ExitState() override;
 	virtual void UpdateState() override;
+
+protected:
+	void TryBaseAttack() override;
 };

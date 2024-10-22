@@ -4,6 +4,7 @@
 #include "UPCharacterMovementComponent.h"
 
 #include "Character/UPCharacterBase.h"
+#include "Character/UPPlayerCharacter.h"
 
 UUPCharacterMovementComponent::UUPCharacterMovementComponent()
 {
@@ -13,6 +14,14 @@ UUPCharacterMovementComponent::UUPCharacterMovementComponent()
 void UUPCharacterMovementComponent::Initialize()
 {
 	OwningCharacter = Cast<AUPCharacterBase>(GetOwner());
+
+	
+	AUPPlayerCharacter* PlayerCharacter = Cast<AUPPlayerCharacter>(OwningCharacter);
+	if (PlayerCharacter != nullptr)
+	{
+		PlayerCharacter->GetInputHandler()->OnMoveInputed.AddUObject(this, &UUPCharacterMovementComponent::SetLastInput);
+		return;
+	}
 }
 
 
@@ -53,8 +62,6 @@ void UUPCharacterMovementComponent::Move(FVector2D MovementVector)
 	
 	OwningCharacter->AddMovementInput(ForwardDirection, MovementVector.X);
 	OwningCharacter->AddMovementInput(RightDirection, MovementVector.Y);
-
-	LastInputVector = (ForwardDirection * MovementVector.X) + (RightDirection * MovementVector.Y);
 }
 
 
@@ -67,5 +74,18 @@ void UUPCharacterMovementComponent::UpdateSpeed()
 	if (FMath::IsNearlyEqual(NewSpeed, DesiredSpeed, 1.0f))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(SpeedChangeTimerHandle);
+	}
+}
+
+void UUPCharacterMovementComponent::SetLastInput(FVector2D MovementVector)
+{
+	const FRotator Rotation = GetController()->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	
+	if (!MovementVector.IsNearlyZero())
+	{
+		LastInputVector = (ForwardDirection * MovementVector.X) + (RightDirection * MovementVector.Y);
 	}
 }
