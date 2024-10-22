@@ -38,6 +38,10 @@ void AUPPettuCharacter::PostInitializeComponents()
 	PettuAIController = Cast<AUPPettuAIController>(GetController());
 
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetSimulatePhysics(false);
+	MovementComponent->bEnablePhysicsInteraction = true;
+	MovementComponent->PushForcePointZOffsetFactor = -1.0f; // 밀어내는 힘의 크기
+	MovementComponent->bPushForceUsingZOffset = true;
 }
 
 void AUPPettuCharacter::BeginPlay()
@@ -161,7 +165,7 @@ void AUPPettuCharacter::AttackHitCheck()
 	AUPPettuWeapon* PettuWeapon = Cast<AUPPettuWeapon>(Weapon);
 	if (PettuWeapon)
 	{
-		PettuWeapon->CheckAttackRange(CurrentSkillData);
+		//PettuWeapon->CheckAttackRange(CurrentSkillData);
 	}
 }
 
@@ -172,6 +176,21 @@ void AUPPettuCharacter::AttackHitCheck(bool bIsAttached, FName SocketName, USkel
 	if (PettuWeapon && bIsAttached && SocketName != NAME_None)
 	{
 		PettuWeapon->CheckAttackSocket(SocketName, CurrentSkillData, MeshComp);
+	}
+}
+
+void AUPPettuCharacter::AttackHitCheck(bool bIsAttached, FName SocketName, USkeletalMeshComponent* MeshComp,
+	float AttackRange, float Amount, FVector CollisionLocation)
+{
+	check(Weapon != nullptr);
+	AUPPettuWeapon* PettuWeapon = Cast<AUPPettuWeapon>(Weapon);
+	if (PettuWeapon && bIsAttached && SocketName != NAME_None)
+	{
+		PettuWeapon->CheckAttackRange(SocketName, MeshComp, AttackRange, CollisionLocation);
+	}
+	else if (PettuWeapon && !bIsAttached)
+	{
+		PettuWeapon->CheckAttackRange(AttackRange, Amount, CollisionLocation);
 	}
 }
 
