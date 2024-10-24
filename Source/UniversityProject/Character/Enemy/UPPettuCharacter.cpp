@@ -4,7 +4,6 @@
 #include "Character/Enemy/UPPettuCharacter.h"
 #include "AI/UPPettuAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "GameFramework/GameModeBase.h"
 #include "Character/Weapon/UPPettuWeapon.h"
 #include "Components/UPCharacterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -37,7 +36,10 @@ void AUPPettuCharacter::PostInitializeComponents()
 	StatComponent->OnStiffen.AddUObject(this, &AUPPettuCharacter::SetStiffen);
 	PettuAIController = Cast<AUPPettuAIController>(GetController());
 
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// 플레이어의 최대 기울기 설정 (보스 머리 위에서 미끄러지게 함)
+	//GetCharacterMovement()->Walkable(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 30.f));
+
+	//GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetSimulatePhysics(false);
 	MovementComponent->bEnablePhysicsInteraction = true;
 	MovementComponent->PushForcePointZOffsetFactor = -1.0f; // 밀어내는 힘의 크기
