@@ -18,6 +18,15 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Notify")
 	FName SocketName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Notify")
+	float AttackRange;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Notify")
+	float Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Notify")
+	FVector CollisionLocation;
 	
 protected:
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;

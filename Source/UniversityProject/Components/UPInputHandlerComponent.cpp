@@ -45,6 +45,7 @@ void UUPInputHandlerComponent::BindActions(UEnhancedInputComponent* EnhancedInpu
 void UUPInputHandlerComponent::MoveInputAction(const FInputActionValue& Value)
 {
 	MovementVector = Value.Get<FVector2D>();
+	OnMoveInputed.Broadcast(MovementVector);
 }
 
 void UUPInputHandlerComponent::LookInputAction(const FInputActionValue& Value)
