@@ -21,6 +21,12 @@ public:
 	float InputAllowFrameCount = 18.0f;
 	UPROPERTY(EditAnywhere, Category = ComboData, Meta = (ToolTip = "몇번째 프레임부터 InputAllowFrameCount프레임까지 다음 콤보 전환을 허용할 것인가?"))
 	float AnimationChangeStartFrameCount = 12.0f;
-
-	
+	UPROPERTY(EditAnywhere, Category = ComboData, Meta = (ToolTip = "스킬 도중에 대시가 가능한가"))
+	bool bCanDash = true;
+	UPROPERTY(EditAnywhere, Category = ComboData, Meta = (ToolTip = "스킬 도중에 점프가 가능한가"))
+	bool bCanJump = true;
+	UPROPERTY(EditAnywhere, Category = ComboData, Meta = (ToolTip = "점프를 AnimationChangeStartFrame뒤에 가능하게 할 것인가?"))
+	bool bJumpAfterAnimationChangeStartFrame = false;
+	UPROPERTY(EditAnywhere, Category = ComboData, Meta = (ToolTip = "대시를 AnimationChangeStartFrame뒤에 가능하게 할 것인가?"))
+	bool bDashAfterAnimationChangeStartFrame = false;
 };

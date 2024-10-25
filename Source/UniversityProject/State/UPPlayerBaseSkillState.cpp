@@ -70,11 +70,12 @@ void UUPPlayerBaseSkillState::UpdateState()
 	Super::UpdateState();
 	CurrentTime += OwnerCharacter->GetWorld()->GetDeltaSeconds();
 	
-	if (ComboInputableData != nullptr && CurrentTime >= ComboAnimationStartTime && bIsDashKeyDown == true)
+	if (ComboInputableData != nullptr && bIsDashKeyDown == true && ComboInputableData->bCanDash && (!ComboInputableData->bDashAfterAnimationChangeStartFrame || CurrentTime >= ComboAnimationStartTime))
 	{
 		ChangeState(EPlayerStateType::Dash);
 	}
-	if (ComboInputableData != nullptr && CurrentTime >= ComboAnimationStartTime && bIsJumpKeyDown == true)
+	
+	if (ComboInputableData != nullptr && bIsJumpKeyDown == true && ComboInputableData->bCanJump && (!ComboInputableData->bJumpAfterAnimationChangeStartFrame || CurrentTime >= ComboAnimationStartTime))
 	{
 		ChangeState(EPlayerStateType::Jump);
 	}
