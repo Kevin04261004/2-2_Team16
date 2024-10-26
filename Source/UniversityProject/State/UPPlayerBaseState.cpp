@@ -26,5 +26,9 @@ void UUPPlayerBaseState::ExitState()
 
 void UUPPlayerBaseState::UpdateState()
 {
-	
+	// TODO: 여기서 데미지로 State 변경
+	// OwnerCharacter->OnTakeDamaged.AddLambda([]()
+	// {
+	// 	
+	// });
 }

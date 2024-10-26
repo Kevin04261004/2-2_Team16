@@ -107,16 +107,6 @@ protected:
 
 public:
 	FORCEINLINE UUPStateManager* GetStateManager() { return StateManager; }
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo1;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo2;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo3;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UAnimMontage> TakeDownToIdleMontage;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	float JumpToTakeDownMinVelocity = 1200.f;
 	
 /* Skill Section */
 protected:

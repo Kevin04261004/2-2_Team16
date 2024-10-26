@@ -12,7 +12,7 @@ UUPPlayerBaseAttack02State::UUPPlayerBaseAttack02State()
 void UUPPlayerBaseAttack02State::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)
 {
 	Super::Initialize(InOwnerCharacter, InInputHandler);
-	ComboInputableData = OwnerCharacter->ComboInputableData_Combo2;
+	ComboInputableData = OwnerCharacter->GetStateManager()->ComboInputableData_Combo2;
 }
 
 void UUPPlayerBaseAttack02State::InitSkillData()
