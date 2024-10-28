@@ -32,8 +32,9 @@ void AUPPettuCharacter::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	//StatComponent->OnHpZero.AddUObject(this, &AUPPettuCharacter::SetDead);
-	StatComponent->OnStunStackZero.AddUObject(this, &AUPPettuCharacter::SetStun);
+	//StatComponent->OnStunStackZero.AddUObject(this, &AUPPettuCharacter::SetStun);
 	StatComponent->OnStiffen.AddUObject(this, &AUPPettuCharacter::SetStiffen);
+	StatComponent->OnHpChanged.AddUObject(this, &AUPPettuCharacter::StunCheck);
 	PettuAIController = Cast<AUPPettuAIController>(GetController());
 
 	// 플레이어의 최대 기울기 설정 (보스 머리 위에서 미끄러지게 함)
@@ -85,6 +86,8 @@ void AUPPettuCharacter::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 void AUPPettuCharacter::SetStun()
 {
 	Super::SetStun();
+	StatComponent->ApplyStunStack(1);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Stun"));
 	if (PettuAIController)
 	{
 		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
@@ -211,6 +214,22 @@ void AUPPettuCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
 		InHUDWidget->SetPettuCharacter(this);
 	}
 }
+
+void AUPPettuCharacter::StunCheck(float Hp)
+{
+	float CurrentHp = StatComponent->GetCurrentHp();
+	float CurrentStunStack = StatComponent->GetCurrentStunStack();
+	float MaxHp = StatComponent->GetBaseStat().MaxHp;
+	float MaxStunStack = StatComponent->GetBaseStat().MaxStunStack;
+	//float HealingHp = (MaxHp / MaxStunStack) * (CurrentStunStack + 1) - CurrentHp;
+	if (CurrentHp <= (MaxHp / MaxStunStack) * CurrentStunStack)
+	{
+		SetStun();
+		//StatComponent->HealHp(HealingHp);
+	}
+}
+
+
 
 void AUPPettuCharacter::StunEnd(UAnimMontage* Montage, bool bInterrupted)
 {

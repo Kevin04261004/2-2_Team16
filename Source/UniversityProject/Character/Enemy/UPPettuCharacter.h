@@ -62,6 +62,7 @@ public:
 	virtual void SetStun() override;
 	UFUNCTION()
 	void StunEnd(UAnimMontage* Montage, bool bInterrupted);
+	
 
 /* Stiffen Section */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State", Meta = (AllowPrivateAccess = "true"))
@@ -126,4 +127,7 @@ public:
 	/* UI Section */
 protected:
 	virtual void SetupHUDWidget(UUPHudWidget* InHUDWidget) override;
+	UFUNCTION()
+	void StunCheck(float Hp);
+	
 };

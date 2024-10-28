@@ -61,6 +61,7 @@ public:
 	FORCEINLINE const FUPCharacterStat& GetModifierStat() const { return ModifierStat; }
 	FORCEINLINE FUPCharacterStat GetTotalStat() const { return BaseStat + ModifierStat; }
 	FORCEINLINE float GetCurrentHp() const { return CurrentHp; }
+	FORCEINLINE float GetCurrentStunStack() const { return CurrentStunStack; }
 	FORCEINLINE void HealHp(float InHealAmount)
 	{
 		CurrentHp = FMath::Clamp(CurrentHp + InHealAmount, 0, GetTotalStat().MaxHp);
