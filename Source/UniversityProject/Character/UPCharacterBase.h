@@ -10,6 +10,8 @@
 #include "Interface/UPDamageableInterface.h"
 #include "UPCharacterBase.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnTakeDamaged, float /* DamagedAmount */)
+
 UCLASS()
 class UNIVERSITYPROJECT_API AUPCharacterBase : public ACharacter, public IUPDamageableInterface
 {
@@ -54,10 +56,13 @@ protected:
 	
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void Attack(FHitResult& InHit);
+
 // Attack Hit Section
 public:
 	FORCEINLINE virtual UNiagaraSystem* GetHitEffect() override { return HitEffect.Get(); }
 	FORCEINLINE virtual USoundBase* GetHitSound() override { return HitSound.Get(); }
+	FOnTakeDamaged OnTakeDamaged;
+	
 // Dead Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 죽음 애니메이션 몽타주"))
@@ -80,11 +85,12 @@ protected:
 	TObjectPtr<class UUPCharacterStatComponent> StatComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "게임 시작 시 초기화 될 캐릭터의 스텟"))
 	TObjectPtr<UUPCharacterStatData> CharacterInitalizeStatData;
+	
 // Stat Section
 public:
-	
 	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return StatComponent.Get(); }
 	void ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat);
+
 // Stun Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 스턴 애니메이션 몽타주"))
@@ -98,7 +104,4 @@ protected:
 	void PlayStunAnimation();
 	UFUNCTION()
 	virtual void StunAnimEnd(UAnimMontage* Montage, bool bInterrupted);
-
-	// UI Section
-protected:
 };

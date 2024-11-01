@@ -127,6 +127,7 @@ bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance, FHitR
 float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	StatComponent->ApplyDamage(DamageAmount);
+	OnTakeDamaged.Broadcast(DamageAmount);
 	return DamageAmount;
 }
 

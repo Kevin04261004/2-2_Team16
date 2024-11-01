@@ -115,9 +115,9 @@ void UUPPlayerTakeDownState::SkillFinished()
 void UUPPlayerTakeDownState::PlayAttackToIdleMontage()
 {
 	UAnimInstance* AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
-	if (OwnerCharacter->TakeDownToIdleMontage != nullptr && AnimInstance != nullptr)
+	if (OwnerCharacter->GetStateManager()->TakeDownToIdleMontage != nullptr && AnimInstance != nullptr)
 	{
-		AnimInstance->Montage_Play(OwnerCharacter->TakeDownToIdleMontage);
+		AnimInstance->Montage_Play(OwnerCharacter->GetStateManager()->TakeDownToIdleMontage);
 	}
 }
 

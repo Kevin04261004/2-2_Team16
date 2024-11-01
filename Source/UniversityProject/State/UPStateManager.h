@@ -32,7 +32,7 @@ enum class EPlayerStateType : uint8
 	
 	/* Others... */
 	Dead UMETA(DisplayName = "죽음"), //
-	Damaged UMETA(DisplayName = "데미지를 받음"), //
+	Damaged UMETA(DisplayName = "데미지를 받음"),
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -65,5 +65,15 @@ protected:
 	UPROPERTY()
 	TObjectPtr<class UUPInputHandlerComponent> InputHandler;
 	
-protected:
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo1;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo2;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UUPComboInputableData> ComboInputableData_Combo3;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UAnimMontage> TakeDownToIdleMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	float JumpToTakeDownMinVelocity = 1200.f;
 };

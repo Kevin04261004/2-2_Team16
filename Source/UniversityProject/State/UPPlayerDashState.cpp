@@ -36,6 +36,7 @@ void UUPPlayerDashState::ExitState()
 	Super::ExitState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Player Dash Exit");
 	// OwnerCharacter->PhysicsControlComponent->CollisionOn();
+	OwnerCharacter->MovementComponent->SetIsSprinting(true);
 }
 
 void UUPPlayerDashState::UpdateState()

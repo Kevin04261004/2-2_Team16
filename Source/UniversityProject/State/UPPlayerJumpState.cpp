@@ -55,7 +55,7 @@ void UUPPlayerJumpState::TryBaseAttack()
 {
 	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Jump
 	|| !OwnerCharacter->GetSkillManager()->CanUseSkill(EPlayerSkillType::TakeDown)
-	|| OwnerCharacter->MovementComponent->Velocity.Z > OwnerCharacter->JumpToTakeDownMinVelocity)
+	|| OwnerCharacter->MovementComponent->Velocity.Z > OwnerCharacter->GetStateManager()->JumpToTakeDownMinVelocity)
 	{
 		return;
 	}
