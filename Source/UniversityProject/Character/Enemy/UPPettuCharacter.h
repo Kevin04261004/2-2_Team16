@@ -35,7 +35,9 @@ public:
 	
 protected:
 	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	
+
+private:
+	TObjectPtr<AUPPlayerCharacter> PlayerCharacter;
 /* AI Section */
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))

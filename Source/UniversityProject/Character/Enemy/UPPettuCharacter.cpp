@@ -8,6 +8,7 @@
 #include "Components/UPCharacterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Interface/UPGameInterface.h"
+#include "Kismet/GameplayStatics.h"
 #include "Skill/UPSkillBase.h"
 #include "UI/UPHudWidget.h"
 
@@ -53,6 +54,11 @@ void AUPPettuCharacter::BeginPlay()
 	GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetBaseStat().WalkSpeed;
 	
 	CreateDefaultObjectSkill();
+	PlayerCharacter = Cast<AUPPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (PlayerCharacter)
+	{
+		PlayerCharacter->SetPettuCharacter(this);
+	}
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,

@@ -12,6 +12,7 @@
 #include "Components/UPCameraComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Interface/UPGameInterface.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Manager/UPPostProcessManager.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
@@ -72,8 +73,8 @@ void AUPPlayerCharacter::BeginPlay()
 	EnableInput(PlayerController);
 
 	InputHandler->SetMappingContext(PlayerController);
-	
 	Weapon->OnWeaponHit.AddUObject(CameraComponent, &UUPCameraComponent::HitShakeCamera);
+	
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -81,6 +82,7 @@ void AUPPlayerCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	
 	StateManager->UpdateState();
+	SetLookAtAlpha();
 }
 
 void AUPPlayerCharacter::SetDead()
@@ -173,6 +175,20 @@ void AUPPlayerCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
 			}
 		}
 		InHUDWidget->SetPlayerCharacter(this);
+	}
+}
+
+void AUPPlayerCharacter::SetLookAtAlpha()
+{
+	if (PettuCharacter)
+	{
+		FVector PlayerLocation = GetActorLocation();
+		FVector PettuLocation = PettuCharacter->GetActorLocation();
+		FRotator LookAtRotator = UKismetMathLibrary::FindLookAtRotation(PlayerLocation, PettuLocation);
+		FRotator PlayerRotator = GetActorRotation();
+		LookAtAlpha = FMath::Abs(PlayerRotator.Yaw - LookAtRotator.Yaw) > LookAtFOV ? 0.0f : 1.0f;
+
+		LookAtLocation = PettuCharacter->GetMesh()->GetSocketLocation(LookAtLocationSocketName);
 	}
 }
 
