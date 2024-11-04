@@ -7,14 +7,15 @@
 AUPStageManager::AUPStageManager()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
 }
 
 void AUPStageManager::AdvanceStage()
 {
-	if (CurrentStageIndex < TutorialStages.Num() - 1)
+	if (CurrentStageIndex < StageTutorialData->TutorialStages.Num() - 1)
 	{
+		OnStageClear.Broadcast(CurrentStageIndex);
 		CurrentStageIndex++;
+		OnStageStart.Broadcast(CurrentStageIndex);
 		UE_LOG(LogTemp, Log, TEXT("스테이지 진행: %d"), CurrentStageIndex);
 	}
 	else
@@ -25,14 +26,29 @@ void AUPStageManager::AdvanceStage()
 
 void AUPStageManager::EvaluateCondition(EStageConditionType ConditionType)
 {
-	if (TutorialStages.IsValidIndex(CurrentStageIndex))
+	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{
-		FUPTutorialStage& CurrentStage = TutorialStages[CurrentStageIndex];
+		FUPTutorialStage& CurrentStage = StageTutorialData->TutorialStages[CurrentStageIndex];
 		
-		if (CurrentStage.ConditionType == ConditionType)
+		if (CurrentStage.StageConditionMap.Find(ConditionType))
 		{
-			CurrentStage.bIsComplete = true;
-			AdvanceStage();
+			CurrentStage.StageConditionMap[ConditionType]--;
+
+			EvaluateAllConditions();
 		}
 	}
+}
+
+void AUPStageManager::EvaluateAllConditions()
+{
+	FUPTutorialStage& CurrentStage = StageTutorialData->TutorialStages[CurrentStageIndex];
+	for (TTuple<EStageConditionType, int> condition : CurrentStage.StageConditionMap)
+	{
+		if (condition.Value > 0)
+		{
+			return;
+		}
+	}
+
+	AdvanceStage();
 }

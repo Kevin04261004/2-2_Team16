@@ -71,8 +71,7 @@ void UUPPlayerTakeDownState::UpdateState()
 	/* 공격 애니메이션이 중지됨, 콜리전 체크 및 물리 필요. */
 	if (CurrentMontage == OwnerCharacter->GetSkillManager()->GetSkill(ThisSkillType)->GetSkillData()->GetSkillAnimation() && IsAnimationStoped())
 	{
-		OwnerCharacter->MovementComponent->Velocity = FVector(0, 0, -5000);
-		FHitResult HitResult;
+		OwnerCharacter->MovementComponent->Velocity = FVector(0, 0, -OwnerCharacter->GetStateManager()->TakeDownVelocity);
 		AUPPlayerCharacterWeapon* playerWeapon = Cast<AUPPlayerCharacterWeapon>(OwnerCharacter->GetWeapon());
 
 		playerWeapon->CheckAttackRange();
