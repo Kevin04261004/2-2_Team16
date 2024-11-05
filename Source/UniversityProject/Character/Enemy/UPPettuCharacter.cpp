@@ -44,7 +44,6 @@ void AUPPettuCharacter::PostInitializeComponents()
 	//GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetSimulatePhysics(false);
 	MovementComponent->bEnablePhysicsInteraction = true;
-	MovementComponent->PushForcePointZOffsetFactor = -1.0f; // 밀어내는 힘의 크기
 	MovementComponent->bPushForceUsingZOffset = true;
 }
 

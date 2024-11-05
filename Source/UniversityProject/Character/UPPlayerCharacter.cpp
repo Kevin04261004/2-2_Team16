@@ -2,6 +2,8 @@
 
 #include "Character/UPPlayerCharacter.h"
 
+#include <ThirdParty/ShaderConductor/ShaderConductor/External/SPIRV-Headers/include/spirv/unified1/spirv.h>
+
 #include "EngineUtils.h"
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
@@ -82,7 +84,7 @@ void AUPPlayerCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	
 	StateManager->UpdateState();
-	SetLookAtAlpha();
+	SetLookAtAlpha(DeltaSeconds);
 }
 
 void AUPPlayerCharacter::SetDead()
@@ -178,7 +180,7 @@ void AUPPlayerCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
 	}
 }
 
-void AUPPlayerCharacter::SetLookAtAlpha()
+void AUPPlayerCharacter::SetLookAtAlpha(float DeltaTime)
 {
 	if (PettuCharacter)
 	{
@@ -186,9 +188,10 @@ void AUPPlayerCharacter::SetLookAtAlpha()
 		FVector PettuLocation = PettuCharacter->GetActorLocation();
 		FRotator LookAtRotator = UKismetMathLibrary::FindLookAtRotation(PlayerLocation, PettuLocation);
 		FRotator PlayerRotator = GetActorRotation();
-		LookAtAlpha = FMath::Abs(PlayerRotator.Yaw - LookAtRotator.Yaw) > LookAtFOV ? 0.0f : 1.0f;
-
+		TargetAlpha = FMath::Abs(PlayerRotator.Yaw - LookAtRotator.Yaw) > LookAtFOV ? 0.0f : 1.0f;
+		LookAtAlpha = FMath::FInterpTo(LookAtAlpha, TargetAlpha, DeltaTime, 0.3f);
 		LookAtLocation = PettuCharacter->GetMesh()->GetSocketLocation(LookAtLocationSocketName);
+		LookAtLocation = FVector(-LookAtLocation.X, LookAtLocation.Y, PlayerLocation.Z);
 	}
 }
 

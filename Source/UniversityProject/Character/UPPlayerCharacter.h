@@ -125,14 +125,15 @@ protected:
 private:
 	UPROPERTY()
 	float LookAtAlpha = 0.0f;
+	float TargetAlpha = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = LookAt, Meta = (AllowPrivateAccess = true))
 	float LookAtFOV = 50.0f;
 	UPROPERTY()
 	FVector LookAtLocation = FVector::ZeroVector;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = LookAt, Meta = (AllowPrivateAccess = true))
-	FName LookAtLocationSocketName = TEXT("Bip001-Head");
+	FName LookAtLocationSocketName;
 	
-	void SetLookAtAlpha();
+	void SetLookAtAlpha(float DeltaTime);
 	
 	UPROPERTY()
 	TObjectPtr<AUPPettuCharacter> PettuCharacter;
@@ -145,4 +146,7 @@ public:
 	FVector GetLookAtLocation() const { return LookAtLocation; }
 
 	void SetPettuCharacter(AUPPettuCharacter* InPettuCharacter) { PettuCharacter = InPettuCharacter; }
+
+	UFUNCTION(BlueprintCallable)
+	AUPPettuCharacter* GetPettuCharacter() const { return PettuCharacter.Get(); }
 };
