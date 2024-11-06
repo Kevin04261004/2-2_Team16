@@ -35,7 +35,9 @@ public:
 	
 protected:
 	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	
+
+private:
+	TObjectPtr<AUPPlayerCharacter> PlayerCharacter;
 /* AI Section */
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
@@ -62,6 +64,7 @@ public:
 	virtual void SetStun() override;
 	UFUNCTION()
 	void StunEnd(UAnimMontage* Montage, bool bInterrupted);
+	
 
 /* Stiffen Section */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State", Meta = (AllowPrivateAccess = "true"))
@@ -126,4 +129,7 @@ public:
 	/* UI Section */
 protected:
 	virtual void SetupHUDWidget(UUPHudWidget* InHUDWidget) override;
+	UFUNCTION()
+	void StunCheck(float Hp);
+	
 };
