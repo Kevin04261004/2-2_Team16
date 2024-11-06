@@ -227,7 +227,7 @@ void AUPPettuCharacter::StunCheck(float Hp)
 	float MaxHp = StatComponent->GetBaseStat().MaxHp;
 	float MaxStunStack = StatComponent->GetBaseStat().MaxStunStack;
 	//float HealingHp = (MaxHp / MaxStunStack) * (CurrentStunStack + 1) - CurrentHp;
-	if (CurrentHp <= (MaxHp / MaxStunStack) * CurrentStunStack)
+	if (CurrentHp <= (MaxHp / MaxStunStack) * (CurrentStunStack - 1))
 	{
 		SetStun();
 		//StatComponent->HealHp(HealingHp);
