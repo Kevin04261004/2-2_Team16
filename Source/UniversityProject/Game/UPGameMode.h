@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Interface/UPGameInterface.h"
+#include "Stage/UPStageManager.h"
 #include "UI/UPHudWidget.h"
 #include "UI/UPSettingWidget.h"
 #include "UPGameMode.generated.h"
@@ -45,4 +46,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Game)
 	TObjectPtr<UUPSettingWidget> SettingWidgetObject;
+
+	UPROPERTY()
+	TSubclassOf<AUPStageManager> StageManagerClass;
+	UPROPERTY()
+	TObjectPtr<AUPStageManager> StageManager;
 };

@@ -17,6 +17,12 @@ AUPGameMode::AUPGameMode()
 	static ConstructorHelpers::FClassFinder<APlayerController> PlayerControllerClassRef(TEXT("/Script/UniversityProject.UPPlayerController"));
 	check(PlayerControllerClassRef.Class != nullptr);
 	PlayerControllerClass = PlayerControllerClassRef.Class;
+	
+	static ConstructorHelpers::FClassFinder<AUPStageManager> StageManagerClassRef(TEXT("/Game/UniversityProject/BluePrints/Stage/BP_UPStageManager.BP_UPStageManager_C"));
+	if (StageManagerClassRef.Class != nullptr)
+	{
+		StageManagerClass = StageManagerClassRef.Class;
+	}
 
 	bIsCleared = false;
 	bIsGameOver = false;
@@ -64,4 +70,7 @@ void AUPGameMode::BeginPlay()
 		SettingWDG->AddToViewport();
 		SettingWidgetObject->SetVisibility(ESlateVisibility::Hidden);
 	}
+
+	StageManager = GetWorld()->SpawnActor<AUPStageManager>(StageManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);
+	check(StageManager != nullptr);
 }
