@@ -104,8 +104,28 @@ void AUPPettuWeapon::CheckCollision(FVector Start, FVector End)
 void AUPPettuWeapon::AttackSuccess(FHitResult& result, IUPDamageableInterface* Damageable)
 {
 	Super::AttackSuccess(result, Damageable);
+	
+	// 넉백이 발생할 때 상대방에게 가할 힘의 크기
+	float KnockbackStrength = 1000.0f;
 
-	// TODO: 공격 성공 시 추가로 처리할 내용을 작성
+	// 공격 성공 시 추가 처리 (넉백)
+	if (AActor* HitActor = result.GetActor())
+	{
+		// 적 캐릭터가 물리 시뮬레이션이 가능하면 넉백 적용
+		if (UPrimitiveComponent* HitComp = Cast<UPrimitiveComponent>(HitActor->GetRootComponent()))
+		{
+			if (HitComp->IsSimulatingPhysics())
+			{
+				// 공격자가 있는 방향을 기준으로 피격자를 밀어냄
+				FVector KnockbackDirection = HitActor->GetActorLocation() - GetOwner()->GetActorLocation();
+				KnockbackDirection.Z = 0.0f; // Z 축으로는 힘을 가하지 않음 (원하는 경우 Z 축도 포함 가능)
+				KnockbackDirection.Normalize();
+
+				// 충격(Impulse) 적용 (X, Y 축으로 밀어냄)
+				HitComp->AddImpulse(KnockbackDirection * KnockbackStrength, NAME_None, true);
+			}
+		}
+	}
 }
 
 void AUPPettuWeapon::OnWeaponOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
