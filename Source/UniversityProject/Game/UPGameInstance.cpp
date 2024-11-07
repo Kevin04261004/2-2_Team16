@@ -30,7 +30,7 @@ void UUPGameInstance::OnMapLoaded(const FName& PackageName, UPackage* LoadedPack
 	{
 		if (LoadingWidgetInstance)
 		{
-			LoadingWidgetInstance->RemoveFromViewport();
+			LoadingWidgetInstance->RemoveFromParent();
 		}
 	}
 

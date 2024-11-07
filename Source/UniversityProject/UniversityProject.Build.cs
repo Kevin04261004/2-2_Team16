@@ -25,6 +25,7 @@ public class UniversityProject : ModuleRules
 			"AIModule",
 			"GameplayTasks",
 			"Niagara",
+			"SpinePlugin",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
