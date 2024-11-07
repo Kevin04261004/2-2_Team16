@@ -17,10 +17,12 @@ AUPGameMode::AUPGameMode()
 	static ConstructorHelpers::FClassFinder<APlayerController> PlayerControllerClassRef(TEXT("/Script/UniversityProject.UPPlayerController"));
 	check(PlayerControllerClassRef.Class != nullptr);
 	PlayerControllerClass = PlayerControllerClassRef.Class;
-
+	
 	static ConstructorHelpers::FClassFinder<AUPStageManager> StageManagerClassRef(TEXT("/Game/UniversityProject/BluePrints/Stage/BP_UPStageManager.BP_UPStageManager_C"));
-	check(StageManagerClassRef.Class != nullptr);
-	StageManagerClass = StageManagerClassRef.Class;
+	if (StageManagerClassRef.Class != nullptr)
+	{
+		StageManagerClass = StageManagerClassRef.Class;
+	}
 
 	bIsCleared = false;
 }

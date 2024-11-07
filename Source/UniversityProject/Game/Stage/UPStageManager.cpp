@@ -9,46 +9,71 @@ AUPStageManager::AUPStageManager()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void AUPStageManager::AdvanceStage()
+void AUPStageManager::BeginPlay()
 {
-	if (CurrentStageIndex < StageTutorialData->TutorialStages.Num() - 1)
-	{
-		OnStageClear.Broadcast(CurrentStageIndex);
-		CurrentStageIndex++;
-		OnStageStart.Broadcast(CurrentStageIndex);
-		UE_LOG(LogTemp, Log, TEXT("스테이지 진행: %d"), CurrentStageIndex);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("튜토리얼 완료!"));
-	}
+	Super::BeginPlay();
+	
+	StartStage(0);
 }
 
 void AUPStageManager::EvaluateCondition(EStageConditionType ConditionType)
 {
 	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{
-		FUPTutorialStage& CurrentStage = StageTutorialData->TutorialStages[CurrentStageIndex];
-		
 		if (CurrentStage.StageConditionMap.Find(ConditionType))
 		{
 			CurrentStage.StageConditionMap[ConditionType]--;
 
-			EvaluateAllConditions();
+			CheckStageConditions();
 		}
 	}
 }
 
-void AUPStageManager::EvaluateAllConditions()
+void AUPStageManager::StartStage(int32 StageIndex)
 {
-	FUPTutorialStage& CurrentStage = StageTutorialData->TutorialStages[CurrentStageIndex];
-	for (TTuple<EStageConditionType, int> condition : CurrentStage.StageConditionMap)
+	CurrentStageIndex = StageIndex;
+	if (StageTutorialData && StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{
-		if (condition.Value > 0)
+		CurrentStage = StageTutorialData->TutorialStages[CurrentStageIndex];
+		StageTutorialData->TutorialStages[CurrentStageIndex].OnStageStart.Broadcast();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("StageTutorialData is invalid or no stages are defined!"));
+	}
+}
+
+void AUPStageManager::CompleteStage()
+{
+	UE_LOG(LogTemp, Log, TEXT("Stage %d Complete!"), CurrentStageIndex);
+	StageTutorialData->TutorialStages[CurrentStageIndex].OnStageClear.Broadcast();
+
+	CurrentStageIndex++;
+	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
+	{
+		StartStage(CurrentStageIndex);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("All Stages Completed!"));
+	}
+}
+
+void AUPStageManager::CheckStageConditions()
+{
+	bool bAllConditionsMet = true;
+
+	for (const TPair<EStageConditionType, int>& Condition : CurrentStage.StageConditionMap)
+	{
+		if (Condition.Value > 0)
 		{
-			return;
+			bAllConditionsMet = false;
+			break;
 		}
 	}
 
-	AdvanceStage();
+	if (bAllConditionsMet)
+	{
+		CompleteStage();
+	}
 }

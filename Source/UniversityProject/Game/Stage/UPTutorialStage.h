@@ -3,6 +3,10 @@
 #include "CoreMinimal.h"
 #include "UPTutorialStage.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnStageClear)
+DECLARE_MULTICAST_DELEGATE(FOnStageConditionUpdate)
+DECLARE_MULTICAST_DELEGATE(FOnStageStart)
+
 UENUM(BlueprintType)
 enum class EStageConditionType : uint8
 {
@@ -20,14 +24,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Description;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Tooltip = "DataTable에서 생성할 때 사용할 키 값"))
+	FString SpawnActorKey;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<EStageConditionType, int> StageConditionMap;
+	TMap<EStageConditionType, int /* count */> StageConditionMap;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsComplete;
-
-	FUPTutorialStage() : bIsComplete(false)
-	{
-		StageConditionMap.Empty();
-	}
+	FOnStageClear OnStageClear;
+	FOnStageConditionUpdate OnStageConditionUpdate;
+	FOnStageStart OnStageStart;
+	
+	FUPTutorialStage() = default;
 };

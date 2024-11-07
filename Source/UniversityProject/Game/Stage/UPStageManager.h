@@ -8,9 +8,6 @@
 #include "GameFramework/Actor.h"
 #include "UPStageManager.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnStageClear, int /* StageCount */)
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnStageStart, int /* StageCount */)
-
 UCLASS()
 class UNIVERSITYPROJECT_API AUPStageManager : public AActor
 {
@@ -18,22 +15,23 @@ class UNIVERSITYPROJECT_API AUPStageManager : public AActor
 	
 public:
 	AUPStageManager();
+
+	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Init")
 	TObjectPtr<UUPStageTutorialData> StageTutorialData;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 CurrentStageIndex = 0;
 
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FUPTutorialStage CurrentStage;
 	
 	void EvaluateCondition(EStageConditionType ConditionType);
 
-	FOnStageClear OnStageClear;
-	FOnStageStart OnStageStart;
-	
 private:
-	void EvaluateAllConditions();
-	void AdvanceStage();
+	void StartStage(int32 StageIndex);
+	void CompleteStage();
+	void CheckStageConditions();
 };
 

@@ -10,7 +10,7 @@
 // Sets default values
 AUPReachLocationCollision::AUPReachLocationCollision()
 {
-	CylinderMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CylinderMesh"));ww
+	CylinderMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CylinderMesh"));
 	CylinderMesh->SetGenerateOverlapEvents(true);
 	CylinderMesh->OnComponentBeginOverlap.AddDynamic(this, &AUPReachLocationCollision::OnOverlapBegin);
 }
@@ -36,6 +36,8 @@ void AUPReachLocationCollision::OnOverlapBegin(class UPrimitiveComponent* Overla
 
 	if (stageManager == nullptr)
 	{
-		stageManager->EvaluateCondition(EStageConditionType::ReachLocation);
+		return;
 	}
+	stageManager->EvaluateCondition(EStageConditionType::ReachLocation);
+
 }

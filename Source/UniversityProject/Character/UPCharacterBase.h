@@ -20,7 +20,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MovementComponent, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UUPCharacterMovementComponent> MovementComponent;
 	
-// Init Section
+// Init Section1
 public:
 	AUPCharacterBase(const FObjectInitializer& ObjectInitializer);
 	virtual void BeginPlay() override;
