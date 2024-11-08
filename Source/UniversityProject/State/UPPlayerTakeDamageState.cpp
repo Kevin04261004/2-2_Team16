@@ -3,6 +3,8 @@
 
 #include "State/UPPlayerTakeDamageState.h"
 
+#include "Skill/Player/UPSkillManagerComponent.h"
+
 UUPPlayerTakeDamageState::UUPPlayerTakeDamageState()
 {
 	
@@ -23,7 +25,20 @@ void UUPPlayerTakeDamageState::InitSkillData()
 
 void UUPPlayerTakeDamageState::EnterState()
 {
-	Super::EnterState();
+	UAnimInstance* AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
+	AnimInstance->Montage_Stop(0.0f);
+
+	UUPSkillData* skillData = OwnerCharacter->GetSkillManager()->GetSkill(ThisSkillType)->GetSkillData();
+	AnimInstance->Montage_Play(skillData->GetSkillAnimation(), skillData->GetAnimationSpeed(OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed));
+	
+	// Super::EnterState();
+
+	// TODO: 타겟 오토타겟팅
+	SkillDuration = skillData->GetSkillDuration(OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed);
+
+	OwnerCharacter->GetWorld()->GetTimerManager().SetTimer(SkillEndTimerHandle, this, &UUPPlayerTakeDamageState::SkillFinished, SkillDuration, false);
+
+
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Damaged Enter");
 
 }
@@ -32,7 +47,6 @@ void UUPPlayerTakeDamageState::ExitState()
 {
 	Super::ExitState();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Player Damaged Exit");
-
 }
 
 void UUPPlayerTakeDamageState::UpdateState()
