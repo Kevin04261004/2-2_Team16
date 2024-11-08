@@ -3,6 +3,7 @@
 
 #include "State/UPPlayerTakeDamageState.h"
 
+#include "Components/AutoTargetingComponent.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
 
 UUPPlayerTakeDamageState::UUPPlayerTakeDamageState()
@@ -34,6 +35,10 @@ void UUPPlayerTakeDamageState::EnterState()
 	// Super::EnterState();
 
 	// TODO: 타겟 오토타겟팅
+	if (skillData->IsAutoTargetingSkill())
+	{
+		OwnerCharacter->GetSkillManager()->GetAutoTargetingComponent()->Activate();
+	}
 	SkillDuration = skillData->GetSkillDuration(OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed);
 
 	OwnerCharacter->GetWorld()->GetTimerManager().SetTimer(SkillEndTimerHandle, this, &UUPPlayerTakeDamageState::SkillFinished, SkillDuration, false);
