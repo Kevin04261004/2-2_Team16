@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UPPlayerBaseSkillState.h"
 #include "State/UPPlayerBaseState.h"
 #include "UPPlayerTakeDamageState.generated.h"
 
@@ -10,8 +11,21 @@
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerTakeDamageState : public UUPPlayerBaseState
+class UNIVERSITYPROJECT_API UUPPlayerTakeDamageState : public UUPPlayerBaseSkillState
 {
 	GENERATED_BODY()
-	
+		
+public:
+	UUPPlayerTakeDamageState();
+
+	virtual void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler) override;
+
+public:
+	virtual void InitSkillData() override;
+	virtual void EnterState() override;
+	virtual void ExitState() override;
+	virtual void UpdateState() override;
+
+protected:
+	virtual void SkillFinished() override;
 };
