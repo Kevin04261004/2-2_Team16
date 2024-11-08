@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/UPCharacterBase.h"
 #include "Components/UPInputHandlerComponent.h"
+#include "Enemy/UPPettuCharacter.h"
 #include "Interface/UPAfterImageableInterface.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
@@ -119,4 +120,33 @@ public:
 /* UI Section */
 protected:
 	virtual void SetupHUDWidget(UUPHudWidget* InHUDWidget) override;
+
+/* Look At Section */
+private:
+	UPROPERTY()
+	float LookAtAlpha = 0.0f;
+	float TargetAlpha = 0.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = LookAt, Meta = (AllowPrivateAccess = true))
+	float LookAtFOV = 50.0f;
+	UPROPERTY()
+	FVector LookAtLocation = FVector::ZeroVector;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = LookAt, Meta = (AllowPrivateAccess = true))
+	FName LookAtLocationSocketName;
+	
+	void SetLookAtAlpha(float DeltaTime);
+	
+	UPROPERTY()
+	TObjectPtr<AUPPettuCharacter> PettuCharacter;
+public:
+	UFUNCTION(BlueprintCallable)
+	float GetLookAtAlpha() const { return LookAtAlpha; }
+	UFUNCTION(BlueprintCallable)
+	float GetLookAtFOV() const { return LookAtFOV; }
+	UFUNCTION(BlueprintCallable)
+	FVector GetLookAtLocation() const { return LookAtLocation; }
+
+	void SetPettuCharacter(AUPPettuCharacter* InPettuCharacter) { PettuCharacter = InPettuCharacter; }
+
+	UFUNCTION(BlueprintCallable)
+	AUPPettuCharacter* GetPettuCharacter() const { return PettuCharacter.Get(); }
 };

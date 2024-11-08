@@ -34,11 +34,7 @@ float UUPCharacterStatComponent::ApplyStunStack(float InDamage)
 	const float ActualDamage = FMath::Clamp<float>(InDamage, 0, InDamage);
 
 	SetStunStack(PrevSS - ActualDamage);
-	if (CurrentStunStack <= KINDA_SMALL_NUMBER)
-	{
-		OnStunStackZero.Broadcast();
-	}
-	else if (ActualDamage >= 3)
+	if (ActualDamage >= 3)
 	{
 		OnStiffen.Broadcast();
 	}

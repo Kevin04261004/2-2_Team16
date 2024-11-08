@@ -32,6 +32,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Game)
 	uint8 bIsCleared : 1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Game)
+	bool bIsGameOver = false;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Game)
 	TSubclassOf<UUserWidget> HudWidget;
 

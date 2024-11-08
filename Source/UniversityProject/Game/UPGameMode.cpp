@@ -25,6 +25,7 @@ AUPGameMode::AUPGameMode()
 	}
 
 	bIsCleared = false;
+	bIsGameOver = false;
 }
 
 void AUPGameMode::OnPlayerDead()
@@ -32,6 +33,7 @@ void AUPGameMode::OnPlayerDead()
 	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetWorld()->GetFirstPlayerController());
 	check(PlayerController != nullptr);
 	PlayerController->GameOver();
+	bIsGameOver = true;
 }
 
 void AUPGameMode::OnGameClear()
