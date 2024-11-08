@@ -12,11 +12,13 @@ void UUPPlayerBaseState::Initialize(AUPPlayerCharacter* InOwnerCharacter, UUPInp
 {
 	this->OwnerCharacter = InOwnerCharacter;
 	this->InputHandler = InInputHandler;
+	
+	OwnerCharacter->OnTakeDamaged.AddUObject(this, &UUPPlayerBaseState::TakeDamaged);
 }
 
 void UUPPlayerBaseState::EnterState()
 {
-	
+	// TODO: 여기서 데미지로 State 변경
 }
 
 void UUPPlayerBaseState::ExitState()
@@ -26,9 +28,10 @@ void UUPPlayerBaseState::ExitState()
 
 void UUPPlayerBaseState::UpdateState()
 {
-	// TODO: 여기서 데미지로 State 변경
-	// OwnerCharacter->OnTakeDamaged.AddLambda([]()
-	// {
-	// 	
-	// });
+	
+}
+
+void UUPPlayerBaseState::TakeDamaged(float amount)
+{
+	ChangeState(EPlayerStateType::Damaged);
 }
