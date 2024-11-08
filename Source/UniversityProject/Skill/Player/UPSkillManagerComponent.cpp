@@ -54,8 +54,6 @@ void UUPSkillManagerComponent::CreateDefaultObjectSkill()
 			check(OwningCharacter->MovementComponent != nullptr);
 			check(OwningCharacter != nullptr);
 			NewSkillComponent->Initialize(OwningCharacter->MovementComponent, OwningCharacter);
-			
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Skill Map Created"));
 		}
 	}
 	
