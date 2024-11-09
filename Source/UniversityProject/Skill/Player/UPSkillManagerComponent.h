@@ -41,6 +41,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AutoTargeting, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UAutoTargetingComponent> AutoTargetingComponent;
 
+public:
+	UAutoTargetingComponent* GetAutoTargetingComponent() { return AutoTargetingComponent; }
+	
 /* Owner's Reference Values */
 protected:
 	float* AttackDamagePtr;

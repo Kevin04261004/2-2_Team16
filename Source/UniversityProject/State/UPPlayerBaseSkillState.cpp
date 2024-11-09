@@ -24,7 +24,7 @@ void UUPPlayerBaseSkillState::InitSkillData()
 	// TODO: Set ThisSkillType here!!!
 }
 
-// #pragma optimize("", off)
+#pragma optimize("", off)
 void UUPPlayerBaseSkillState::EnterState()
 {
 	Super::EnterState();
@@ -49,7 +49,7 @@ void UUPPlayerBaseSkillState::EnterState()
 		ComboAnimationStartTime = OneFrameSec * ComboInputableData->AnimationChangeStartFrameCount;	
 	}
 }
-// #pragma optimize("", on)
+#pragma optimize("", on)
 
 
 void UUPPlayerBaseSkillState::ExitState()

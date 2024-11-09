@@ -25,6 +25,7 @@ enum class EPlayerSkillType : uint8
 	TakeDown UMETA(DisplayName="내려 찍기"),
 	KnockOver UMETA(DisplayName="넘어뜨리기"),
 	Dash UMETA(DisplayName="대시"),
+	Damaged UMETA(DisplayName="피격"),
 };
 
 class UUPStateManager;
