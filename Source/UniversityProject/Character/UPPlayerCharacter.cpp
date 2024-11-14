@@ -76,7 +76,8 @@ void AUPPlayerCharacter::BeginPlay()
 
 	InputHandler->SetMappingContext(PlayerController);
 	Weapon->OnWeaponHit.AddUObject(CameraComponent, &UUPCameraComponent::HitShakeCamera);
-	
+
+	ConstCameraZ = GetActorLocation().Z;
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -85,6 +86,10 @@ void AUPPlayerCharacter::Tick(float DeltaSeconds)
 	
 	StateManager->UpdateState();
 	SetLookAtAlpha(DeltaSeconds);
+
+	FVector cameraLocation = FollowCamera->GetRelativeLocation();
+	cameraLocation.Z = ConstCameraZ;
+	FollowCamera->SetRelativeLocation(cameraLocation);
 }
 
 void AUPPlayerCharacter::SetDead()
