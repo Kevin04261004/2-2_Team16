@@ -22,6 +22,14 @@ void UUPCameraComponent::Initialize(USpringArmComponent& SpringArmComponent, UCa
 	CameraBoom = SpringArmComponent;
 	FollowCamera = CameraComponent;
 	CurrentZoom = CameraBoom->TargetArmLength;
+	
+	// APlayerController* playerController = Cast<APlayerController>(OwningCharacter->GetController());
+	// if (playerController)
+	// {
+	// 	// Pitch 제한을 -45도에서 45도로 설정
+	// 	playerController->PlayerCameraManager->ViewPitchMin = -45.0f;
+	// 	playerController->PlayerCameraManager->ViewPitchMax = 45.0f;
+	// }
 }
 
 
@@ -60,5 +68,5 @@ void UUPCameraComponent::ZoomCamera(float Value)
 void UUPCameraComponent::LookCamera(FVector2D LookAxisVector)
 {
 	OwningCharacter->AddControllerYawInput(LookAxisVector.X * CameraSpeed);
-	// OwningCharacter->AddControllerPitchInput(LookAxisVector.Y * CameraSpeed);
+	OwningCharacter->AddControllerPitchInput(LookAxisVector.Y * CameraSpeed);
 }

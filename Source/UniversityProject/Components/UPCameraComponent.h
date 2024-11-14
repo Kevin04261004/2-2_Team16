@@ -53,6 +53,12 @@ protected:
 	float ZoomStep = 10.0f;
 
 	UPROPERTY(EditAnywhere, Category="Camera")
+	float MaxPitch = 45.0f;
+	
+	UPROPERTY(EditAnywhere, Category="Camera")
+	float MinPitch = -45.0f;
+	
+	UPROPERTY(EditAnywhere, Category="Camera")
 	float CurrentZoom;
 
 	TObjectPtr<AUPPlayerCharacter> OwningCharacter;
