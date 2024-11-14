@@ -72,6 +72,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UUPCameraComponent> CameraComponent;
 
+	float ConstCameraZ = 0.f;
 public:
 	FORCEINLINE UUPCameraComponent* GetCameraComponent() const { return CameraComponent.Get(); }
 	

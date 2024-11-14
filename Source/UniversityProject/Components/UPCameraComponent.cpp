@@ -60,5 +60,5 @@ void UUPCameraComponent::ZoomCamera(float Value)
 void UUPCameraComponent::LookCamera(FVector2D LookAxisVector)
 {
 	OwningCharacter->AddControllerYawInput(LookAxisVector.X * CameraSpeed);
-	OwningCharacter->AddControllerPitchInput(LookAxisVector.Y * CameraSpeed);
+	// OwningCharacter->AddControllerPitchInput(LookAxisVector.Y * CameraSpeed);
 }

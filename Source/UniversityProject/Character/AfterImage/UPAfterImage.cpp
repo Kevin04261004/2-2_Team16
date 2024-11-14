@@ -12,11 +12,6 @@ AUPAfterImage::AUPAfterImage()
 	PrimaryActorTick.bCanEverTick = true;
 	PoseableMesh = CreateDefaultSubobject<UPoseableMeshComponent>(TEXT("PoseableMesh"));
 	RootComponent = PoseableMesh;
-	ConstructorHelpers::FObjectFinder<UMaterialInstance> M_GhostTail(TEXT("/Game/UniversityProject/Graphics/Effects/afterImage/M_AfterImage_Inst.M_AfterImage_Inst"));
-	if (M_GhostTail.Succeeded())
-	{
-		GhostMaterial = M_GhostTail.Object;
-	}
 }
 
 void AUPAfterImage::BeginPlay()
