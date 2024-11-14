@@ -47,6 +47,8 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 
 	MovementComponent->bEnablePhysicsInteraction = true;
 	MovementComponent->bPushForceUsingZOffset = false;
+
+	ConstCameraZ = 0.0f;
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -77,7 +79,8 @@ void AUPPlayerCharacter::BeginPlay()
 	InputHandler->SetMappingContext(PlayerController);
 	Weapon->OnWeaponHit.AddUObject(CameraComponent, &UUPCameraComponent::HitShakeCamera);
 
-	ConstCameraZ = GetActorLocation().Z;
+	ConstCameraZ = CameraBoom->SocketOffset.Z;
+	StartZ = GetActorLocation().Z;
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -87,9 +90,7 @@ void AUPPlayerCharacter::Tick(float DeltaSeconds)
 	StateManager->UpdateState();
 	SetLookAtAlpha(DeltaSeconds);
 
-	FVector cameraLocation = FollowCamera->GetRelativeLocation();
-	cameraLocation.Z = ConstCameraZ;
-	FollowCamera->SetRelativeLocation(cameraLocation);
+	CameraBoom->SocketOffset.Z = StartZ - GetActorLocation().Z + ConstCameraZ;
 }
 
 void AUPPlayerCharacter::SetDead()
