@@ -5,6 +5,8 @@
 
 #include "Character/UPCharacterBase.h"
 #include "Character/UPPlayerCharacter.h"
+#include "Components/AutoTargetingComponent.h"
+#include "Skill/Player/UPSkillManagerComponent.h"
 
 void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
                                                   float InTotalDuration)
@@ -25,6 +27,19 @@ void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCo
 				FRotator NewRotation = LastInputVector.Rotation();
 				Owner->SetActorRotation(NewRotation);
 			}	
+		}
+
+		if (bLookTarget)
+		{
+			if (AUPPlayerCharacter* PlayerCharacter = Cast<AUPPlayerCharacter>(Owner))
+			{
+				UAutoTargetingComponent* AutoTargetingComponent = PlayerCharacter->GetSkillManager()->GetAutoTargetingComponent();
+				AActor* target = AutoTargetingComponent->FindDamageableTargetOrNull(PlayerCharacter->GetActorLocation(), EAutoTargetingMode::ATM_Nearest);
+				if (target != nullptr)
+				{
+					AutoTargetingComponent->RotateToTarget(target->GetActorLocation());
+				}
+			}
 		}
 		
 		StartLocation = Owner->GetActorLocation();
