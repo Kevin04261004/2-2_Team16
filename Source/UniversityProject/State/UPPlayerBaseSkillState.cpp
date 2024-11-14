@@ -65,6 +65,7 @@ void UUPPlayerBaseSkillState::ExitState()
 }
 
 #pragma optimize("", off)
+// PRAGMA_DISABLE_OPTIMIZATION
 void UUPPlayerBaseSkillState::UpdateState()
 {
 	Super::UpdateState();

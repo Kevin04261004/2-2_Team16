@@ -76,4 +76,6 @@ public:
 	TObjectPtr<UAnimMontage> TakeDownToIdleMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
 	float JumpToTakeDownMinVelocity = 1200.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	float TakeDownVelocity = 5000.f;
 };

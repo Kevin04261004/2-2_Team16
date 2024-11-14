@@ -28,6 +28,7 @@ public:
 protected:
 	TObjectPtr<AUPPlayerCharacter> OwnerCharacter;
 	TObjectPtr<UUPInputHandlerComponent> InputHandler;
+	void TakeDamaged(float amount);
 
 protected:
 	FORCEINLINE void ChangeState(EPlayerStateType NextState) const { OwnerCharacter->GetStateManager()->ChangeState(NextState); }

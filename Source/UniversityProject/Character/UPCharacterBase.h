@@ -8,6 +8,7 @@
 #include "GameData/UPCharacterStat.h"
 #include "GameFramework/Character.h"
 #include "Interface/UPDamageableInterface.h"
+#include "Interface/UPKnockBackableInterface.h"
 #include "UPCharacterBase.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnTakeDamaged, float /* DamagedAmount */)
@@ -20,7 +21,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MovementComponent, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UUPCharacterMovementComponent> MovementComponent;
 	
-// Init Section
+// Init Section1
 public:
 	AUPCharacterBase(const FObjectInitializer& ObjectInitializer);
 	virtual void BeginPlay() override;
@@ -57,12 +58,12 @@ protected:
 	virtual float UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void Attack(FHitResult& InHit);
 
-// Attack Hit Section
+	// Attack Hit Section
 public:
 	FORCEINLINE virtual UNiagaraSystem* GetHitEffect() override { return HitEffect.Get(); }
 	FORCEINLINE virtual USoundBase* GetHitSound() override { return HitSound.Get(); }
 	FOnTakeDamaged OnTakeDamaged;
-	
+
 // Dead Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 죽음 애니메이션 몽타주"))
