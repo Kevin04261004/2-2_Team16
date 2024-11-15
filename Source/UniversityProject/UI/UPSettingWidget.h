@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/UPPlayerCharacter.h"
+#include "Components/Slider.h"
 #include "UI/UPUserWidget.h"
 #include "UPSettingWidget.generated.h"
 
@@ -17,6 +18,14 @@ class UNIVERSITYPROJECT_API UUPSettingWidget : public UUPUserWidget
 
 public:
 	virtual void NativeConstruct() override;
+
+	UFUNCTION(BlueprintCallable)
+	USlider* GetBGMVolumeSlider() const { return BGMVolumeSlider; }
+	
+	UFUNCTION(BlueprintCallable)
+	USlider* GetSFXVolumeSlider() const { return SFXVolumeSlider; }
+
+	
 
 private:
 	TObjectPtr<AUPPlayerCharacter> PlayerCharacter;
@@ -60,9 +69,9 @@ protected:
 /* Audio Setting */
 protected:
 	UPROPERTY(meta = (BindWidget))
-	class USlider* BGMVolumeSlider;
+	USlider* BGMVolumeSlider;
 	UPROPERTY(meta = (BindWidget))
-	class USlider* SFXVolumeSlider;
+	USlider* SFXVolumeSlider;
 
 	UFUNCTION()
 	void OnBGMVolumeChanged(float Value);
