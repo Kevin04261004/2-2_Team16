@@ -70,6 +70,9 @@ public:
 	float ApplyDamage(float InDamage);
 	float ApplyStunStack(float InDamage);
 
+	UFUNCTION(BlueprintCallable)
+	float GetStunStack() const { return CurrentStunStack; }
+
 // Data Section
 protected:
 	void SetHp(float NewHp);

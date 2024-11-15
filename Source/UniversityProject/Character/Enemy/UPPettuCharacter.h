@@ -101,6 +101,8 @@ public:
 	UFUNCTION()
 	void PatternMontageEnd(UAnimMontage* Montage, bool bInterrupted);
 
+	float GetStunStack() const { return StatComponent->GetCurrentStunStack(); }
+
 /* Skill Section */
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
