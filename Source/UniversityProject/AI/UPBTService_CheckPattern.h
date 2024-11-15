@@ -24,6 +24,7 @@ protected:
 
 	bool bIsStun = false;
 	bool bIsDead = false;
+	bool bIsTimerOn = false;
 	
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
