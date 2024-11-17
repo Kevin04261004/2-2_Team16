@@ -24,6 +24,18 @@ public:
 
 	virtual void BeginPlay() override;
 	
+private:
+	// 현재 스테이지 데이터를 표시할 위젯
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<class UUPTutorialWidget> TutorialWidgetClass;
+
+	// 현재 생성된 위젯
+	UPROPERTY()
+	UUPTutorialWidget* TutorialWidget;
+
+	// 위젯 초기화
+	void InitializeTutorialWidget();
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Init")
 	TObjectPtr<UUPStageTutorialData> StageTutorialData;
 
@@ -38,6 +50,10 @@ public:
 	FOnStageClear OnStageClear;
 	FOnStageConditionUpdate OnStageConditionUpdate;
 	FOnStageStart OnStageStart;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Init")
+	TMap<EStageConditionType, FString> TutorialConditionDescriptionMap;
+	
 private:
 	void StartStage(int32 StageIndex);
 	void CompleteStage();

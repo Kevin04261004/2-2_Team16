@@ -4,6 +4,7 @@
 #include "Game/Stage/UPStageManager.h"
 
 #include "Manager/UPActorSpawner.h"
+#include "UI/UPTutorialWidget.h"
 
 // Sets default values
 AUPStageManager::AUPStageManager()
@@ -15,6 +16,8 @@ void AUPStageManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	InitializeTutorialWidget();
+	
 	UUPActorSpawner* ActorSpawner = GetGameInstance()->GetSubsystem<UUPActorSpawner>();
 	if (ActorSpawner != nullptr)
 	{
@@ -29,6 +32,21 @@ void AUPStageManager::BeginPlay()
 	StartStage(0);
 }
 
+void AUPStageManager::InitializeTutorialWidget()
+{
+	if (TutorialWidgetClass == nullptr)
+	{
+		return;
+	}
+	// 위젯 생성
+	TutorialWidget = CreateWidget<UUPTutorialWidget>(GetWorld(), TutorialWidgetClass);
+	if (TutorialWidget)
+	{
+		// 화면에 표시
+		TutorialWidget->AddToViewport();
+	}
+}
+
 void AUPStageManager::EvaluateCondition(EStageConditionType ConditionType)
 {
 	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
@@ -36,7 +54,22 @@ void AUPStageManager::EvaluateCondition(EStageConditionType ConditionType)
 		if (CurrentStage.StageConditionMap.Find(ConditionType))
 		{
 			CurrentStage.StageConditionMap[ConditionType]--;
-
+			
+			if (TutorialWidget)
+			{
+				int32 TaskIndex = 0;
+				for (const TPair<EStageConditionType, int32>& Condition : CurrentStage.StageConditionMap)
+				{
+					if (Condition.Key == ConditionType)
+					{
+						int32 max = StageTutorialData->TutorialStages[CurrentStageIndex].StageConditionMap[Condition.Key];
+						int32 remaining = max - Condition.Value;
+						TutorialWidget->UpdateTask(TaskIndex, remaining, max);
+						break;
+					}
+					TaskIndex++;
+				}
+			}
 			CheckStageConditions();
 		}
 	}
@@ -48,6 +81,18 @@ void AUPStageManager::StartStage(int32 StageIndex)
 	if (StageTutorialData && StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{
 		CurrentStage = StageTutorialData->TutorialStages[CurrentStageIndex];
+
+		if (TutorialWidget)
+		{
+			TutorialWidget->ClearAll(); // 이전 조건 초기화
+
+			for (const TPair<EStageConditionType, int32>& Condition : CurrentStage.StageConditionMap)
+			{
+				TutorialWidget->SetDescription(CurrentStage.Description);
+				TutorialWidget->AddTask(TutorialConditionDescriptionMap[Condition.Key], 0, Condition.Value);
+			}
+		}
+		
 		OnStageStart.Broadcast(CurrentStage.SpawnActorKey);
 	}
 	else
