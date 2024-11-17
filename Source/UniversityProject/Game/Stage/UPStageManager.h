@@ -13,7 +13,9 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnStageConditionUpdate, FString /* Spawn Ac
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStageStart, FString /* Spawn Actor Key */)
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPStageManager : public AActor
+class UNIVERSITYPROJECT_API
+
+AUPStageManager : public AActor
 {
 	GENERATED_BODY()
 	

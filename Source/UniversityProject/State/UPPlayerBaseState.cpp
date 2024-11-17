@@ -17,20 +17,23 @@ void UUPPlayerBaseState::Initialize(AUPPlayerCharacter* InOwnerCharacter, UUPInp
 	this->InputHandler = InInputHandler;
 	
 	OwnerCharacter->OnTakeDamaged.AddUObject(this, &UUPPlayerBaseState::TakeDamaged);
+	
+	AGameModeBase* GM = OwnerCharacter->GetWorld()->GetAuthGameMode();
+	if (GM == nullptr)
+	{
+		return;
+	}
+	AUPGameMode* gameMode = Cast<AUPGameMode>(GM);
+	if (gameMode == nullptr)
+	{
+		return;
+	}
+	StageManager = gameMode->StageManager;
+	check (StageManager != nullptr);
 }
 
 void UUPPlayerBaseState::EnterState()
 {
-	if (StageManager == nullptr)
-	{
-		AUPGameMode* gameMode = Cast<AUPGameMode>(OwnerCharacter->GetWorld()->GetAuthGameMode());
-		if (gameMode == nullptr)
-		{
-			return;
-		}
-		StageManager = gameMode->StageManager;
-		check (StageManager != nullptr);
-	}
 	StageManager->EvaluateCondition(CheckConditionWhenStarted);
 }
 
