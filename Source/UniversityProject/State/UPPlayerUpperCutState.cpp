@@ -10,6 +10,8 @@ class UUPSkillBase;
 
 UUPPlayerUpperCutState::UUPPlayerUpperCutState()
 {
+	CheckConditionWhenStarted = EStageConditionType::UseUpperCut;
+	CheckConditionWhenFinish = EStageConditionType::FinishUseUpperCut;
 }
 
 void UUPPlayerUpperCutState::Initialize(AUPPlayerCharacter* InOwnerCharacter,

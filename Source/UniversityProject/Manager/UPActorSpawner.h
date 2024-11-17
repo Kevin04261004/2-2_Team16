@@ -23,8 +23,8 @@ public:
 	UUPActorSpawner();
 	
 	UFUNCTION()
-	void SpawnActors(FString SpawnActorKey);
-
+	void SpawnActorsWhenStageStart(FString SpawnActorKey);
+	
 	void InitializeSpawner(AUPStageManager* StageManager);
 	
 private:

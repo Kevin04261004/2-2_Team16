@@ -3,9 +3,12 @@
 
 #include "State/UPPlayerBaseState.h"
 
+#include "Game/UPGameMode.h"
+
 UUPPlayerBaseState::UUPPlayerBaseState()
 {
-	
+	CheckConditionWhenStarted = EStageConditionType::None;
+	CheckConditionWhenFinish = EStageConditionType::None;
 }
 
 void UUPPlayerBaseState::Initialize(AUPPlayerCharacter* InOwnerCharacter, UUPInputHandlerComponent* InInputHandler)
@@ -18,12 +21,22 @@ void UUPPlayerBaseState::Initialize(AUPPlayerCharacter* InOwnerCharacter, UUPInp
 
 void UUPPlayerBaseState::EnterState()
 {
-	// TODO: 여기서 데미지로 State 변경
+	if (StageManager == nullptr)
+	{
+		AUPGameMode* gameMode = Cast<AUPGameMode>(OwnerCharacter->GetWorld()->GetAuthGameMode());
+		if (gameMode == nullptr)
+		{
+			return;
+		}
+		StageManager = gameMode->StageManager;
+		check (StageManager != nullptr);
+	}
+	StageManager->EvaluateCondition(CheckConditionWhenStarted);
 }
 
 void UUPPlayerBaseState::ExitState()
 {
-	
+	StageManager->EvaluateCondition(CheckConditionWhenFinish);
 }
 
 void UUPPlayerBaseState::UpdateState()

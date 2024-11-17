@@ -7,7 +7,8 @@
 
 UUPPlayerJumpState::UUPPlayerJumpState()
 {
-	
+	CheckConditionWhenStarted = EStageConditionType::UseJump;
+	CheckConditionWhenFinish = EStageConditionType::FinishUseJump;
 }
 
 void UUPPlayerJumpState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)

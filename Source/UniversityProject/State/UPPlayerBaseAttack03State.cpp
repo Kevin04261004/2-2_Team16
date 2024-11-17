@@ -6,6 +6,8 @@
 
 UUPPlayerBaseAttack03State::UUPPlayerBaseAttack03State()
 {
+	CheckConditionWhenStarted = EStageConditionType::UseBaseAttack03;
+	CheckConditionWhenFinish = EStageConditionType::FinishUseBaseAttack03;
 }
 
 void UUPPlayerBaseAttack03State::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)

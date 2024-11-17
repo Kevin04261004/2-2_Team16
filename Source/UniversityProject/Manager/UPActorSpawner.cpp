@@ -13,7 +13,7 @@ UUPActorSpawner::UUPActorSpawner()
 	}
 }
 
-void UUPActorSpawner::SpawnActors(FString SpawnActorKey)
+void UUPActorSpawner::SpawnActorsWhenStageStart(FString SpawnActorKey)
 {
 	if (!ActorSpawnDataTable)
 	{
@@ -42,9 +42,8 @@ void UUPActorSpawner::InitializeSpawner(AUPStageManager* StageManager)
 		return;
 	}
 
-	// Bind the OnStageStart event to SpawnActors
-	StageManager->OnStageStart.AddUObject(this, &UUPActorSpawner::SpawnActors);
-
+	StageManager->OnStageStart.AddUObject(this, &UUPActorSpawner::SpawnActorsWhenStageStart);
+	
 	UE_LOG(LogTemp, Log, TEXT("ActorSpawner successfully bound to StageManager"));
 }
 

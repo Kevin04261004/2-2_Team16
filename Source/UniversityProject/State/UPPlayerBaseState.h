@@ -4,8 +4,10 @@
 #include "CoreMinimal.h"
 #include "UPStateManager.h"
 #include "Character/UPPlayerCharacter.h"
+#include "Game/Stage/UPTutorialStage.h"
 #include "UPPlayerBaseState.generated.h"
 
+class AUPStageManager;
 class AUPPlayerCharacter;
 
 /**
@@ -32,4 +34,9 @@ protected:
 
 protected:
 	FORCEINLINE void ChangeState(EPlayerStateType NextState) const { OwnerCharacter->GetStateManager()->ChangeState(NextState); }
+
+protected:
+	TObjectPtr<AUPStageManager> StageManager; 
+	EStageConditionType CheckConditionWhenFinish;
+	EStageConditionType CheckConditionWhenStarted;
 };

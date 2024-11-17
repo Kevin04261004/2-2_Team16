@@ -58,7 +58,7 @@ void AUPStageManager::StartStage(int32 StageIndex)
 
 void AUPStageManager::CompleteStage()
 {
-	FString str = FString::Printf(TEXT("Stage %d Clear"), CurrentStageIndex);
+	FString str = FString::Printf(TEXT("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Stage %d Clear!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"), CurrentStageIndex);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, *str);
 	OnStageClear.Broadcast(CurrentStage.SpawnActorKey);
 
@@ -69,7 +69,7 @@ void AUPStageManager::CompleteStage()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "All Stage Clear");
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!!!!!!!!!!!!!!!!!!!!!!!!!All Stage Clear!!!!!!!!!!!!!!!!!!!!!!");
 	}
 }
 
