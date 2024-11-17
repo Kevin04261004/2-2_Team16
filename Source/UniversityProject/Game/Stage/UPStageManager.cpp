@@ -3,6 +3,8 @@
 
 #include "Game/Stage/UPStageManager.h"
 
+#include "Manager/UPActorSpawner.h"
+
 // Sets default values
 AUPStageManager::AUPStageManager()
 {
@@ -12,6 +14,17 @@ AUPStageManager::AUPStageManager()
 void AUPStageManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UUPActorSpawner* ActorSpawner = GetGameInstance()->GetSubsystem<UUPActorSpawner>();
+	if (ActorSpawner != nullptr)
+	{
+		ActorSpawner->InitializeSpawner(this);
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Actor Spawner Initialized");
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Actor Spawner Not Found");
+	}
 	
 	StartStage(0);
 }
@@ -35,18 +48,19 @@ void AUPStageManager::StartStage(int32 StageIndex)
 	if (StageTutorialData && StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{
 		CurrentStage = StageTutorialData->TutorialStages[CurrentStageIndex];
-		StageTutorialData->TutorialStages[CurrentStageIndex].OnStageStart.Broadcast();
+		OnStageStart.Broadcast(CurrentStage.SpawnActorKey);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("StageTutorialData is invalid or no stages are defined!"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "No stage found");
 	}
 }
 
 void AUPStageManager::CompleteStage()
 {
-	UE_LOG(LogTemp, Log, TEXT("Stage %d Complete!"), CurrentStageIndex);
-	StageTutorialData->TutorialStages[CurrentStageIndex].OnStageClear.Broadcast();
+	FString str = FString::Printf(TEXT("Stage %d Clear"), CurrentStageIndex);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, *str);
+	OnStageClear.Broadcast(CurrentStage.SpawnActorKey);
 
 	CurrentStageIndex++;
 	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
@@ -55,7 +69,7 @@ void AUPStageManager::CompleteStage()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("All Stages Completed!"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "All Stage Clear");
 	}
 }
 

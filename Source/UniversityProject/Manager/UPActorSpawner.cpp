@@ -3,6 +3,16 @@
 
 #include "Manager/UPActorSpawner.h"
 
+UUPActorSpawner::UUPActorSpawner()
+{
+	static ConstructorHelpers::FObjectFinder<UDataTable> DataTableFinder(TEXT("/Game/UniversityProject/GameData/Stage/DT_SpawnActor.DT_SpawnActor"));
+	if (DataTableFinder.Succeeded())
+	{
+		ActorSpawnDataTable = DataTableFinder.Object;
+		UE_LOG(LogTemp, Log, TEXT("ActorSpawnDataTable successfully loaded in UUPActorSpawner constructor."));
+	}
+}
+
 void UUPActorSpawner::SpawnActors(FString SpawnActorKey)
 {
 	if (!ActorSpawnDataTable)
@@ -17,8 +27,25 @@ void UUPActorSpawner::SpawnActors(FString SpawnActorKey)
 
 	for (FUPSpawnActorData* Row : Rows)
 	{
-		SpawnActor(*Row);
+		if (Row->SpawnActorKey == SpawnActorKey)
+		{
+			SpawnActor(*Row);
+		}
 	}
+}
+
+void UUPActorSpawner::InitializeSpawner(AUPStageManager* StageManager)
+{
+	if (!StageManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("StageManager is null!"));
+		return;
+	}
+
+	// Bind the OnStageStart event to SpawnActors
+	StageManager->OnStageStart.AddUObject(this, &UUPActorSpawner::SpawnActors);
+
+	UE_LOG(LogTemp, Log, TEXT("ActorSpawner successfully bound to StageManager"));
 }
 
 void UUPActorSpawner::SpawnActor(const FUPSpawnActorData& SpawnData)

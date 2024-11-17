@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Game/Stage/UPStageManager.h"
 #include "GameData/FUPSpawnActorData.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "UPActorSpawner.generated.h"
@@ -17,11 +18,15 @@ class UNIVERSITYPROJECT_API UUPActorSpawner : public UGameInstanceSubsystem
 
 public:
 	UPROPERTY()
-	UDataTable* ActorSpawnDataTable;
+	TObjectPtr<UDataTable> ActorSpawnDataTable;
 
+	UUPActorSpawner();
+	
 	UFUNCTION()
 	void SpawnActors(FString SpawnActorKey);
 
+	void InitializeSpawner(AUPStageManager* StageManager);
+	
 private:
 	void SpawnActor(const FUPSpawnActorData& SpawnData);
 };

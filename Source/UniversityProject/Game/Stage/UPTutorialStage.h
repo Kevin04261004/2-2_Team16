@@ -3,10 +3,6 @@
 #include "CoreMinimal.h"
 #include "UPTutorialStage.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnStageClear)
-DECLARE_MULTICAST_DELEGATE(FOnStageConditionUpdate)
-DECLARE_MULTICAST_DELEGATE(FOnStageStart)
-
 UENUM(BlueprintType)
 enum class EStageConditionType : uint8
 {
@@ -29,10 +25,6 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EStageConditionType, int /* count */> StageConditionMap;
-
-	FOnStageClear OnStageClear;
-	FOnStageConditionUpdate OnStageConditionUpdate;
-	FOnStageStart OnStageStart;
 	
 	FUPTutorialStage() = default;
 };
