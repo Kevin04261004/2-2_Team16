@@ -50,9 +50,6 @@ public:
 	FOnStageClear OnStageClear;
 	FOnStageConditionUpdate OnStageConditionUpdate;
 	FOnStageStart OnStageStart;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Init")
-	TMap<EStageConditionType, FString> TutorialConditionDescriptionMap;
 	
 private:
 	void StartStage(int32 StageIndex);

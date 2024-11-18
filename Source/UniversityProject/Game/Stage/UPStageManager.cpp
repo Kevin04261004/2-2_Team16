@@ -89,7 +89,7 @@ void AUPStageManager::StartStage(int32 StageIndex)
 			for (const TPair<EStageConditionType, int32>& Condition : CurrentStage.StageConditionMap)
 			{
 				TutorialWidget->SetDescription(CurrentStage.Description);
-				TutorialWidget->AddTask(TutorialConditionDescriptionMap[Condition.Key], 0, Condition.Value);
+				TutorialWidget->AddTask(StageTutorialData->TutorialConditionDescriptionMap[Condition.Key], 0, Condition.Value);
 			}
 		}
 		
