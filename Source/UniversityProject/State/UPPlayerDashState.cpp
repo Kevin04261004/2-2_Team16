@@ -9,6 +9,8 @@
 
 UUPPlayerDashState::UUPPlayerDashState()
 {
+	CheckConditionWhenStarted = EStageConditionType::UseDashSkill;
+	CheckConditionWhenFinish = EStageConditionType::FinishUseDashSkill;
 }
 
 void UUPPlayerDashState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)

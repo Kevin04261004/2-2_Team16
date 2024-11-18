@@ -18,4 +18,7 @@ class UNIVERSITYPROJECT_API UUPStageTutorialData : public UPrimaryDataAsset
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stage)
 	TArray<FUPTutorialStage> TutorialStages;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Init")
+	TMap<EStageConditionType, FString> TutorialConditionDescriptionMap;
 };

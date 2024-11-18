@@ -3,9 +3,12 @@
 
 #include "State/UPPlayerBaseState.h"
 
+#include "Game/UPGameMode.h"
+
 UUPPlayerBaseState::UUPPlayerBaseState()
 {
-	
+	CheckConditionWhenStarted = EStageConditionType::None;
+	CheckConditionWhenFinish = EStageConditionType::None;
 }
 
 void UUPPlayerBaseState::Initialize(AUPPlayerCharacter* InOwnerCharacter, UUPInputHandlerComponent* InInputHandler)
@@ -14,16 +17,29 @@ void UUPPlayerBaseState::Initialize(AUPPlayerCharacter* InOwnerCharacter, UUPInp
 	this->InputHandler = InInputHandler;
 	
 	OwnerCharacter->OnTakeDamaged.AddUObject(this, &UUPPlayerBaseState::TakeDamaged);
+	
+	AGameModeBase* GM = OwnerCharacter->GetWorld()->GetAuthGameMode();
+	if (GM == nullptr)
+	{
+		return;
+	}
+	AUPGameMode* gameMode = Cast<AUPGameMode>(GM);
+	if (gameMode == nullptr)
+	{
+		return;
+	}
+	StageManager = gameMode->StageManager;
+	check (StageManager != nullptr);
 }
 
 void UUPPlayerBaseState::EnterState()
 {
-	// TODO: 여기서 데미지로 State 변경
+	StageManager->EvaluateCondition(CheckConditionWhenStarted);
 }
 
 void UUPPlayerBaseState::ExitState()
 {
-	
+	StageManager->EvaluateCondition(CheckConditionWhenFinish);
 }
 
 void UUPPlayerBaseState::UpdateState()

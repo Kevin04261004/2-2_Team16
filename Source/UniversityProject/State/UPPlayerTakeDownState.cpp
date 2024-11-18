@@ -11,6 +11,8 @@ class UUPSkillBase;
 
 UUPPlayerTakeDownState::UUPPlayerTakeDownState()
 {
+	CheckConditionWhenStarted = EStageConditionType::UseTakeDown;
+	CheckConditionWhenFinish = EStageConditionType::FinishUseTakeDown;
 }
 
 void UUPPlayerTakeDownState::Initialize(AUPPlayerCharacter* InOwnerCharacter,

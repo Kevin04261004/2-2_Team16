@@ -14,6 +14,7 @@ AUPReachLocationCollision::AUPReachLocationCollision()
 	CylinderMesh->SetGenerateOverlapEvents(true);
 	CylinderMesh->OnComponentBeginOverlap.AddDynamic(this, &AUPReachLocationCollision::OnOverlapBegin);
 }
+
 void AUPReachLocationCollision::OnOverlapBegin(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor,
 	class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -40,4 +41,9 @@ void AUPReachLocationCollision::OnOverlapBegin(class UPrimitiveComponent* Overla
 	}
 	stageManager->EvaluateCondition(EStageConditionType::ReachLocation);
 
+
+	// TODO: 이펙트 추가
+
+	
+	Destroy();
 }
