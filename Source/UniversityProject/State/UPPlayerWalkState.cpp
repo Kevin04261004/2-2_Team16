@@ -7,6 +7,7 @@
 
 UUPPlayerWalkState::UUPPlayerWalkState()
 {
+	
 }
 
 void UUPPlayerWalkState::Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler)

@@ -63,6 +63,8 @@ void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
 	StateMap[EPlayerStateType::Land]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Damaged]->Initialize(OwningCharacter, InputHandler);
 	
+
+	
 	CurrentStateType = InitState;
 	StateMap[CurrentStateType]->EnterState();
 }
