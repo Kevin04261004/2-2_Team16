@@ -6,7 +6,7 @@
 #include "UPPettuAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/UPPlayerCharacter.h"
-#include "Character/Enemy/UPPettuCharacter.h"
+#include "Character/Enemy/UPMonsterBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -21,7 +21,7 @@ EBTNodeResult::Type UUPBTTask_RotateToPlayer::ExecuteTask(UBehaviorTreeComponent
 	AIController = Cast<AUPPettuAIController>(OwnerComp.GetAIOwner());
 	if (AIController)
 	{
-		AIPawn = Cast<AUPPettuCharacter>(AIController->GetPawn());
+		AIPawn = Cast<AUPMonsterBase>(AIController->GetPawn());
 		if (AIPawn)
 		{
 			PlayerCharacter = Cast<AUPPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
@@ -47,16 +47,16 @@ void UUPBTTask_RotateToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
 	AIController = Cast<AUPPettuAIController>(OwnerComp.GetAIOwner());
 	if (AIController)
 	{
-		AIPawn = Cast<AUPPettuCharacter>(AIController->GetPawn());
+		AIPawn = Cast<AUPMonsterBase>(AIController->GetPawn());
 		if (AIPawn)
 		{
-			// 2초 동안 목표 회전으로 보간
+			// 지정한 시간 동안 목표 회전으로 보간
 			ElapsedTime += DeltaSeconds;
 			float Alpha = FMath::Clamp(ElapsedTime / RotationTime, 0.0f, 1.0f);
 
 			FRotator NewRotation = FMath::Lerp(StartRotation, TargetRotation, Alpha);
 			AIPawn->SetActorRotation(NewRotation);
-			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("%f"), Alpha));
+			//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("%f"), Alpha));
 
 			// 목표 회전에 도달하면 태스크 완료
 			if (Alpha >= 1.0f)

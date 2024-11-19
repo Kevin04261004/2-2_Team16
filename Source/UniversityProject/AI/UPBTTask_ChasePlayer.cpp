@@ -16,6 +16,7 @@ EBTNodeResult::Type UUPBTTask_ChasePlayer::ExecuteTask(UBehaviorTreeComponent& O
 {
 	if (auto* const cont = Cast<AUPPettuAIController>(OwnerComp.GetAIOwner()))
 	{
+		cont->SetReplicatedMovement()
 		auto const TargetLocation = OwnerComp.GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey());
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(cont, TargetLocation);
 

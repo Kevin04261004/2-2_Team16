@@ -29,7 +29,7 @@ private:
 	class AUPPettuAIController* AIController;
 
 	UPROPERTY()
-	class AUPPettuCharacter* AIPawn;
+	class AUPMonsterBase* AIPawn;
 
 	UPROPERTY()
 	FRotator TargetRotation;
