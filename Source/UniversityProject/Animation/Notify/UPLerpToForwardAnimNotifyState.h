@@ -20,6 +20,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category="Init")
 	bool bIsLookLastInput;
+
+	UPROPERTY(EditAnywhere, Category="Init")
+	bool bLookTarget = false;
 	
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float InTotalDuration) override;
 	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime) override;
