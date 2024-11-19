@@ -26,9 +26,9 @@ public class UniversityProject : ModuleRules
 			"GameplayTasks",
 			"Niagara",
 			"SpinePlugin",
+			"MovieScene",
+			"LevelSequence"
 		});
-
-		PrivateDependencyModuleNames.AddRange(new string[] { "LevelSequence" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

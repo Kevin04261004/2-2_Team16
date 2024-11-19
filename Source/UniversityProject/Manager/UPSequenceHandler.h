@@ -8,7 +8,7 @@
 #include "UPSequenceHandler.generated.h"
 
 UCLASS()
-class YOURGAME_API UUPSequenceHandler : public UGameInstanceSubsystem
+class UNIVERSITYPROJECT_API UUPSequenceHandler : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 

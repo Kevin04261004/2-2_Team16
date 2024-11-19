@@ -1,7 +1,5 @@
 #include "Manager/UPSequenceHandler.h"
 
-#include "Engine/World.h"
-
 void UUPSequenceHandler::PlaySequence(ULevelSequence* Sequence)
 {
 	if (!Sequence)
@@ -45,9 +43,12 @@ void UUPSequenceHandler::SkipSequence()
 {
 	if (CurSequencePlayer)
 	{
-		FQualifiedFrameTime EndTime = CurSequencePlayer->GetEndTime();
+		float SequenceDuration = CurSequencePlayer->GetDuration().AsSeconds();
+
+		// 재생 시간을 끝으로 이동
+		FMovieSceneSequencePlaybackParams PlaybackParams = FMovieSceneSequencePlaybackParams(SequenceDuration, EUpdatePositionMethod::Jump);
+		CurSequencePlayer->SetPlaybackPosition(PlaybackParams);
 		
-		// CurSequencePlayer->SetPlaybackPosition();
 		UE_LOG(LogTemp, Log, TEXT("Sequence Skipped to End."));
 	}
 }
