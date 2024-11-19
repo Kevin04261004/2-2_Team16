@@ -26,6 +26,7 @@ class UNIVERSITYPROJECT_API AUPMonsterBase : public AUPCharacterBase
 public:
 	AUPMonsterBase(const FObjectInitializer& ObjectInitializer);
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 
 /* AI Section */
 public:

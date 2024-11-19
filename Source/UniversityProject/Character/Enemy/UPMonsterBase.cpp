@@ -15,6 +15,12 @@ void AUPMonsterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	CreateDefaultObjectSkill();
+	MovementComponent->SetMovementMode(MOVE_Walking);
+}
+
+void AUPMonsterBase::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
 }
 
 void AUPMonsterBase::InitSkillMap()

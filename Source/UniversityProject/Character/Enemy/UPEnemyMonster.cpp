@@ -28,6 +28,8 @@ void AUPEnemyMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	bIsKnockbackActive = false;
+	MovementComponent->StopMovementImmediately();
+	MovementComponent->SetMovementMode(MOVE_Walking);
 }
 
 float AUPEnemyMonster::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -41,7 +43,7 @@ float AUPEnemyMonster::UPTakeDamage(float DamageAmount, FDamageEvent const& Dama
 			MonsterAIController->GetBlackboardComponent()->SetValueAsBool("IsKnockback", bIsKnockbackActive);
 			MonsterAIController->StopMovement();
 		}
-		MovementComponent->SetMovementMode(MOVE_None);
+		MovementComponent->DisableMovement();
 
 		// 공격한 대상을 바라보게 설정
 		FRotator LookAtRotation = (DamageCauser->GetActorLocation() - GetActorLocation()).Rotation();
