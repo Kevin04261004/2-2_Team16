@@ -55,6 +55,8 @@ void UUPBTTask_RotateToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
 			float Alpha = FMath::Clamp(ElapsedTime / RotationTime, 0.0f, 1.0f);
 
 			FRotator NewRotation = FMath::Lerp(StartRotation, TargetRotation, Alpha);
+			NewRotation.Pitch = StartRotation.Pitch;
+			NewRotation.Roll = StartRotation.Roll;
 			AIPawn->SetActorRotation(NewRotation);
 			//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("%f"), Alpha));
 
