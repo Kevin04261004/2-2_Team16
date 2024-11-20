@@ -39,7 +39,7 @@ void AUPReachLocationCollision::OnOverlapBegin(class UPrimitiveComponent* Overla
 	{
 		return;
 	}
-	stageManager->EvaluateCondition(EStageConditionType::SequencePlay);
+	stageManager->EvaluateCondition(EStageConditionType::ReachLocation);
 	
 	// TODO: 이펙트 추가
 	
