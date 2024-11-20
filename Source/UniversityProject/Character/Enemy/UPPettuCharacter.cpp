@@ -11,7 +11,13 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Interface/UPGameInterface.h"
 #include "Kismet/GameplayStatics.h"
+#include "Misc/MapErrors.h"
 #include "UI/UPHudWidget.h"
+
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraDataInterfaceArrayFunctionLibrary.h"
+
 
 AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
@@ -51,6 +57,32 @@ void AUPPettuCharacter::BeginPlay()
 	{
 		PlayerCharacter->SetPettuCharacter(this);
 	}
+	
+	if (NiagaraSystem != nullptr && GetMesh() != nullptr)
+	{
+		LeftHandEffect = UNiagaraFunctionLibrary::SpawnSystemAttached(
+			NiagaraSystem,                        // Niagara 시스템
+			GetMesh(),
+			TEXT("LeftSocket"),              // 소켓 이름
+			FVector::ZeroVector,                 // 위치 (소켓 기준)
+			FRotator::ZeroRotator,               // 회전 (소켓 기준)
+			EAttachLocation::SnapToTarget,       // 소켓 기준 위치 설정
+			false                                 // AutoDestroy 설정
+		);
+		LeftHandEffect->Deactivate();
+		
+		RightHandEffect = UNiagaraFunctionLibrary::SpawnSystemAttached(
+		NiagaraSystem,                        // Niagara 시스템
+		GetMesh(),
+		TEXT("RightSocket"),              // 소켓 이름
+		FVector::ZeroVector,                 // 위치 (소켓 기준)
+		FRotator::ZeroRotator,               // 회전 (소켓 기준)
+		EAttachLocation::SnapToTarget,       // 소켓 기준 위치 설정
+		false                                 // AutoDestroy 설정
+		);
+		RightHandEffect->Deactivate();
+	}
+	
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -181,6 +213,29 @@ void AUPPettuCharacter::StunCheck(float Hp)
 	}
 }
 
+void AUPPettuCharacter::PunchTrailOn(EPunchTrailType type)
+{
+	if (type == EPunchTrailType::Left)
+	{
+		LeftHandEffect->Activate(true);
+	}
+	else if (type == EPunchTrailType::Right)
+	{
+		LeftHandEffect->Activate(true);
+	}
+}
+
+void AUPPettuCharacter::PunchTrailOff(EPunchTrailType type)
+{
+	if (type == EPunchTrailType::Left)
+	{
+		LeftHandEffect->Deactivate();
+	}
+	else if (type == EPunchTrailType::Right)
+	{
+		LeftHandEffect->Deactivate();
+	}
+}
 
 
 void AUPPettuCharacter::StunEnd(UAnimMontage* Montage, bool bInterrupted)

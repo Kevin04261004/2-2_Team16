@@ -7,10 +7,11 @@
 #include "Character/UPCharacterBase.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
+#include "Interface/UPPettuPunchTrailInterface.h"
 #include "UPPettuCharacter.generated.h"
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPMonsterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterHUDInterface
+class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPMonsterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterHUDInterface, public IUPPettuPunchTrailInterface
 {
 	GENERATED_BODY()
 public:
@@ -86,7 +87,24 @@ public:
 	/* UI Section */
 protected:
 	virtual void SetupHUDWidget(UUPHudWidget* InHUDWidget) override;
+	
 	UFUNCTION()
 	void StunCheck(float Hp);
+
+/* Punch */
+protected:
+	virtual void PunchTrailOn(EPunchTrailType type) override;
+	virtual void PunchTrailOff(EPunchTrailType type) override;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects")
+	TObjectPtr<UNiagaraComponent> LeftHandEffect;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects")
+	TObjectPtr<UNiagaraComponent> RightHandEffect;
+	
+/* Effects */
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Init", Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UNiagaraSystem> NiagaraSystem;
 	
 };
