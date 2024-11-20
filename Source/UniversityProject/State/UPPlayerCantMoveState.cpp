@@ -20,7 +20,8 @@ void UUPPlayerCantMoveState::EnterState()
 	OwnerCharacter->MovementComponent->ClearAccumulatedForces();
 	OwnerCharacter->MovementComponent->Velocity = FVector::ZeroVector;
 	OwnerCharacter->MovementComponent->StopActiveMovement();
-	
+	OwnerCharacter->Controller->StopMovement();
+
 	// 이동 모드를 MOVE_None로 설정 (움직이지 않음)
 	OwnerCharacter->MovementComponent->DisableMovement();
 	OwnerCharacter->MovementComponent->SetMovementMode(MOVE_None);
