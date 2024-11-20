@@ -11,11 +11,10 @@
 AUPPettuWeapon::AUPPettuWeapon()
 {
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("AttackCollision"));
-	SphereCollision->InitSphereRadius(50.0f);
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SphereCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
 	SphereCollision->SetCollisionResponseToChannel(CCHANEL_UPACTION, ECR_Overlap);
-	SphereCollision->SetHiddenInGame(true);
+	SphereCollision->SetHiddenInGame(false);
 	
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AUPPettuWeapon::OnWeaponOverlapBegin);
 	
@@ -79,7 +78,7 @@ void AUPPettuWeapon::CheckCollision(FVector Start, FVector End)
 		TraceChannel,
 		false,
 		ActorsToIgnore,
-		EDrawDebugTrace::None, 
+		EDrawDebugTrace::ForDuration, 
 		HitResults,
 		true, 
 		FLinearColor::Red,
