@@ -3,6 +3,7 @@
 
 #include "Game/Stage/UPSequencePlayCollision.h"
 
+#include "Game/UPGameMode.h"
 #include "Manager/UPSequenceHandler.h"
 
 class ULevelSequence;
@@ -29,5 +30,20 @@ void AUPSequencePlayCollision::OnOverlapBegin(class UPrimitiveComponent* Overlap
 	{
 		SequenceHandler->PlaySequence(Sequence);
 	}
+
+
+	AUPGameMode* gameMode = Cast<AUPGameMode>(GetWorld()->GetAuthGameMode());
+	if (gameMode == nullptr)
+	{
+		return;
+	}
+	AUPStageManager* stageManager = gameMode->StageManager;
+
+	if (stageManager == nullptr)
+	{
+		return;
+	}
+	stageManager->EvaluateCondition(EStageConditionType::ReachLocation);
+	Destroy();
 }
 
