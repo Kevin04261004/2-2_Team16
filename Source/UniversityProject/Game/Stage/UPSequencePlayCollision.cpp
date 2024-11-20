@@ -43,7 +43,7 @@ void AUPSequencePlayCollision::OnOverlapBegin(class UPrimitiveComponent* Overlap
 	{
 		return;
 	}
-	stageManager->EvaluateCondition(EStageConditionType::ReachLocation);
+	stageManager->EvaluateCondition(EStageConditionType::SequencePlay);
 	Destroy();
 }
 
