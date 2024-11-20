@@ -12,11 +12,6 @@
 // Sets default values
 AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(CharacterMovementComponentName))
 {
-	// Pawn
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationRoll = false;
-
 	// Capsule
 	TObjectPtr<UCapsuleComponent> CapsuleComponent_ = GetCapsuleComponent();
 	CapsuleComponent_->InitCapsuleSize(42.f, 96.0f);
@@ -37,12 +32,6 @@ AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) 
 	MeshComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -100.0f), FRotator(0.0f, -90.0f, 0.0f));
 	MeshComponent->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
-
-	// Set Stat
-	StatComponent = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
-
-	bIsDead = false;
-	CurAttackDamage = 0.0f;
 }
 
 void AUPCharacterBase::BeginPlay()
@@ -55,12 +44,8 @@ void AUPCharacterBase::BeginPlay()
 	/* Init */
 	// Set AnimInstance
 	GetMesh()->SetAnimInstanceClass(AnimInstanceClass);
-
-
+	
 	// Set StatComponent Value
-	check(StatComponent != nullptr);
-	check(CharacterInitalizeStatData != nullptr);	
-	StatComponent->SetBaseStat(CharacterInitalizeStatData->Stat);
 	MovementComponent->Initialize();
 	MovementComponent->SetCharacterStat(StatComponent);
     MovementComponent->SetIsSprinting(false);
@@ -81,10 +66,6 @@ void AUPCharacterBase::BeginPlay()
 void AUPCharacterBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-
-	/* Component Delegate */
-	check(StatComponent != nullptr);
-	StatComponent->OnHpZero.AddUObject(this, &AUPCharacterBase::SetDead);
 }
 
 bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit, FVector& OutActorLocation) // 캐릭터 앞에 콜라이더가 존재하는지 확인합니다. 존재하면 true를 리턴합니다.

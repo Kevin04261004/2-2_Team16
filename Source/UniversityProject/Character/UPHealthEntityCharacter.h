@@ -18,6 +18,9 @@ class UNIVERSITYPROJECT_API AUPHealthEntityCharacter : public ACharacter, public
 public:
 	AUPHealthEntityCharacter(const FObjectInitializer& ObjectInitializer);
 
+	virtual void BeginPlay() override;
+	virtual void PostInitializeComponents() override;
+	
 /* Attack Hit Section */
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true", Tooltip = "피격시 생성되는 파티클"))

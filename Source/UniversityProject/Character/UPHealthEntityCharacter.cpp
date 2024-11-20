@@ -3,11 +3,35 @@
 
 #include "Character/UPHealthEntityCharacter.h"
 
+#include "UPCharacterBase.h"
 #include "Components/UPCharacterMovementComponent.h"
 
 AUPHealthEntityCharacter::AUPHealthEntityCharacter(const FObjectInitializer& ObjectInitializer) : CurAttackDamage(0), bIsDead(false)
 {
+	// Pawn
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 	
+	// Set Stat
+	StatComponent = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
+}
+
+void AUPHealthEntityCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	check(StatComponent != nullptr);
+	check(CharacterInitalizeStatData != nullptr);	
+	StatComponent->SetBaseStat(CharacterInitalizeStatData->Stat);
+}
+
+void AUPHealthEntityCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	check(StatComponent != nullptr);
+	StatComponent->OnHpZero.AddUObject(this, &AUPHealthEntityCharacter::SetDead);
 }
 
 float AUPHealthEntityCharacter::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -20,24 +44,24 @@ float AUPHealthEntityCharacter::UPTakeDamage(float DamageAmount, struct FDamageE
 void AUPHealthEntityCharacter::SetDead()
 {
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
-	PlayDeadAnimation();
 	SetActorEnableCollision(false);
 	bIsDead = true;
+	PlayDeadAnimation();
 }
 
 void AUPHealthEntityCharacter::PlayDeadAnimation()
 {
+	if (DeadMontage == nullptr)
+	{
+		Destroy();
+		return;
+	}
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance == nullptr)
 	{
 		return;
 	}
 	AnimInstance->StopAllMontages(0.0f);
-	if (DeadMontage == nullptr)
-	{
-		Destroy();
-		return;
-	}
 	AnimInstance->Montage_Play(DeadMontage, 1.0f);
 	AnimInstance->OnMontageEnded.AddDynamic(this, &AUPHealthEntityCharacter::DeadAnimEnd);
 }
