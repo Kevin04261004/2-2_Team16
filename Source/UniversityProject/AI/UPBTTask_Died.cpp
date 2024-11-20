@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "AI/UPBTTask_Died.h"
-#include "Character/Enemy/UPPettuCharacter.h"
 #include "AI/UPPettuAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Character/UPCharacterBase.h"
 
 UUPBTTask_Died::UUPBTTask_Died(const FObjectInitializer& ObjectInitializer)
 {
@@ -15,8 +15,8 @@ EBTNodeResult::Type UUPBTTask_Died::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	auto* const PettuController = Cast<AUPPettuAIController>(OwnerComp.GetAIOwner());
 	if (PettuController)
 	{
-		auto* const Pettu = Cast<AUPPettuCharacter>(PettuController->GetPawn());
-		if (Pettu)
+		auto* const EnemyCharacter = Cast<AUPCharacterBase>(PettuController->GetPawn());
+		if (EnemyCharacter)
 		{
 			OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("IsDead"), true);
 			return EBTNodeResult::Succeeded;

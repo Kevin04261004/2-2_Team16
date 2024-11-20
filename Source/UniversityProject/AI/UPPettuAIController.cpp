@@ -2,7 +2,6 @@
 
 
 #include "AI/UPPettuAIController.h"
-#include "Character/Enemy/UPPettuCharacter.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/UPPlayerCharacter.h"
@@ -17,9 +16,9 @@ AUPPettuAIController::AUPPettuAIController(FObjectInitializer const& ObjectIniti
 void AUPPettuAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	if (AUPPettuCharacter* const Pettu = Cast<AUPPettuCharacter>(InPawn))
+	if (AUPMonsterBase* const Monster = Cast<AUPMonsterBase>(InPawn))
 	{
-		if (UBehaviorTree* const tree = Pettu->GetBehaviorTree())
+		if (UBehaviorTree* const tree = Monster->GetBehaviorTree())
 		{
 			UBlackboardComponent* b;
 			UseBlackboard(tree->BlackboardAsset, b);
