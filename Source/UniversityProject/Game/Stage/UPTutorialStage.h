@@ -14,6 +14,7 @@ enum class EStageConditionType : uint8
 	UseJump UMETA(DisplayName = "UseJump"),
 	UseTakeDown UMETA(DisplayName = "UseTakeDown"),
 	UseUpperCut UMETA(DisplayName = "UseUpperCut"),
+
 	FinishUseBaseAttack01 UMETA(DisplayName = "Finish UseBaseAttack01"),
 	FinishUseBaseAttack02 UMETA(DisplayName = "Finish UseBaseAttack02"),
 	FinishUseBaseAttack03 UMETA(DisplayName = "Finish UseBaseAttack03"),
@@ -21,8 +22,12 @@ enum class EStageConditionType : uint8
 	FinishUseJump UMETA(DisplayName = "Finish UseJump"),
 	FinishUseTakeDown UMETA(DisplayName = "Finish UseTakeDown"),
 	FinishUseUpperCut UMETA(DisplayName = "Finish UseUpperCut"),
+
 	ReachLocation UMETA(DisplayName = "ReachLocation"),
 	SequencePlay UMETA(DisplayName = "SequencePlay"),
+
+	KillMonster UMETA(DisplayName = "KillMonster"),
+	KillHealthMeshObject UMETA(DisplayName = "KillHealthMeshObject"),
 };
 
 USTRUCT(BlueprintType)

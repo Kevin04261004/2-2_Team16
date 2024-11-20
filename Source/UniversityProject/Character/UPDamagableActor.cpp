@@ -25,6 +25,8 @@ AUPDamagableActor::AUPDamagableActor()
 		HpBar->SetDrawSize(FVector2D(150.0f, 15.0f));
 		HpBar->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
+
+	
 }
 
 float AUPDamagableActor::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,

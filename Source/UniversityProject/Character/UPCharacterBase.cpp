@@ -32,6 +32,8 @@ AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) 
 	MeshComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -100.0f), FRotator(0.0f, -90.0f, 0.0f));
 	MeshComponent->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
+
+	DiedCondition = EStageConditionType::None;
 }
 
 void AUPCharacterBase::BeginPlay()

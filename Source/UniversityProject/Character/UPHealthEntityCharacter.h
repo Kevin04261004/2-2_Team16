@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Game/Stage/UPStageManager.h"
+#include "Game/Stage/UPTutorialStage.h"
 #include "GameData/UPCharacterStatData.h"
 #include "GameFramework/Character.h"
 #include "Interface/UPDamageableInterface.h"
@@ -50,6 +52,11 @@ protected:
 	void PlayDeadAnimation();
 	UFUNCTION()
 	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 죽었을 때 튜토리얼한테 쏘는거."))
+	EStageConditionType DiedCondition;
+
+	TObjectPtr<AUPStageManager> StageManager;
 	
 public:
 	FORCEINLINE bool IsDead() const { return bIsDead; }

@@ -5,6 +5,7 @@
 
 #include "UPCharacterBase.h"
 #include "Components/UPCharacterMovementComponent.h"
+#include "Game/UPGameMode.h"
 
 AUPHealthEntityCharacter::AUPHealthEntityCharacter(const FObjectInitializer& ObjectInitializer) : CurAttackDamage(0), bIsDead(false)
 {
@@ -15,6 +16,8 @@ AUPHealthEntityCharacter::AUPHealthEntityCharacter(const FObjectInitializer& Obj
 	
 	// Set Stat
 	StatComponent = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
+
+	DiedCondition = EStageConditionType::KillHealthMeshObject;
 }
 
 void AUPHealthEntityCharacter::BeginPlay()
@@ -24,6 +27,19 @@ void AUPHealthEntityCharacter::BeginPlay()
 	check(StatComponent != nullptr);
 	check(CharacterInitalizeStatData != nullptr);	
 	StatComponent->SetBaseStat(CharacterInitalizeStatData->Stat);
+
+	AGameModeBase* GM = GetWorld()->GetAuthGameMode();
+	if (GM == nullptr)
+	{
+		return;
+	}
+	AUPGameMode* gameMode = Cast<AUPGameMode>(GM);
+	if (gameMode == nullptr)
+	{
+		return;
+	}
+	StageManager = gameMode->StageManager;
+	check(StageManager != nullptr);
 }
 
 void AUPHealthEntityCharacter::PostInitializeComponents()
@@ -43,6 +59,7 @@ float AUPHealthEntityCharacter::UPTakeDamage(float DamageAmount, struct FDamageE
 
 void AUPHealthEntityCharacter::SetDead()
 {
+	StageManager->EvaluateCondition(DiedCondition);
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 	SetActorEnableCollision(false);
 	bIsDead = true;

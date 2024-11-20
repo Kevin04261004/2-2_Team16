@@ -9,6 +9,7 @@
 AUPMonsterBase::AUPMonsterBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	InitSkillMap();
+	
 }
 
 void AUPMonsterBase::BeginPlay()
