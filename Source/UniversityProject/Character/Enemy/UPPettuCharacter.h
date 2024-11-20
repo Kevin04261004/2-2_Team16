@@ -3,27 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UPMonsterBase.h"
 #include "Character/UPCharacterBase.h"
-#include "BehaviorTree/BehaviorTree.h"
-#include "Skill/UPSkillBase.h"
-#include "AI/UPPettuAIController.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
-#include "Skill/UPPettuSkillData.h"
 #include "UPPettuCharacter.generated.h"
 
-UENUM(BlueprintType)
-enum class EPettuSkillType : uint8
-{
-	SmashAttack UMETA(DisplayName = "휘두르기1"),
-	SmashAttack2 UMETA(DisplayName = "휘두르기2"),
-	TakeTurnGroundAttack UMETA(DisplayName = "두 손 번갈아 내려찍기"),
-	JumpGroundAttack UMETA(DisplayName = "점프 내려찍기"),
-	TwoHandGroundAttack UMETA(DisplayName = "두 손 내려찍기"),
-};
-
 UCLASS()
-class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPCharacterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterHUDInterface
+class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPMonsterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterHUDInterface
 {
 	GENERATED_BODY()
 public:
@@ -40,11 +27,6 @@ private:
 	TObjectPtr<AUPPlayerCharacter> PlayerCharacter;
 /* AI Section */
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UBehaviorTree> BTree;
-	
-	TObjectPtr<class UBehaviorTree> GetBehaviorTree() const { return BTree; }
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class AAIController> PettuAIController;
 
@@ -77,15 +59,6 @@ public:
 	void PlayStiffenAnimation();
 	
 private:
-
-	///////////// 상수 //////////////
-	float MaxComboCount;
-	float BaseComboFrameRate;
-	float LastComboFrameRate; 
-
-	///////////// 변수 //////////////
-	float DamageReceived;
-
 	UFUNCTION()
 	void TestFunc();
 	FTimerHandle TestHandle;
@@ -102,31 +75,13 @@ public:
 	void PatternMontageEnd(UAnimMontage* Montage, bool bInterrupted);
 
 	float GetStunStack() const { return StatComponent->GetCurrentStunStack(); }
-
-/* Skill Section */
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	TMap<EPettuSkillType, TSubclassOf<UUPSkillBase>> SkillMapInitializer;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
-	TMap<EPettuSkillType, UUPSkillBase*> SkillMap;
-
-	UPROPERTY()
-	TObjectPtr<UUPPettuSkillData> CurrentSkillData;
-	
-	void InitSkillMap();
-	void CreateDefaultObjectSkill();
-
-	UPROPERTY()
-	EPettuSkillType CurrentSkillType;
 /* Attack Section */
 public:
 	virtual void AttackHitCheck() override;
 	void AttackHitCheck(bool bIsAttached, FName SocketName, USkeletalMeshComponent* MeshComp);
 	void AttackHitCheck(bool bIsAttached, FName SocketName, USkeletalMeshComponent* MeshComp,
 		float AttackRange, float Amount, FVector CollisionLocation);
-public:
-	virtual void SkillAttack(EPettuSkillType SkillType);
 
 	/* UI Section */
 protected:
