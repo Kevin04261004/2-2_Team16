@@ -28,6 +28,7 @@ void AUPStageManager::BeginPlay()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Actor Spawner Not Found");
 	}
+
 	
 	StartStage(0);
 }
