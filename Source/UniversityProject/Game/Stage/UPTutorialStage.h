@@ -41,6 +41,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Tooltip = "DataTable에서 생성할 때 사용할 키 값"))
 	FString SpawnActorKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Tooltip = "클리어 후, 몇초동안의 텀이 존재한가?"))
+	float TurmAfterClear;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EStageConditionType, int /* count */> StageConditionMap;

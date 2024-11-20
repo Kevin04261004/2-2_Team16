@@ -107,16 +107,31 @@ void AUPStageManager::CompleteStage()
 	FString str = FString::Printf(TEXT("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Stage %d Clear!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"), CurrentStageIndex + 1);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, *str);
 	OnStageClear.Broadcast(CurrentStage.SpawnActorKey);
-
-	CurrentStageIndex++;
+	
 	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{
-		StartStage(CurrentStageIndex);
+		if (CurrentStage.TurmAfterClear <= 0.0f)
+		{
+			CurrentStage.TurmAfterClear = 0.1f;
+		}
+		GetWorld()->GetTimerManager().SetTimer(
+			NextStageTimerHandle,
+			this,
+			&AUPStageManager::StartNextStage,
+			CurrentStage.TurmAfterClear,
+			false
+		);
 	}
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!!!!!!!!!!!!!!!!!!!!!!!!!All Stage Clear!!!!!!!!!!!!!!!!!!!!!!");
 	}
+}
+
+void AUPStageManager::StartNextStage()
+{
+	CurrentStageIndex++;
+	StartStage(CurrentStageIndex);
 }
 
 void AUPStageManager::CheckStageConditions()

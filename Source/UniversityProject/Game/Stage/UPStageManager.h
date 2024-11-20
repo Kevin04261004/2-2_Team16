@@ -48,10 +48,12 @@ public:
 	FOnStageClear OnStageClear;
 	FOnStageConditionUpdate OnStageConditionUpdate;
 	FOnStageStart OnStageStart;
-	
+
+	FTimerHandle NextStageTimerHandle;
 private:
 	void StartStage(int32 StageIndex);
 	void CompleteStage();
+	void StartNextStage();
 	void CheckStageConditions();
 };
 
