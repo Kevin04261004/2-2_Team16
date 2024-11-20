@@ -44,19 +44,6 @@ void UUPBTService_DistanceCheck::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 		return;
 	}
 	AUPPlayerCharacter* Player = Cast<AUPPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (!Player)
-	{
-		// TODO: 삭제. 중간시연 용. 빌드에서 안돼서 넣어둔거.
-		GameMode->HudWidgetObject->SetVisibility(ESlateVisibility::Hidden);
-		return;
-	}
-	else
-	{
-		// TODO: 삭제. 중간시연 용. 빌드에서 안돼서 넣어둔거.
-		GameMode->HudWidgetObject->SetVisibility(ESlateVisibility::HitTestInvisible);
-	}
-
-	
 
 	float DistanceToPlayer = FVector::Dist(AIPawn->GetActorLocation(), Player->GetActorLocation());
 	bool bIsInRange = DistanceToPlayer <= Distance;
