@@ -1,5 +1,11 @@
 #include "Manager/UPSequenceHandler.h"
 
+#include "LevelSequenceActor.h"
+#include "Blueprint/UserWidget.h"
+#include "Character/UPPlayerCharacter.h"
+#include "Components/SlateWrapperTypes.h"
+#include "GameFramework/Character.h"
+
 void UUPSequenceHandler::PlaySequence(ULevelSequence* Sequence)
 {
 	if (!Sequence)
@@ -11,6 +17,8 @@ void UUPSequenceHandler::PlaySequence(ULevelSequence* Sequence)
 	FMovieSceneSequencePlaybackSettings PlaybackSettings;
 	PlaybackSettings.bAutoPlay = false;
 
+	SetSequenceMode();
+	
 	// ULevelSequencePlayer 생성
 	CurSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
 		GetWorld(),
@@ -23,6 +31,9 @@ void UUPSequenceHandler::PlaySequence(ULevelSequence* Sequence)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Playing Level Sequence..."));
 		CurSequencePlayer->Play();
+
+		CurSequencePlayer->OnFinished.AddDynamic(this, &UUPSequenceHandler::EnableCharacterMovement);
+		CurSequencePlayer->OnFinished.AddDynamic(this, &UUPSequenceHandler::EnableHiddenUI);
 	}
 	else
 	{
@@ -55,6 +66,65 @@ void UUPSequenceHandler::SkipSequence()
 
 void UUPSequenceHandler::SetSequenceMode()
 {
-	// 여기에 추가적인 모드 설정 로직을 구현
-	UE_LOG(LogTemp, Log, TEXT("Sequence mode set."));
+	DisableCharacterMovement();
+	HideUI();
+
+	// TODO: 
+}
+
+void UUPSequenceHandler::EnableCharacterMovement()
+{
+	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
+	{
+		AUPPlayerCharacter* PlayerCharacter = Cast<AUPPlayerCharacter>(PC->GetPawn());
+		if (PlayerCharacter)
+		{
+			UCharacterMovementComponent* MovementComponent = PlayerCharacter->GetCharacterMovement();
+			if (PlayerCharacter->MovementComponent)
+			{
+				MovementComponent->SetMovementMode(MOVE_Walking);
+			}
+			PlayerCharacter->bIsInvincible = false;
+			PlayerCharacter->EnableInput(PC);
+		}
+	}
+}
+
+
+void UUPSequenceHandler::DisableCharacterMovement()
+{
+	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
+	{
+		AUPPlayerCharacter* PlayerCharacter = Cast<AUPPlayerCharacter>(PC->GetPawn());
+		PC->FlushPressedKeys(); // 누적된 키 입력을 지움
+		PlayerCharacter->DisableInput(PC); // 입력 비활성화
+		PlayerCharacter->GetStateManager()->ChangeState(EPlayerStateType::CantMove);
+	}
+}
+
+void UUPSequenceHandler::HideUI()
+{
+	for (TObjectIterator<UUserWidget> It; It; ++It)
+	{
+		if (It->IsInViewport() && It->IsVisible())
+		{
+			// 현재 화면에 표시되는 위젯만 처리
+			It->SetVisibility(ESlateVisibility::Hidden);
+			HiddenWidgets.Add(*It); // 숨긴 위젯을 저장
+		}
+	}
+
+}
+
+void UUPSequenceHandler::EnableHiddenUI()
+{
+	for (UUserWidget* Widget : HiddenWidgets)
+	{
+		if (Widget && Widget->IsValidLowLevel())
+		{
+			Widget->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
+
+	HiddenWidgets.Empty();
 }

@@ -4,7 +4,6 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "LevelSequence.h"
 #include "LevelSequencePlayer.h"
-#include "MovieSceneSequencePlaybackSettings.h"
 #include "UPSequenceHandler.generated.h"
 
 UCLASS()
@@ -27,6 +26,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Cinematic")
 	void SetSequenceMode();
 
+	UFUNCTION(BlueprintCallable, Category = "Cinematic")
+	void EnableCharacterMovement();
+	UFUNCTION(BlueprintCallable, Category = "Cinematic")
+	void DisableCharacterMovement();
+
+	UFUNCTION(BlueprintCallable, Category = "Cinematic")
+	void EnableHiddenUI();
+	UFUNCTION(BlueprintCallable, Category = "Cinematic")
+	void HideUI();
 private:
 	// 현재 재생 중인 시퀀스 플레이어
 	UPROPERTY()
@@ -35,4 +43,7 @@ private:
 	// 현재 시퀀스 액터 (필요한 경우 추가 설정 가능)
 	UPROPERTY()
 	ALevelSequenceActor* CurSequenceActor;
+
+	UPROPERTY()
+	TArray<UUserWidget*> HiddenWidgets;
 };

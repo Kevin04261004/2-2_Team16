@@ -155,4 +155,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	AUPPettuCharacter* GetPettuCharacter() const { return PettuCharacter.Get(); }
+
+public:
+	bool bIsInvincible;
 };

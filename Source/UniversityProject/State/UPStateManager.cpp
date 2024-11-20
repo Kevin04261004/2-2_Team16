@@ -9,6 +9,7 @@
 #include "UPPlayerSprintState.h"
 #include "UPPlayerWalkState.h"
 #include "UPPlayerBaseState.h"
+#include "UPPlayerCantMoveState.h"
 #include "UPPlayerDashState.h"
 #include "UPPlayerInAirState.h"
 #include "UPPlayerJumpState.h"
@@ -45,6 +46,7 @@ void UUPStateManager::InitializeStateMap()
 	StateMap.Add(EPlayerStateType::InAir, NewObject<UUPPlayerInAirState>());
 	StateMap.Add(EPlayerStateType::Land, NewObject<UUPPlayerLandState>());
 	StateMap.Add(EPlayerStateType::Damaged, NewObject<UUPPlayerTakeDamageState>());
+	StateMap.Add(EPlayerStateType::CantMove, NewObject<UUPPlayerCantMoveState>());
 }
 
 void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
@@ -62,8 +64,7 @@ void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
 	StateMap[EPlayerStateType::InAir]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Land]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Damaged]->Initialize(OwningCharacter, InputHandler);
-	
-
+	StateMap[EPlayerStateType::CantMove]->Initialize(OwningCharacter, InputHandler);
 	
 	CurrentStateType = InitState;
 	StateMap[CurrentStateType]->EnterState();

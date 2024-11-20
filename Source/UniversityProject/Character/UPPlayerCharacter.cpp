@@ -49,6 +49,8 @@ AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	MovementComponent->bPushForceUsingZOffset = false;
 
 	ConstCameraZ = 0.0f;
+
+	bIsInvincible = false;
 }
 
 void AUPPlayerCharacter::PostInitializeComponents()
@@ -126,6 +128,10 @@ void AUPPlayerCharacter::CreateAfterImage() // IUPAfterImageableInterface
 float AUPPlayerCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	AController* EventInstigator, AActor* DamageCauser)
 {
+	if (bIsInvincible)
+	{
+		return 0;
+	}
 	float super = Super::UPTakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	check(CameraComponent != nullptr);
