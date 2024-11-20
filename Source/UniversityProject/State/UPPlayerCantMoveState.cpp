@@ -16,6 +16,7 @@ void UUPPlayerCantMoveState::Initialize(AUPPlayerCharacter* InOwnerCharacter,
 void UUPPlayerCantMoveState::EnterState()
 {
 	Super::EnterState();
+	InputHandler->OnMoveInputed.Broadcast(FVector2D::ZeroVector);
 	OwnerCharacter->MovementComponent->StopMovementImmediately();
 	OwnerCharacter->MovementComponent->ClearAccumulatedForces();
 	OwnerCharacter->MovementComponent->Velocity = FVector::ZeroVector;
