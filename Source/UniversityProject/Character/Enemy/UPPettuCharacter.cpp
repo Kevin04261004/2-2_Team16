@@ -37,7 +37,7 @@ void AUPPettuCharacter::PostInitializeComponents()
 	//StatComponent->OnStunStackZero.AddUObject(this, &AUPPettuCharacter::SetStun);
 	StatComponent->OnStiffen.AddUObject(this, &AUPPettuCharacter::SetStiffen);
 	StatComponent->OnHpChanged.AddUObject(this, &AUPPettuCharacter::StunCheck);
-	PettuAIController = Cast<AUPPettuAIController>(GetController());
+	MonsterAIController = Cast<AUPPettuAIController>(GetController());
 
 	// 플레이어의 최대 기울기 설정 (보스 머리 위에서 미끄러지게 함)
 	//GetCharacterMovement()->Walkable(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 30.f));
@@ -94,18 +94,6 @@ float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& Da
 void AUPPettuCharacter::SetDead()
 {
 	Super::SetDead();
-	MovementComponent->DisableMovement();
-	//PettuAIController = Cast<AUPPettuAIController>(GetController());
-	if (PettuAIController)
-	{
-		if (PettuAIController->BrainComponent)
-		{
-			PettuAIController->BrainComponent->StopLogic(TEXT("Death"));
-		}
-		PettuAIController->StopMovement();
-	}
-	
-	//Destroy();
 }
 
 void AUPPettuCharacter::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
@@ -118,9 +106,9 @@ void AUPPettuCharacter::SetStun()
 	Super::SetStun();
 	StatComponent->ApplyStunStack(1);
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Stun"));
-	if (PettuAIController)
+	if (MonsterAIController)
 	{
-		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
+		UBlackboardComponent* BlackboardComp = MonsterAIController->GetBlackboardComponent();
 		if (BlackboardComp)
 		{
 			BlackboardComp->SetValueAsBool(TEXT("IsStun"), bIsStun);
@@ -245,9 +233,9 @@ void AUPPettuCharacter::StunEnd(UAnimMontage* Montage, bool bInterrupted)
 		return;
 	}
 	bIsStun = false;
-	if (PettuAIController)
+	if (MonsterAIController)
 	{
-		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
+		UBlackboardComponent* BlackboardComp = MonsterAIController->GetBlackboardComponent();
 		if (BlackboardComp)
 		{
 			BlackboardComp->SetValueAsBool(TEXT("IsStun"), bIsStun);
@@ -262,9 +250,9 @@ void AUPPettuCharacter::SetStiffen()
 	PlayStiffenAnimation();
 	bIsStiffen = true;
 	
-	if (PettuAIController)
+	if (MonsterAIController)
 	{
-		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
+		UBlackboardComponent* BlackboardComp = MonsterAIController->GetBlackboardComponent();
 		if (BlackboardComp)
 		{
 			BlackboardComp->SetValueAsBool(TEXT("IsStiffen"), bIsStiffen);
@@ -281,9 +269,9 @@ void AUPPettuCharacter::StiffenEnd(UAnimMontage* Montage, bool bInterrupted)
 	}
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	bIsStiffen = false;
-	if (PettuAIController)
+	if (MonsterAIController)
 	{
-		UBlackboardComponent* BlackboardComp = PettuAIController->GetBlackboardComponent();
+		UBlackboardComponent* BlackboardComp = MonsterAIController->GetBlackboardComponent();
 		if (BlackboardComp)
 		{
 			BlackboardComp->SetValueAsBool(TEXT("IsStiffen"), bIsStiffen);
