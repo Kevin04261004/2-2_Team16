@@ -11,12 +11,12 @@
 
 void UUPGameInstance::StartGame()
 {
-	if (LoadingWidgetClass)
+	if (CutSceneWidgetClass)
 	{
-		LoadingWidgetInstance = CreateWidget<UUserWidget>(this, LoadingWidgetClass);
-		if (LoadingWidgetInstance)
+		CutSceneWidgetInstance = CreateWidget<UUserWidget>(this, CutSceneWidgetClass);
+		if (CutSceneWidgetInstance)
 		{
-			LoadingWidgetInstance->AddToViewport();
+			CutSceneWidgetInstance->AddToViewport();
 		}
 	}
 
@@ -24,23 +24,39 @@ void UUPGameInstance::StartGame()
 	LoadPackageAsync(MapPath, FLoadPackageAsyncDelegate::CreateUObject(this, &UUPGameInstance::OnMapLoaded));
 }
 
-void UUPGameInstance::OnMapLoaded(const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result)
+void UUPGameInstance::OnCutSceneFinished()
 {
-	if (Result == EAsyncLoadingResult::Succeeded)
+	bIsCutsceneFinished = true;
+	TryOpenLevel(LoadedPackageName);
+}
+
+void UUPGameInstance::TryOpenLevel(const FName& PackageName)
+{
+	if (bIsMapLoaded && bIsCutsceneFinished)
 	{
-		if (LoadingWidgetInstance)
+		if (CutSceneWidgetInstance)
 		{
-			LoadingWidgetInstance->RemoveFromParent();
+			CutSceneWidgetInstance->RemoveFromParent();
+		}
+
+		UGameplayStatics::OpenLevel(GetWorld(), PackageName);
+		AUPPlayerController* PlayerController = Cast<AUPPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		if (PlayerController)
+		{
+			PlayerController->ClientSetCameraFade(true, FColor::Black, FVector2D(1.0f, 0.0f), 1.0f, false, true);
 		}
 	}
+}
 
-	UGameplayStatics::OpenLevel(GetWorld(), FName(*PackageName.ToString()));
-	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	if (PlayerController)
+void UUPGameInstance::OnMapLoaded(const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result)
+{
+	LoadedPackageName = PackageName;
+	if (Result == EAsyncLoadingResult::Succeeded)
 	{
-		PlayerController->ClientSetCameraFade(true, FColor::Black, FVector2D(1.0f, 0.0f), 1.0f, false, true);
+		// 맵 로딩이 완료되었지만 컷 만화가 아직 끝나지 않으면 대기
+		bIsMapLoaded = true;
+		TryOpenLevel(PackageName);
 	}
-
 	else
 	{
 		// Handle loading failure if needed
