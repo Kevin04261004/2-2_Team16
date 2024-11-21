@@ -10,6 +10,7 @@
 
 UUPBTTask_ChasePlayer::UUPBTTask_ChasePlayer(const FObjectInitializer& ObjectInitializer)
 {
+	MoveStopDistance = 100.f;
 	NodeName = TEXT("ChasePlayer");
 }
 
@@ -21,7 +22,7 @@ EBTNodeResult::Type UUPBTTask_ChasePlayer::ExecuteTask(UBehaviorTreeComponent& O
 		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(cont, TargetLocation);
 		FAIMoveRequest MoveRequest;
 		MoveRequest.SetGoalLocation(TargetLocation);
-		MoveRequest.SetAcceptanceRadius(5.0f);
+		MoveRequest.SetAcceptanceRadius(MoveStopDistance);
 
 		FNavPathSharedPtr NavPath;
 

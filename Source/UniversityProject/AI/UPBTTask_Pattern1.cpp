@@ -35,6 +35,10 @@ EBTNodeResult::Type UUPBTTask_Pattern1::ExecuteTask(UBehaviorTreeComponent& Owne
 
 void UUPBTTask_Pattern1::OnPatternMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
+	if (!IsValid(CurrentOwnerComp) || !IsValid(MonsterCharacter))
+	{
+		return;
+	}
 	AnimInstance->OnMontageEnded.RemoveDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
 	CurrentOwnerComp->GetBlackboardComponent()->SetValueAsBool(TEXT("CanExecutePattern"), false);
 	FinishLatentTask(*CurrentOwnerComp, EBTNodeResult::Succeeded);
