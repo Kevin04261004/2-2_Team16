@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UPActorSpawnerSubsystem.h"
 #include "Game/Stage/UPStageManager.h"
 #include "GameData/FUPSpawnActorData.h"
 #include "Subsystems/GameInstanceSubsystem.h"
@@ -20,13 +21,13 @@ public:
 	UPROPERTY()
 	TObjectPtr<UDataTable> ActorSpawnDataTable;
 
+	UPROPERTY()
+	TObjectPtr<UUPActorSpawnerSubsystem> ActorSpawnerSubsystem;
+	
 	UUPActorSpawner();
 	
 	UFUNCTION()
-	void SpawnActorsWhenStageStart(FString SpawnActorKey);
+	void SpawnActorsWhenStageStart(FString SpawnActorKey) const;
 	
 	void InitializeSpawner(AUPStageManager* StageManager);
-	
-private:
-	void SpawnActor(const FUPSpawnActorData& SpawnData);
 };
