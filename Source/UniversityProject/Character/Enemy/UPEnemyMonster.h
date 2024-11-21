@@ -20,17 +20,10 @@ public:
 protected:
 	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-/* AI Section */
-public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class AAIController> MonsterAIController;
-
-	AAIController* GetPettuAIController() const { return MonsterAIController; }
-
 /* Dead Section */
 	virtual void SetDead() override;
 
-	void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted) override;
+	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted) override;
 
 /* Pattern Section */
 public:

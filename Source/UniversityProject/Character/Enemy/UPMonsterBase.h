@@ -30,6 +30,11 @@ public:
 
 /* AI Section */
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class AAIController> MonsterAIController;
+
+	AAIController* GetAIController() const { return MonsterAIController; }
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UBehaviorTree> BTree;
 	
@@ -57,4 +62,30 @@ protected:
 	
 public:
 	virtual void SkillAttack(EPettuSkillType SkillType);
+
+/* Dead Section */
+public:
+	virtual void SetDead() override;
+
+	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, Meta = (AllowPrivate))
+	UAnimSequence* DeathAnim;
+
+private:
+	void StartFadeOut();
+	UFUNCTION()
+	void UpdateFadeOut();
+	UFUNCTION()
+	void FinishFadeOut();
+
+	UPROPERTY()
+	TArray<UMaterialInstanceDynamic*> CachedDynamicMaterials;
+	
+	UPROPERTY()
+	FTimerHandle FadeTimerHandle;
+	UPROPERTY()
+	FTimerHandle FadeEndHandle;
+	
+	float CurrentFadeAlpha;
 };
