@@ -36,5 +36,7 @@ private:
 	UPROPERTY()
 	FRotator StartRotation;
 	UPROPERTY()
+	FVector TargetLocation;
+	UPROPERTY()
 	float ElapsedTime;
 };

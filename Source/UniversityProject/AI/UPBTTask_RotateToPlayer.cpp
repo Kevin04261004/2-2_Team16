@@ -33,6 +33,7 @@ EBTNodeResult::Type UUPBTTask_RotateToPlayer::ExecuteTask(UBehaviorTreeComponent
 					TargetRotation = UKismetMathLibrary::FindLookAtRotation(AIPawn->GetActorLocation(), PlayerCharacter->GetActorLocation());
 					StartRotation = AIPawn->GetActorRotation();
 					ElapsedTime = 0.0f;
+					AIPawn->bIsRotating = true;
 					return EBTNodeResult::InProgress;
 				}
 			}
@@ -50,6 +51,14 @@ void UUPBTTask_RotateToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
 		AIPawn = Cast<AUPMonsterBase>(AIController->GetPawn());
 		if (AIPawn)
 		{
+			// 목표 탐색 (플레이어 위치 업데이트)
+			AActor* TargetActor = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+			if (TargetActor)
+			{
+				TargetLocation = TargetActor->GetActorLocation();
+				TargetRotation = (TargetLocation - AIPawn->GetActorLocation()).Rotation();
+			}
+
 			// 지정한 시간 동안 목표 회전으로 보간
 			ElapsedTime += DeltaSeconds;
 			float Alpha = FMath::Clamp(ElapsedTime / RotationTime, 0.0f, 1.0f);
@@ -58,11 +67,11 @@ void UUPBTTask_RotateToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
 			NewRotation.Pitch = StartRotation.Pitch;
 			NewRotation.Roll = StartRotation.Roll;
 			AIPawn->SetActorRotation(NewRotation);
-			//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("%f"), Alpha));
 
 			// 목표 회전에 도달하면 태스크 완료
 			if (Alpha >= 1.0f)
 			{
+				AIPawn->bIsRotating = false;
 				FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 			}
 		}
