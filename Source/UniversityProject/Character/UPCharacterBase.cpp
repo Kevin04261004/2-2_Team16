@@ -10,13 +10,8 @@
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
 // Sets default values
-AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
+AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(CharacterMovementComponentName))
 {
-	// Pawn
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationRoll = false;
-
 	// Capsule
 	TObjectPtr<UCapsuleComponent> CapsuleComponent_ = GetCapsuleComponent();
 	CapsuleComponent_->InitCapsuleSize(42.f, 96.0f);
@@ -38,11 +33,7 @@ AUPCharacterBase::AUPCharacterBase(const FObjectInitializer& ObjectInitializer) 
 	MeshComponent->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
-	// Set Stat
-	StatComponent = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
-
-	bIsDead = false;
-	CurAttackDamage = 0.0f;
+	DiedCondition = EStageConditionType::None;
 }
 
 void AUPCharacterBase::BeginPlay()
@@ -55,12 +46,8 @@ void AUPCharacterBase::BeginPlay()
 	/* Init */
 	// Set AnimInstance
 	GetMesh()->SetAnimInstanceClass(AnimInstanceClass);
-
-
+	
 	// Set StatComponent Value
-	check(StatComponent != nullptr);
-	check(CharacterInitalizeStatData != nullptr);	
-	StatComponent->SetBaseStat(CharacterInitalizeStatData->Stat);
 	MovementComponent->Initialize();
 	MovementComponent->SetCharacterStat(StatComponent);
     MovementComponent->SetIsSprinting(false);
@@ -81,11 +68,6 @@ void AUPCharacterBase::BeginPlay()
 void AUPCharacterBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-
-	/* Component Delegate */
-	check(StatComponent != nullptr);
-	StatComponent->OnHpZero.AddUObject(this, &AUPCharacterBase::SetDead);
-	StatComponent->OnStatChanged.AddUObject(this, &AUPCharacterBase::ApplyStat);
 }
 
 bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit, FVector& OutActorLocation) // 캐릭터 앞에 콜라이더가 존재하는지 확인합니다. 존재하면 true를 리턴합니다.
@@ -124,13 +106,6 @@ bool AUPCharacterBase::TryCheckForwardCollision(float InLineTraceDistance, FHitR
 	return false;
 }
 
-float AUPCharacterBase::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
-{
-	StatComponent->ApplyDamage(DamageAmount);
-	OnTakeDamaged.Broadcast(DamageAmount);
-	return DamageAmount;
-}
-
 void AUPCharacterBase::Attack(FHitResult& InHit)
 {
 	IUPDamageableInterface* Damageable = Cast<IUPDamageableInterface>(InHit.GetActor());
@@ -140,39 +115,6 @@ void AUPCharacterBase::Attack(FHitResult& InHit)
 	}
 	FDamageEvent DamageEvent;
 	Damageable->UPTakeDamage(CurAttackDamage, DamageEvent, GetController(), this);
-}
-
-void AUPCharacterBase::SetDead()
-{
-	GetCharacterMovement()->SetMovementMode(MOVE_None);
-	PlayDeadAnimation();
-	SetActorEnableCollision(false);
-	bIsDead = true;
-}
-
-void AUPCharacterBase::PlayDeadAnimation()
-{
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance == nullptr)
-	{
-		return;
-	}
-	AnimInstance->StopAllMontages(0.0f);
-	check(DeadMontage != nullptr);
-	AnimInstance->Montage_Play(DeadMontage, 1.0f);
-	AnimInstance->OnMontageEnded.AddDynamic(this, &AUPCharacterBase::DeadAnimEnd);
-}
-
-void AUPCharacterBase::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
-{
-	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPCharacterBase::DeadAnimEnd);
-	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-	bIsDead = false;
-}
-
-void AUPCharacterBase::ApplyStat(const FUPCharacterStat& BaseStat, const FUPCharacterStat& ModifierStat)
-{
-	MovementComponent->SetIsSprinting(MovementComponent->GetIsSprinting());
 }
 
 void AUPCharacterBase::SetStun()

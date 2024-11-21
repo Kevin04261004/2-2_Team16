@@ -25,7 +25,7 @@ void UUPHudWidget::NativeConstruct()
 float UUPHudWidget::GetPlayerHpPercent_Implementation() const
 {
 	if (PlayerCharacter)
-		return PlayerCharacter->GetStatComponent()->GetCurrentHp() / PlayerCharacter->GetStatComponent()->GetBaseStat().MaxHp;
+		return PlayerCharacter->GetStat()->GetCurrentHp() / PlayerCharacter->GetStat()->GetBaseStat().MaxHp;
 	return 0.0f;
 }
 
@@ -33,7 +33,7 @@ float UUPHudWidget::GetPettuHpPercent_Implementation() const
 {
 	if (PettuCharacter)
 	{
-		return PettuCharacter->GetStatComponent()->GetCurrentHp() / PettuCharacter->GetStatComponent()->GetBaseStat().MaxHp;
+		return PettuCharacter->GetStat()->GetCurrentHp() / PettuCharacter->GetStat()->GetBaseStat().MaxHp;
 	}
 	return 0.0f;
 }

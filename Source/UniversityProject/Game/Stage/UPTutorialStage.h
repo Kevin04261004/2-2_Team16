@@ -14,6 +14,7 @@ enum class EStageConditionType : uint8
 	UseJump UMETA(DisplayName = "UseJump"),
 	UseTakeDown UMETA(DisplayName = "UseTakeDown"),
 	UseUpperCut UMETA(DisplayName = "UseUpperCut"),
+
 	FinishUseBaseAttack01 UMETA(DisplayName = "Finish UseBaseAttack01"),
 	FinishUseBaseAttack02 UMETA(DisplayName = "Finish UseBaseAttack02"),
 	FinishUseBaseAttack03 UMETA(DisplayName = "Finish UseBaseAttack03"),
@@ -21,8 +22,12 @@ enum class EStageConditionType : uint8
 	FinishUseJump UMETA(DisplayName = "Finish UseJump"),
 	FinishUseTakeDown UMETA(DisplayName = "Finish UseTakeDown"),
 	FinishUseUpperCut UMETA(DisplayName = "Finish UseUpperCut"),
+
 	ReachLocation UMETA(DisplayName = "ReachLocation"),
 	SequencePlay UMETA(DisplayName = "SequencePlay"),
+
+	KillMonster UMETA(DisplayName = "KillMonster"),
+	KillHealthMeshObject UMETA(DisplayName = "KillHealthMeshObject"),
 };
 
 USTRUCT(BlueprintType)
@@ -36,6 +41,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Tooltip = "DataTable에서 생성할 때 사용할 키 값"))
 	FString SpawnActorKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Tooltip = "클리어 후, 몇초동안의 텀이 존재한가?"))
+	float TurmAfterClear;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EStageConditionType, int /* count */> StageConditionMap;
