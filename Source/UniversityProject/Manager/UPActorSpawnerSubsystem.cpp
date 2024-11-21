@@ -112,4 +112,20 @@ void UUPActorSpawnerSubsystem::SpawnActor(const FUPSpawnActorData& SpawnData)
 			}
 		}
 	}
+
+	SpawnedActors.Add(SpawnedActor);
+}
+
+void UUPActorSpawnerSubsystem::ClearSpawnedActors()
+{
+	for (AActor* actor : SpawnedActors)
+	{
+		if (actor == nullptr)
+		{
+			continue;
+		}
+		actor->Destroy();
+		SpawnedActors.Remove(actor);
+	}
+	SpawnedActors.Empty();
 }

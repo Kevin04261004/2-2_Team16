@@ -11,6 +11,7 @@
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStageClear, FString /* Spawn Actor Key */)
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStageConditionUpdate, FString /* Spawn Actor Key */)
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStageStart, FString /* Spawn Actor Key */)
+DECLARE_MULTICAST_DELEGATE(FOnTutorialStageClear)
 
 UCLASS()
 class UNIVERSITYPROJECT_API AUPStageManager : public AActor
@@ -21,7 +22,7 @@ public:
 	AUPStageManager();
 
 	virtual void BeginPlay() override;
-	
+
 private:
 	// 현재 스테이지 데이터를 표시할 위젯
 	UPROPERTY(EditAnywhere, Category = "UI")
@@ -48,12 +49,17 @@ public:
 	FOnStageClear OnStageClear;
 	FOnStageConditionUpdate OnStageConditionUpdate;
 	FOnStageStart OnStageStart;
+	FOnTutorialStageClear OnTutorialStageClear;
 
 	FTimerHandle NextStageTimerHandle;
+
+	UFUNCTION()
+	void SkipTutorial();
 private:
-	void StartStage(int32 StageIndex);
+	void TutorialStartStage(int32 StageIndex);
 	void CompleteStage();
 	void StartNextStage();
+	void TutorialStageClear();
 	void CheckStageConditions();
 };
 

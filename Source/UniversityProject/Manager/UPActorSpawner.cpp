@@ -15,6 +15,11 @@ void UUPActorSpawner::SpawnActorsWhenStageStart(FString SpawnActorKey) const
 	ActorSpawnerSubsystem->SpawnActorsWhenStageStart(SpawnActorKey);
 }
 
+void UUPActorSpawner::ClearSpawnedActors()
+{
+	ActorSpawnerSubsystem->ClearSpawnedActors();
+}
+
 void UUPActorSpawner::InitializeSpawner(AUPStageManager* StageManager)
 {
 	ActorSpawnerSubsystem = GetWorld()->GetSubsystem<UUPActorSpawnerSubsystem>();
@@ -31,6 +36,6 @@ void UUPActorSpawner::InitializeSpawner(AUPStageManager* StageManager)
 	}
 
 	StageManager->OnStageStart.AddUObject(this, &UUPActorSpawner::SpawnActorsWhenStageStart);
-	
+	StageManager->OnTutorialStageClear.AddUObject(this, &UUPActorSpawner::ClearSpawnedActors);
 	UE_LOG(LogTemp, Log, TEXT("ActorSpawner successfully bound to StageManager"));
 }

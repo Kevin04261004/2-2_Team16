@@ -22,7 +22,10 @@ public:
 	void SpawnActorsWhenStageStart(FString SpawnActorKey);
 	void SpawnActor(const FUPSpawnActorData& SpawnData);
 
+	void ClearSpawnedActors();
 private:
 	UPROPERTY()
 	UDataTable* ActorSpawnDataTable;
+
+	TArray<AActor*> SpawnedActors;
 };

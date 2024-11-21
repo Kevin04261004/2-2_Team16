@@ -28,6 +28,7 @@ public:
 	
 	UFUNCTION()
 	void SpawnActorsWhenStageStart(FString SpawnActorKey) const;
-	
+	void ClearSpawnedActors();
+
 	void InitializeSpawner(AUPStageManager* StageManager);
 };

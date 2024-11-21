@@ -3,6 +3,8 @@
 
 #include "Game/Stage/UPStageManager.h"
 
+#include "Game/UPGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "Manager/UPActorSpawner.h"
 #include "UI/UPTutorialWidget.h"
 
@@ -29,8 +31,7 @@ void AUPStageManager::BeginPlay()
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Actor Spawner Not Found");
 	}
 
-	
-	StartStage(0);
+	TutorialStartStage(0);
 }
 
 void AUPStageManager::InitializeTutorialWidget()
@@ -76,7 +77,7 @@ void AUPStageManager::EvaluateCondition(EStageConditionType ConditionType)
 	}
 }
 
-void AUPStageManager::StartStage(int32 StageIndex)
+void AUPStageManager::TutorialStartStage(int32 StageIndex)
 {
 	CurrentStageIndex = StageIndex;
 	if (StageTutorialData && StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
@@ -124,14 +125,32 @@ void AUPStageManager::CompleteStage()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!!!!!!!!!!!!!!!!!!!!!!!!!All Stage Clear!!!!!!!!!!!!!!!!!!!!!!");
+		TutorialStageClear();
 	}
 }
 
 void AUPStageManager::StartNextStage()
 {
 	CurrentStageIndex++;
-	StartStage(CurrentStageIndex);
+	TutorialStartStage(CurrentStageIndex);
+}
+
+void AUPStageManager::SkipTutorial()
+{
+	TutorialStageClear();
+}
+
+void AUPStageManager::TutorialStageClear()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!!!!!!!!!!!!!!!!!!!!!!!!!All Stage Clear!!!!!!!!!!!!!!!!!!!!!!");
+
+	AUPGameMode* GameMode = Cast<AUPGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GameMode)
+	{
+		GameMode->OnTutorialClear();
+	}
+
+	OnTutorialStageClear.Broadcast();
 }
 
 void AUPStageManager::CheckStageConditions()
