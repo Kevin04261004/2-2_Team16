@@ -14,7 +14,8 @@ void UUPBTService_CheckPattern::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	bIsStun = OwnerComp.GetBlackboardComponent()->GetValueAsBool(TEXT("IsStun"));
 	bIsDead = OwnerComp.GetBlackboardComponent()->GetValueAsBool(TEXT("IsDead"));
-	if (!bIsStun && !bIsDead)
+	bIsTimerOn = OwnerComp.GetBlackboardComponent()->GetValueAsBool(TEXT("IsTimerOn"));
+	if (!bIsStun && !bIsDead && bIsTimerOn)
 	{
 		ElapsedTime += DeltaSeconds;
 		if (ElapsedTime >= TimerInterval)

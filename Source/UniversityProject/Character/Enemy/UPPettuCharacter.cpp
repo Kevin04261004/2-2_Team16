@@ -2,6 +2,8 @@
 
 
 #include "Character/Enemy/UPPettuCharacter.h"
+
+#include "BrainComponent.h"
 #include "AI/UPPettuAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/Weapon/UPPettuWeapon.h"
@@ -9,23 +11,22 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Interface/UPGameInterface.h"
 #include "Kismet/GameplayStatics.h"
-#include "Skill/UPSkillBase.h"
+#include "Misc/MapErrors.h"
 #include "UI/UPHudWidget.h"
+
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraDataInterfaceArrayFunctionLibrary.h"
+
 
 AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	static ConstructorHelpers::FObjectFinder<UUPCharacterStatData> StatDataRef(TEXT("/Game/UniversityProject/GameData/DA_PettuCharacterStat.DA_PettuCharacterStat"));
 	StatComponent->SetBaseStat(StatDataRef.Object.Get()->Stat);
 	
-	MaxComboCount = 3.0f;
-	BaseComboFrameRate = 60.f;
-	LastComboFrameRate = 120.0f;
-	DamageReceived = 1.0f;
 	bIsStiffen = false;
 	bIsStun = false;
 	bIsDead = false;
-
-	InitSkillMap();
 }
 
 void AUPPettuCharacter::PostInitializeComponents()
@@ -51,13 +52,37 @@ void AUPPettuCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetBaseStat().WalkSpeed;
-	
-	CreateDefaultObjectSkill();
 	PlayerCharacter = Cast<AUPPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (PlayerCharacter)
 	{
 		PlayerCharacter->SetPettuCharacter(this);
 	}
+	
+	if (NiagaraSystem != nullptr && GetMesh() != nullptr)
+	{
+		LeftHandEffect = UNiagaraFunctionLibrary::SpawnSystemAttached(
+			NiagaraSystem,                        // Niagara 시스템
+			GetMesh(),
+			TEXT("LeftSocket"),              // 소켓 이름
+			FVector::ZeroVector,                 // 위치 (소켓 기준)
+			FRotator::ZeroRotator,               // 회전 (소켓 기준)
+			EAttachLocation::SnapToTarget,       // 소켓 기준 위치 설정
+			false                                 // AutoDestroy 설정
+		);
+		LeftHandEffect->Deactivate();
+		
+		RightHandEffect = UNiagaraFunctionLibrary::SpawnSystemAttached(
+		NiagaraSystem,                        // Niagara 시스템
+		GetMesh(),
+		TEXT("RightSocket"),              // 소켓 이름
+		FVector::ZeroVector,                 // 위치 (소켓 기준)
+		FRotator::ZeroRotator,               // 회전 (소켓 기준)
+		EAttachLocation::SnapToTarget,       // 소켓 기준 위치 설정
+		false                                 // AutoDestroy 설정
+		);
+		RightHandEffect->Deactivate();
+	}
+	
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -130,45 +155,6 @@ void AUPPettuCharacter::PatternMontageEnd(UAnimMontage* Montage, bool bInterrupt
 	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPPettuCharacter::PatternMontageEnd);
 }
 
-void AUPPettuCharacter::InitSkillMap()
-{
-	const UEnum* EnumPtr = StaticEnum<EPettuSkillType>();
-	if (!EnumPtr)
-	{
-		return;
-	}
-	
-	for (int32 i = 0; i < EnumPtr->GetMaxEnumValue(); ++i)  // GetMaxEnumValue()를 사용
-	{
-		EPettuSkillType EnumValue = static_cast<EPettuSkillType>(EnumPtr->GetValueByIndex(i));  // GetValueByIndex() 사용
-		SkillMapInitializer.Add(EnumValue, nullptr);
-	}
-}
-
-void AUPPettuCharacter::CreateDefaultObjectSkill()
-{
-	
-	for (auto skillMapTuple : SkillMapInitializer)
-	{
-		if (skillMapTuple.Value == nullptr)
-		{
-			continue;
-		}
-		
-		if (UUPSkillBase* NewSkillComponent = NewObject<UUPSkillBase>(this, skillMapTuple.Value))
-		{
-			// 컴포넌트를 월드에 등록합니다.
-			NewSkillComponent->RegisterComponent();
-
-			// SkillMap에 새로 생성된 컴포넌트를 추가합니다.
-			EPettuSkillType Type = skillMapTuple.Key;
-			SkillMap.Add(Type, NewSkillComponent);
-
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Skill Map Created"));
-		}
-	}
-}
-
 void AUPPettuCharacter::AttackHitCheck()
 {
 	check(Weapon != nullptr);
@@ -204,13 +190,6 @@ void AUPPettuCharacter::AttackHitCheck(bool bIsAttached, FName SocketName, USkel
 	}
 }
 
-void AUPPettuCharacter::SkillAttack(EPettuSkillType SkillType)
-{
-	UUPSkillBase** Skill = SkillMap.Find(SkillType);
-	CurrentSkillData = Cast<UUPPettuSkillData>((*Skill)->GetSkillData());
-	(*Skill)->TryActivateSkill(nullptr);
-	CurAttackDamage = (*Skill)->GetSkillAttackDamage();
-}
 
 void AUPPettuCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
 {
@@ -234,6 +213,29 @@ void AUPPettuCharacter::StunCheck(float Hp)
 	}
 }
 
+void AUPPettuCharacter::PunchTrailOn(EPunchTrailType type)
+{
+	if (type == EPunchTrailType::Left)
+	{
+		LeftHandEffect->Activate(true);
+	}
+	else if (type == EPunchTrailType::Right)
+	{
+		LeftHandEffect->Activate(true);
+	}
+}
+
+void AUPPettuCharacter::PunchTrailOff(EPunchTrailType type)
+{
+	if (type == EPunchTrailType::Left)
+	{
+		LeftHandEffect->Deactivate();
+	}
+	else if (type == EPunchTrailType::Right)
+	{
+		LeftHandEffect->Deactivate();
+	}
+}
 
 
 void AUPPettuCharacter::StunEnd(UAnimMontage* Montage, bool bInterrupted)

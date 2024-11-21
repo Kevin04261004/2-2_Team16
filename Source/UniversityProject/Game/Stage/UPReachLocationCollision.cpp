@@ -40,10 +40,8 @@ void AUPReachLocationCollision::OnOverlapBegin(class UPrimitiveComponent* Overla
 		return;
 	}
 	stageManager->EvaluateCondition(EStageConditionType::ReachLocation);
-
-
+	
 	// TODO: 이펙트 추가
-
 	
 	Destroy();
 }

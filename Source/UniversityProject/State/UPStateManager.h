@@ -33,6 +33,7 @@ enum class EPlayerStateType : uint8
 	/* Others... */
 	Dead UMETA(DisplayName = "죽음"), //
 	Damaged UMETA(DisplayName = "데미지를 받음"),
+	CantMove UMETA(DisplayName = "움직일 수 없음")
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

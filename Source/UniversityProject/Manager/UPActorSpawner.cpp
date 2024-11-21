@@ -3,6 +3,8 @@
 
 #include "Manager/UPActorSpawner.h"
 
+#include "Character/Enemy/UPMonsterBase.h"
+
 UUPActorSpawner::UUPActorSpawner()
 {
 	static ConstructorHelpers::FObjectFinder<UDataTable> DataTableFinder(TEXT("/Game/UniversityProject/GameData/Stage/DT_SpawnActor.DT_SpawnActor"));
@@ -55,6 +57,7 @@ void UUPActorSpawner::SpawnActor(const FUPSpawnActorData& SpawnData)
 		return;
 	}
 
+	// Actor를 스폰
 	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(
 		SpawnData.ActorClass,
 		SpawnData.SpawnLocation,
@@ -63,12 +66,31 @@ void UUPActorSpawner::SpawnActor(const FUPSpawnActorData& SpawnData)
 
 	if (SpawnedActor)
 	{
+		// UPMonsterBase 여부 체크
+		AUPMonsterBase* SpawnedMonster = Cast<AUPMonsterBase>(SpawnedActor);
+		if (SpawnedMonster)
+		{
+			// UPMonsterBase일 경우에만 AIController 추가
+			APawn* SpawnedPawn = Cast<APawn>(SpawnedMonster);
+			if (SpawnedPawn && SpawnedPawn->Controller == nullptr)
+			{
+				if (SpawnedPawn->AIControllerClass != nullptr)
+				{
+					AUPPettuAIController* NewController = GetWorld()->SpawnActor<AUPPettuAIController>(SpawnedPawn->AIControllerClass);
+					if (NewController)
+					{
+						NewController->Possess(SpawnedPawn);
+					}
+				}
+			}
+		}
+
 		// ActorAttributes에 정의된 속성값을 Actor에 적용
 		for (const TPair<FString, float>& Attribute : SpawnData.ActorAttributes)
 		{
 			FName PropertyName = FName(*Attribute.Key);
 			FProperty* Property = SpawnedActor->GetClass()->FindPropertyByName(PropertyName);
-            
+
 			if (Property)
 			{
 				void* PropertyValue = Property->ContainerPtrToValuePtr<void>(SpawnedActor);

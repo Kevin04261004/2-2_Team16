@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "Character/Enemy/UPPettuCharacter.h"
+#include "Character/Enemy/UPMonsterBase.h"
 #include "UPBTTask_Pattern1.generated.h"
 
 /**
@@ -32,6 +32,6 @@ private:
 	EPettuSkillType SkillType;
 
 	UPROPERTY()
-	TObjectPtr<AUPPettuCharacter> PettuCharacter;
+	TObjectPtr<AUPMonsterBase> MonsterCharacter;
 	
 };
