@@ -37,5 +37,11 @@ void UUPActorSpawner::InitializeSpawner(AUPStageManager* StageManager)
 
 	StageManager->OnStageStart.AddUObject(this, &UUPActorSpawner::SpawnActorsWhenStageStart);
 	StageManager->OnTutorialStageClear.AddUObject(this, &UUPActorSpawner::ClearSpawnedActors);
+	StageManager->OnBossStageStart.AddUObject(this,&UUPActorSpawner::SpawnBoss);
 	UE_LOG(LogTemp, Log, TEXT("ActorSpawner successfully bound to StageManager"));
+}
+
+void UUPActorSpawner::SpawnBoss()
+{
+	SpawnActorsWhenStageStart(TEXT("BossStageStart"));
 }

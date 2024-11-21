@@ -32,6 +32,8 @@ void AUPPlayerController::BeginPlay()
 	{
 		SettingWidgetObject = GameMode->SettingWidgetObject;
 		check(SettingWidgetObject != nullptr);
+
+		GameMode->StageManager->OnBossStageStart.AddUObject(this, &AUPPlayerController::SetGameMode);
 	}
 }
 
