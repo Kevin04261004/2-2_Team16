@@ -17,12 +17,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartGame();
 
+	UFUNCTION(BlueprintCallable)
+	void OnCutSceneFinished();
+
 private:
 	UPROPERTY()
-	UUserWidget* LoadingWidgetInstance;
+	UUserWidget* CutSceneWidgetInstance;
 
 	UPROPERTY(EditAnywhere, Category = "UI", Meta = (AllowPrivateAccess = true))
-	TSubclassOf<UUserWidget> LoadingWidgetClass;
+	TSubclassOf<UUserWidget> CutSceneWidgetClass;
 
+	FName LoadedPackageName;
+
+	void TryOpenLevel(const FName& PackageName);
+	
+	bool bIsMapLoaded = false;
+	bool bIsCutsceneFinished = false;
 	void OnMapLoaded(const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result);
 };

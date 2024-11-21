@@ -35,6 +35,9 @@ public:
 	
 	TObjectPtr<class UBehaviorTree> GetBehaviorTree() const { return BTree; }
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bIsRotating = false;
+
 /* Skill Section */
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
