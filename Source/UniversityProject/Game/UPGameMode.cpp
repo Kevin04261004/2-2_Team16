@@ -26,6 +26,7 @@ AUPGameMode::AUPGameMode()
 
 	bIsCleared = false;
 	bIsGameOver = false;
+	bIsTutorialCleared = false;
 }
 
 void AUPGameMode::OnPlayerDead()
@@ -42,6 +43,11 @@ void AUPGameMode::OnGameClear()
 	check(PlayerController != nullptr);
 	PlayerController->GameClear();
 	bIsCleared = true;
+}
+
+void AUPGameMode::OnTutorialClear()
+{
+	bIsTutorialCleared = true;
 }
 
 bool AUPGameMode::IsGameCleared()

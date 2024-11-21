@@ -26,21 +26,14 @@ protected:
 
 private:
 	TObjectPtr<AUPPlayerCharacter> PlayerCharacter;
-/* AI Section */
-public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = AI, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class AAIController> PettuAIController;
-
-	AAIController* GetPettuAIController() const { return PettuAIController; }
 	
 /* State Section */
 public:
 	
 /* Dead Section */
-	FORCEINLINE bool IsPettuDead() const { return IsDead(); }
 	virtual void SetDead() override;
 
-	void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted) override;
+	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted) override;
 
 /* Stun Section */
 	FORCEINLINE bool IsPettuStun() const { return IsStun(); }

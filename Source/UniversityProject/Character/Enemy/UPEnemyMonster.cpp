@@ -16,6 +16,7 @@ AUPEnemyMonster::AUPEnemyMonster(const FObjectInitializer& ObjectInitializer) : 
 	bIsDead = false;
 
 	InitSkillMap();
+	DiedCondition = EStageConditionType::KillMonster;
 }
 
 void AUPEnemyMonster::PostInitializeComponents()
@@ -85,15 +86,6 @@ float AUPEnemyMonster::UPTakeDamage(float DamageAmount, FDamageEvent const& Dama
 void AUPEnemyMonster::SetDead()
 {
 	Super::SetDead();
-	MovementComponent->DisableMovement();
-	if (MonsterAIController)
-	{
-		if (MonsterAIController->BrainComponent)
-		{
-			MonsterAIController->BrainComponent->StopLogic(TEXT("Dead"));
-		}
-		MonsterAIController->StopMovement();
-	}
 }
 
 void AUPEnemyMonster::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
