@@ -79,6 +79,8 @@ void AUPStageManager::EvaluateCondition(EStageConditionType ConditionType)
 
 void AUPStageManager::TutorialStartStage(int32 StageIndex)
 {
+	TutorialWidget->SetIsEnabled(true);
+	TutorialWidget->SetVisibility(ESlateVisibility::Visible);
 	CurrentStageIndex = StageIndex;
 	if (StageTutorialData && StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{
@@ -137,6 +139,10 @@ void AUPStageManager::StartNextStage()
 
 void AUPStageManager::SkipTutorial()
 {
+	if (GetWorld()->GetTimerManager().IsTimerActive(NextStageTimerHandle))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(NextStageTimerHandle);
+	}
 	TutorialStageClear();
 }
 
@@ -149,6 +155,9 @@ void AUPStageManager::TutorialStageClear()
 	{
 		GameMode->OnTutorialClear();
 	}
+
+	TutorialWidget->SetIsEnabled(false);
+	TutorialWidget->SetVisibility(ESlateVisibility::Hidden);
 
 	OnTutorialStageClear.Broadcast();
 }
