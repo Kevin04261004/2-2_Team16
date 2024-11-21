@@ -18,6 +18,16 @@ void AUPStageManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	FString CurrentLevelName = GetWorld()->GetMapName(); // 전체 이름: /Game/Maps/TitleLevel
+	CurrentLevelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix); // 경로 및 접두사를 제거해 레벨 이름만 남김
+
+	if (CurrentLevelName == "TitleLevel")
+	{
+		// TitleLevel이면 실행 중단
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, TEXT("Current level is TitleLevel. Skipping BeginPlay logic."));
+		return;
+	}
+	
 	InitializeTutorialWidget();
 	
 	UUPActorSpawner* ActorSpawner = GetGameInstance()->GetSubsystem<UUPActorSpawner>();

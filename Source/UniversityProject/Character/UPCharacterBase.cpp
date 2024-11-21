@@ -7,6 +7,8 @@
 #include "Components/UPCharacterMovementComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "UI/UPHudWidget.h"
+#include "GameFramework/HUD.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
 // Sets default values
@@ -50,7 +52,7 @@ void AUPCharacterBase::BeginPlay()
 	// Set StatComponent Value
 	MovementComponent->Initialize();
 	MovementComponent->SetCharacterStat(StatComponent);
-    MovementComponent->SetIsSprinting(false);
+	MovementComponent->SetIsSprinting(false);
 	
 	// Spawn the weapon(Actor) & Get hand Socket to Add it
 	FActorSpawnParameters SpawnParams;
@@ -63,6 +65,10 @@ void AUPCharacterBase::BeginPlay()
 
 	/* Actor Delegate */
 	Weapon->OnWeaponHit.AddUObject(this, &AUPCharacterBase::Attack);
+
+	/* Subscribe StageManager Delegate */
+	StageManager->OnBossStageStart.AddUObject(this, &AUPCharacterBase::SetUI);
+	SetUI();
 }
 
 void AUPCharacterBase::PostInitializeComponents()
@@ -150,6 +156,23 @@ void AUPCharacterBase::StunAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPCharacterBase::StunAnimEnd);
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	bIsStun = false;
+}
+
+void AUPCharacterBase::SetUI()
+{
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		// 현재 PlayerController에서 Viewport에 있는 모든 위젯을 탐색
+		for (TObjectIterator<UUserWidget> It; It; ++It)
+		{
+			UUPHudWidget* HudWidget = Cast<UUPHudWidget>(*It);
+			if (HudWidget)
+			{
+				SetupHUDWidget(HudWidget);
+			}
+		}
+	}
 }
 
 void AUPCharacterBase::DestroyWeapon()
