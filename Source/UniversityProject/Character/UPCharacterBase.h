@@ -47,7 +47,7 @@ public:
 // Attack Hit Section
 protected:
 	virtual void Attack(FHitResult& InHit);
-
+	virtual void SetDead() override;
 // Stun Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 스턴 애니메이션 몽타주"))

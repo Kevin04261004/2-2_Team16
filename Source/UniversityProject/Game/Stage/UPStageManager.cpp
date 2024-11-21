@@ -79,10 +79,14 @@ void AUPStageManager::EvaluateCondition(EStageConditionType ConditionType)
 
 void AUPStageManager::TutorialStartStage(int32 StageIndex)
 {
+	if (StageTutorialData == nullptr)
+	{
+		return;
+	}
 	TutorialWidget->SetIsEnabled(true);
 	TutorialWidget->SetVisibility(ESlateVisibility::Visible);
 	CurrentStageIndex = StageIndex;
-	if (StageTutorialData && StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
+	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{
 		CurrentStage = StageTutorialData->TutorialStages[CurrentStageIndex];
 
@@ -101,7 +105,7 @@ void AUPStageManager::TutorialStartStage(int32 StageIndex)
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "No stage found");
+		TutorialStageClear();
 	}
 }
 
@@ -125,10 +129,6 @@ void AUPStageManager::CompleteStage()
 			false
 		);
 	}
-	else
-	{
-		TutorialStageClear();
-	}
 }
 
 void AUPStageManager::StartNextStage()
@@ -144,8 +144,6 @@ void AUPStageManager::SkipTutorial()
 		GetWorld()->GetTimerManager().ClearTimer(NextStageTimerHandle);
 	}
 	TutorialStageClear();
-
-	BossStageStart();
 }
 
 void AUPStageManager::TutorialStageClear()
@@ -162,6 +160,8 @@ void AUPStageManager::TutorialStageClear()
 	TutorialWidget->SetVisibility(ESlateVisibility::Hidden);
 
 	OnTutorialStageClear.Broadcast();
+	
+	BossStageStart();
 }
 
 void AUPStageManager::CheckStageConditions()

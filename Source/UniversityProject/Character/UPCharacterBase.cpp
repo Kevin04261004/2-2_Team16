@@ -117,6 +117,12 @@ void AUPCharacterBase::Attack(FHitResult& InHit)
 	Damageable->UPTakeDamage(CurAttackDamage, DamageEvent, GetController(), this);
 }
 
+void AUPCharacterBase::SetDead()
+{
+	Weapon->Destroy();
+	Super::SetDead();
+}
+
 void AUPCharacterBase::SetStun()
 {
 	GetCharacterMovement()->SetMovementMode(MOVE_None);

@@ -118,14 +118,16 @@ void UUPActorSpawnerSubsystem::SpawnActor(const FUPSpawnActorData& SpawnData)
 
 void UUPActorSpawnerSubsystem::ClearSpawnedActors()
 {
-	for (AActor* actor : SpawnedActors)
+	for (AActor* SpawnedActor : SpawnedActors)
 	{
-		if (actor == nullptr)
+		if (SpawnedActor && !SpawnedActor->IsPendingKillPending())
 		{
-			continue;
+			SpawnedActor->Destroy(); // 액터 삭제
 		}
-		actor->Destroy();
-		SpawnedActors.Remove(actor);
 	}
+
 	SpawnedActors.Empty();
+
+	UE_LOG(LogTemp, Log, TEXT("All spawned actors have been cleared."));
 }
+
