@@ -48,7 +48,8 @@ void AUPAfterImage::Init(USkeletalMeshComponent* Mesh)
 	check (Mesh->SkeletalMesh != nullptr);
 	PoseableMesh->SetSkeletalMesh(Mesh->SkeletalMesh);
 	PoseableMesh->CopyPoseFromSkeletalComponent(Mesh);
-	
+	PoseableMesh->OverlayMaterialMaxDrawDistance = 0.1f;
+
 	Material = UKismetMaterialLibrary::CreateDynamicMaterialInstance(GetWorld(), GhostMaterial);
 	if (Material == nullptr)
 	{

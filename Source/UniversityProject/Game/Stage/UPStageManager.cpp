@@ -144,6 +144,8 @@ void AUPStageManager::SkipTutorial()
 		GetWorld()->GetTimerManager().ClearTimer(NextStageTimerHandle);
 	}
 	TutorialStageClear();
+
+	BossStageStart();
 }
 
 void AUPStageManager::TutorialStageClear()
@@ -179,4 +181,9 @@ void AUPStageManager::CheckStageConditions()
 	{
 		CompleteStage();
 	}
+}
+
+void AUPStageManager::BossStageStart()
+{
+	OnBossStageStart.Broadcast();
 }

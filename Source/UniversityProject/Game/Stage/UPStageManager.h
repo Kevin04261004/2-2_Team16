@@ -12,6 +12,7 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnStageClear, FString /* Spawn Actor Key */
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStageConditionUpdate, FString /* Spawn Actor Key */)
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStageStart, FString /* Spawn Actor Key */)
 DECLARE_MULTICAST_DELEGATE(FOnTutorialStageClear)
+DECLARE_MULTICAST_DELEGATE(FOnBossStageStart)
 
 UCLASS()
 class UNIVERSITYPROJECT_API AUPStageManager : public AActor
@@ -50,7 +51,8 @@ public:
 	FOnStageConditionUpdate OnStageConditionUpdate;
 	FOnStageStart OnStageStart;
 	FOnTutorialStageClear OnTutorialStageClear;
-
+	FOnBossStageStart OnBossStageStart;
+	
 	FTimerHandle NextStageTimerHandle;
 
 	UFUNCTION()
@@ -61,5 +63,6 @@ private:
 	void StartNextStage();
 	void TutorialStageClear();
 	void CheckStageConditions();
+	void BossStageStart();
 };
 
