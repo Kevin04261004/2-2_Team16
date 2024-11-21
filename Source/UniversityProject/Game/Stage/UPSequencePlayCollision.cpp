@@ -25,6 +25,12 @@ void AUPSequencePlayCollision::OnOverlapBegin(class UPrimitiveComponent* Overlap
 		return;
 	}
 	
+	AUPPlayerCharacter* PlayerCharacter = Cast<AUPPlayerCharacter>(OtherActor);
+	if (PlayerCharacter == nullptr)
+	{
+		return;
+	}
+	
 	UUPSequenceHandler* SequenceHandler = GetGameInstance()->GetSubsystem<UUPSequenceHandler>();
 	if (SequenceHandler)
 	{

@@ -120,8 +120,12 @@ void UUPActorSpawnerSubsystem::ClearSpawnedActors()
 {
 	for (AActor* SpawnedActor : SpawnedActors)
 	{
-		if (SpawnedActor && !SpawnedActor->IsPendingKillPending())
+		if (SpawnedActor != nullptr && !SpawnedActor->IsPendingKillPending())
 		{
+			if (AUPCharacterBase* CharacterBase = Cast<AUPCharacterBase>(SpawnedActor))
+			{
+				CharacterBase->DestroyWeapon();
+			}
 			SpawnedActor->Destroy(); // 액터 삭제
 		}
 	}

@@ -151,3 +151,11 @@ void AUPCharacterBase::StunAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	bIsStun = false;
 }
+
+void AUPCharacterBase::DestroyWeapon()
+{
+	if (IsValid(Weapon))
+	{
+		Weapon->Destroy();
+	}
+}

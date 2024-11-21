@@ -61,4 +61,9 @@ protected:
 	void PlayStunAnimation();
 	UFUNCTION()
 	virtual void StunAnimEnd(UAnimMontage* Montage, bool bInterrupted);
+
+
+public:
+	UFUNCTION()
+	void DestroyWeapon();
 };
