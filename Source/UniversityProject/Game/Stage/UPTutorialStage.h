@@ -22,6 +22,7 @@ enum class EStageConditionType : uint8
 	FinishUseTakeDown UMETA(DisplayName = "Finish UseTakeDown"),
 	FinishUseUpperCut UMETA(DisplayName = "Finish UseUpperCut"),
 	ReachLocation UMETA(DisplayName = "ReachLocation"),
+	SequencePlay UMETA(DisplayName = "SequencePlay"),
 };
 
 USTRUCT(BlueprintType)

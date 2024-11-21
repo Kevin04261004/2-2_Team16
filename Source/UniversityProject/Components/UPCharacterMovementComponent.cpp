@@ -54,6 +54,10 @@ void UUPCharacterMovementComponent::SetCharacterStat(UUPCharacterStatComponent* 
 
 void UUPCharacterMovementComponent::Move(FVector2D MovementVector)
 {
+	if (MovementVector == FVector2D::ZeroVector)
+	{
+		return;
+	}
 	const FRotator Rotation = GetController()->GetControlRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0);
 	
