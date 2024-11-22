@@ -12,11 +12,13 @@
 #include "Interface/UPGameInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Misc/MapErrors.h"
+#include "GameFramework/HUD.h"
 #include "UI/UPHudWidget.h"
 
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraDataInterfaceArrayFunctionLibrary.h"
+#include "Character/UPPlayerCharacter.h"
 
 
 AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -82,7 +84,14 @@ void AUPPettuCharacter::BeginPlay()
 		);
 		RightHandEffect->Deactivate();
 	}
-	
+
+	/* Set HUD */
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController && PlayerController->GetHUD())
+	{
+		UUPHudWidget* HudWidget = Cast<UUPHudWidget>(PlayerController->GetHUD());
+		SetupHUDWidget(HudWidget);
+	}
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -181,6 +190,7 @@ void AUPPettuCharacter::AttackHitCheck(bool bIsAttached, FName SocketName, USkel
 
 void AUPPettuCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
 {
+	Super::SetupHUDWidget(InHUDWidget);
 	if (InHUDWidget)
 	{
 		InHUDWidget->SetPettuCharacter(this);

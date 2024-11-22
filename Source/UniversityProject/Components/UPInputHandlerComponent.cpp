@@ -42,6 +42,7 @@ void UUPInputHandlerComponent::BindActions(UEnhancedInputComponent* EnhancedInpu
 	EnhancedInputComponent->BindAction(GlobalTimeReset, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::GlobalTimeResetInputAction);
 	EnhancedInputComponent->BindAction(SettingAction, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::SettingInputAction);
 	EnhancedInputComponent->BindAction(TutorialSkip, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::TutorialSkipInputAction);
+	EnhancedInputComponent->BindAction(SkipOneStage, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::SkipOneStageInputAction);
 }
 
 
@@ -132,6 +133,15 @@ void UUPInputHandlerComponent::TutorialSkipInputAction(const FInputActionValue& 
 	if (GameMode)
 	{
 		GameMode->StageManager->SkipTutorial();
+	}
+}
+
+void UUPInputHandlerComponent::SkipOneStageInputAction(const FInputActionValue& Value)
+{
+	AUPGameMode* GameMode = Cast<AUPGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GameMode)
+	{
+		GameMode->StageManager->StartNextStage();
 	}
 }
 

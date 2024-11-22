@@ -30,11 +30,10 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Init, meta=(AllowPrivateAccess= "true", Tooltip = "캐릭터가 사용하는 애니메이션 클래스"))
 	TObjectPtr<UClass> AnimInstanceClass;
-
+	
 // Utils...
 public:
 	bool TryCheckForwardCollision(float InLineTraceDistance, FHitResult& OutHit, FVector& OutActorLocation);
-	
 // Weapon Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터가 사용하는 무기 클래스"))
@@ -47,7 +46,7 @@ public:
 // Attack Hit Section
 protected:
 	virtual void Attack(FHitResult& InHit);
-
+	virtual void SetDead() override;
 // Stun Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "캐릭터 스턴 애니메이션 몽타주"))
@@ -61,4 +60,16 @@ protected:
 	void PlayStunAnimation();
 	UFUNCTION()
 	virtual void StunAnimEnd(UAnimMontage* Montage, bool bInterrupted);
+
+/* UI Section */
+protected:
+	virtual void SetupHUDWidget(class UUPHudWidget* InHUDWidget) {};
+
+/* UI Section */
+public:
+	void SetUI();
+
+public:
+	UFUNCTION()
+	void DestroyWeapon();
 };

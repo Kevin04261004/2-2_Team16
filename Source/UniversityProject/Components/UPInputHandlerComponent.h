@@ -59,6 +59,8 @@ protected:
 	TObjectPtr<class UInputAction> GlobalTimeReset;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> TutorialSkip;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> SkipOneStage;
 	
 	void MoveInputAction(const FInputActionValue& Value);
 	void LookInputAction(const FInputActionValue& Value);
@@ -72,6 +74,7 @@ protected:
 	void GlobalTimeResetInputAction(const FInputActionValue& Value);
 	void SettingInputAction(const FInputActionValue& Value);
 	void TutorialSkipInputAction(const FInputActionValue& Value);
+	void SkipOneStageInputAction(const FInputActionValue& Value);
 	
 protected:
 	FVector2D MovementVector;

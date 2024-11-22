@@ -3,8 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Character/UPPlayerCharacter.h"
-#include "Character/Enemy/UPPettuCharacter.h"
 #include "GameData/UPCharacterStat.h"
 #include "UI/UPUserWidget.h"
 #include "UPHudWidget.generated.h"
@@ -24,13 +22,11 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "UI")
 	float GetPettuHpPercent() const;
-
-	void SetPlayerCharacter(AUPPlayerCharacter* InPlayerCharacter) { PlayerCharacter = InPlayerCharacter; }
-	void SetPettuCharacter(AUPPettuCharacter* InPettuCharacter) { PettuCharacter = InPettuCharacter; }
+	float GetPettuHpPercent_Implementation() const;
+	void SetPlayerCharacter(class AUPPlayerCharacter* InPlayerCharacter) { PlayerCharacter = InPlayerCharacter; }
+	void SetPettuCharacter(class AUPPettuCharacter* InPettuCharacter) { PettuCharacter = InPettuCharacter; }
 
 protected:
-	virtual void NativeConstruct() override;
-	
 	float PlayerHP = 0.0f;
 	float PlayerMaxHP = 0.0f;
 
@@ -38,8 +34,8 @@ protected:
 	float PettuMaxHP = 0.0f;
 
 	UPROPERTY()
-	TObjectPtr<AUPPlayerCharacter> PlayerCharacter;
+	TObjectPtr<class AUPPlayerCharacter> PlayerCharacter;
 
 	UPROPERTY()
-	TObjectPtr<AUPPettuCharacter> PettuCharacter;
+	TObjectPtr<class AUPPettuCharacter> PettuCharacter;
 };
