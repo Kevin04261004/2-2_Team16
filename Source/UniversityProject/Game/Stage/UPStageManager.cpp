@@ -18,6 +18,16 @@ void AUPStageManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	FString CurrentLevelName = GetWorld()->GetMapName(); // 전체 이름: /Game/Maps/TitleLevel
+	CurrentLevelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix); // 경로 및 접두사를 제거해 레벨 이름만 남김
+
+	if (CurrentLevelName == "TitleLevel")
+	{
+		// TitleLevel이면 실행 중단
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, TEXT("Current level is TitleLevel. Skipping BeginPlay logic."));
+		return;
+	}
+	
 	InitializeTutorialWidget();
 	
 	UUPActorSpawner* ActorSpawner = GetGameInstance()->GetSubsystem<UUPActorSpawner>();
@@ -79,10 +89,14 @@ void AUPStageManager::EvaluateCondition(EStageConditionType ConditionType)
 
 void AUPStageManager::TutorialStartStage(int32 StageIndex)
 {
+	if (StageTutorialData == nullptr)
+	{
+		return;
+	}
 	TutorialWidget->SetIsEnabled(true);
 	TutorialWidget->SetVisibility(ESlateVisibility::Visible);
 	CurrentStageIndex = StageIndex;
-	if (StageTutorialData && StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
+	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{
 		CurrentStage = StageTutorialData->TutorialStages[CurrentStageIndex];
 
@@ -96,12 +110,18 @@ void AUPStageManager::TutorialStartStage(int32 StageIndex)
 				TutorialWidget->AddTask(StageTutorialData->TutorialConditionDescriptionMap[Condition.Key], 0, Condition.Value);
 			}
 		}
-		
-		OnStageStart.Broadcast(CurrentStage.SpawnActorKey);
+		if (CurrentStage.SpawnActorKey.Len() <= 0)
+		{
+			OnStageStart.Broadcast(CurrentStage.SpawnActorKey);
+		}
+		if (CurrentStage.bIsDialogue)
+		{
+			CompleteStage();
+		}
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "No stage found");
+		TutorialStageClear();
 	}
 }
 
@@ -124,10 +144,6 @@ void AUPStageManager::CompleteStage()
 			CurrentStage.TurmAfterClear,
 			false
 		);
-	}
-	else
-	{
-		TutorialStageClear();
 	}
 }
 
@@ -160,6 +176,8 @@ void AUPStageManager::TutorialStageClear()
 	TutorialWidget->SetVisibility(ESlateVisibility::Hidden);
 
 	OnTutorialStageClear.Broadcast();
+	
+	BossStageStart();
 }
 
 void AUPStageManager::CheckStageConditions()
@@ -179,4 +197,9 @@ void AUPStageManager::CheckStageConditions()
 	{
 		CompleteStage();
 	}
+}
+
+void AUPStageManager::BossStageStart()
+{
+	OnBossStageStart.Broadcast();
 }

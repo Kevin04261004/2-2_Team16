@@ -77,9 +77,9 @@ public:
 	void AttackHitCheck(bool bIsAttached, FName SocketName, USkeletalMeshComponent* MeshComp,
 		float AttackRange, float Amount, FVector CollisionLocation);
 
-	/* UI Section */
+/* UI Section */
 protected:
-	virtual void SetupHUDWidget(UUPHudWidget* InHUDWidget) override;
+	virtual void SetupHUDWidget(class UUPHudWidget* InHUDWidget) override;
 	
 	UFUNCTION()
 	void StunCheck(float Hp);

@@ -4,6 +4,7 @@
 #include "Character/Enemy/UPMonsterBase.h"
 
 #include "BrainComponent.h"
+#include "Character/Weapon/UPWeaponBase.h"
 #include "Skill/UPPettuSkillData.h"
 #include "Skill/UPSkillBase.h"
 
@@ -74,7 +75,9 @@ void AUPMonsterBase::SkillAttack(EPettuSkillType SkillType)
 
 void AUPMonsterBase::SetDead()
 {
-	Super::SetDead();
+	//Super::SetDead();
+	SetActorEnableCollision(false);
+	bIsDead = true;
 	MovementComponent->DisableMovement();
 	if (MonsterAIController)
 	{

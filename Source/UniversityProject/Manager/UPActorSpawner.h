@@ -31,4 +31,8 @@ public:
 	void ClearSpawnedActors();
 
 	void InitializeSpawner(AUPStageManager* StageManager);
+
+
+private:
+	void SpawnBoss();
 };
