@@ -110,7 +110,7 @@ void AUPStageManager::TutorialStartStage(int32 StageIndex)
 				TutorialWidget->AddTask(StageTutorialData->TutorialConditionDescriptionMap[Condition.Key], 0, Condition.Value);
 			}
 		}
-		if (CurrentStage.SpawnActorKey.Len() <= 0)
+		if (CurrentStage.SpawnActorKey.Len() > 0)
 		{
 			OnStageStart.Broadcast(CurrentStage.SpawnActorKey);
 		}
