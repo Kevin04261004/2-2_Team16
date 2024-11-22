@@ -28,7 +28,7 @@ public:
 		float AttackRange, FVector CollisionLocation);
 
 	UFUNCTION(BlueprintCallable, Category = "Collision")
-	void SetCollision();
+	void SetCollision(bool bIsCollision);
 	
 	virtual void ClearAttackedActors() override;
 	
