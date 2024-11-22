@@ -54,8 +54,12 @@ void AUPStageManager::InitializeTutorialWidget()
 	TutorialWidget = CreateWidget<UUPTutorialWidget>(GetWorld(), TutorialWidgetClass);
 	if (TutorialWidget)
 	{
+		TutorialWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
+
+		// Focusable 비활성화
+		TutorialWidget->SetIsFocusable(false);
 		// 화면에 표시
-		TutorialWidget->AddToViewport();
+		TutorialWidget->AddToViewport(-10);
 	}
 }
 
