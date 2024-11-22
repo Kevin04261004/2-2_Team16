@@ -75,7 +75,9 @@ void AUPMonsterBase::SkillAttack(EPettuSkillType SkillType)
 
 void AUPMonsterBase::SetDead()
 {
-	Super::SetDead();
+	//Super::SetDead();
+	SetActorEnableCollision(false);
+	bIsDead = true;
 	MovementComponent->DisableMovement();
 	if (MonsterAIController)
 	{
