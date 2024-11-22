@@ -24,6 +24,10 @@ AUPPettuWeapon::AUPPettuWeapon()
 void AUPPettuWeapon::CheckAttackRange(float AttackRange, float Amount, FVector CollisionLocation)
 {
 	AActor* OwnerActor = GetOwner();
+	if (OwnerActor == nullptr)
+	{
+		return;
+	}
 	FVector OwnerLocation = OwnerActor->GetActorLocation();
 	FVector StartLocation = OwnerLocation + CollisionLocation +
 		OwnerActor->GetActorForwardVector() * Amount;

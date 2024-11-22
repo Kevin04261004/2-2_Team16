@@ -55,12 +55,11 @@ public:
 	
 	FTimerHandle NextStageTimerHandle;
 
-	UFUNCTION()
 	void SkipTutorial();
+	void StartNextStage();
 private:
 	void TutorialStartStage(int32 StageIndex);
 	void CompleteStage();
-	void StartNextStage();
 	void TutorialStageClear();
 	void CheckStageConditions();
 	void BossStageStart();

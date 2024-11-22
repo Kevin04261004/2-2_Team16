@@ -57,4 +57,5 @@ public:
 	TSubclassOf<AUPStageManager> StageManagerClass;
 	UPROPERTY()
 	TObjectPtr<AUPStageManager> StageManager;
+
 };
