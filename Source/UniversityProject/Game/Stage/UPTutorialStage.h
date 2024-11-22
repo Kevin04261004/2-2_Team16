@@ -44,6 +44,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Tooltip = "클리어 후, 몇초동안의 텀이 존재한가?"))
 	float TurmAfterClear;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Tooltip = "다이얼로그인가?"))
+	bool bIsDialogue;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EStageConditionType, int /* count */> StageConditionMap;
