@@ -4,6 +4,7 @@
 #include "Character/Enemy/UPMonsterBase.h"
 
 #include "BrainComponent.h"
+#include "Character/Weapon/UPPettuWeapon.h"
 #include "Character/Weapon/UPWeaponBase.h"
 #include "Skill/UPPettuSkillData.h"
 #include "Skill/UPSkillBase.h"
@@ -92,74 +93,80 @@ void AUPMonsterBase::SetDead()
 void AUPMonsterBase::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	Super::DeadAnimEnd(Montage, bInterrupted);
-
-	//GetMesh()->Stop();
-	GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
-	//if (Montage)
-	//{
-	//	float LastFrameTime = Montage->GetPlayLength();
-	//	GetMesh()->SetPosition(LastFrameTime); // 애니메이션 마지막 프레임으로 이동
-	//	GetMesh()->SetPlayRate(0.0f);          // 재생 정지
-	//}
-	if (DeathAnim)
-	{
-		GetMesh()->PlayAnimation(DeathAnim, false); // 애니메이션 재생 (루프 없음)
-		GetMesh()->SetPosition(DeathAnim->GetPlayLength()); // 마지막 프레임으로 이동
-	}
 	
-	// 다이나믹 머티리얼 캐싱 (한 번만 생성)
-	CachedDynamicMaterials.Empty(); // 기존 캐싱 데이터 초기화
+}
+
+void AUPMonsterBase::DeadFadeOut()
+{
+	// 1. 평상시 사용하던 머티리얼을 Dissolve 머티리얼로 교체
 	for (int32 i = 0; i < GetMesh()->GetNumMaterials(); i++)
 	{
-		UMaterialInstanceDynamic* DynamicMaterial = GetMesh()->CreateAndSetMaterialInstanceDynamic(i);
-		if (DynamicMaterial)
+		UMaterialInterface* OriginalMaterial = GetMesh()->GetMaterial(i);
+
+		// Dissolve 머티리얼로 교체
+		UMaterialInstanceDynamic* DissolveMaterial = UMaterialInstanceDynamic::Create(DissolveMaterialTemplate, this);
+		if (DissolveMaterial)
 		{
-			CachedDynamicMaterials.Add(DynamicMaterial);
-			DynamicMaterial->SetScalarParameterValue(FName("Opacity"), 1.0f); // 초기값 설정
+			// 초기 Dissolve 값을 설정 (1.0 -> 완전히 불투명)
+			DissolveMaterial->SetScalarParameterValue(TEXT("Dissolve"), 1.0f);
+			GetMesh()->SetMaterial(i, DissolveMaterial);
+
+			// 캐싱하여 나중에 업데이트에 사용
+			CachedDissolveMaterials.Add(DissolveMaterial);
 		}
 	}
 
-	StartFadeOut();
+	// Dissolve 효과 시작
+	StartDissolve();
 }
 
-void AUPMonsterBase::StartFadeOut()
+void AUPMonsterBase::StartDissolve()
 {
-	// 1초마다 업데이트되는 타이머로 투명도 변경
-	const float FadeDuration = 2.0f; // 사라지는 데 걸리는 시간
-	const float FadeInterval = 0.1f; // 업데이트 간격
-	CurrentFadeAlpha = 1.0f; // 초기 투명도 설정
+	const float DissolveDuration = 2.0f; // Dissolve 효과의 총 시간
+	const float DissolveInterval = 0.05f; // 업데이트 간격
+	CurrentDissolveValue = 0.0f; // 초기 Dissolve 값 설정 (완전히 보이는 상태)
 
-	// 타이머 시작
-	GetWorldTimerManager().SetTimer(FadeTimerHandle, this, &AUPMonsterBase::UpdateFadeOut, FadeInterval, true);
+	// Dissolve 업데이트 타이머 시작
+	GetWorldTimerManager().SetTimer(DissolveTimerHandle, this, &AUPMonsterBase::UpdateDissolve, DissolveInterval, true);
 
-	// 타이머를 종료하기 위한 Delay
-	GetWorldTimerManager().SetTimer(FadeEndHandle, this, &AUPMonsterBase::FinishFadeOut, FadeDuration, false);
+	// Dissolve 종료 타이머 설정
+	GetWorldTimerManager().SetTimer(DissolveEndHandle, this, &AUPMonsterBase::FinishDissolve, DissolveDuration, false);
 }
 
-void AUPMonsterBase::UpdateFadeOut()
+void AUPMonsterBase::UpdateDissolve()
 {
-	CurrentFadeAlpha -= 0.05f; // 투명도 감소 (값 조정 가능)
+	// Dissolve 값을 점진적으로 증가
+	CurrentDissolveValue += 0.05f;
 
-	if (CurrentFadeAlpha <= 0.0f)
+	if (CurrentDissolveValue > 1.0f)
 	{
-		CurrentFadeAlpha = 0.0f;
+		CurrentDissolveValue = 1.0f;
 	}
 
-	// 캐싱된 다이나믹 머티리얼에 투명도 적용
-	for (UMaterialInstanceDynamic* DynamicMaterial : CachedDynamicMaterials)
+	// 모든 캐싱된 머티리얼에 Dissolve 값 업데이트
+	for (UMaterialInstanceDynamic* DissolveMaterial : CachedDissolveMaterials)
 	{
-		if (DynamicMaterial)
+		if (DissolveMaterial)
 		{
-			DynamicMaterial->SetScalarParameterValue(FName("Opacity"), CurrentFadeAlpha);
+			DissolveMaterial->SetScalarParameterValue(TEXT("Dissolve"), CurrentDissolveValue);
 		}
 	}
 }
 
-void AUPMonsterBase::FinishFadeOut()
+void AUPMonsterBase::FinishDissolve()
 {
 	// 타이머 정지
-	GetWorldTimerManager().ClearTimer(FadeTimerHandle);
+	GetWorldTimerManager().ClearTimer(DissolveTimerHandle);
 
 	// 액터 제거
 	Destroy();
+}
+
+void AUPMonsterBase::SetWeaponCollision(bool bIsCollision)
+{
+	if (Weapon)
+	{
+		AUPPettuWeapon* MonsterWeapon = Cast<AUPPettuWeapon>(Weapon);
+		MonsterWeapon->SetCollision(bIsCollision);
+	}
 }

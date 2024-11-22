@@ -52,9 +52,16 @@ void AUPPettuWeapon::CheckAttackRange(FName SocketName, USkeletalMeshComponent* 
 	SphereCollision->SetRelativeLocation(CollisionLocation);
 }
 
-void AUPPettuWeapon::SetCollision()
+void AUPPettuWeapon::SetCollision(bool bIsCollision)
 {
-	SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (bIsCollision)
+	{
+		SphereCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	}
+	else
+	{
+		SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
 
 void AUPPettuWeapon::ClearAttackedActors()
