@@ -3,6 +3,8 @@
 
 #include "Game/Stage/UPStageManager.h"
 
+#include "Game/UPGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "Manager/UPActorSpawner.h"
 #include "UI/UPTutorialWidget.h"
 
@@ -16,6 +18,16 @@ void AUPStageManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	FString CurrentLevelName = GetWorld()->GetMapName(); // 전체 이름: /Game/Maps/TitleLevel
+	CurrentLevelName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix); // 경로 및 접두사를 제거해 레벨 이름만 남김
+
+	if (CurrentLevelName == "TitleLevel")
+	{
+		// TitleLevel이면 실행 중단
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, TEXT("Current level is TitleLevel. Skipping BeginPlay logic."));
+		return;
+	}
+	
 	InitializeTutorialWidget();
 	
 	UUPActorSpawner* ActorSpawner = GetGameInstance()->GetSubsystem<UUPActorSpawner>();
@@ -29,8 +41,7 @@ void AUPStageManager::BeginPlay()
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Actor Spawner Not Found");
 	}
 
-	
-	StartStage(0);
+	TutorialStartStage(0);
 }
 
 void AUPStageManager::InitializeTutorialWidget()
@@ -76,10 +87,16 @@ void AUPStageManager::EvaluateCondition(EStageConditionType ConditionType)
 	}
 }
 
-void AUPStageManager::StartStage(int32 StageIndex)
+void AUPStageManager::TutorialStartStage(int32 StageIndex)
 {
+	if (StageTutorialData == nullptr)
+	{
+		return;
+	}
+	TutorialWidget->SetIsEnabled(true);
+	TutorialWidget->SetVisibility(ESlateVisibility::Visible);
 	CurrentStageIndex = StageIndex;
-	if (StageTutorialData && StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
+	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{
 		CurrentStage = StageTutorialData->TutorialStages[CurrentStageIndex];
 
@@ -98,7 +115,7 @@ void AUPStageManager::StartStage(int32 StageIndex)
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "No stage found");
+		TutorialStageClear();
 	}
 }
 
@@ -107,16 +124,54 @@ void AUPStageManager::CompleteStage()
 	FString str = FString::Printf(TEXT("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Stage %d Clear!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"), CurrentStageIndex + 1);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, *str);
 	OnStageClear.Broadcast(CurrentStage.SpawnActorKey);
-
-	CurrentStageIndex++;
+	
 	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{
-		StartStage(CurrentStageIndex);
+		if (CurrentStage.TurmAfterClear <= 0.0f)
+		{
+			CurrentStage.TurmAfterClear = 0.1f;
+		}
+		GetWorld()->GetTimerManager().SetTimer(
+			NextStageTimerHandle,
+			this,
+			&AUPStageManager::StartNextStage,
+			CurrentStage.TurmAfterClear,
+			false
+		);
 	}
-	else
+}
+
+void AUPStageManager::StartNextStage()
+{
+	CurrentStageIndex++;
+	TutorialStartStage(CurrentStageIndex);
+}
+
+void AUPStageManager::SkipTutorial()
+{
+	if (GetWorld()->GetTimerManager().IsTimerActive(NextStageTimerHandle))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!!!!!!!!!!!!!!!!!!!!!!!!!All Stage Clear!!!!!!!!!!!!!!!!!!!!!!");
+		GetWorld()->GetTimerManager().ClearTimer(NextStageTimerHandle);
 	}
+	TutorialStageClear();
+}
+
+void AUPStageManager::TutorialStageClear()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!!!!!!!!!!!!!!!!!!!!!!!!!All Stage Clear!!!!!!!!!!!!!!!!!!!!!!");
+
+	AUPGameMode* GameMode = Cast<AUPGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GameMode)
+	{
+		GameMode->OnTutorialClear();
+	}
+
+	TutorialWidget->SetIsEnabled(false);
+	TutorialWidget->SetVisibility(ESlateVisibility::Hidden);
+
+	OnTutorialStageClear.Broadcast();
+	
+	BossStageStart();
 }
 
 void AUPStageManager::CheckStageConditions()
@@ -136,4 +191,9 @@ void AUPStageManager::CheckStageConditions()
 	{
 		CompleteStage();
 	}
+}
+
+void AUPStageManager::BossStageStart()
+{
+	OnBossStageStart.Broadcast();
 }

@@ -31,7 +31,11 @@ void AUPPlayerController::BeginPlay()
 	if (GameMode)
 	{
 		SettingWidgetObject = GameMode->SettingWidgetObject;
+		HudWidgetObject = GameMode->HudWidgetObject;
 		check(SettingWidgetObject != nullptr);
+		check(HudWidgetObject != nullptr);
+
+		GameMode->StageManager->OnBossStageStart.AddUObject(this, &AUPPlayerController::SetGameMode);
 	}
 }
 
@@ -59,6 +63,7 @@ void AUPPlayerController::SetGameMode()
 	TimeManager->WorldTimeReset();
 	
 	SettingWidgetObject->SetVisibility(ESlateVisibility::Hidden);
+	HudWidgetObject->SetVisibility(ESlateVisibility::Visible);
 	bShowMouseCursor = false;
 	CurInputMode = EInputMode::Game;
 }

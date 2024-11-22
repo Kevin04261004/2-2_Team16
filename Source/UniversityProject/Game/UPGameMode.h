@@ -25,13 +25,19 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void OnGameClear() override;
+
+	virtual void OnTutorialClear();
 	
 	virtual bool IsGameCleared() override;
+	FORCEINLINE virtual bool IsTutorialStage() { return bIsTutorialCleared == true; }
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Game)
 	uint8 bIsCleared : 1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Game)
+	uint8 bIsTutorialCleared : 1;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Game)
 	bool bIsGameOver = false;
 
@@ -51,4 +57,5 @@ public:
 	TSubclassOf<AUPStageManager> StageManagerClass;
 	UPROPERTY()
 	TObjectPtr<AUPStageManager> StageManager;
+
 };

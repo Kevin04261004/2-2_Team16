@@ -44,4 +44,5 @@ protected:
 
 protected:
 	TObjectPtr<class UUPSettingWidget> SettingWidgetObject;
+	TObjectPtr<class UUPHudWidget> HudWidgetObject;
 };

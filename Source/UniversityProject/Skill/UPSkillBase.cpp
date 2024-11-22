@@ -124,7 +124,7 @@ void UUPSkillBase::CustomActivate_Implementation(AActor* TargetOrNull)
 		UAnimInstance* AnimInstance = player->GetMesh()->GetAnimInstance();
 		if (AnimInstance != nullptr)
 		{
-			float animSpeed = SkillData->GetAnimationSpeed(player->GetStatComponent()->GetTotalStat().AttackSpeed);
+			float animSpeed = SkillData->GetAnimationSpeed(player->GetStat()->GetTotalStat().AttackSpeed);
 			AnimInstance->Montage_Play(skillAnimation, animSpeed);
 		}
 	}
@@ -164,7 +164,7 @@ void UUPSkillBase::CustomDeActivate_Implementation(AActor* TargetOrNull)
 float UUPSkillBase::GetSkillDuration() const
 {
 	AUPCharacterBase* character = Cast<AUPCharacterBase>(GetOwner());
-	float skillDuration = SkillData->GetSkillDuration(character->GetStatComponent()->GetTotalStat().AttackSpeed);
+	float skillDuration = SkillData->GetSkillDuration(character->GetStat()->GetTotalStat().AttackSpeed);
 	return skillDuration;
 }
 

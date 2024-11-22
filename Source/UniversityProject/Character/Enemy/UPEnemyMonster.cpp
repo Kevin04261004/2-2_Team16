@@ -16,6 +16,7 @@ AUPEnemyMonster::AUPEnemyMonster(const FObjectInitializer& ObjectInitializer) : 
 	bIsDead = false;
 
 	InitSkillMap();
+	DiedCondition = EStageConditionType::KillMonster;
 }
 
 void AUPEnemyMonster::PostInitializeComponents()

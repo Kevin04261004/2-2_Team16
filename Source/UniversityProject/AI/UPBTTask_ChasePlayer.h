@@ -15,6 +15,10 @@ class UNIVERSITYPROJECT_API UUPBTTask_ChasePlayer : public UBTTask_BlackboardBas
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Init")
+	float MoveStopDistance;
+	
 	UUPBTTask_ChasePlayer(const FObjectInitializer& ObjectInitializer);
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	

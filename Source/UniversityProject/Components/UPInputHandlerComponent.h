@@ -49,13 +49,18 @@ protected:
 	TObjectPtr<class UInputAction> CameraZoomAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> SettingAction;
-	
+
+	/* Debug */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> GlobalTimeUp;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> GlobalTimeDown;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> GlobalTimeReset;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> TutorialSkip;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> SkipOneStage;
 	
 	void MoveInputAction(const FInputActionValue& Value);
 	void LookInputAction(const FInputActionValue& Value);
@@ -68,6 +73,8 @@ protected:
 	void GlobalTimeDownInputAction(const FInputActionValue& Value);
 	void GlobalTimeResetInputAction(const FInputActionValue& Value);
 	void SettingInputAction(const FInputActionValue& Value);
+	void TutorialSkipInputAction(const FInputActionValue& Value);
+	void SkipOneStageInputAction(const FInputActionValue& Value);
 	
 protected:
 	FVector2D MovementVector;

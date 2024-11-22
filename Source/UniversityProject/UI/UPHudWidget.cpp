@@ -2,30 +2,20 @@
 
 
 #include "UI/UPHudWidget.h"
-#include "Character/Enemy/UPPettuCharacter.h"
-#include "Components/ProgressBar.h"
-#include "Interface/UPCharacterHUDInterface.h"
 
+#include "Character/UPPlayerCharacter.h"
+#include "Character/Enemy/UPPettuCharacter.h"
 
 UUPHudWidget::UUPHudWidget(const FObjectInitializer& ObjectInitializer)
 {
 }
 
-void UUPHudWidget::NativeConstruct()
-{
-	Super::NativeConstruct();
-
-	IUPCharacterHUDInterface* HUDPawn = Cast<IUPCharacterHUDInterface>(GetOwningPlayerPawn());
-	if (HUDPawn)
-	{
-		HUDPawn->SetupHUDWidget(this);
-	}
-}
-
 float UUPHudWidget::GetPlayerHpPercent_Implementation() const
 {
 	if (PlayerCharacter)
-		return PlayerCharacter->GetStatComponent()->GetCurrentHp() / PlayerCharacter->GetStatComponent()->GetBaseStat().MaxHp;
+	{
+		return PlayerCharacter->GetStat()->GetCurrentHp() / PlayerCharacter->GetStat()->GetBaseStat().MaxHp;
+	}
 	return 0.0f;
 }
 
@@ -33,7 +23,7 @@ float UUPHudWidget::GetPettuHpPercent_Implementation() const
 {
 	if (PettuCharacter)
 	{
-		return PettuCharacter->GetStatComponent()->GetCurrentHp() / PettuCharacter->GetStatComponent()->GetBaseStat().MaxHp;
+		return PettuCharacter->GetStat()->GetCurrentHp() / PettuCharacter->GetStat()->GetBaseStat().MaxHp;
 	}
 	return 0.0f;
 }

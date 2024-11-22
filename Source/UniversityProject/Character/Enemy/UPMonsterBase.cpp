@@ -4,6 +4,7 @@
 #include "Character/Enemy/UPMonsterBase.h"
 
 #include "BrainComponent.h"
+#include "Character/Weapon/UPWeaponBase.h"
 #include "Skill/UPPettuSkillData.h"
 #include "Skill/UPSkillBase.h"
 
@@ -11,6 +12,7 @@
 AUPMonsterBase::AUPMonsterBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	InitSkillMap();
+	
 }
 
 void AUPMonsterBase::BeginPlay()

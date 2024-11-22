@@ -177,17 +177,9 @@ void AUPPlayerCharacter::SetupStimuliSource()
 
 void AUPPlayerCharacter::SetupHUDWidget(UUPHudWidget* InHUDWidget)
 {
+	Super::SetupHUDWidget(InHUDWidget);
 	if (InHUDWidget)
 	{
-		AUPPettuCharacter* Pettu = nullptr;
-		for (TActorIterator<AUPPettuCharacter> It(GetWorld()); It; ++It)
-		{
-			Pettu = *It;
-			if (Pettu)
-			{
-				InHUDWidget->SetPettuCharacter(Pettu);
-			}
-		}
 		InHUDWidget->SetPlayerCharacter(this);
 	}
 }

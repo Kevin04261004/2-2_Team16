@@ -6,6 +6,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Character/UPCharacterBase.h"
+#include "Game/UPGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Manager/UPTimeManager.h"
 #include "Player/UPPlayerController.h"
@@ -39,6 +41,8 @@ void UUPInputHandlerComponent::BindActions(UEnhancedInputComponent* EnhancedInpu
 	EnhancedInputComponent->BindAction(GlobalTimeDown, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::GlobalTimeDownInputAction);
 	EnhancedInputComponent->BindAction(GlobalTimeReset, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::GlobalTimeResetInputAction);
 	EnhancedInputComponent->BindAction(SettingAction, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::SettingInputAction);
+	EnhancedInputComponent->BindAction(TutorialSkip, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::TutorialSkipInputAction);
+	EnhancedInputComponent->BindAction(SkipOneStage, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::SkipOneStageInputAction);
 }
 
 
@@ -120,6 +124,24 @@ void UUPInputHandlerComponent::SettingInputAction(const FInputActionValue& Value
 	if (PlayerController->GetInputMode() == EInputMode::Game)
 	{
 		PlayerController->SetUIMode();
+	}
+}
+
+void UUPInputHandlerComponent::TutorialSkipInputAction(const FInputActionValue& Value)
+{
+	AUPGameMode* GameMode = Cast<AUPGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GameMode)
+	{
+		GameMode->StageManager->SkipTutorial();
+	}
+}
+
+void UUPInputHandlerComponent::SkipOneStageInputAction(const FInputActionValue& Value)
+{
+	AUPGameMode* GameMode = Cast<AUPGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GameMode)
+	{
+		GameMode->StageManager->StartNextStage();
 	}
 }
 
