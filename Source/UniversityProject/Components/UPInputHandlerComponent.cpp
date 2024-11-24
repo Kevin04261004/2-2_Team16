@@ -121,10 +121,7 @@ void UUPInputHandlerComponent::SettingInputAction(const FInputActionValue& Value
 	{
 		return;
 	}
-	if (PlayerController->GetInputMode() == EInputMode::Game)
-	{
-		PlayerController->SetUIMode();
-	}
+	PlayerController->SetUIMode();
 }
 
 void UUPInputHandlerComponent::TutorialSkipInputAction(const FInputActionValue& Value)

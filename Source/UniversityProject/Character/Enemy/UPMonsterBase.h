@@ -69,23 +69,33 @@ public:
 
 	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted) override;
 
+	void DeadFadeOut();
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, Meta = (AllowPrivate))
 	UAnimSequence* DeathAnim;
 
+	UPROPERTY(EditAnywhere, Category = "Materials")
+	UMaterialInterface* DissolveMaterialTemplate;
+
 private:
-	void StartFadeOut();
+	void StartDissolve();
 	UFUNCTION()
-	void UpdateFadeOut();
+	void UpdateDissolve();
 	UFUNCTION()
-	void FinishFadeOut();
+	void FinishDissolve();
 
 	UPROPERTY()
-	TArray<UMaterialInstanceDynamic*> CachedDynamicMaterials;
+	TArray<UMaterialInstanceDynamic*> CachedDissolveMaterials;
 	
 	UPROPERTY()
-	FTimerHandle FadeTimerHandle;
+	FTimerHandle DissolveTimerHandle;
 	UPROPERTY()
-	FTimerHandle FadeEndHandle;
+	FTimerHandle DissolveEndHandle;
 	
-	float CurrentFadeAlpha;
+	float CurrentDissolveValue;
+
+	/* Weapon Section */
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetWeaponCollision(bool bIsCollision);
 };
