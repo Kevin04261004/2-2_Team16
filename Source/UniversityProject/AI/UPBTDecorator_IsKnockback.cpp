@@ -18,8 +18,6 @@ bool UUPBTDecorator_IsKnockback::CalculateRawConditionValue(UBehaviorTreeCompone
 		auto* const EnemyCharacter = Cast<AUPEnemyMonster>(PettuController->GetPawn());
 		if (EnemyCharacter)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("IsKnockbackActive: %s"),
-				EnemyCharacter->IsKnockbackActive() ? TEXT("true") : TEXT("false")));
 			return EnemyCharacter->IsKnockbackActive();
 		}
 	}

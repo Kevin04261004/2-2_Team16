@@ -54,6 +54,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Knockback")
 	float KnockbackStrength = 500.0f;
 
+	UPROPERTY(EditAnywhere, Category = "Knockback")
+	UAnimMontage* KnockbackMontage;
+
 private:
 	UPROPERTY()
 	UTimelineComponent* KnockbackTimeline;
