@@ -54,8 +54,12 @@ void AUPStageManager::InitializeTutorialWidget()
 	TutorialWidget = CreateWidget<UUPTutorialWidget>(GetWorld(), TutorialWidgetClass);
 	if (TutorialWidget)
 	{
+		TutorialWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
+
+		// Focusable 비활성화
+		TutorialWidget->SetIsFocusable(false);
 		// 화면에 표시
-		TutorialWidget->AddToViewport();
+		TutorialWidget->AddToViewport(-10);
 	}
 }
 
@@ -110,7 +114,7 @@ void AUPStageManager::TutorialStartStage(int32 StageIndex)
 				TutorialWidget->AddTask(StageTutorialData->TutorialConditionDescriptionMap[Condition.Key], 0, Condition.Value);
 			}
 		}
-		if (CurrentStage.SpawnActorKey.Len() <= 0)
+		if (CurrentStage.SpawnActorKey.Len() > 0)
 		{
 			OnStageStart.Broadcast(CurrentStage.SpawnActorKey);
 		}

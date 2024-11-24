@@ -6,6 +6,7 @@
 #include "Character/UPCharacterBase.h"
 #include "Character/UPPlayerCharacter.h"
 #include "Components/AutoTargetingComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
 
 void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
@@ -51,9 +52,10 @@ void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCo
 			FHitResult Hit;
 			FVector HitLocation;
 			// TODO: 무기의 길이를 구하는 코드 만들기.
-			if (base->TryCheckForwardCollision(Amount >= 0 ? 150 : -150, Hit, HitLocation))
+			if (base->TryCheckForwardCollision(Amount >= 0 ? Amount : -Amount, Hit, HitLocation))
 			{
-				TargetLocation = StartLocation;
+				Hit.Location.Z = Owner->GetActorLocation().Z;
+				TargetLocation = Hit.Location - Owner->GetActorForwardVector() * (base->GetCapsuleComponent()->GetScaledCapsuleRadius() / 2);
 			}
 		}
 		StartTime = MeshComp->GetWorld()->GetTimeSeconds();

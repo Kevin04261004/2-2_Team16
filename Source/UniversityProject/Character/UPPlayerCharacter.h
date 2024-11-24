@@ -74,8 +74,8 @@ protected:
 
 	UPROPERTY()
 	float ConstCameraZ;
-	UPROPERTY()
-	float StartZ;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera, Meta = (AllowPrivateAccess = true))
+	float CameraStartZ;
 	
 public:
 	FORCEINLINE UUPCameraComponent* GetCameraComponent() const { return CameraComponent.Get(); }

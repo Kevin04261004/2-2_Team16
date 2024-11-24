@@ -39,18 +39,31 @@ void AUPPlayerController::BeginPlay()
 	}
 }
 
-void AUPPlayerController::SetUIMode()
+void AUPPlayerController::SetUIMode() 
 {
+	// Set Input Mode
 	FInputModeUIOnly InputModeData;
 	InputModeData.SetWidgetToFocus(SettingWidgetObject->TakeWidget());
 	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	SetInputMode(InputModeData);
 
-	UUPTimeManager* TimeManager = GetGameInstance()->GetSubsystem<UUPTimeManager>();
-	TimeManager->WorldTimeStop();
-	
+	// Set visibility
 	SettingWidgetObject->SetVisibility(ESlateVisibility::Visible);
+	HudWidgetObject->SetVisibility(ESlateVisibility::Hidden);
+
+
+	// Ensure mouse cursor is shown
 	bShowMouseCursor = true;
+	DefaultMouseCursor = EMouseCursor::Default;
+
+	// Stop world time
+	UUPTimeManager* TimeManager = GetGameInstance()->GetSubsystem<UUPTimeManager>();
+	if (TimeManager)
+	{
+		TimeManager->WorldTimeStop();
+	}
+	
+	// Update input mode state
 	CurInputMode = EInputMode::UI;
 }
 
