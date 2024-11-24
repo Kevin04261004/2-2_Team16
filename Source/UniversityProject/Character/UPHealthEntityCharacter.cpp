@@ -63,7 +63,7 @@ void AUPHealthEntityCharacter::SetDead()
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 	SetActorEnableCollision(false);
 	bIsDead = true;
-	PlayDeadAnimation();
+	//PlayDeadAnimation();
 }
 
 void AUPHealthEntityCharacter::PlayDeadAnimation()
