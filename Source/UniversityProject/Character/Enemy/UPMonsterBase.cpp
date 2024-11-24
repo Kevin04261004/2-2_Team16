@@ -4,6 +4,7 @@
 #include "Character/Enemy/UPMonsterBase.h"
 
 #include "BrainComponent.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Character/Weapon/UPPettuWeapon.h"
 #include "Character/Weapon/UPWeaponBase.h"
 #include "Skill/UPPettuSkillData.h"
@@ -21,6 +22,7 @@ void AUPMonsterBase::BeginPlay()
 	Super::BeginPlay();
 	CreateDefaultObjectSkill();
 	MovementComponent->SetMovementMode(MOVE_Walking);
+	MonsterAIController = Cast<AUPPettuAIController>(GetController());
 }
 
 void AUPMonsterBase::Tick(float DeltaSeconds)
@@ -76,18 +78,32 @@ void AUPMonsterBase::SkillAttack(EPettuSkillType SkillType)
 
 void AUPMonsterBase::SetDead()
 {
-	//Super::SetDead();
-	SetActorEnableCollision(false);
-	bIsDead = true;
+	Super::SetDead();
+	//StageManager->EvaluateCondition(DiedCondition);
+	//SetActorEnableCollision(false);
+	//bIsDead = true;
 	MovementComponent->DisableMovement();
 	if (MonsterAIController)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Monster Dead"));
 		if (MonsterAIController->BrainComponent)
 		{
 			MonsterAIController->BrainComponent->StopLogic(TEXT("Dead"));
 		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("BrainComponent is nullptr"));
+		}
+		UBehaviorTreeComponent* BTComp = Cast<UBehaviorTreeComponent>(MonsterAIController->BrainComponent);
+		if (BTComp)
+		{
+			BTComp->StopTree(EBTStopMode::Forced);
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Monster Dead"));
+		}
 		MonsterAIController->StopMovement();
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Dead"));
+	//Weapon->Destroy();
 }
 
 void AUPMonsterBase::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
