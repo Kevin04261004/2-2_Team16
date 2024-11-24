@@ -85,7 +85,6 @@ void AUPMonsterBase::SetDead()
 	MovementComponent->DisableMovement();
 	if (MonsterAIController)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Monster Dead"));
 		if (MonsterAIController->BrainComponent)
 		{
 			MonsterAIController->BrainComponent->StopLogic(TEXT("Dead"));
@@ -98,17 +97,20 @@ void AUPMonsterBase::SetDead()
 		if (BTComp)
 		{
 			BTComp->StopTree(EBTStopMode::Forced);
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Monster Dead"));
 		}
 		MonsterAIController->StopMovement();
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Dead"));
 	//Weapon->Destroy();
 }
 
 void AUPMonsterBase::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	Super::DeadAnimEnd(Montage, bInterrupted);
+	
+}
+
+void AUPMonsterBase::PlayDeadAnimation()
+{
 	
 }
 

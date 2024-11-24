@@ -49,7 +49,7 @@ protected:
 	bool bIsDead;
 
 	virtual void SetDead();
-	void PlayDeadAnimation();
+	virtual void PlayDeadAnimation();
 	UFUNCTION()
 	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted);
 	
