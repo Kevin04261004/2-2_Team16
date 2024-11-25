@@ -62,6 +62,19 @@ float AUPEnemyMonster::UPTakeDamage(float DamageAmount, FDamageEvent const& Dama
 		// 넉백 세기 (적절히 조정 필요)
 		FVector KnockbackTarget = MyLocation + (KnockbackDirection * KnockbackStrength);
 
+		
+		if (KnockbackMontage)
+		{
+			UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+			if (AnimInstance)
+			{
+				AnimInstance->StopAllMontages(0.0f);
+				AnimInstance->Montage_Play(KnockbackMontage);
+				
+				//AnimInstance->OnMontageEnded.AddDynamic(this, &AUPEnemyMonster::KnockbackFinished);
+			}
+		}
+
 		// 타임라인을 이용한 넉백 애니메이션 적용
 		FOnTimelineFloat ProgressFunction;
 		ProgressFunction.BindUFunction(this, FName("KnockbackProgress"));
