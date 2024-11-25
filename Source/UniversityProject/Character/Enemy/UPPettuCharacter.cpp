@@ -143,6 +143,11 @@ void AUPPettuCharacter::SetDead()
 	CurrentPhase = EBossPhase::Dead;
 }
 
+void AUPPettuCharacter::PlayDeadAnimation()
+{
+	Super::Super::PlayDeadAnimation();
+}
+
 void AUPPettuCharacter::Phase2Start()
 {
 	bIsInvincible = false;
@@ -206,6 +211,8 @@ void AUPPettuCharacter::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 	AUPGameMode* GameMode = Cast<AUPGameMode>(GetWorld()->GetAuthGameMode());
 	check(GameMode != nullptr);
 	GameMode->OnGameClear();
+
+	Destroy();
 }
 
 void AUPPettuCharacter::SetStun()
