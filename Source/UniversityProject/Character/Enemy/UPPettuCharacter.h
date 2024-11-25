@@ -3,12 +3,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "LevelSequence.h"
 #include "UPMonsterBase.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include "Character/UPCharacterBase.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
 #include "Interface/UPPettuPunchTrailInterface.h"
 #include "UPPettuCharacter.generated.h"
+
+UENUM(BlueprintType)
+enum class EBossPhase : uint8
+{
+	Phase1 UMETA(DisplayName = "Phase 1"),
+	Phase2 UMETA(DisplayName = "Phase 2"),
+	Dead UMETA(DisplayName = "Dead")
+};
 
 UCLASS()
 class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPMonsterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterHUDInterface, public IUPPettuPunchTrailInterface
@@ -52,11 +62,6 @@ public:
 	TObjectPtr<UAnimMontage> StiffenMontage;
 	void PlayStiffenAnimation();
 	
-private:
-	UFUNCTION()
-	void TestFunc();
-	FTimerHandle TestHandle;
-	
 /* Pattern Section */
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pattern, Meta = (AllowPrivateAccess = "true"))
@@ -99,5 +104,22 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Init", Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UNiagaraSystem> NiagaraSystem;
+
+
+/* phase */
+protected:
+	UPROPERTY()
+	EBossPhase CurrentPhase;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Init", Meta = (AllowPrivateAccess = "true"))
+	ULevelSequence* Boss2PhaseStartSequence;
+
+	UFUNCTION()
+	void Phase2Start();
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Init", Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UBehaviorTree> Phase2BehaviorTree;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Init", Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UUPCharacterStatData> Phase2InitslizeStatData;
 };

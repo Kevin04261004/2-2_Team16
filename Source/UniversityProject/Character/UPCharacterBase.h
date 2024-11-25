@@ -5,11 +5,6 @@
 #include "CoreMinimal.h"
 #include "UPHealthEntityCharacter.h"
 #include "Components/UPCharacterMovementComponent.h"
-#include "GameData/UPCharacterStatData.h"
-#include "GameData/UPCharacterStat.h"
-#include "GameFramework/Character.h"
-#include "Interface/UPDamageableInterface.h"
-#include "Interface/UPKnockBackableInterface.h"
 #include "UPCharacterBase.generated.h"
 
 UCLASS()
