@@ -42,7 +42,7 @@ public:
 	
 /* Dead Section */
 	virtual void SetDead() override;
-
+	virtual void PlayDeadAnimation() override;
 	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted) override;
 
 /* Stun Section */

@@ -111,7 +111,7 @@ void AUPMonsterBase::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 
 void AUPMonsterBase::PlayDeadAnimation()
 {
-	
+	// Super::PlayDeadAnimation();
 }
 
 void AUPMonsterBase::DeadFadeOut()
