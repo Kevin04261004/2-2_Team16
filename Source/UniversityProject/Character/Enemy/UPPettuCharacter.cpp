@@ -146,6 +146,18 @@ void AUPPettuCharacter::SetDead()
 void AUPPettuCharacter::Phase2Start()
 {
 	bIsInvincible = false;
+
+	// 머티리얼 세팅
+	UMaterialInterface* OverlayMaterial = Phase2OutLineMaterial;
+        
+	// 오버레이 머티리얼이 있다면 동적으로 설정
+	if (OverlayMaterial)
+	{
+		DynamicMaterial = UMaterialInstanceDynamic::Create(OverlayMaterial, this);
+		GetMesh()->SetOverlayMaterial(DynamicMaterial);
+	}
+
+	
 	// 스텟 세팅 및 초기화
 	check(StatComponent != nullptr);
 	check(CharacterInitalizeStatData != nullptr);	

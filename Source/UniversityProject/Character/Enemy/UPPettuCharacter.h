@@ -122,4 +122,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Init", Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UUPCharacterStatData> Phase2InitslizeStatData;
+
+	/** 오버레이 머티리얼 */
+	UPROPERTY(EditAnywhere, Category = "Init")
+	class UMaterialInterface* Phase2OutLineMaterial;
+
+	/** 동적 머티리얼 인스턴스 */
+	UPROPERTY(Transient)
+	class UMaterialInstanceDynamic* DynamicMaterial;
 };
