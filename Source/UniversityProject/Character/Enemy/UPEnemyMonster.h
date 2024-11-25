@@ -20,6 +20,8 @@ public:
 protected:
 	virtual float UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	FUPCharacterStat BaseStat;
+
 /* Dead Section */
 	virtual void SetDead() override;
 

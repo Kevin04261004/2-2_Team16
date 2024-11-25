@@ -11,8 +11,9 @@
 AUPEnemyMonster::AUPEnemyMonster(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	static ConstructorHelpers::FObjectFinder<UUPCharacterStatData> StatDataRef(TEXT("/Game/UniversityProject/GameData/DA_EnemyMonsterStat.DA_EnemyMonsterStat"));
+	//BaseStat = StatDataRef.Object.Get()->Stat;
+	//BaseStat.WalkSpeed = FMath::RandRange(BaseStat.WalkSpeed - 150.0f, BaseStat.WalkSpeed + 150.0f);
 	StatComponent->SetBaseStat(StatDataRef.Object.Get()->Stat);
-
 	bIsDead = false;
 
 	InitSkillMap();
@@ -23,14 +24,15 @@ void AUPEnemyMonster::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	MonsterAIController = Cast<AUPPettuAIController>(GetController());
+	
 }
 
 void AUPEnemyMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	bIsKnockbackActive = false;
-	MovementComponent->StopMovementImmediately();
-	MovementComponent->SetMovementMode(MOVE_Walking);
+	//MovementComponent->StopMovementImmediately();
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("RandomSpeed : %f"), MovementComponent->MaxWalkSpeed));
 }
 
 float AUPEnemyMonster::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
