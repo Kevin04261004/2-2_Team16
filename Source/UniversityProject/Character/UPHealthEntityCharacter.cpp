@@ -2,8 +2,6 @@
 
 
 #include "Character/UPHealthEntityCharacter.h"
-
-#include "UPCharacterBase.h"
 #include "Components/UPCharacterMovementComponent.h"
 #include "Game/UPGameMode.h"
 
@@ -18,6 +16,7 @@ AUPHealthEntityCharacter::AUPHealthEntityCharacter(const FObjectInitializer& Obj
 	StatComponent = CreateDefaultSubobject<UUPCharacterStatComponent>(TEXT("Stat"));
 
 	DiedCondition = EStageConditionType::KillHealthMeshObject;
+	bIsInvincible = false;
 }
 
 void AUPHealthEntityCharacter::BeginPlay()
@@ -52,6 +51,10 @@ void AUPHealthEntityCharacter::PostInitializeComponents()
 
 float AUPHealthEntityCharacter::UPTakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
+	if (bIsInvincible)
+	{
+		return 0;
+	}
 	StatComponent->ApplyDamage(DamageAmount);
 	OnTakeDamaged.Broadcast(DamageAmount);
 	return DamageAmount;

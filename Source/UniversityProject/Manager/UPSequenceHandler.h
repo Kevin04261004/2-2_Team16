@@ -35,6 +35,8 @@ public:
 	void EnableHiddenUI();
 	UFUNCTION(BlueprintCallable, Category = "Cinematic")
 	void HideUI();
+
+	FORCEINLINE ULevelSequencePlayer* GetCurrentSequence() { return CurSequencePlayer; } 
 private:
 	// 현재 재생 중인 시퀀스 플레이어
 	UPROPERTY()

@@ -3,12 +3,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "LevelSequence.h"
 #include "UPMonsterBase.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include "Character/UPCharacterBase.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
 #include "Interface/UPPettuPunchTrailInterface.h"
 #include "UPPettuCharacter.generated.h"
+
+UENUM(BlueprintType)
+enum class EBossPhase : uint8
+{
+	Phase1 UMETA(DisplayName = "Phase 1"),
+	Phase2 UMETA(DisplayName = "Phase 2"),
+	Dead UMETA(DisplayName = "Dead")
+};
 
 UCLASS()
 class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPMonsterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterHUDInterface, public IUPPettuPunchTrailInterface
@@ -32,7 +42,7 @@ public:
 	
 /* Dead Section */
 	virtual void SetDead() override;
-
+	virtual void PlayDeadAnimation() override;
 	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted) override;
 
 /* Stun Section */
@@ -51,11 +61,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UAnimMontage> StiffenMontage;
 	void PlayStiffenAnimation();
-	
-private:
-	UFUNCTION()
-	void TestFunc();
-	FTimerHandle TestHandle;
 	
 /* Pattern Section */
 public:
@@ -99,5 +104,30 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Init", Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UNiagaraSystem> NiagaraSystem;
+
+
+/* phase */
+protected:
+	UPROPERTY()
+	EBossPhase CurrentPhase;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Init", Meta = (AllowPrivateAccess = "true"))
+	ULevelSequence* Boss2PhaseStartSequence;
+
+	UFUNCTION()
+	void Phase2Start();
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Init", Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UBehaviorTree> Phase2BehaviorTree;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Init", Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UUPCharacterStatData> Phase2InitslizeStatData;
+
+	/** 오버레이 머티리얼 */
+	UPROPERTY(EditAnywhere, Category = "Init")
+	class UMaterialInterface* Phase2OutLineMaterial;
+
+	/** 동적 머티리얼 인스턴스 */
+	UPROPERTY(Transient)
+	class UMaterialInstanceDynamic* DynamicMaterial;
 };

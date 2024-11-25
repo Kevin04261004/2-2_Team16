@@ -9,16 +9,15 @@
 #include "Character/Weapon/UPPettuWeapon.h"
 #include "Components/UPCharacterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Interface/UPGameInterface.h"
 #include "Kismet/GameplayStatics.h"
-#include "Misc/MapErrors.h"
 #include "GameFramework/HUD.h"
 #include "UI/UPHudWidget.h"
-
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
-#include "NiagaraDataInterfaceArrayFunctionLibrary.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Character/UPPlayerCharacter.h"
+#include "Game/UPGameMode.h"
+#include "Manager/UPSequenceHandler.h"
 
 
 AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UUPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -29,6 +28,7 @@ AUPPettuCharacter::AUPPettuCharacter(const FObjectInitializer& ObjectInitializer
 	bIsStiffen = false;
 	bIsStun = false;
 	bIsDead = false;
+	CurrentPhase = EBossPhase::Phase1;
 }
 
 void AUPPettuCharacter::PostInitializeComponents()
@@ -102,12 +102,117 @@ float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& Da
 
 void AUPPettuCharacter::SetDead()
 {
-	Super::SetDead();
+	if (CurrentPhase == EBossPhase::Phase1)
+	{
+		bIsInvincible = true;
+		GetMesh()->SetVisibility(false, true);
+		
+		// BT 중지
+		MovementComponent->DisableMovement();
+		if (MonsterAIController)
+		{
+			if (MonsterAIController->BrainComponent)
+			{
+				MonsterAIController->BrainComponent->StopLogic(TEXT("Dead"));
+			}
+			else
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("BrainComponent is nullptr"));
+			}
+			UBehaviorTreeComponent* BTComp = Cast<UBehaviorTreeComponent>(MonsterAIController->BrainComponent);
+			if (BTComp)
+			{
+				BTComp->StopTree(EBTStopMode::Forced);
+			}
+			MonsterAIController->StopMovement();
+		}
+		
+		// 보스 시퀀서 시작
+		// 시퀀서 종료 시, 보스 2페이즈로 변경 및 전투 시작.
+		UUPSequenceHandler* SequenceHandler = GetGameInstance()->GetSubsystem<UUPSequenceHandler>();
+		if (SequenceHandler != nullptr)
+		{
+			SequenceHandler->PlaySequence(Boss2PhaseStartSequence);
+			SequenceHandler->GetCurrentSequence()->OnFinished.AddDynamic(this, &AUPPettuCharacter::Phase2Start);
+		}
+	}
+	else if (CurrentPhase == EBossPhase::Phase2)
+	{
+		Super::SetDead();
+	}
+	CurrentPhase = EBossPhase::Dead;
+}
+
+void AUPPettuCharacter::PlayDeadAnimation()
+{
+	Super::Super::PlayDeadAnimation();
+}
+
+void AUPPettuCharacter::Phase2Start()
+{
+	bIsInvincible = false;
+
+	// 머티리얼 세팅
+	UMaterialInterface* OverlayMaterial = Phase2OutLineMaterial;
+        
+	// 오버레이 머티리얼이 있다면 동적으로 설정
+	if (OverlayMaterial)
+	{
+		DynamicMaterial = UMaterialInstanceDynamic::Create(OverlayMaterial, this);
+		GetMesh()->SetOverlayMaterial(DynamicMaterial);
+	}
+
+	
+	// 스텟 세팅 및 초기화
+	check(StatComponent != nullptr);
+	check(CharacterInitalizeStatData != nullptr);	
+	StatComponent->SetBaseStat(Phase2InitslizeStatData->Stat);
+
+	GetMesh()->SetVisibility(true, true);
+	
+	// BT 변경 및 재시작
+	if (MonsterAIController)
+	{
+		if (Phase2BehaviorTree)
+		{
+			MonsterAIController->RunBehaviorTree(Phase2BehaviorTree);
+		}
+
+		UBehaviorTreeComponent* BTComp = Cast<UBehaviorTreeComponent>(MonsterAIController->BrainComponent);
+		if (BTComp)
+		{
+			BTComp->RestartTree();
+		}
+	}
+
+	// 이동 활성화
+	MovementComponent->SetMovementMode(MOVE_Walking);
+
+	// 현재 스테이트 변경
+	CurrentPhase = EBossPhase::Phase2;
+
+	// 델리게이트 제거
+	UUPSequenceHandler* SequenceHandler = GetGameInstance()->GetSubsystem<UUPSequenceHandler>();
+	if (SequenceHandler)
+	{
+		ULevelSequencePlayer* CurrentSequence = SequenceHandler->GetCurrentSequence();
+		if (CurrentSequence)
+		{
+			CurrentSequence->OnFinished.RemoveDynamic(this, &AUPPettuCharacter::Phase2Start);
+		}
+	}
 }
 
 void AUPPettuCharacter::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	Super::DeadAnimEnd(Montage, bInterrupted);
+
+	// 승리
+	AUPGameMode* GameMode = Cast<AUPGameMode>(GetWorld()->GetAuthGameMode());
+	check(GameMode != nullptr);
+	GameMode->OnGameClear();
+
+	Destroy();
 }
 
 void AUPPettuCharacter::SetStun()
@@ -124,11 +229,6 @@ void AUPPettuCharacter::SetStun()
 		}
 	}
 	GetMesh()->GetAnimInstance()->OnMontageEnded.AddDynamic(this, &AUPPettuCharacter::StunEnd);
-}
-
-void AUPPettuCharacter::TestFunc()
-{
-	// TODO -> 필요한 기능 테스트용
 }
 
 void AUPPettuCharacter::PlayPatternMontage(UAnimMontage* Montage)
@@ -304,5 +404,3 @@ void AUPPettuCharacter::PlayStiffenAnimation()
 		AnimInstance->Montage_Play(StiffenMontage, 1.0f);
 	}
 }
-
-

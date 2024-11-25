@@ -111,7 +111,7 @@ void AUPMonsterBase::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 
 void AUPMonsterBase::PlayDeadAnimation()
 {
-	
+	// Super::PlayDeadAnimation();
 }
 
 void AUPMonsterBase::DeadFadeOut()
@@ -156,9 +156,9 @@ void AUPMonsterBase::UpdateDissolve()
 	// Dissolve 값을 점진적으로 증가
 	CurrentDissolveValue += 0.05f;
 
-	if (CurrentDissolveValue > 1.0f)
+	if (CurrentDissolveValue > 2.0f)
 	{
-		CurrentDissolveValue = 1.0f;
+		CurrentDissolveValue = 2.0f;
 	}
 
 	// 모든 캐싱된 머티리얼에 Dissolve 값 업데이트
