@@ -46,7 +46,7 @@ void UUPSettingWidget::NativeConstruct()
 	
 	if (ExitGameButton != nullptr)
 	{
-		ExitGameButton->OnClicked.AddDynamic(this, &UUPSettingWidget::OnExitSetting);
+		ExitGameButton->OnClicked.AddDynamic(this, &UUPSettingWidget::OnExitGame);
 	}
 
 	/* Switch */

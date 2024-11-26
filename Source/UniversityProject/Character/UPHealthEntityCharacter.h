@@ -49,7 +49,7 @@ protected:
 	bool bIsDead;
 
 	virtual void SetDead();
-	void PlayDeadAnimation();
+	virtual void PlayDeadAnimation();
 	UFUNCTION()
 	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted);
 	
@@ -69,6 +69,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "게임 시작 시 초기화 될 캐릭터의 스텟"))
 	TObjectPtr<UUPCharacterStatData> CharacterInitalizeStatData;
 
+	bool bIsInvincible;
+	
 public:
 	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return StatComponent.Get(); }
+
+	
 };

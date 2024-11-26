@@ -27,7 +27,7 @@ public:
 	virtual void OnGameClear() override;
 
 	virtual void OnTutorialClear();
-	
+
 	virtual bool IsGameCleared() override;
 	FORCEINLINE virtual bool IsTutorialStage() { return bIsTutorialCleared == true; }
 	virtual void BeginPlay() override;

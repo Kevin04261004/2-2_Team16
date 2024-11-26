@@ -3,7 +3,7 @@
 
 #include "AI/UUPBTDecorator_IsDead.h"
 #include "UPPettuAIController.h"
-#include "Character/UPCharacterBase.h"
+#include "Character/Enemy/UPMonsterBase.h"
 
 
 UUUPBTDecorator_IsDead::UUUPBTDecorator_IsDead(const FObjectInitializer& ObjectInitializer)
@@ -16,9 +16,10 @@ bool UUUPBTDecorator_IsDead::CalculateRawConditionValue(UBehaviorTreeComponent& 
 	auto* const PettuController = Cast<AUPPettuAIController>(OwnerComp.GetAIOwner());
 	if (PettuController)
 	{
-		auto* const EnemyCharacter = Cast<AUPCharacterBase>(PettuController->GetPawn());
+		auto* const EnemyCharacter = Cast<AUPMonsterBase>(PettuController->GetPawn());
 		if (EnemyCharacter)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("IsDead : %d"), EnemyCharacter->IsDead()));
 			return EnemyCharacter->IsDead();
 		}
 	}
