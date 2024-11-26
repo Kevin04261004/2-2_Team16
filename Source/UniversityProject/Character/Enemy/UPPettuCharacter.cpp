@@ -211,7 +211,6 @@ void AUPPettuCharacter::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 	AUPGameMode* GameMode = Cast<AUPGameMode>(GetWorld()->GetAuthGameMode());
 	check(GameMode != nullptr);
 	GameMode->OnGameClear();
-
 	Destroy();
 }
 
@@ -219,7 +218,6 @@ void AUPPettuCharacter::SetStun()
 {
 	Super::SetStun();
 	StatComponent->ApplyStunStack(1);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Stun"));
 	if (MonsterAIController)
 	{
 		UBlackboardComponent* BlackboardComp = MonsterAIController->GetBlackboardComponent();
