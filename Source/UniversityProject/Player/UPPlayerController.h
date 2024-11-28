@@ -36,13 +36,15 @@ protected:
 
 public:
 	void SetUIMode();
+	void SetUIVisibility(ESlateVisibility Visibility);
 	void SetGameMode();
+	void SetHUDVisibility(ESlateVisibility Visibility);
 	FORCEINLINE EInputMode GetInputMode() const { return CurInputMode; }
 	
 protected:
 	EInputMode CurInputMode;
 
-protected:
+public:
 	TObjectPtr<class UUPSettingWidget> SettingWidgetObject;
 	TObjectPtr<class UUPHudWidget> HudWidgetObject;
 };
