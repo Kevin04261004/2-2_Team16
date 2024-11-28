@@ -47,11 +47,6 @@ void AUPPlayerController::SetUIMode()
 	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	SetInputMode(InputModeData);
 
-	// Set visibility
-	SettingWidgetObject->SetVisibility(ESlateVisibility::Visible);
-	HudWidgetObject->SetVisibility(ESlateVisibility::Hidden);
-
-
 	// Ensure mouse cursor is shown
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
@@ -65,6 +60,14 @@ void AUPPlayerController::SetUIMode()
 	
 	// Update input mode state
 	CurInputMode = EInputMode::UI;
+
+	SetUIVisibility(ESlateVisibility::Visible);
+}
+
+void AUPPlayerController::SetUIVisibility(ESlateVisibility Visibility)
+{
+	// Set visibility
+	SettingWidgetObject->SetVisibility(Visibility);
 }
 
 void AUPPlayerController::SetGameMode()
@@ -75,8 +78,14 @@ void AUPPlayerController::SetGameMode()
 	UUPTimeManager* TimeManager = GetGameInstance()->GetSubsystem<UUPTimeManager>();
 	TimeManager->WorldTimeReset();
 	
-	SettingWidgetObject->SetVisibility(ESlateVisibility::Hidden);
-	HudWidgetObject->SetVisibility(ESlateVisibility::Visible);
 	bShowMouseCursor = false;
 	CurInputMode = EInputMode::Game;
+
+	SetUIVisibility(ESlateVisibility::Hidden);
+}
+
+void AUPPlayerController::SetHUDVisibility(ESlateVisibility Visibility)
+{
+	// Set visibility
+	HudWidgetObject->SetVisibility(Visibility);
 }

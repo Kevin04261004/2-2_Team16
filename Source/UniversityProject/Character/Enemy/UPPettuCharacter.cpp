@@ -86,12 +86,16 @@ void AUPPettuCharacter::BeginPlay()
 	}
 
 	/* Set HUD */
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetWorld()->GetFirstPlayerController());
 	if (PlayerController && PlayerController->GetHUD())
 	{
 		UUPHudWidget* HudWidget = Cast<UUPHudWidget>(PlayerController->GetHUD());
 		SetupHUDWidget(HudWidget);
 	}
+	
+	PlayerController->SetGameMode();
+	PlayerController->SetHUDVisibility(ESlateVisibility::Visible);
+	PlayerController->HudWidgetObject->SetPettuHudVisible(true);
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -170,7 +174,7 @@ void AUPPettuCharacter::Phase2Start()
 
 	GetMesh()->SetVisibility(true, true);
 	
-	// BT 변경 및 재시작
+	// BT 변경 m및 재시작
 	if (MonsterAIController)
 	{
 		if (Phase2BehaviorTree)
@@ -248,6 +252,20 @@ void AUPPettuCharacter::PlayPatternMontage(UAnimMontage* Montage)
 void AUPPettuCharacter::PatternMontageEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &AUPPettuCharacter::PatternMontageEnd);
+
+	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetController());
+	if (PlayerController && PlayerController->GetHUD())
+	{
+		UUPHudWidget* HudWidget = Cast<UUPHudWidget>(PlayerController->GetHUD());
+		SetupHUDWidget(HudWidget);
+	}
+
+	if (PlayerController == nullptr)
+	{
+		return;
+	}
+	AUPPlayerController* PlayerController2 = Cast<AUPPlayerController>(PlayerController);
+	PlayerController2->HudWidgetObject->SetPettuHudVisible(true);
 }
 
 void AUPPettuCharacter::AttackHitCheck()
