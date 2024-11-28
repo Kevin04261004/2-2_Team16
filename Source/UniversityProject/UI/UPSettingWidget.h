@@ -25,8 +25,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	USlider* GetSFXVolumeSlider() const { return SFXVolumeSlider; }
 
-	
-
 private:
 	TObjectPtr<AUPPlayerCharacter> PlayerCharacter;
 
@@ -86,4 +84,6 @@ protected:
 
 	UFUNCTION()
 	void OnCameraSpeedChanged(float Value);
+
+	void FindPlayerInWorld();
 };

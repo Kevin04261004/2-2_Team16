@@ -35,14 +35,15 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	void SetUIMode();
+	void SetUIMode(bool bTimeStop = true);
 	void SetGameMode();
 	FORCEINLINE EInputMode GetInputMode() const { return CurInputMode; }
 	
 protected:
 	EInputMode CurInputMode;
 
-protected:
+public:
 	TObjectPtr<class UUPSettingWidget> SettingWidgetObject;
 	TObjectPtr<class UUPHudWidget> HudWidgetObject;
+	TObjectPtr<class UUPSkipTutorialWidget> SkipTutorialWidget; 
 };
