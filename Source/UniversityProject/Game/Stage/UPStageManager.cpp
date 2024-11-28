@@ -131,8 +131,6 @@ void AUPStageManager::TutorialStartStage(int32 StageIndex)
 
 void AUPStageManager::CompleteStage()
 {
-	FString str = FString::Printf(TEXT("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Stage %d Clear!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"), CurrentStageIndex + 1);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, *str);
 	OnStageClear.Broadcast(CurrentStage.SpawnActorKey);
 	
 	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
@@ -168,8 +166,6 @@ void AUPStageManager::SkipTutorial()
 
 void AUPStageManager::TutorialStageClear()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!!!!!!!!!!!!!!!!!!!!!!!!!All Stage Clear!!!!!!!!!!!!!!!!!!!!!!");
-
 	AUPGameMode* GameMode = Cast<AUPGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (GameMode)
 	{

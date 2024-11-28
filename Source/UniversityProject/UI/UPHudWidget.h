@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameData/UPCharacterStat.h"
 #include "UI/UPUserWidget.h"
 #include "UPHudWidget.generated.h"
 
@@ -17,25 +16,28 @@ class UNIVERSITYPROJECT_API UUPHudWidget : public UUPUserWidget
 public:
 	UUPHudWidget(const FObjectInitializer& ObjectInitializer);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "UI")
-	float GetPlayerHpPercent() const;
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "UI")
-	float GetPettuHpPercent() const;
-	float GetPettuHpPercent_Implementation() const;
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerHudWidget(class UUPPlayerHudWidget* InPlayerHudWidget) { PlayerHudWidget = InPlayerHudWidget; }
+	UFUNCTION(BlueprintCallable)
+	void SetPettuHudWidget(class UUPPettuHudWidget* InPettuHudWidget) { PettuHudWidget = InPettuHudWidget; }
+	
 	void SetPlayerCharacter(class AUPPlayerCharacter* InPlayerCharacter) { PlayerCharacter = InPlayerCharacter; }
 	void SetPettuCharacter(class AUPPettuCharacter* InPettuCharacter) { PettuCharacter = InPettuCharacter; }
+	
+	void SetPlayerHudVisible(bool bVisible);
+	void SetPettuHudVisible(bool bVisible);
+
+	
 
 protected:
-	float PlayerHP = 0.0f;
-	float PlayerMaxHP = 0.0f;
-
-	float PettuHP = 0.0f;
-	float PettuMaxHP = 0.0f;
-
 	UPROPERTY()
 	TObjectPtr<class AUPPlayerCharacter> PlayerCharacter;
 
 	UPROPERTY()
 	TObjectPtr<class AUPPettuCharacter> PettuCharacter;
+
+private:
+	TObjectPtr<class UUPPlayerHudWidget> PlayerHudWidget;
+	
+	TObjectPtr<class UUPPettuHudWidget> PettuHudWidget;
 };
