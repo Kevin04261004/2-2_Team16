@@ -16,16 +16,10 @@ void UUPSettingWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	for (TActorIterator<AUPPlayerCharacter> It(GetWorld()); It; ++It)
+	if (PlayerCharacter == nullptr)
 	{
-		AUPPlayerCharacter* player = *It;
-		if (player != nullptr)
-		{
-			PlayerCharacter = player;
-			break;
-		}
+		FindPlayerInWorld();
 	}
-	check (PlayerCharacter != nullptr);
 
 	/* Sound */
 	if (BGMVolumeSlider != nullptr)
@@ -137,5 +131,26 @@ void UUPSettingWidget::OnSFXVolumeChanged(float Value)
 
 void UUPSettingWidget::OnCameraSpeedChanged(float Value)
 {
+	if (PlayerCharacter == nullptr)
+	{
+		FindPlayerInWorld();
+	}
+	if (PlayerCharacter == nullptr)
+	{
+		return;
+	}
 	PlayerCharacter->GetCameraComponent()->CameraSpeed = Value;
+}
+
+void UUPSettingWidget::FindPlayerInWorld()
+{
+	for (TActorIterator<AUPPlayerCharacter> It(GetWorld()); It; ++It)
+	{
+		AUPPlayerCharacter* player = *It;
+		if (player != nullptr)
+		{
+			PlayerCharacter = player;
+			break;
+		}
+	}
 }

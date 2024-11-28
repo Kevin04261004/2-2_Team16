@@ -2,31 +2,30 @@
 
 
 #include "UI/UPHudWidget.h"
+#include "UPPettuHudWidget.h"
+#include "UPPlayerHudWidget.h"
 
-#include "Character/UPPlayerCharacter.h"
-#include "Character/Enemy/UPPettuCharacter.h"
 
 UUPHudWidget::UUPHudWidget(const FObjectInitializer& ObjectInitializer)
 {
 }
 
-float UUPHudWidget::GetPlayerHpPercent_Implementation() const
+void UUPHudWidget::SetPlayerHudVisible(bool bVisible)
 {
-	if (PlayerCharacter)
+	if (PlayerHudWidget)
 	{
-		return PlayerCharacter->GetStat()->GetCurrentHp() / PlayerCharacter->GetStat()->GetBaseStat().MaxHp;
+		PlayerHudWidget->SetVisibility(bVisible ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
 	}
-	return 0.0f;
 }
 
-float UUPHudWidget::GetPettuHpPercent_Implementation() const
+void UUPHudWidget::SetPettuHudVisible(bool bVisible)
 {
-	if (PettuCharacter)
+	if (PettuHudWidget)
 	{
-		return PettuCharacter->GetStat()->GetCurrentHp() / PettuCharacter->GetStat()->GetBaseStat().MaxHp;
+		PettuHudWidget->SetVisibility(bVisible ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
 	}
-	return 0.0f;
 }
+
 
 
 
