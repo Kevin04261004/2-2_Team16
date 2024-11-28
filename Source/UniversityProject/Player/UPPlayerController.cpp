@@ -41,11 +41,11 @@ void AUPPlayerController::BeginPlay()
 		GameMode->StageManager->OnBossStageStart.AddUObject(this, &AUPPlayerController::SetGameMode);
 	}
 
-	SetUIMode();
+	SetUIMode(false);
 	SkipTutorialWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
-void AUPPlayerController::SetUIMode() 
+void AUPPlayerController::SetUIMode(bool bTimeStop) 
 {
 	// Set Input Mode
 	FInputModeUIOnly InputModeData;
@@ -58,10 +58,13 @@ void AUPPlayerController::SetUIMode()
 	DefaultMouseCursor = EMouseCursor::Default;
 
 	// Stop world time
-	UUPTimeManager* TimeManager = GetGameInstance()->GetSubsystem<UUPTimeManager>();
-	if (TimeManager)
+	if (bTimeStop)
 	{
-		TimeManager->WorldTimeStop();
+		UUPTimeManager* TimeManager = GetGameInstance()->GetSubsystem<UUPTimeManager>();
+		if (TimeManager)
+		{
+			TimeManager->WorldTimeStop();
+		}	
 	}
 	
 	// Update input mode state

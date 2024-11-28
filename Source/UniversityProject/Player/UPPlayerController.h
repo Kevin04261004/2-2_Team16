@@ -35,7 +35,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	void SetUIMode();
+	void SetUIMode(bool bTimeStop = true);
 	void SetGameMode();
 	FORCEINLINE EInputMode GetInputMode() const { return CurInputMode; }
 	
