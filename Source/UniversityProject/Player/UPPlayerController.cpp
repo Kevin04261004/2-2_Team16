@@ -7,6 +7,7 @@
 #include "Game/UPGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Manager/UPTimeManager.h"
+#include "UI/UPSkipTutorialWidget.h"
 
 AUPPlayerController::AUPPlayerController()
 {
@@ -32,11 +33,16 @@ void AUPPlayerController::BeginPlay()
 	{
 		SettingWidgetObject = GameMode->SettingWidgetObject;
 		HudWidgetObject = GameMode->HudWidgetObject;
+		SkipTutorialWidget = GameMode->SkipTutorialObject;
 		check(SettingWidgetObject != nullptr);
 		check(HudWidgetObject != nullptr);
+		check(SkipTutorialWidget != nullptr);
 
 		GameMode->StageManager->OnBossStageStart.AddUObject(this, &AUPPlayerController::SetGameMode);
 	}
+
+	SetUIMode();
+	SkipTutorialWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void AUPPlayerController::SetUIMode() 
@@ -60,16 +66,7 @@ void AUPPlayerController::SetUIMode()
 	
 	// Update input mode state
 	CurInputMode = EInputMode::UI;
-
-	SetUIVisibility(ESlateVisibility::Visible);
 }
-
-void AUPPlayerController::SetUIVisibility(ESlateVisibility Visibility)
-{
-	// Set visibility
-	SettingWidgetObject->SetVisibility(Visibility);
-}
-
 void AUPPlayerController::SetGameMode()
 {
 	FInputModeGameOnly GameOnlyInputMode;
@@ -80,12 +77,5 @@ void AUPPlayerController::SetGameMode()
 	
 	bShowMouseCursor = false;
 	CurInputMode = EInputMode::Game;
-
-	SetUIVisibility(ESlateVisibility::Hidden);
-}
-
-void AUPPlayerController::SetHUDVisibility(ESlateVisibility Visibility)
-{
-	// Set visibility
-	HudWidgetObject->SetVisibility(Visibility);
+	SettingWidgetObject->SetVisibility(ESlateVisibility::Hidden);
 }

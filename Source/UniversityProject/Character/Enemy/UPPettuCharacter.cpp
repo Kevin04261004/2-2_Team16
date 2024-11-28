@@ -94,8 +94,9 @@ void AUPPettuCharacter::BeginPlay()
 	}
 	
 	PlayerController->SetGameMode();
-	PlayerController->SetHUDVisibility(ESlateVisibility::Visible);
+	PlayerController->HudWidgetObject->SetVisibility(ESlateVisibility::Visible);
 	PlayerController->HudWidgetObject->SetPettuHudVisible(true);
+	PlayerController->HudWidgetObject->SetPlayerHudVisible(true);
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -216,6 +217,18 @@ void AUPPettuCharacter::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 	check(GameMode != nullptr);
 	GameMode->OnGameClear();
 	Destroy();
+
+	/* Set HUD */
+	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetWorld()->GetFirstPlayerController());
+	if (PlayerController && PlayerController->GetHUD())
+	{
+		UUPHudWidget* HudWidget = Cast<UUPHudWidget>(PlayerController->GetHUD());
+		SetupHUDWidget(HudWidget);
+	}
+	
+	PlayerController->SetGameMode();
+	PlayerController->HudWidgetObject->SetPettuHudVisible(false);
+	PlayerController->HudWidgetObject->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AUPPettuCharacter::SetStun()

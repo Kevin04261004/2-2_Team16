@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Player/UPPlayerController.h"
 #include "UI/UPHudWidget.h"
+#include "UI/UPSkipTutorialWidget.h"
 
 AUPGameMode::AUPGameMode()
 {
@@ -77,6 +78,15 @@ void AUPGameMode::BeginPlay()
 		SettingWidgetObject->SetVisibility(ESlateVisibility::Hidden);
 	}
 
+	if (SkipTutorial != nullptr)
+	{
+		UUPUserWidget* SkipTutorialWDG = CreateWidget<UUPUserWidget>(GetWorld(), SkipTutorial);
+		SkipTutorialObject = Cast<UUPSkipTutorialWidget>(SkipTutorialWDG);
+		check(SkipTutorialWDG != nullptr);
+		SkipTutorialWDG->AddToViewport();
+		SkipTutorialObject->SetVisibility(ESlateVisibility::Hidden);
+	}
+	
 	StageManager = GetWorld()->SpawnActor<AUPStageManager>(StageManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);
 	check(StageManager != nullptr);
 }

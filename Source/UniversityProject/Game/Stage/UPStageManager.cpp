@@ -40,8 +40,6 @@ void AUPStageManager::BeginPlay()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Actor Spawner Not Found");
 	}
-
-	TutorialStartStage(0);
 }
 
 void AUPStageManager::InitializeTutorialWidget()
@@ -54,7 +52,7 @@ void AUPStageManager::InitializeTutorialWidget()
 	TutorialWidget = CreateWidget<UUPTutorialWidget>(GetWorld(), TutorialWidgetClass);
 	if (TutorialWidget)
 	{
-		TutorialWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
+		TutorialWidget->SetVisibility(ESlateVisibility::Hidden);
 
 		// Focusable 비활성화
 		TutorialWidget->SetIsFocusable(false);
@@ -98,7 +96,7 @@ void AUPStageManager::TutorialStartStage(int32 StageIndex)
 		return;
 	}
 	TutorialWidget->SetIsEnabled(true);
-	TutorialWidget->SetVisibility(ESlateVisibility::Visible);
+	TutorialWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
 	CurrentStageIndex = StageIndex;
 	if (StageTutorialData->TutorialStages.IsValidIndex(CurrentStageIndex))
 	{

@@ -70,13 +70,21 @@ void UUPSettingWidget::NativeConstruct()
 
 void UUPSettingWidget::OnExitSetting()
 {
-	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetWorld()->GetFirstPlayerController());
-	if (PlayerController == nullptr)
+	FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+	if (CurrentLevelName == TEXT("TitleLevel"))
 	{
-		return;
+		SetVisibility(ESlateVisibility::Hidden);
 	}
-	
-	PlayerController->SetGameMode();
+	else
+	{
+		AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetWorld()->GetFirstPlayerController());
+		if (PlayerController == nullptr)
+		{
+			return;
+		}
+		PlayerController->SetGameMode();
+	}
+
 }
 
 void UUPSettingWidget::OnExitGame()

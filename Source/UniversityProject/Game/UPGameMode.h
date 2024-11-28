@@ -53,6 +53,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Game)
 	TObjectPtr<UUPSettingWidget> SettingWidgetObject;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Game)
+	TSubclassOf<UUPUserWidget> SkipTutorial;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Game)
+	TObjectPtr<UUPSkipTutorialWidget> SkipTutorialObject;
+	
 	UPROPERTY()
 	TSubclassOf<AUPStageManager> StageManagerClass;
 	UPROPERTY()
