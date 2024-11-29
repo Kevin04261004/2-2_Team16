@@ -122,6 +122,7 @@ void UUPInputHandlerComponent::SettingInputAction(const FInputActionValue& Value
 		return;
 	}
 	PlayerController->SetUIMode();
+	PlayerController->SettingWidgetObject->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UUPInputHandlerComponent::TutorialSkipInputAction(const FInputActionValue& Value)
