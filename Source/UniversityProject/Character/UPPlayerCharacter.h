@@ -48,7 +48,7 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
 	virtual void SetDead() override;
-
+	virtual void SetActorHiddenInGame(bool bNewHidden) override;
 protected:
 	TObjectPtr<AUPPlayerController> PlayerController;
 	
