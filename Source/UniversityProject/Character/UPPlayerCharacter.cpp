@@ -81,7 +81,7 @@ void AUPPlayerCharacter::BeginPlay()
 	InputHandler->SetMappingContext(PlayerController);
 	Weapon->OnWeaponHit.AddUObject(CameraComponent, &UUPCameraComponent::HitShakeCamera);
 
-	ConstCameraZ = CameraBoom->SocketOffset.Z;
+	//ConstCameraZ = CameraBoom->SocketOffset.Z;
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -91,7 +91,7 @@ void AUPPlayerCharacter::Tick(float DeltaSeconds)
 	StateManager->UpdateState();
 	SetLookAtAlpha(DeltaSeconds);
 
-	CameraBoom->SocketOffset.Z = CameraStartZ - GetActorLocation().Z + ConstCameraZ;
+	// CameraBoom->SocketOffset.Z = CameraStartZ - GetActorLocation().Z + ConstCameraZ;
 }
 
 void AUPPlayerCharacter::SetDead()
