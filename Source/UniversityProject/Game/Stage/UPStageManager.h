@@ -55,7 +55,9 @@ public:
 	
 	FTimerHandle NextStageTimerHandle;
 
+	UFUNCTION(BlueprintCallable)
 	void SkipTutorial();
+	
 	void StartNextStage();
 	void TutorialStartStage(int32 StageIndex);
 private:

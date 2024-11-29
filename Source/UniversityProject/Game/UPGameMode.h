@@ -61,7 +61,7 @@ public:
 	
 	UPROPERTY()
 	TSubclassOf<AUPStageManager> StageManagerClass;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<AUPStageManager> StageManager;
 
 };

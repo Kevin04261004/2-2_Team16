@@ -103,6 +103,16 @@ void AUPPlayerCharacter::SetDead()
 	UPGameMode->OnPlayerDead();
 }
 
+void AUPPlayerCharacter::SetActorHiddenInGame(bool bNewHidden)
+{
+	Super::SetActorHiddenInGame(bNewHidden);
+
+	if (Weapon != nullptr)
+	{
+		Weapon->SetActorHiddenInGame(bNewHidden);
+	}
+}
+
 void AUPPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
