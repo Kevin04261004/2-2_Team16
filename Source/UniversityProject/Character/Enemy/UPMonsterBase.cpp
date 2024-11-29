@@ -4,6 +4,7 @@
 #include "Character/Enemy/UPMonsterBase.h"
 
 #include "BrainComponent.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Character/Weapon/UPPettuWeapon.h"
 #include "Character/Weapon/UPWeaponBase.h"
 #include "Skill/UPPettuSkillData.h"
@@ -21,6 +22,7 @@ void AUPMonsterBase::BeginPlay()
 	Super::BeginPlay();
 	CreateDefaultObjectSkill();
 	MovementComponent->SetMovementMode(MOVE_Walking);
+	MonsterAIController = Cast<AUPPettuAIController>(GetController());
 }
 
 void AUPMonsterBase::Tick(float DeltaSeconds)
@@ -76,9 +78,10 @@ void AUPMonsterBase::SkillAttack(EPettuSkillType SkillType)
 
 void AUPMonsterBase::SetDead()
 {
-	//Super::SetDead();
-	SetActorEnableCollision(false);
-	bIsDead = true;
+	Super::SetDead();
+	//StageManager->EvaluateCondition(DiedCondition);
+	//SetActorEnableCollision(false);
+	//bIsDead = true;
 	MovementComponent->DisableMovement();
 	if (MonsterAIController)
 	{
@@ -86,14 +89,29 @@ void AUPMonsterBase::SetDead()
 		{
 			MonsterAIController->BrainComponent->StopLogic(TEXT("Dead"));
 		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("BrainComponent is nullptr"));
+		}
+		UBehaviorTreeComponent* BTComp = Cast<UBehaviorTreeComponent>(MonsterAIController->BrainComponent);
+		if (BTComp)
+		{
+			BTComp->StopTree(EBTStopMode::Forced);
+		}
 		MonsterAIController->StopMovement();
 	}
+	//Weapon->Destroy();
 }
 
 void AUPMonsterBase::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	Super::DeadAnimEnd(Montage, bInterrupted);
 	
+}
+
+void AUPMonsterBase::PlayDeadAnimation()
+{
+	// Super::PlayDeadAnimation();
 }
 
 void AUPMonsterBase::DeadFadeOut()
@@ -138,9 +156,9 @@ void AUPMonsterBase::UpdateDissolve()
 	// Dissolve 값을 점진적으로 증가
 	CurrentDissolveValue += 0.05f;
 
-	if (CurrentDissolveValue > 1.0f)
+	if (CurrentDissolveValue > 2.0f)
 	{
-		CurrentDissolveValue = 1.0f;
+		CurrentDissolveValue = 2.0f;
 	}
 
 	// 모든 캐싱된 머티리얼에 Dissolve 값 업데이트

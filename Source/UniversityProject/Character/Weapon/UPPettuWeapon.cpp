@@ -14,7 +14,7 @@ AUPPettuWeapon::AUPPettuWeapon()
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SphereCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
 	SphereCollision->SetCollisionResponseToChannel(CCHANEL_UPACTION, ECR_Overlap);
-	SphereCollision->SetHiddenInGame(false);
+	SphereCollision->SetHiddenInGame(true);
 	
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AUPPettuWeapon::OnWeaponOverlapBegin);
 	

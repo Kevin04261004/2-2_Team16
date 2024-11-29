@@ -16,8 +16,15 @@ void UUPSequenceHandler::PlaySequence(ULevelSequence* Sequence)
 
 	FMovieSceneSequencePlaybackSettings PlaybackSettings;
 	PlaybackSettings.bAutoPlay = false;
-
+	PlaybackSettings.bHidePlayer = true;
+	PlaybackSettings.bDisableMovementInput = true;
+	PlaybackSettings.bDisableLookAtInput = true;
 	SetSequenceMode();
+	
+	if (CurSequencePlayer)
+	{
+		CurSequencePlayer->OnFinished.RemoveAll(this);
+	}
 	
 	// ULevelSequencePlayer 생성
 	CurSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
@@ -34,6 +41,7 @@ void UUPSequenceHandler::PlaySequence(ULevelSequence* Sequence)
 
 		CurSequencePlayer->OnFinished.AddDynamic(this, &UUPSequenceHandler::EnableCharacterMovement);
 		CurSequencePlayer->OnFinished.AddDynamic(this, &UUPSequenceHandler::EnableHiddenUI);
+		CurSequencePlayer->OnFinished.AddDynamic(this, &UUPSequenceHandler::EnableInput);
 	}
 	else
 	{
@@ -68,6 +76,7 @@ void UUPSequenceHandler::SetSequenceMode()
 {
 	DisableCharacterMovement();
 	HideUI();
+	DisableInput();
 
 	// TODO: 
 }
@@ -127,4 +136,31 @@ void UUPSequenceHandler::EnableHiddenUI()
 	}
 
 	HiddenWidgets.Empty();
+}
+
+void UUPSequenceHandler::EnableInput()
+{
+	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
+	{
+		if (APawn* Pawn = PC->GetPawn())
+		{
+			PC->SetInputMode(FInputModeGameOnly()); // 게임 입력 모드로 전환
+			PC->bShowMouseCursor = false;          // 마우스 커서 숨김
+			Pawn->EnableInput(PC);
+		}
+	}
+}
+
+void UUPSequenceHandler::DisableInput()
+{
+	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
+	{
+		if (APawn* Pawn = PC->GetPawn())
+		{
+			PC->FlushPressedKeys(); // 이전 입력 초기화
+			PC->SetInputMode(FInputModeUIOnly()); // UI 입력 모드로 전환
+			PC->bShowMouseCursor = true;         // 마우스 커서 표시
+			Pawn->DisableInput(PC);
+		}
+	}
 }

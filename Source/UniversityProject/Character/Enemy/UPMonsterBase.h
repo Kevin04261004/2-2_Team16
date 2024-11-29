@@ -69,6 +69,8 @@ public:
 
 	virtual void DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted) override;
 
+	virtual void PlayDeadAnimation() override;
+
 	void DeadFadeOut();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, Meta = (AllowPrivate))

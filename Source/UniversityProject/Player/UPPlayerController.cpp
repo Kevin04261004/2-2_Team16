@@ -7,6 +7,7 @@
 #include "Game/UPGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Manager/UPTimeManager.h"
+#include "UI/UPSkipTutorialWidget.h"
 
 AUPPlayerController::AUPPlayerController()
 {
@@ -32,14 +33,19 @@ void AUPPlayerController::BeginPlay()
 	{
 		SettingWidgetObject = GameMode->SettingWidgetObject;
 		HudWidgetObject = GameMode->HudWidgetObject;
+		SkipTutorialWidget = GameMode->SkipTutorialObject;
 		check(SettingWidgetObject != nullptr);
 		check(HudWidgetObject != nullptr);
+		check(SkipTutorialWidget != nullptr);
 
 		GameMode->StageManager->OnBossStageStart.AddUObject(this, &AUPPlayerController::SetGameMode);
 	}
+
+	SetUIMode(false);
+	SkipTutorialWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
-void AUPPlayerController::SetUIMode() 
+void AUPPlayerController::SetUIMode(bool bTimeStop) 
 {
 	// Set Input Mode
 	FInputModeUIOnly InputModeData;
@@ -47,26 +53,23 @@ void AUPPlayerController::SetUIMode()
 	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	SetInputMode(InputModeData);
 
-	// Set visibility
-	SettingWidgetObject->SetVisibility(ESlateVisibility::Visible);
-	HudWidgetObject->SetVisibility(ESlateVisibility::Hidden);
-
-
 	// Ensure mouse cursor is shown
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
 
 	// Stop world time
-	UUPTimeManager* TimeManager = GetGameInstance()->GetSubsystem<UUPTimeManager>();
-	if (TimeManager)
+	if (bTimeStop)
 	{
-		TimeManager->WorldTimeStop();
+		UUPTimeManager* TimeManager = GetGameInstance()->GetSubsystem<UUPTimeManager>();
+		if (TimeManager)
+		{
+			TimeManager->WorldTimeStop();
+		}	
 	}
 	
 	// Update input mode state
 	CurInputMode = EInputMode::UI;
 }
-
 void AUPPlayerController::SetGameMode()
 {
 	FInputModeGameOnly GameOnlyInputMode;
@@ -75,8 +78,7 @@ void AUPPlayerController::SetGameMode()
 	UUPTimeManager* TimeManager = GetGameInstance()->GetSubsystem<UUPTimeManager>();
 	TimeManager->WorldTimeReset();
 	
-	SettingWidgetObject->SetVisibility(ESlateVisibility::Hidden);
-	HudWidgetObject->SetVisibility(ESlateVisibility::Visible);
 	bShowMouseCursor = false;
 	CurInputMode = EInputMode::Game;
+	SettingWidgetObject->SetVisibility(ESlateVisibility::Hidden);
 }

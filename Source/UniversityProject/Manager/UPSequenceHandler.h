@@ -34,7 +34,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Cinematic")
 	void EnableHiddenUI();
 	UFUNCTION(BlueprintCallable, Category = "Cinematic")
+	void EnableInput();
+	UFUNCTION(BlueprintCallable, Category = "Cinematic")
+	void DisableInput();
+	UFUNCTION(BlueprintCallable, Category = "Cinematic")
 	void HideUI();
+
+	FORCEINLINE ULevelSequencePlayer* GetCurrentSequence() { return CurSequencePlayer; } 
 private:
 	// 현재 재생 중인 시퀀스 플레이어
 	UPROPERTY()

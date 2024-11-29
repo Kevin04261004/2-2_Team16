@@ -27,7 +27,7 @@ public:
 	virtual void OnGameClear() override;
 
 	virtual void OnTutorialClear();
-	
+
 	virtual bool IsGameCleared() override;
 	FORCEINLINE virtual bool IsTutorialStage() { return bIsTutorialCleared == true; }
 	virtual void BeginPlay() override;
@@ -53,9 +53,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Game)
 	TObjectPtr<UUPSettingWidget> SettingWidgetObject;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Game)
+	TSubclassOf<UUPUserWidget> SkipTutorial;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Game)
+	TObjectPtr<UUPSkipTutorialWidget> SkipTutorialObject;
+	
 	UPROPERTY()
 	TSubclassOf<AUPStageManager> StageManagerClass;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<AUPStageManager> StageManager;
 
 };

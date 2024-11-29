@@ -27,5 +27,6 @@ private:
 	UPROPERTY()
 	UDataTable* ActorSpawnDataTable;
 
+	UPROPERTY()
 	TArray<AActor*> SpawnedActors;
 };
