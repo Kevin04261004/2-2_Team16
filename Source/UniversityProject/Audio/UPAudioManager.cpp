@@ -84,8 +84,20 @@ void UUPAudioManager::SetBGMVolume(float volume)
 
 	if (ActivatedBGMSound != nullptr)
 	{
-		ActivatedBGMSound->SetVolumeMultiplier(BGMVolume);
+		if (FMath::IsNearlyZero(BGMVolume)) 
+		{
+			ActivatedBGMSound->SetPaused(true);
+		}
+		else 
+		{
+			if (ActivatedBGMSound->bIsPaused)
+			{
+				ActivatedBGMSound->SetPaused(false);
+			}
+			ActivatedBGMSound->SetVolumeMultiplier(BGMVolume);
+		}
 	}
 }
+
 
 
