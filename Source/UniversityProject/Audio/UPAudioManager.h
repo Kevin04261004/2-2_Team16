@@ -32,6 +32,7 @@ public:
 
 protected:
 	TObjectPtr<class UUPAudioManagerData> AudioManagerData;
+	
 public:
 	void PlaySoundAtLocation(ESFXAudioType sfx, FVector location);
 	void PlaySoundAtLocation(USoundBase* sfx, FVector location);
@@ -54,4 +55,7 @@ public:
 private:
 	float SFXVolume;
 	float BGMVolume;
+
+public:
+	void CollectAllSounds(UWorld* World);
 };

@@ -3,9 +3,13 @@
 
 #include "Audio/UPAudioManager.h"
 
+#include "EngineUtils.h"
 #include "UPAudioBaseInfo.h"
 #include "Components/AudioComponent.h"
 #include "Audio/UPAudioManagerData.h"
+#include "Sound/AmbientSound.h"
+
+class AAmbientSound;
 
 UUPAudioManager::UUPAudioManager()
 {
@@ -99,5 +103,28 @@ void UUPAudioManager::SetBGMVolume(float volume)
 	}
 }
 
+void UUPAudioManager::CollectAllSounds(UWorld* World)
+{
+	if (!World)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("World is null. Cannot collect AmbientSounds."));
+		return;
+	}
 
-
+	// 월드 내 모든 AmbientSound 액터 순회
+	for (TActorIterator<AAmbientSound> ActorItr(World); ActorItr; ++ActorItr)
+	{
+		AAmbientSound* AmbientSound = *ActorItr;
+		if (AmbientSound && AmbientSound->GetAudioComponent())
+		{
+			UAudioComponent* AudioComponent = AmbientSound->GetAudioComponent();
+			if (AudioComponent && AudioComponent->Sound)
+			{
+				// AmbientSound의 사운드 추가
+				ActivatedSFXSounds.Add(AudioComponent);
+				UE_LOG(LogTemp, Log, TEXT("Found AmbientSound: %s"), *AudioComponent->Sound->GetName());
+			}
+		}
+	}
+	UE_LOG(LogTemp, Log, TEXT("Collected %d sounds."), ActivatedSFXSounds.Num());
+}

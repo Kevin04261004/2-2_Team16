@@ -3,6 +3,7 @@
 
 #include "UPGameMode.h"
 
+#include "Audio/UPAudioManager.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/UPPlayerController.h"
@@ -89,4 +90,7 @@ void AUPGameMode::BeginPlay()
 	
 	StageManager = GetWorld()->SpawnActor<AUPStageManager>(StageManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);
 	check(StageManager != nullptr);
+
+	UUPAudioManager* AudioManager = GetGameInstance()->GetSubsystem<UUPAudioManager>();
+	AudioManager->CollectAllSounds(GetWorld());
 }
