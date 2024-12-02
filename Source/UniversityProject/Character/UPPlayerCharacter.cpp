@@ -21,6 +21,7 @@
 #include "Skill/Player/UPSkillManagerComponent.h"
 #include "State/UPPlayerTakeDownState.h"
 #include "UI/UPHudWidget.h"
+#include "GameFramework/HUD.h"
 #include "Weapon/UPPlayerCharacterWeapon.h"
 
 AUPPlayerCharacter::AUPPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -80,6 +81,15 @@ void AUPPlayerCharacter::BeginPlay()
 
 	InputHandler->SetMappingContext(PlayerController);
 	Weapon->OnWeaponHit.AddUObject(CameraComponent, &UUPCameraComponent::HitShakeCamera);
+
+	/* Set HUD */
+	if (PlayerController && PlayerController->GetHUD())
+	{
+		UUPHudWidget* HudWidget = Cast<UUPHudWidget>(PlayerController->GetHUD());
+		SetupHUDWidget(HudWidget);
+	}
+	PlayerController->HudWidgetObject->SetVisibility(ESlateVisibility::Visible);
+	PlayerController->HudWidgetObject->SetPlayerHudVisible(true);
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)
@@ -97,6 +107,14 @@ void AUPPlayerCharacter::SetDead()
 	DisableInput(PlayerController);
 	IUPGameInterface* UPGameMode = Cast<IUPGameInterface>(GetWorld()->GetAuthGameMode());
 	UPGameMode->OnPlayerDead();
+
+	/* Set HUD */
+	if (PlayerController && PlayerController->GetHUD())
+	{
+		UUPHudWidget* HudWidget = Cast<UUPHudWidget>(PlayerController->GetHUD());
+		SetupHUDWidget(HudWidget);
+	}
+	PlayerController->HudWidgetObject->SetPlayerHudVisible(false);
 }
 
 void AUPPlayerCharacter::SetActorHiddenInGame(bool bNewHidden)
