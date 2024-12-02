@@ -17,6 +17,9 @@ AUPHealthEntityCharacter::AUPHealthEntityCharacter(const FObjectInitializer& Obj
 
 	DiedCondition = EStageConditionType::KillHealthMeshObject;
 	bIsInvincible = false;
+
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshForVisible"));
+	StaticMeshComponent->SetupAttachment(RootComponent);
 }
 
 void AUPHealthEntityCharacter::BeginPlay()

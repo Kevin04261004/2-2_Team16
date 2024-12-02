@@ -9,7 +9,6 @@
 #include "Character/UPCharacterBase.h"
 #include "Interface/UPAnimationAttackCheckInterface.h"
 #include "Interface/UPCharacterHUDInterface.h"
-#include "Interface/UPPettuPunchTrailInterface.h"
 #include "UPPettuCharacter.generated.h"
 
 UENUM(BlueprintType)
@@ -21,7 +20,7 @@ enum class EBossPhase : uint8
 };
 
 UCLASS()
-class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPMonsterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterHUDInterface, public IUPPettuPunchTrailInterface
+class UNIVERSITYPROJECT_API AUPPettuCharacter : public AUPMonsterBase, public IUPAnimationAttackCheckInterface, public IUPCharacterHUDInterface
 {
 	GENERATED_BODY()
 public:
@@ -88,24 +87,7 @@ protected:
 	
 	UFUNCTION()
 	void StunCheck(float Hp);
-
-/* Punch */
-protected:
-	virtual void PunchTrailOn(EPunchTrailType type) override;
-	virtual void PunchTrailOff(EPunchTrailType type) override;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects")
-	TObjectPtr<UNiagaraComponent> LeftHandEffect;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects")
-	TObjectPtr<UNiagaraComponent> RightHandEffect;
-	
-/* Effects */
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Init", Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UNiagaraSystem> NiagaraSystem;
-
-
 /* phase */
 protected:
 	UPROPERTY()

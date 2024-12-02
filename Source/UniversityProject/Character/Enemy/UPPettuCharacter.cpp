@@ -59,31 +59,6 @@ void AUPPettuCharacter::BeginPlay()
 	{
 		PlayerCharacter->SetPettuCharacter(this);
 	}
-	
-	if (NiagaraSystem != nullptr && GetMesh() != nullptr)
-	{
-		LeftHandEffect = UNiagaraFunctionLibrary::SpawnSystemAttached(
-			NiagaraSystem,                        // Niagara 시스템
-			GetMesh(),
-			TEXT("LeftSocket"),              // 소켓 이름
-			FVector::ZeroVector,                 // 위치 (소켓 기준)
-			FRotator::ZeroRotator,               // 회전 (소켓 기준)
-			EAttachLocation::SnapToTarget,       // 소켓 기준 위치 설정
-			false                                 // AutoDestroy 설정
-		);
-		LeftHandEffect->Deactivate();
-		
-		RightHandEffect = UNiagaraFunctionLibrary::SpawnSystemAttached(
-		NiagaraSystem,                        // Niagara 시스템
-		GetMesh(),
-		TEXT("RightSocket"),              // 소켓 이름
-		FVector::ZeroVector,                 // 위치 (소켓 기준)
-		FRotator::ZeroRotator,               // 회전 (소켓 기준)
-		EAttachLocation::SnapToTarget,       // 소켓 기준 위치 설정
-		false                                 // AutoDestroy 설정
-		);
-		RightHandEffect->Deactivate();
-	}
 
 	/* Set HUD */
 	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetWorld()->GetFirstPlayerController());
@@ -92,11 +67,8 @@ void AUPPettuCharacter::BeginPlay()
 		UUPHudWidget* HudWidget = Cast<UUPHudWidget>(PlayerController->GetHUD());
 		SetupHUDWidget(HudWidget);
 	}
-	
-	PlayerController->SetGameMode();
 	PlayerController->HudWidgetObject->SetVisibility(ESlateVisibility::Visible);
 	PlayerController->HudWidgetObject->SetPettuHudVisible(true);
-	PlayerController->HudWidgetObject->SetPlayerHudVisible(true);
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -225,10 +197,7 @@ void AUPPettuCharacter::DeadAnimEnd(UAnimMontage* Montage, bool bInterrupted)
 		UUPHudWidget* HudWidget = Cast<UUPHudWidget>(PlayerController->GetHUD());
 		SetupHUDWidget(HudWidget);
 	}
-	
-	PlayerController->SetGameMode();
 	PlayerController->HudWidgetObject->SetPettuHudVisible(false);
-	PlayerController->HudWidgetObject->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AUPPettuCharacter::SetStun()
@@ -339,31 +308,6 @@ void AUPPettuCharacter::StunCheck(float Hp)
 		//StatComponent->HealHp(HealingHp);
 	}
 }
-
-void AUPPettuCharacter::PunchTrailOn(EPunchTrailType type)
-{
-	if (type == EPunchTrailType::Left)
-	{
-		LeftHandEffect->Activate(true);
-	}
-	else if (type == EPunchTrailType::Right)
-	{
-		LeftHandEffect->Activate(true);
-	}
-}
-
-void AUPPettuCharacter::PunchTrailOff(EPunchTrailType type)
-{
-	if (type == EPunchTrailType::Left)
-	{
-		LeftHandEffect->Deactivate();
-	}
-	else if (type == EPunchTrailType::Right)
-	{
-		LeftHandEffect->Deactivate();
-	}
-}
-
 
 void AUPPettuCharacter::StunEnd(UAnimMontage* Montage, bool bInterrupted)
 {

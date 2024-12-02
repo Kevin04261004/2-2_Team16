@@ -74,5 +74,9 @@ protected:
 public:
 	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return StatComponent.Get(); }
 
-	
+
+/* Just for visible */
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UStaticMeshComponent* StaticMeshComponent;
 };
