@@ -68,6 +68,8 @@ void AUPGameMode::BeginPlay()
 		check(Hud != nullptr);
 		Hud->AddToViewport();
 		HudWidgetObject->SetVisibility(ESlateVisibility::Hidden);
+		HudWidgetObject->SetPlayerHudVisible(false);
+		HudWidgetObject->SetPettuHudVisible(false);
 	}
 
 	if (SettingWidget != nullptr)
