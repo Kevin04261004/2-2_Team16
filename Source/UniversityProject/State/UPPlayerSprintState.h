@@ -6,6 +6,7 @@
 #include "Interface/UPBaseAttackableStateInterface.h"
 #include "Interface/UPDashableStateInterface.h"
 #include "Interface/UPJumpableStateInterface.h"
+#include "Interface/UPUppercutableStateInterface.h"
 #include "State/UPPlayerBaseState.h"
 #include "UPPlayerSprintState.generated.h"
 
@@ -13,7 +14,7 @@
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerSprintState : public UUPPlayerBaseState, public IUPJumpableStateInterface, public IUPDashableStateInterface, public IUPBaseAttackableStateInterface
+class UNIVERSITYPROJECT_API UUPPlayerSprintState : public UUPPlayerBaseState, public IUPJumpableStateInterface, public IUPDashableStateInterface, public IUPBaseAttackableStateInterface, public IUPUppercutableStateInterface
 {
 	GENERATED_BODY()
 		
@@ -31,4 +32,5 @@ protected:
 	virtual void TryJump() override;
 	virtual void TryDash() override;
 	virtual void TryBaseAttack() override;
+	virtual void TryUpperCut() override;
 };
