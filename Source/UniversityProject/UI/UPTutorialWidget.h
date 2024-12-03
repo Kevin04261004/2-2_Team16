@@ -56,9 +56,21 @@ public:
 	// 작업 초기화
 	void ClearAll();
 
-	void SetDescription(const FString& NewDescription) const;
+	void SetDescription(const FString& NewDescription);
 	void SetTaskVisibleNon() const;
 
+	UPROPERTY()
+	FString TargetDescription;
+
+	UPROPERTY()
+	FString CurrentTypedText;
+
+	FTimerHandle TypingTimerHandle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	float TypingTime = 0.05f;
+	
+	void StartTypingEffect(const FString& NewDescription);
+	void UpdateTypingEffect();
 private:
 	// 동적으로 생성된 작업 위젯 목록
 	TArray<UUPConditionalCellWidget*> CellWidgets;
