@@ -31,8 +31,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Lerp")
 	UCurveFloat* LerpCurve;
 private:
-	FVector StartLocation; // 캐릭터의 초기 위치
-	FVector TargetLocation;
-	float StartTime;
-	float TotalDuration;
+	//FVector StartLocation; // 캐릭터의 초기 위치
+	//FVector TargetLocation;
+	//float StartTime;
+	//float TotalDuration;
 };
