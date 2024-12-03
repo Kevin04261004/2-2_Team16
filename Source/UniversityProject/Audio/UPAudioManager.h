@@ -18,6 +18,8 @@ enum class EBGMAudioType : uint8
 {
 	Title,
 	Fight,
+	BossPhase1,
+	BossPhase2,
 };
 
 /**

@@ -14,6 +14,7 @@
 #include "UI/UPHudWidget.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Audio/UPAudioManager.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Character/UPPlayerCharacter.h"
 #include "Game/UPGameMode.h"
@@ -69,6 +70,12 @@ void AUPPettuCharacter::BeginPlay()
 	}
 	PlayerController->HudWidgetObject->SetVisibility(ESlateVisibility::Visible);
 	PlayerController->HudWidgetObject->SetPettuHudVisible(true);
+
+	UUPAudioManager* AudioManager = GetGameInstance()->GetSubsystem<UUPAudioManager>();
+	if (AudioManager != nullptr)
+	{
+		AudioManager->PlayBGM(EBGMAudioType::BossPhase1);
+	}
 }
 
 float AUPPettuCharacter::UPTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -129,6 +136,13 @@ void AUPPettuCharacter::Phase2Start()
 {
 	bIsInvincible = false;
 
+	// BGM Set
+	UUPAudioManager* AudioManager = GetGameInstance()->GetSubsystem<UUPAudioManager>();
+	if (AudioManager != nullptr)
+	{
+		AudioManager->PlayBGM(EBGMAudioType::BossPhase2);
+	}
+	
 	// 머티리얼 세팅
 	UMaterialInterface* OverlayMaterial = Phase2OutLineMaterial;
         
