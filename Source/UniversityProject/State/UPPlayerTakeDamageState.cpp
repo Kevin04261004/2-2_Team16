@@ -66,7 +66,7 @@ void UUPPlayerTakeDamageState::SkillFinished()
 	{
 		if (InputHandler->IsMoving())
 		{
-			ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
+			ChangeState(EPlayerStateType::Sprint);
 		}
 		else
 		{

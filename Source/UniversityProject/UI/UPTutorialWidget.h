@@ -23,6 +23,10 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* TutorialCanvas;
 
+	// Description 패널
+	UPROPERTY(meta = (BindWidget))
+	class UCanvasPanel* DescriptionCanvas;
+	
 	// 기본 캔버스 크기
 	UPROPERTY(EditDefaultsOnly, Category = "Layout")
 	FVector2D BaseCanvasSize = FVector2D(500.0f, 0.0f);
@@ -53,6 +57,7 @@ public:
 	void ClearAll();
 
 	void SetDescription(const FString& NewDescription) const;
+	void SetTaskVisibleNon() const;
 
 private:
 	// 동적으로 생성된 작업 위젯 목록

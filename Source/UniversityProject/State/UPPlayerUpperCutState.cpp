@@ -49,19 +49,5 @@ void UUPPlayerUpperCutState::UpdateState()
 void UUPPlayerUpperCutState::SkillFinished()
 {
 	Super::SkillFinished();
-	if (OwnerCharacter->CanJump())
-	{
-		if (InputHandler->IsMoving())
-		{
-			ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
-		}
-		else
-		{
-			ChangeState(EPlayerStateType::Idle);
-		}	
-	}
-	else
-	{
-		ChangeState(EPlayerStateType::InAir);
-	}
+	ChangeState(EPlayerStateType::InAir);
 }

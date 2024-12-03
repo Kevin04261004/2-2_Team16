@@ -11,6 +11,7 @@
 
 void UUPTutorialWidget::AddTask(const FString& TaskName, int32 CurrentProgress, int32 TotalProgress)
 {
+	TutorialCanvas->SetVisibility(ESlateVisibility::HitTestInvisible);
 	// 작업 위젯 클래스가 설정되어 있는지 확인
 	if (CellWidgetClass == nullptr)
 	{
@@ -83,5 +84,18 @@ void UUPTutorialWidget::ClearAll()
 
 void UUPTutorialWidget::SetDescription(const FString& NewDescription) const
 {
-	DescriptionText->SetText(FText::FromString(NewDescription));
+	if (NewDescription.IsEmpty())
+	{
+		DescriptionCanvas->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else
+	{
+		DescriptionCanvas->SetVisibility(ESlateVisibility::Visible);
+		DescriptionText->SetText(FText::FromString(NewDescription));	
+	}
+}
+
+void UUPTutorialWidget::SetTaskVisibleNon() const
+{
+	TutorialCanvas->SetVisibility(ESlateVisibility::Hidden);
 }
