@@ -63,7 +63,7 @@ void AUPPlayerCharacterWeapon::CheckAttackRadius(float Range)
 		}
 	}
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), Range, 32, FColor::Red, false, 0.3f, 0, 1.0f);
+	// DrawDebugSphere(GetWorld(), GetActorLocation(), Range, 32, FColor::Red, false, 0.3f, 0, 1.0f);
 }
 
 void AUPPlayerCharacterWeapon::ClearAttackedActors()
