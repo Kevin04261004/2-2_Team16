@@ -79,4 +79,6 @@ public:
 	float JumpToTakeDownMinVelocity = 1200.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
 	float TakeDownVelocity = 5000.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	float TakeDownAttackRadius = 125.f;
 };

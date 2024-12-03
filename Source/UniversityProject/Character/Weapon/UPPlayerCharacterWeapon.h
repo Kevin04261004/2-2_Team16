@@ -19,6 +19,8 @@ public:
 public:
 	// 애니메이션에서 매 프레임마다 호출하는 Notify함수
 	void CheckAttackRange();
+
+	void CheckAttackRadius(float Range);
 	
 	// 콤보 공격이 종료되었을 때 호출되는 Notify함수
 	virtual void ClearAttackedActors() override;
