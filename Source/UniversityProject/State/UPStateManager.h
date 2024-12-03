@@ -13,6 +13,7 @@ enum class EPlayerStateType : uint8
 	None UMETA(DisplayName = "Hidden"),
 	/* Movement */
 	Idle UMETA(DisplayName = "Idle"),
+	Walk UMETA(DisplayName = "걷기"),
 	Sprint UMETA(DisplayName = "달리기"),
 	Jump UMETA(DisplayName = "점프"),
 	InAir UMETA(DisplayName = "공중"),

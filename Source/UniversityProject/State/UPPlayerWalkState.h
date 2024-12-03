@@ -7,18 +7,18 @@
 #include "Interface/UPDashableStateInterface.h"
 #include "Interface/UPJumpableStateInterface.h"
 #include "State/UPPlayerBaseState.h"
-#include "UPPlayerSprintState.generated.h"
+#include "UPPlayerWalkState.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerSprintState : public UUPPlayerBaseState, public IUPJumpableStateInterface, public IUPDashableStateInterface, public IUPBaseAttackableStateInterface
+class UNIVERSITYPROJECT_API UUPPlayerWalkState : public UUPPlayerBaseState, public IUPJumpableStateInterface, public IUPDashableStateInterface, public IUPBaseAttackableStateInterface
 {
 	GENERATED_BODY()
-		
+	
 public:
-	UUPPlayerSprintState();
+	UUPPlayerWalkState();
 
 	virtual void Initialize(AUPPlayerCharacter* InOwnerCharacter, class UUPInputHandlerComponent* InInputHandler) override;
 

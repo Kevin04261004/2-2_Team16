@@ -12,8 +12,6 @@ void UUPPlayerComboAttackState::Initialize(AUPPlayerCharacter* InOwnerCharacter,
 {
 	Super::Initialize(InOwnerCharacter, InInputHandler);
 	InputHandler->OnBaseAttackInputed.AddUObject(this, &UUPPlayerComboAttackState::TryBaseAttack);
-	InputHandler->OnUpperCutInputed.AddUObject(this, &UUPPlayerComboAttackState::TryUpperCut);
-	
 }
 
 void UUPPlayerComboAttackState::InitSkillData()
@@ -43,10 +41,6 @@ void UUPPlayerComboAttackState::UpdateState()
 	{
 		ChangeState(NextAttackStateType);
 	}
-	else if (CurrentTime >= ComboAnimationStartTime && bIsUppercutKeyDown == true)
-	{
-		ChangeState(EPlayerStateType::UpperCut);
-	}
 }
 
 void UUPPlayerComboAttackState::SkillFinished()
@@ -59,21 +53,5 @@ void UUPPlayerComboAttackState::TryBaseAttack()
 	if (CurrentTime <= OneFrameSec * ComboInputableData->InputAllowFrameCount)
 	{
 		bIsAttackKeyDown = true;
-		if (bIsUppercutKeyDown == true)
-		{
-			bIsUppercutKeyDown = false;
-		}
-	}
-}
-
-void UUPPlayerComboAttackState::TryUpperCut()
-{
-	if (CurrentTime <= OneFrameSec * ComboInputableData->InputAllowFrameCount)
-	{
-		bIsUppercutKeyDown = true;
-		if (bIsAttackKeyDown == true)
-		{
-			bIsAttackKeyDown = false;
-		}
 	}
 }

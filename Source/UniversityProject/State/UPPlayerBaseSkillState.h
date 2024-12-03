@@ -43,8 +43,6 @@ protected:
 	UPROPERTY()
 	bool bIsAttackKeyDown = false;
 	UPROPERTY()
-	bool bIsUppercutKeyDown = false;
-	UPROPERTY()
 	bool bIsDashKeyDown = false;
 	UPROPERTY()
 	bool bIsJumpKeyDown = false;

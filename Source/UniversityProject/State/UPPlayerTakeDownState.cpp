@@ -100,7 +100,7 @@ void UUPPlayerTakeDownState::SkillFinished()
 	{
 		if (InputHandler->IsMoving())
 		{
-			ChangeState(EPlayerStateType::Sprint);
+			ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
 		}
 		else
 		{

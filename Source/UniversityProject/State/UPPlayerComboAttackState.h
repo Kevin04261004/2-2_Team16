@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameData/UPComboInputableData.h"
 #include "Interface/UPBaseAttackableStateInterface.h"
-#include "Interface/UPUppercutableStateInterface.h"
 #include "State/UPPlayerBaseSkillState.h"
 #include "UPPlayerComboAttackState.generated.h"
 
@@ -13,7 +12,7 @@
  * 
  */
 UCLASS()
-class UNIVERSITYPROJECT_API UUPPlayerComboAttackState : public UUPPlayerBaseSkillState, public IUPBaseAttackableStateInterface, public IUPUppercutableStateInterface
+class UNIVERSITYPROJECT_API UUPPlayerComboAttackState : public UUPPlayerBaseSkillState, public IUPBaseAttackableStateInterface
 {
 	GENERATED_BODY()
 		
@@ -31,6 +30,5 @@ public:
 protected:
 	virtual void SkillFinished() override;
 	virtual void TryBaseAttack() override;
-	virtual void TryUpperCut() override;
 	EPlayerStateType NextAttackStateType;
 };
