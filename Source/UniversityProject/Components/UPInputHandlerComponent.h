@@ -12,7 +12,6 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnCameraLookInputed, FVector2D /* LookAxisV
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnMoveInputed, FVector2D /* MoveAxisVector */);
 DECLARE_MULTICAST_DELEGATE(FOnJumpInputed);
 DECLARE_MULTICAST_DELEGATE(FOnDashInputed);
-DECLARE_MULTICAST_DELEGATE(FOnUpperCutInputed);
 DECLARE_MULTICAST_DELEGATE(FOnBaseAttackInputed);
 
 
@@ -79,6 +78,7 @@ protected:
 	
 protected:
 	FVector2D MovementVector;
+	bool bIsSprint;
 	
 public:
 	FOnCameraZoomed OnCameraZoomed;
@@ -86,9 +86,9 @@ public:
 	FOnMoveInputed OnMoveInputed;
 	FOnJumpInputed OnJumpInputed;
 	FOnDashInputed OnDashInputed;
-	FOnUpperCutInputed OnUpperCutInputed;
 	FOnBaseAttackInputed OnBaseAttackInputed;
 	
 	FORCEINLINE FVector2D GetMovementVector() const { return MovementVector; }
 	FORCEINLINE bool IsMoving() const { return MovementVector != FVector2D::ZeroVector; }
+	FORCEINLINE bool IsSprint() const { return bIsSprint; }
 };

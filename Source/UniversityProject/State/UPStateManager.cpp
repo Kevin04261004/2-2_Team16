@@ -7,6 +7,7 @@
 #include "UPPlayerBaseAttack03State.h"
 #include "UPPlayerIdleState.h"
 #include "UPPlayerSprintState.h"
+#include "UPPlayerWalkState.h"
 #include "UPPlayerBaseState.h"
 #include "UPPlayerCantMoveState.h"
 #include "UPPlayerDashState.h"
@@ -33,6 +34,7 @@ void UUPStateManager::InitializeStateMap()
 {
 	// TODO: 코드 최적화 엔진에서 추가 가능하게
 	StateMap.Add(EPlayerStateType::Idle, NewObject<UUPPlayerIdleState>());
+	StateMap.Add(EPlayerStateType::Walk, NewObject<UUPPlayerWalkState>());
 	StateMap.Add(EPlayerStateType::Sprint, NewObject<UUPPlayerSprintState>());
 	StateMap.Add(EPlayerStateType::Jump, NewObject<UUPPlayerJumpState>());
 	StateMap.Add(EPlayerStateType::Dash, NewObject<UUPPlayerDashState>());
@@ -50,6 +52,7 @@ void UUPStateManager::InitializeStateMap()
 void UUPStateManager::InitializeStates(const EPlayerStateType InitState)
 {
 	StateMap[EPlayerStateType::Idle]->Initialize(OwningCharacter, InputHandler);
+	StateMap[EPlayerStateType::Walk]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Sprint]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Jump]->Initialize(OwningCharacter, InputHandler);
 	StateMap[EPlayerStateType::Dash]->Initialize(OwningCharacter, InputHandler);

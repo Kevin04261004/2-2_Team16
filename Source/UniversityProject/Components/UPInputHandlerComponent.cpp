@@ -75,7 +75,7 @@ void UUPInputHandlerComponent::JumpInputAction(const FInputActionValue& Value)
 
 void UUPInputHandlerComponent::SprintInputAction(const FInputActionValue& Value)
 {
-	OnUpperCutInputed.Broadcast();
+	bIsSprint = Value.Get<bool>();
 }
 
 void UUPInputHandlerComponent::ZoomCameraInputAction(const FInputActionValue& Value)
