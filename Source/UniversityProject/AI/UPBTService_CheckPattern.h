@@ -19,6 +19,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timer")
 	float TimerInterval = 5.0f;
 
+	float RandomInterval = 0.0f;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timer")
 	float ElapsedTime = 0.0f;
 

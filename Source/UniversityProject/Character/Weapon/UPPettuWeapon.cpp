@@ -115,33 +115,33 @@ void AUPPettuWeapon::AttackSuccess(FHitResult& result, IUPDamageableInterface* D
 {
 	Super::AttackSuccess(result, Damageable);
 	
-	// 넉백이 발생할 때 상대방에게 가할 힘의 크기
-	float KnockbackStrength = 1000.0f;
-
-	// 공격 성공 시 추가 처리 (넉백)
-	if (AActor* HitActor = result.GetActor())
-	{
-		// 적 캐릭터가 물리 시뮬레이션이 가능하면 넉백 적용
-		if (UPrimitiveComponent* HitComp = Cast<UPrimitiveComponent>(HitActor->GetRootComponent()))
-		{
-			if (HitComp->IsSimulatingPhysics())
-			{
-				// 공격자가 있는 방향을 기준으로 피격자를 밀어냄
-				FVector KnockbackDirection = HitActor->GetActorLocation() - GetOwner()->GetActorLocation();
-				KnockbackDirection.Z = 0.0f; // Z 축으로는 힘을 가하지 않음 (원하는 경우 Z 축도 포함 가능)
-				KnockbackDirection.Normalize();
-
-				// 충격(Impulse) 적용 (X, Y 축으로 밀어냄)
-				HitComp->AddImpulse(KnockbackDirection * KnockbackStrength, NAME_None, true);
-			}
-		}
-	}
+	//// 넉백이 발생할 때 상대방에게 가할 힘의 크기
+	//float KnockbackStrength = 1000.0f;
+//
+	//// 공격 성공 시 추가 처리 (넉백)
+	//if (AActor* HitActor = result.GetActor())
+	//{
+	//	// 적 캐릭터가 물리 시뮬레이션이 가능하면 넉백 적용
+	//	if (UPrimitiveComponent* HitComp = Cast<UPrimitiveComponent>(HitActor->GetRootComponent()))
+	//	{
+	//		if (HitComp->IsSimulatingPhysics())
+	//		{
+	//			// 공격자가 있는 방향을 기준으로 피격자를 밀어냄
+	//			FVector KnockbackDirection = HitActor->GetActorLocation() - GetOwner()->GetActorLocation();
+	//			KnockbackDirection.Z = 0.0f; // Z 축으로는 힘을 가하지 않음 (원하는 경우 Z 축도 포함 가능)
+	//			KnockbackDirection.Normalize();
+//
+	//			// 충격(Impulse) 적용 (X, Y 축으로 밀어냄)
+	//			HitComp->AddImpulse(KnockbackDirection * KnockbackStrength, NAME_None, true);
+	//		}
+	//	}
+	//}
 }
 
 void AUPPettuWeapon::OnWeaponOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor && OtherActor != this && OtherActor != GetOwner())
+	if (OtherActor && OtherActor != this && OtherActor != GetOwner() && OtherActor->IsA(AUPPlayerCharacter::StaticClass()))
 	{
 		ClearAttackedActors();
 		FHitResult HitResult = SweepResult;
