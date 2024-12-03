@@ -155,7 +155,7 @@ void UUPSkillBase::CustomDeActivate_Implementation(AActor* TargetOrNull)
 {
 	CurCoolTime = SkillData->GetCoolTime();
 	SetComponentTickEnabled(true);
-	
+	GetWorld()->GetTimerManager().ClearTimer(SkillDurationHandle);
 	SetOwnerMovementMode(MOVE_Walking);
 	
 	bIsSkillActive = false;

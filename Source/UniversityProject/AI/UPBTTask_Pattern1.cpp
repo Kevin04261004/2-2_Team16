@@ -7,11 +7,12 @@
 #include "Character/Enemy/UPMonsterBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Physics/Collision.h"
 
 UUPBTTask_Pattern1::UUPBTTask_Pattern1(const FObjectInitializer& ObjectInitializer)
 {
 	NodeName = TEXT("Pattern1");
+	bNotifyTick = false;
+	bCreateNodeInstance = true;
 }
 
 EBTNodeResult::Type UUPBTTask_Pattern1::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -28,6 +29,7 @@ EBTNodeResult::Type UUPBTTask_Pattern1::ExecuteTask(UBehaviorTreeComponent& Owne
 		FRotator NewRotation = FRotator(0.0f, LookAtRotation.Yaw, 0.0f);
 		MonsterCharacter->SetActorRotation(NewRotation);
 		AnimInstance->OnMontageEnded.AddDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
+		//AnimInstance->OnMontageBlendingOut.AddDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
 		return EBTNodeResult::InProgress;
 	}
 	return EBTNodeResult::Failed;
@@ -39,7 +41,16 @@ void UUPBTTask_Pattern1::OnPatternMontageEnded(UAnimMontage* Montage, bool bInte
 	{
 		return;
 	}
+	if (bInterrupted)
+	{
+		AnimInstance->OnMontageEnded.RemoveDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
+		//AnimInstance->OnMontageBlendingOut.RemoveDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
+		CurrentOwnerComp->GetBlackboardComponent()->SetValueAsBool(TEXT("CanExecutePattern"), false);
+		FinishLatentTask(*CurrentOwnerComp, EBTNodeResult::Succeeded);
+	}
 	AnimInstance->OnMontageEnded.RemoveDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
+	//AnimInstance->OnMontageBlendingOut.RemoveDynamic(this, &UUPBTTask_Pattern1::OnPatternMontageEnded);
 	CurrentOwnerComp->GetBlackboardComponent()->SetValueAsBool(TEXT("CanExecutePattern"), false);
 	FinishLatentTask(*CurrentOwnerComp, EBTNodeResult::Succeeded);
+	
 }

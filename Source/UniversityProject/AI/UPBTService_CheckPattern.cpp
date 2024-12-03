@@ -7,6 +7,8 @@
 UUPBTService_CheckPattern::UUPBTService_CheckPattern(const FObjectInitializer& ObjectInitializer)
 {
 	NodeName = TEXT("Check Pattern");
+	bCreateNodeInstance = true;
+	RandomInterval = FMath::RandRange(TimerInterval - 1.0f, TimerInterval + 1.0f);
 }
 
 void UUPBTService_CheckPattern::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -18,7 +20,7 @@ void UUPBTService_CheckPattern::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	if (!bIsStun && !bIsDead && bIsTimerOn)
 	{
 		ElapsedTime += DeltaSeconds;
-		if (ElapsedTime >= TimerInterval)
+		if (ElapsedTime >= RandomInterval)
 		{
 			OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("CanExecutePattern"), true);
 			ResetTimer();
@@ -29,4 +31,5 @@ void UUPBTService_CheckPattern::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 void UUPBTService_CheckPattern::ResetTimer()
 {
 	ElapsedTime = 0.0f;
+	RandomInterval = FMath::RandRange(TimerInterval - 1.0f, TimerInterval + 1.0f);
 }

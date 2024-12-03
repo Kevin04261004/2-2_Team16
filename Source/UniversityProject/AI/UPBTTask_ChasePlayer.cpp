@@ -12,6 +12,7 @@ UUPBTTask_ChasePlayer::UUPBTTask_ChasePlayer(const FObjectInitializer& ObjectIni
 {
 	MoveStopDistance = 100.f;
 	NodeName = TEXT("ChasePlayer");
+	bCreateNodeInstance = true;
 }
 
 EBTNodeResult::Type UUPBTTask_ChasePlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)

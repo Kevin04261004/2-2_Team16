@@ -9,6 +9,16 @@
 #include "Components/CapsuleComponent.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
 
+struct FNotifyStateData
+{
+	FVector StartLocation;
+	FVector TargetLocation;
+	float TotalDuration;
+	float StartTime;
+};
+
+TMap<AActor*, FNotifyStateData> NotifyStateDataMap;
+
 void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
                                                   float InTotalDuration)
 {
@@ -43,10 +53,10 @@ void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCo
 			}
 		}
 		
-		StartLocation = Owner->GetActorLocation();
+		FVector StartLocation = Owner->GetActorLocation();
 
 		AUPCharacterBase* base = Cast<AUPCharacterBase>(Owner);
-		TargetLocation = StartLocation + Owner->GetActorForwardVector() * Amount;
+		FVector TargetLocation = StartLocation + Owner->GetActorForwardVector() * Amount;
 		if (base != nullptr)
 		{
 			FHitResult Hit;
@@ -58,8 +68,15 @@ void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCo
 				TargetLocation = Hit.Location - Owner->GetActorForwardVector() * (base->GetCapsuleComponent()->GetScaledCapsuleRadius() / 2);
 			}
 		}
-		StartTime = MeshComp->GetWorld()->GetTimeSeconds();
-		TotalDuration = InTotalDuration;
+
+		FNotifyStateData NotifyData;
+		NotifyData.StartLocation = StartLocation;
+		NotifyData.TargetLocation = TargetLocation;
+		NotifyData.StartTime = MeshComp->GetWorld()->GetTimeSeconds();
+		NotifyData.TotalDuration = InTotalDuration;
+		NotifyStateDataMap.Add(Owner, NotifyData);
+		//StartTime = MeshComp->GetWorld()->GetTimeSeconds();
+		//TotalDuration = InTotalDuration;
 	}
 	
 }
@@ -71,20 +88,23 @@ void UUPLerpToForwardAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshCom
 	
 	if (AActor* Owner = MeshComp->GetOwner())
 	{
-		// 현재 Notify 구간의 진행 시간 계산
-		float CurrentTime = MeshComp->GetWorld()->GetTimeSeconds();
-		float ElapsedTime = CurrentTime - StartTime; // Notify가 시작된 후 경과한 시간
-		float Progress = FMath::Clamp(ElapsedTime / TotalDuration, 0.f, 1.f); // 0에서 1까지의 진행 비율 계산
-
-		// 커브가 설정되어 있으면 커브의 값을 사용
-		if (LerpCurve)
+		if (FNotifyStateData* NotifyData = NotifyStateDataMap.Find(Owner))
 		{
-			Progress = LerpCurve->GetFloatValue(Progress);
-		}
+			// 현재 Notify 구간의 진행 시간 계산
+			float CurrentTime = MeshComp->GetWorld()->GetTimeSeconds();
+			float ElapsedTime = CurrentTime - NotifyData->StartTime; // Notify가 시작된 후 경과한 시간
+			float Progress = FMath::Clamp(ElapsedTime / NotifyData->TotalDuration, 0.f, 1.f); // 0에서 1까지의 진행 비율 계산
 
-		// 진행 비율에 따라 캐릭터의 위치를 업데이트
-		FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, Progress);
-		Owner->SetActorLocation(NewLocation);
+			// 커브가 설정되어 있으면 커브의 값을 사용
+			if (LerpCurve)
+			{
+				Progress = LerpCurve->GetFloatValue(Progress);
+			}
+
+			// 진행 비율에 따라 캐릭터의 위치를 업데이트
+			FVector NewLocation = FMath::Lerp(NotifyData->StartLocation, NotifyData->TargetLocation, Progress);
+			Owner->SetActorLocation(NewLocation);
+		}
 	}
 }
 
@@ -94,7 +114,11 @@ void UUPLerpToForwardAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp
 	
 	if (AActor* Owner = MeshComp->GetOwner())
 	{
-		// 캐릭터를 원래 위치로 다시 이동시킴
-		Owner->SetActorLocation(TargetLocation);
+		if (FNotifyStateData* NotifyData = NotifyStateDataMap.Find(Owner))
+		{
+			// 캐릭터를 원래 위치로 다시 이동시킴
+			Owner->SetActorLocation(NotifyData->TargetLocation);
+			NotifyStateDataMap.Remove(Owner);
+		}
 	}
 }
