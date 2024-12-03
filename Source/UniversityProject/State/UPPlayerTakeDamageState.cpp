@@ -42,8 +42,7 @@ void UUPPlayerTakeDamageState::EnterState()
 	SkillDuration = skillData->GetSkillDuration(OwnerCharacter->GetStat()->GetTotalStat().AttackSpeed);
 
 	OwnerCharacter->GetWorld()->GetTimerManager().SetTimer(SkillEndTimerHandle, this, &UUPPlayerTakeDamageState::SkillFinished, SkillDuration, false);
-
-
+	
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Player Damaged Enter");
 
 }

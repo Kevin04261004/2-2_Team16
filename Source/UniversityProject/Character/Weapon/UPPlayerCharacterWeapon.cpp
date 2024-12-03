@@ -1,5 +1,6 @@
 ﻿#include "UPPlayerCharacterWeapon.h"
 #include "DrawDebugHelpers.h"
+#include "Interface/UPDamageableInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Manager/UPPostProcessManager.h"
 #include "Physics/Collision.h"
@@ -24,6 +25,45 @@ AUPPlayerCharacterWeapon::AUPPlayerCharacterWeapon()
 void AUPPlayerCharacterWeapon::CheckAttackRange()
 {
 	CheckCollisionSockets();
+}
+
+void AUPPlayerCharacterWeapon::CheckAttackRadius(float Range)
+{
+	ClearAttackedActors();
+	
+	// 구 충돌 설정
+	TArray<FHitResult> OverlapResults;
+	FCollisionShape SphereShape = FCollisionShape::MakeSphere(Range);
+
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);     // 무기 자신 무시
+	QueryParams.AddIgnoredActor(GetOwner()); // 소유자(캐릭터) 무시
+
+	// 구 충돌 실행
+	bool bOverlap = GetWorld()->SweepMultiByChannel(
+		OverlapResults,
+		GetActorLocation(),
+		GetActorLocation(),
+		FQuat::Identity,
+		CCHANEL_UPACTION,
+		SphereShape,
+		QueryParams
+	);
+
+	if (bOverlap)
+	{
+		for (FHitResult& HitResult : OverlapResults)
+		{
+			AActor* HitActor = HitResult.GetActor();
+			IUPDamageableInterface* Damageable = Cast<IUPDamageableInterface>(HitActor);
+			if (HitActor && !AttackedActors.Contains(HitActor) && Damageable != nullptr)
+			{
+				Attack(HitResult); // 대미지 처리
+			}
+		}
+	}
+
+	DrawDebugSphere(GetWorld(), GetActorLocation(), Range, 32, FColor::Red, false, 0.3f, 0, 1.0f);
 }
 
 void AUPPlayerCharacterWeapon::ClearAttackedActors()

@@ -115,6 +115,10 @@ void UUPPlayerTakeDownState::SkillFinished()
 
 void UUPPlayerTakeDownState::PlayAttackToIdleMontage()
 {
+	AUPPlayerCharacterWeapon* playerWeapon = Cast<AUPPlayerCharacterWeapon>(OwnerCharacter->GetWeapon());
+
+	playerWeapon->CheckAttackRadius(OwnerCharacter->GetStateManager()->TakeDownAttackRadius);
+	
 	UAnimInstance* AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
 	if (OwnerCharacter->GetStateManager()->TakeDownToIdleMontage != nullptr && AnimInstance != nullptr)
 	{
