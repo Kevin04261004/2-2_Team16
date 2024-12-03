@@ -18,6 +18,7 @@ void UUPPlayerSprintState::Initialize(AUPPlayerCharacter* InOwnerCharacter, clas
 	InputHandler->OnJumpInputed.AddUObject(this, &UUPPlayerSprintState::TryJump);
 	InputHandler->OnDashInputed.AddUObject(this, &UUPPlayerSprintState::TryDash);
 	InputHandler->OnBaseAttackInputed.AddUObject(this, &UUPPlayerSprintState::TryBaseAttack);
+	InputHandler->OnUpperCutInputed.AddUObject(this, &UUPPlayerSprintState::TryUpperCut);
 }
 
 void UUPPlayerSprintState::EnterState()
@@ -39,21 +40,7 @@ void UUPPlayerSprintState::UpdateState()
 	Super::UpdateState();
 
 	/* if Check */
-	if (OwnerCharacter->CanJump())
-	{
-		if (InputHandler->IsMoving())
-		{
-			if (!InputHandler->IsSprint())
-			{
-				ChangeState(EPlayerStateType::Walk);
-			}
-		}
-		else
-		{
-			ChangeState(EPlayerStateType::Idle);
-		}	
-	}
-	else
+	if (!OwnerCharacter->CanJump())
 	{
 		ChangeState(EPlayerStateType::InAir);
 	}
@@ -81,6 +68,15 @@ void UUPPlayerSprintState::TryDash()
 }
 
 void UUPPlayerSprintState::TryBaseAttack()
+{
+	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Sprint || !OwnerCharacter->GetSkillManager()->CanUseSkill(EPlayerSkillType::BaseAttack01))
+	{
+		return;
+	}
+	ChangeState(EPlayerStateType::BaseAttack01);
+}
+
+void UUPPlayerSprintState::TryUpperCut()
 {
 	if (OwnerCharacter->GetStateManager()->GetCurrentState() != EPlayerStateType::Sprint || !OwnerCharacter->GetSkillManager()->CanUseSkill(EPlayerSkillType::UpperCut))
 	{
