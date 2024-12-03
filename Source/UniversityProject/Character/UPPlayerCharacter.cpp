@@ -90,6 +90,9 @@ void AUPPlayerCharacter::BeginPlay()
 	}
 	PlayerController->HudWidgetObject->SetVisibility(ESlateVisibility::Visible);
 	PlayerController->HudWidgetObject->SetPlayerHudVisible(true);
+
+	USkeletalMeshComponent* MeshComponent = FindComponentByClass<USkeletalMeshComponent>();
+	PlayerController->SetAudioListenerOverride(MeshComponent, FVector::ZeroVector, FRotator::ZeroRotator);
 }
 
 void AUPPlayerCharacter::Tick(float DeltaSeconds)

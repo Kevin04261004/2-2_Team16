@@ -31,6 +31,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = Game, Meta = (DisplayName = "OnGameClearCpp"))
 	void K2_OnGameClear();
 	void GameClear();
+
 protected:
 	virtual void BeginPlay() override;
 

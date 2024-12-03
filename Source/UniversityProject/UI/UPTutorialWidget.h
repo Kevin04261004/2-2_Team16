@@ -25,7 +25,7 @@ protected:
 
 	// 기본 캔버스 크기
 	UPROPERTY(EditDefaultsOnly, Category = "Layout")
-	FVector2D BaseCanvasSize = FVector2D(500.0f, 75.0f);
+	FVector2D BaseCanvasSize = FVector2D(500.0f, 0.0f);
 
 	// 작업 하나당 추가될 높이
 	UPROPERTY(EditDefaultsOnly, Category = "Layout")
