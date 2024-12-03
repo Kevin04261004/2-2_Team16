@@ -45,6 +45,7 @@ void UUPPlayerBaseSkillState::EnterState()
 		bIsAttackKeyDown = false;
 		bIsDashKeyDown = false;
 		bIsJumpKeyDown = false;
+		bIsUppercutKeyDown = false;
 		CurrentTime = 0.0f;
 		ComboAnimationStartTime = OneFrameSec * ComboInputableData->AnimationChangeStartFrameCount;	
 	}
@@ -62,10 +63,9 @@ void UUPPlayerBaseSkillState::ExitState()
 	bIsDashKeyDown = false;
 	bIsAttackKeyDown = false;
 	bIsJumpKeyDown = false;
+	bIsUppercutKeyDown = false;
 }
 
-#pragma optimize("", off)
-// PRAGMA_DISABLE_OPTIMIZATION
 void UUPPlayerBaseSkillState::UpdateState()
 {
 	Super::UpdateState();
@@ -75,13 +75,11 @@ void UUPPlayerBaseSkillState::UpdateState()
 	{
 		ChangeState(EPlayerStateType::Dash);
 	}
-	
-	if (ComboInputableData != nullptr && bIsJumpKeyDown == true && ComboInputableData->bCanJump && (!ComboInputableData->bJumpAfterAnimationChangeStartFrame || CurrentTime >= ComboAnimationStartTime))
+	else if (ComboInputableData != nullptr && bIsJumpKeyDown == true && ComboInputableData->bCanJump && (!ComboInputableData->bJumpAfterAnimationChangeStartFrame || CurrentTime >= ComboAnimationStartTime))
 	{
 		ChangeState(EPlayerStateType::Jump);
 	}
 }
-#pragma optimize("", on)
 
 void UUPPlayerBaseSkillState::SkillFinished()
 {
