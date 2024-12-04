@@ -3,6 +3,7 @@
 
 #include "UPGameMode.h"
 
+#include "UPGameInstance.h"
 #include "Audio/UPAudioManager.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
@@ -52,6 +53,21 @@ void AUPGameMode::OnTutorialClear()
 	bIsTutorialCleared = true;
 }
 
+void AUPGameMode::RestartGame()
+{
+	//UUPGameInstance* GameInstance = Cast<UUPGameInstance>(GetGameInstance());
+	//GameInstance->TryOpenLevel(GameInstance->LoadedPackageName);
+	StageManager->TutorialStartStage(StageManager->StageTutorialData->TutorialStages.Num() - 1);
+
+	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetWorld()->GetFirstPlayerController());
+	if (PlayerController == nullptr)
+	{
+		return;
+	}	
+	PlayerController->SkipTutorialWidget->SetVisibility(ESlateVisibility::Hidden);
+	PlayerController->SetGameMode();
+}
+
 bool AUPGameMode::IsGameCleared()
 {
 	return bIsCleared;
@@ -96,3 +112,5 @@ void AUPGameMode::BeginPlay()
 	UUPAudioManager* AudioManager = GetGameInstance()->GetSubsystem<UUPAudioManager>();
 	AudioManager->CollectAllSounds(GetWorld());
 }
+
+
