@@ -52,6 +52,19 @@ void AUPGameMode::OnTutorialClear()
 	bIsTutorialCleared = true;
 }
 
+void AUPGameMode::RestartGame()
+{
+	StageManager->TutorialStartStage(StageManager->StageTutorialData->TutorialStages.Num() - 1);
+
+	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetWorld()->GetFirstPlayerController());
+	if (PlayerController == nullptr)
+	{
+		return;
+	}	
+	PlayerController->SkipTutorialWidget->SetVisibility(ESlateVisibility::Hidden);
+	PlayerController->SetGameMode();
+}
+
 bool AUPGameMode::IsGameCleared()
 {
 	return bIsCleared;
@@ -96,3 +109,5 @@ void AUPGameMode::BeginPlay()
 	UUPAudioManager* AudioManager = GetGameInstance()->GetSubsystem<UUPAudioManager>();
 	AudioManager->CollectAllSounds(GetWorld());
 }
+
+

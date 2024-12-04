@@ -28,6 +28,9 @@ public:
 
 	virtual void OnTutorialClear();
 
+	UFUNCTION(BlueprintCallable)
+	void RestartGame();
+
 	virtual bool IsGameCleared() override;
 	FORCEINLINE virtual bool IsTutorialStage() { return bIsTutorialCleared == true; }
 	virtual void BeginPlay() override;
