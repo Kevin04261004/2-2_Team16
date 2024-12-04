@@ -61,6 +61,12 @@ void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCo
 		{
 			FHitResult Hit;
 			FVector HitLocation;
+
+			if (bIgnoreBoss)
+			{
+				
+			}
+			
 			// TODO: 무기의 길이를 구하는 코드 만들기.
 			if (base->TryCheckForwardCollision(Amount >= 0 ? Amount : -Amount, Hit, HitLocation))
 			{

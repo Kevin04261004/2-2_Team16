@@ -30,22 +30,20 @@ void AUPPlayerCharacterWeapon::CheckAttackRange()
 void AUPPlayerCharacterWeapon::CheckAttackRadius(float Range)
 {
 	ClearAttackedActors();
-	
-	// 구 충돌 설정
+
 	TArray<FHitResult> OverlapResults;
 	FCollisionShape SphereShape = FCollisionShape::MakeSphere(Range);
 
 	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this);     // 무기 자신 무시
-	QueryParams.AddIgnoredActor(GetOwner()); // 소유자(캐릭터) 무시
+	QueryParams.AddIgnoredActor(this);
+	QueryParams.AddIgnoredActor(GetOwner());
 
-	// 구 충돌 실행
-	bool bOverlap = GetWorld()->SweepMultiByChannel(
+	bool bOverlap = GetWorld()->SweepMultiByObjectType(
 		OverlapResults,
 		GetActorLocation(),
 		GetActorLocation(),
 		FQuat::Identity,
-		CCHANEL_UPACTION,
+		FCollisionObjectQueryParams(FCollisionObjectQueryParams::InitType::AllDynamicObjects), // 특정 오브젝트 필터
 		SphereShape,
 		QueryParams
 	);
@@ -55,15 +53,13 @@ void AUPPlayerCharacterWeapon::CheckAttackRadius(float Range)
 		for (FHitResult& HitResult : OverlapResults)
 		{
 			AActor* HitActor = HitResult.GetActor();
-			IUPDamageableInterface* Damageable = Cast<IUPDamageableInterface>(HitActor);
-			if (HitActor && !AttackedActors.Contains(HitActor) && Damageable != nullptr)
+			if (HitActor && !AttackedActors.Contains(HitActor) &&
+				HitActor->GetClass()->ImplementsInterface(UUPDamageableInterface::StaticClass()))
 			{
-				Attack(HitResult); // 대미지 처리
+				Attack(HitResult);
 			}
 		}
 	}
-
-	// DrawDebugSphere(GetWorld(), GetActorLocation(), Range, 32, FColor::Red, false, 0.3f, 0, 1.0f);
 }
 
 void AUPPlayerCharacterWeapon::ClearAttackedActors()
