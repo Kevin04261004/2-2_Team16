@@ -20,5 +20,4 @@ protected:
 	EBGMAudioType SceneBGM;
 	
 	virtual void BeginPlay() override;
-
 };

@@ -13,7 +13,6 @@ enum class EPlayerStateType : uint8
 	None UMETA(DisplayName = "Hidden"),
 	/* Movement */
 	Idle UMETA(DisplayName = "Idle"),
-	Walk UMETA(DisplayName = "걷기"),
 	Sprint UMETA(DisplayName = "달리기"),
 	Jump UMETA(DisplayName = "점프"),
 	InAir UMETA(DisplayName = "공중"),
@@ -79,4 +78,6 @@ public:
 	float JumpToTakeDownMinVelocity = 1200.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
 	float TakeDownVelocity = 5000.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = true))
+	float TakeDownAttackRadius = 125.f;
 };

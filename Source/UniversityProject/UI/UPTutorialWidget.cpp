@@ -11,6 +11,7 @@
 
 void UUPTutorialWidget::AddTask(const FString& TaskName, int32 CurrentProgress, int32 TotalProgress)
 {
+	TutorialCanvas->SetVisibility(ESlateVisibility::HitTestInvisible);
 	// 작업 위젯 클래스가 설정되어 있는지 확인
 	if (CellWidgetClass == nullptr)
 	{
@@ -81,7 +82,57 @@ void UUPTutorialWidget::ClearAll()
 	CellWidgets.Empty();
 }
 
-void UUPTutorialWidget::SetDescription(const FString& NewDescription) const
+void UUPTutorialWidget::SetDescription(const FString& NewDescription)
 {
-	DescriptionText->SetText(FText::FromString(NewDescription));
+	if (NewDescription.IsEmpty())
+	{
+		DescriptionCanvas->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else
+	{
+		DescriptionCanvas->SetVisibility(ESlateVisibility::Visible);
+		StartTypingEffect(NewDescription);
+	}
+}
+
+void UUPTutorialWidget::StartTypingEffect(const FString& NewDescription)
+{
+	// 초기화
+	TargetDescription = NewDescription;
+	CurrentTypedText = TEXT("");
+
+	// 기존 타이머가 실행 중이면 정지
+	if (GetWorld()->GetTimerManager().IsTimerActive(TypingTimerHandle))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(TypingTimerHandle);
+	}
+
+	// 타이머 시작 (0.05초 간격으로 실행)
+	GetWorld()->GetTimerManager().SetTimer(
+		TypingTimerHandle,
+		this,
+		&UUPTutorialWidget::UpdateTypingEffect,
+		TypingTime, // 타이핑 속도 (조정 가능)
+		true
+	);
+}
+
+void UUPTutorialWidget::UpdateTypingEffect()
+{
+	if (CurrentTypedText.Len() < TargetDescription.Len())
+	{
+		// 한 글자씩 추가
+		CurrentTypedText.AppendChar(TargetDescription[CurrentTypedText.Len()]);
+		DescriptionText->SetText(FText::FromString(CurrentTypedText));
+	}
+	else
+	{
+		// 모든 텍스트가 출력되면 타이머 정지
+		GetWorld()->GetTimerManager().ClearTimer(TypingTimerHandle);
+	}
+}
+
+void UUPTutorialWidget::SetTaskVisibleNon() const
+{
+	TutorialCanvas->SetVisibility(ESlateVisibility::Hidden);
 }

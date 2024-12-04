@@ -100,7 +100,7 @@ void UUPPlayerTakeDownState::SkillFinished()
 	{
 		if (InputHandler->IsMoving())
 		{
-			ChangeState(InputHandler->IsSprint() ? EPlayerStateType::Sprint : EPlayerStateType::Walk);
+			ChangeState(EPlayerStateType::Sprint);
 		}
 		else
 		{
@@ -115,6 +115,10 @@ void UUPPlayerTakeDownState::SkillFinished()
 
 void UUPPlayerTakeDownState::PlayAttackToIdleMontage()
 {
+	AUPPlayerCharacterWeapon* playerWeapon = Cast<AUPPlayerCharacterWeapon>(OwnerCharacter->GetWeapon());
+
+	playerWeapon->CheckAttackRadius(OwnerCharacter->GetStateManager()->TakeDownAttackRadius);
+	
 	UAnimInstance* AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
 	if (OwnerCharacter->GetStateManager()->TakeDownToIdleMontage != nullptr && AnimInstance != nullptr)
 	{
