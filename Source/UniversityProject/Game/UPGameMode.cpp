@@ -3,6 +3,7 @@
 
 #include "UPGameMode.h"
 
+#include "UPGameInstance.h"
 #include "Audio/UPAudioManager.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
@@ -54,6 +55,8 @@ void AUPGameMode::OnTutorialClear()
 
 void AUPGameMode::RestartGame()
 {
+	//UUPGameInstance* GameInstance = Cast<UUPGameInstance>(GetGameInstance());
+	//GameInstance->TryOpenLevel(GameInstance->LoadedPackageName);
 	StageManager->TutorialStartStage(StageManager->StageTutorialData->TutorialStages.Num() - 1);
 
 	AUPPlayerController* PlayerController = Cast<AUPPlayerController>(GetWorld()->GetFirstPlayerController());
