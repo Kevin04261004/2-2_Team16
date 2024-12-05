@@ -130,14 +130,20 @@ void UUPLerpToForwardAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp
 
 bool UUPLerpToForwardAnimNotifyState::IsTargetIsEnemy(AActor* Owner, AActor* Target)
 {
+	IUPDamageableInterface* curTarget = Cast<IUPDamageableInterface>(Target);
+	if (curTarget == nullptr)
+	{
+		return false;
+	}
+	
 	TArray<FHitResult> HitResults;
 
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(Amount);
 	FCollisionQueryParams Parameters;
 	Parameters.AddIgnoredActor(Owner);
 	
-	DrawDebugSphere(GetWorld(), Owner->GetActorLocation(), Amount, 12, FColor::Blue, false, 1.5f);
-	bool bHit = GetWorld()->SweepMultiByChannel(
+	DrawDebugSphere(Owner->GetWorld(), Owner->GetActorLocation(), Amount, 12, FColor::Blue, false, 1.5f);
+	bool bHit = Owner->GetWorld()->SweepMultiByChannel(
 		HitResults,
 		Owner->GetActorLocation(),
 		Owner->GetActorLocation(),
