@@ -59,6 +59,10 @@ void AUPStageManager::InitializeTutorialWidget()
 		// 화면에 표시
 		TutorialWidget->AddToViewport(-10);
 	}
+	AUPGameMode* UPGameMode = Cast<AUPGameMode>(GetWorld()->GetAuthGameMode());
+	check(UPGameMode != nullptr);
+	HudWidget = UPGameMode->HudWidgetObject;
+	check(HudWidget != nullptr);
 }
 
 void AUPStageManager::EvaluateCondition(EStageConditionType ConditionType)
@@ -107,6 +111,8 @@ void AUPStageManager::TutorialStartStage(int32 StageIndex)
 			TutorialWidget->ClearAll(); // 이전 조건 초기화
 
 			TutorialWidget->SetDescription(CurrentStage.Description);
+
+			HudWidget->SetExpression(CurrentStage.ExpressionType);
 
 			if (CurrentStage.StageConditionMap.Num() == 0)
 			{

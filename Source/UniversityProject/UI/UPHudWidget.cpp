@@ -26,6 +26,14 @@ void UUPHudWidget::SetPettuHudVisible(bool bVisible)
 	}
 }
 
+void UUPHudWidget::SetExpression(EPlayerExpressionType expressionType)
+{
+	if (PlayerHudWidget)
+	{
+		PlayerHudWidget->SetFacialExpression(expressionType);
+	}
+}
+
 
 
 
