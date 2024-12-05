@@ -1,12 +1,12 @@
 {
 	"TargetName": "UniversityProject",
 	"Platform": "Win64",
-	"Configuration": "Shipping",
+	"Configuration": "Development",
 	"TargetType": "Game",
 	"IsTestTarget": false,
 	"Architecture": "x64",
 	"Project": "../../UniversityProject.uproject",
-	"Launch": "$(ProjectDir)/Binaries/Win64/UniversityProject-Win64-Shipping.exe",
+	"Launch": "$(ProjectDir)/Binaries/Win64/UniversityProject.exe",
 	"Version": 
 	{
 		"MajorVersion": 5,
@@ -33,11 +33,11 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UniversityProject-Win64-Shipping.exe",
+			"Path": "$(ProjectDir)/Binaries/Win64/UniversityProject.exe",
 			"Type": "Executable"
 		},
 		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UniversityProject-Win64-Shipping.pdb",
+			"Path": "$(ProjectDir)/Binaries/Win64/UniversityProject.pdb",
 			"Type": "SymbolFile"
 		},
 		{
@@ -84,6 +84,10 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/ThirdParty/Vorbis/Win64/VS2015/libvorbisfile_64.dll",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/Windows/WinPixEventRuntime/x64/WinPixEventRuntime.dll",
 			"Type": "NonUFS"
 		},
 		{
@@ -2927,6 +2931,18 @@
 			"Type": "UFS"
 		},
 		{
+			"Path": "$(EngineDir)/Extras/GPUDumpViewer/GPUDumpViewer.html",
+			"Type": "DebugNonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Extras/GPUDumpViewer/OpenGPUDumpViewer.bat",
+			"Type": "DebugNonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Extras/GPUDumpViewer/OpenGPUDumpViewer.sh",
+			"Type": "DebugNonUFS"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/2D/Paper2D/Paper2D.uplugin",
 			"Type": "UFS"
 		},
@@ -3015,7 +3031,19 @@
 			"Type": "UFS"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Developer/DumpGPUServices/DumpGPUServices.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Developer/PixWinPlugin/PixWinPlugin.uplugin",
+			"Type": "UFS"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/Developer/PluginUtils/PluginUtils.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Developer/RenderDocPlugin/RenderDocPlugin.uplugin",
 			"Type": "UFS"
 		},
 		{
@@ -3344,6 +3372,10 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Runtime/GooglePAD/GooglePAD.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/InputDebugging/InputDebugging.uplugin",
 			"Type": "UFS"
 		},
 		{
