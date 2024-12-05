@@ -2979,6 +2979,10 @@
 			"Type": "UFS"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Bridge.uplugin",
+			"Type": "UFS"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/Cameras/CameraShakePreviewer/CameraShakePreviewer.uplugin",
 			"Type": "UFS"
 		},
@@ -3176,6 +3180,10 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Experimental/MeshModelingToolsetExp/MeshModelingToolsetExp.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/MetaHuman/MetaHumanProjectUtilities/MetaHumanProjectUtilities.uplugin",
 			"Type": "UFS"
 		},
 		{
@@ -3535,6 +3543,7 @@
 		"BlendSpaceMotionAnalysis",
 		"BlueprintHeaderView",
 		"BlueprintMaterialTextureNodes",
+		"Bridge",
 		"CLionSourceCodeAccess",
 		"CableComponent",
 		"CameraShakePreviewer",
@@ -3611,6 +3620,7 @@
 		"MeshModelingToolset",
 		"MeshModelingToolsetExp",
 		"MeshPainting",
+		"MetaHumanProjectUtilities",
 		"Metasound",
 		"MobileLauncherProfileWizard",
 		"MobilePatchingUtils",
