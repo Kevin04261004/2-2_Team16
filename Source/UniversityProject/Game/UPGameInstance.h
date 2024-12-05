@@ -20,6 +20,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnCutSceneFinished();
 
+	void TryOpenLevel(const FName& PackageName);
+
+	FName LoadedPackageName;
+
 private:
 	UPROPERTY()
 	UUserWidget* CutSceneWidgetInstance;
@@ -27,9 +31,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "UI", Meta = (AllowPrivateAccess = true))
 	TSubclassOf<UUserWidget> CutSceneWidgetClass;
 
-	FName LoadedPackageName;
-
-	void TryOpenLevel(const FName& PackageName);
+	
 	
 	bool bIsMapLoaded = false;
 	bool bIsCutsceneFinished = false;

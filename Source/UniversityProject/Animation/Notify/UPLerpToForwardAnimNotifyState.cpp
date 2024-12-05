@@ -7,6 +7,7 @@
 #include "Character/UPPlayerCharacter.h"
 #include "Components/AutoTargetingComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Physics/Collision.h"
 #include "Skill/Player/UPSkillManagerComponent.h"
 
 struct FNotifyStateData
@@ -62,16 +63,14 @@ void UUPLerpToForwardAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCo
 			FHitResult Hit;
 			FVector HitLocation;
 
-			if (bIgnoreBoss)
-			{
-				
-			}
-			
 			// TODO: 무기의 길이를 구하는 코드 만들기.
 			if (base->TryCheckForwardCollision(Amount >= 0 ? Amount : -Amount, Hit, HitLocation))
 			{
-				Hit.Location.Z = Owner->GetActorLocation().Z;
-				TargetLocation = Hit.Location - Owner->GetActorForwardVector() * (base->GetCapsuleComponent()->GetScaledCapsuleRadius() / 2);
+				if (!bIgnoreEnemys || !IsTargetIsEnemy(MeshComp->GetOwner(), Hit.GetActor()))
+				{
+					Hit.Location.Z = Owner->GetActorLocation().Z;
+					TargetLocation = Hit.Location - Owner->GetActorForwardVector() * (base->GetCapsuleComponent()->GetScaledCapsuleRadius() / 2);
+				}
 			}
 		}
 
@@ -127,4 +126,44 @@ void UUPLerpToForwardAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp
 			NotifyStateDataMap.Remove(Owner);
 		}
 	}
+}
+
+bool UUPLerpToForwardAnimNotifyState::IsTargetIsEnemy(AActor* Owner, AActor* Target)
+{
+	IUPDamageableInterface* curTarget = Cast<IUPDamageableInterface>(Target);
+	if (curTarget == nullptr)
+	{
+		return false;
+	}
+	
+	TArray<FHitResult> HitResults;
+
+	FCollisionShape Sphere = FCollisionShape::MakeSphere(Amount);
+	FCollisionQueryParams Parameters;
+	Parameters.AddIgnoredActor(Owner);
+	
+	DrawDebugSphere(Owner->GetWorld(), Owner->GetActorLocation(), Amount, 12, FColor::Blue, false, 1.5f);
+	bool bHit = Owner->GetWorld()->SweepMultiByChannel(
+		HitResults,
+		Owner->GetActorLocation(),
+		Owner->GetActorLocation(),
+		FQuat::Identity,
+		CCHANEL_UPACTION,
+		Sphere,
+		Parameters
+	);
+
+	if (!bHit)
+	{
+		return false;
+	}
+
+	for (const FHitResult& HitResult : HitResults)
+	{
+		if (Target == HitResult.GetActor())
+		{
+			return true;
+		}
+	}
+	return false;
 }

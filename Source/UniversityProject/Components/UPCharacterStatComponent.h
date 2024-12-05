@@ -26,7 +26,8 @@ public:
 	UUPCharacterStatComponent();
 
 // Init Section
-protected:
+public:
+	UFUNCTION(Blueprintable, BlueprintCallable)
 	virtual void InitializeComponent() override;
 
 // Stat Section
@@ -74,9 +75,10 @@ public:
 	float GetStunStack() const { return CurrentStunStack; }
 
 // Data Section
-protected:
+public:
 	void SetHp(float NewHp);
-
+	
+protected:
 	void SetStunStack(float NewStunStat);
 	
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)

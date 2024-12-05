@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/UPCharacterStatComponent.h"
 #include "Game/Stage/UPStageManager.h"
 #include "Game/Stage/UPTutorialStage.h"
 #include "GameData/UPCharacterStatData.h"
@@ -12,7 +13,7 @@
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnTakeDamaged, float /* DamagedAmount */)
 
-UCLASS()
+UCLASS(Blueprintable)
 class UNIVERSITYPROJECT_API AUPHealthEntityCharacter : public ACharacter, public IUPDamageableInterface
 {
 	GENERATED_BODY()
@@ -64,7 +65,7 @@ public:
 // Stat Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true", Tooltip = "스텟 컴포넌트"))
-	TObjectPtr<class UUPCharacterStatComponent> StatComponent;
+	TObjectPtr<UUPCharacterStatComponent> StatComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category =Init, Meta = (AllowPrivateAccess = "true", Tooltip = "게임 시작 시 초기화 될 캐릭터의 스텟"))
 	TObjectPtr<UUPCharacterStatData> CharacterInitalizeStatData;
@@ -72,8 +73,10 @@ protected:
 	bool bIsInvincible;
 	
 public:
-	FORCEINLINE const UUPCharacterStatComponent* GetStat() const { return StatComponent.Get(); }
-
+	UFUNCTION(Blueprintable, BlueprintCallable)
+	UUPCharacterStatComponent* GetStat() const { return StatComponent.Get(); }
+	UFUNCTION(Blueprintable, BlueprintCallable)
+	void SetHpMax() { StatComponent->SetHp(StatComponent->GetTotalStat().MaxHp);}
 
 /* Just for visible */
 private:
