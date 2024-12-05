@@ -26,7 +26,13 @@ protected:
 	// Description 패널
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* DescriptionCanvas;
-	
+
+	UPROPERTY(meta = (BindWidget))
+	class UImage* TutoShowUI;
+
+	bool bTutoShow = true;
+	bool bIsAlphaIncreasing = true;
+	float CurrentAlpha = 1.0f;
 	// 기본 캔버스 크기
 	UPROPERTY(EditDefaultsOnly, Category = "Layout")
 	FVector2D BaseCanvasSize = FVector2D(500.0f, 0.0f);
@@ -59,6 +65,7 @@ public:
 	void SetDescription(const FString& NewDescription);
 	void SetTaskVisibleNon() const;
 
+	void TriggerTutoShowUI();
 	UPROPERTY()
 	FString TargetDescription;
 
@@ -66,6 +73,7 @@ public:
 	FString CurrentTypedText;
 
 	FTimerHandle TypingTimerHandle;
+	FTimerHandle AlphaChangeTimer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	float TypingTime = 0.05f;
 	
@@ -74,4 +82,6 @@ public:
 private:
 	// 동적으로 생성된 작업 위젯 목록
 	TArray<UUPConditionalCellWidget*> CellWidgets;
+
+	void UpdateAlpha();
 };
