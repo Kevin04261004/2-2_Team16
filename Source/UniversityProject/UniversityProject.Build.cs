@@ -27,7 +27,9 @@ public class UniversityProject : ModuleRules
 			"Niagara",
 			"SpinePlugin",
 			"MovieScene",
-			"LevelSequence"
+			"LevelSequence",
+			"Slate",        // Slate 모듈 추가
+			"SlateCore" 
 		});
 
 		// Uncomment if you are using Slate UI
