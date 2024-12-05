@@ -1,5 +1,6 @@
 ﻿#include "UPPlayerCharacterWeapon.h"
 #include "DrawDebugHelpers.h"
+#include "FrontendFilters.h"
 #include "Interface/UPDamageableInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Manager/UPPostProcessManager.h"
@@ -166,6 +167,17 @@ void AUPPlayerCharacterWeapon::CheckCollisionSockets()
 void AUPPlayerCharacterWeapon::AttackSuccess(FHitResult& result, IUPDamageableInterface* Damageable)
 {
 	Super::AttackSuccess(result, Damageable);
+
+	if (HitParticle) // HitParticle는 UParticleSystem*로 선언된 변수라고 가정
+	{
+		UNiagaraComponent* spark = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+					GetWorld(),                  // 월드 컨텍스트
+					HitParticle,                   // 나이아가라 시스템
+					result.Location,             // 생성 위치 (타격 지점)
+					result.Normal.Rotation()     // 방향 (충돌 표면의 법선 벡터로 회전)
+					// 각도: 무기의 소켓 1의 위치 - 타격 부분
+				);
+	}
 	
 	/* Game Time Stop */
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), StopTimeVolume);
@@ -175,7 +187,7 @@ void AUPPlayerCharacterWeapon::AttackSuccess(FHitResult& result, IUPDamageableIn
 	
 	/* Volume */
 	UUPPostProcessManager* PostProcessManager = GetGameInstance()->GetSubsystem<UUPPostProcessManager>();
-	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::Blur, true, 0.1f);
+	PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::Blur, true, StopTime);
 	// PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::SpeedLine, true, 0.1f);
 	// PostProcessManager->TogglePostProcessMaterial(EPostProcessMaterialType::EdgeFadeDesaturation, true, 0.1f);
 }

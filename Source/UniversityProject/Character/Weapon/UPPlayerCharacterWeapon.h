@@ -34,6 +34,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Weapon")
 	TArray<FVector> SocketLocationArray;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Weapon", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UNiagaraSystem> HitParticle;
+
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Debug")
 	bool bIsDebugLineOn;
 

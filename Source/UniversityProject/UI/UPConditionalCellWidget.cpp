@@ -4,6 +4,7 @@
 #include "UI/UPConditionalCellWidget.h"
 
 #include "Components/CheckBox.h"
+#include "Components/Image.h"
 #include "Components/TextBlock.h"
 
 void UUPConditionalCellWidget::InitializeTask(const FString& TaskName, int32 CurrentProgress, int32 TotalProgress)
@@ -26,6 +27,15 @@ void UUPConditionalCellWidget::UpdateProgress(int32 CurrentProgress, int32 Total
 	{
 		FString ProgressString = FString::Printf(TEXT("( %d / %d )"), CurrentProgress, TotalProgress);
 		ProgressText->SetText(FText::FromString(ProgressString));
-		Check->SetIsChecked(CurrentProgress >= TotalProgress);
+		if (TotalProgress > CurrentProgress)
+		{
+			True->SetVisibility(ESlateVisibility::Hidden);
+			False->SetVisibility(ESlateVisibility::Visible);
+		}
+		else
+		{
+			True->SetVisibility(ESlateVisibility::Visible);
+			False->SetVisibility(ESlateVisibility::Hidden);
+		}
 	}
 }
