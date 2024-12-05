@@ -33,6 +33,9 @@ private:
 	UPROPERTY()
 	UUPTutorialWidget* TutorialWidget;
 
+	UPROPERTY()
+	UUPHudWidget* HudWidget;
+	
 	// 위젯 초기화
 	void InitializeTutorialWidget();
 public:
