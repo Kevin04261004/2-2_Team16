@@ -25,7 +25,7 @@ public:
 	bool bLookTarget = false;
 
 	UPROPERTY(EditAnywhere, Category="Init")
-	bool bIgnoreBoss = false;
+	bool bIgnoreEnemys = false;
 	
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float InTotalDuration) override;
 	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime) override;
@@ -33,6 +33,10 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Lerp")
 	UCurveFloat* LerpCurve;
+
+private:
+	bool IsTargetIsEnemy(AActor* Owner, AActor* Target);
+	
 private:
 	//FVector StartLocation; // 캐릭터의 초기 위치
 	//FVector TargetLocation;
