@@ -6,6 +6,7 @@
 #include "UPConditionalCellWidget.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Components/Image.h"
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 
@@ -135,4 +136,42 @@ void UUPTutorialWidget::UpdateTypingEffect()
 void UUPTutorialWidget::SetTaskVisibleNon() const
 {
 	TutorialCanvas->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void UUPTutorialWidget::TriggerTutoShowUI()
+{
+	bTutoShow = !bTutoShow;
+	bIsAlphaIncreasing = bTutoShow; // 켜지면 증가, 꺼지면 감소
+
+	// 타이머 시작: Alpha를 점진적으로 변경
+	GetWorld()->GetTimerManager().SetTimer(
+		AlphaChangeTimer,
+		this,
+		&UUPTutorialWidget::UpdateAlpha,
+		0.02f, // 업데이트 간격 (20ms)
+		true
+	);
+}
+
+void UUPTutorialWidget::UpdateAlpha()
+{
+	// Alpha 값 업데이트
+	float TargetAlpha = bIsAlphaIncreasing ? 1.0f : 0.0f;
+	float Delta = 0.05f; // Alpha 변화 속도
+
+	if (bIsAlphaIncreasing)
+	{
+		CurrentAlpha = FMath::Min(CurrentAlpha + Delta, TargetAlpha);
+	}
+	else
+	{
+		CurrentAlpha = FMath::Max(CurrentAlpha - Delta, TargetAlpha);
+	}
+
+	TutoShowUI->SetRenderOpacity(CurrentAlpha);
+
+	if (CurrentAlpha == TargetAlpha)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(AlphaChangeTimer);
+	}
 }

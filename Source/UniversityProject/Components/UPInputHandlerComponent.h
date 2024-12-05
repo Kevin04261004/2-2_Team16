@@ -50,7 +50,8 @@ protected:
 	TObjectPtr<class UInputAction> CameraZoomAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> SettingAction;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> TutoShowUIAction;
 	/* Debug */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Init, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> GlobalTimeUp;
@@ -76,6 +77,7 @@ protected:
 	void SettingInputAction(const FInputActionValue& Value);
 	void TutorialSkipInputAction(const FInputActionValue& Value);
 	void SkipOneStageInputAction(const FInputActionValue& Value);
+	void TutoShowUIInputAction(const FInputActionValue& Value);
 	
 protected:
 	FVector2D MovementVector;
