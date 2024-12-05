@@ -6,6 +6,16 @@
 #include "UPHudWidget.h"
 #include "UPPlayerHudWidget.generated.h"
 
+UENUM(BlueprintType)
+enum class EPlayerExpressionType : uint8
+{
+	Common UMETA(DisplayName = "평범, 기쁨"),
+	Exciting UMETA(DisplayName = "궁금"),
+	Downcast UMETA(DisplayName = "시무룩"),
+	Sad UMETA(DisplayName = "절망, 슬픔"),
+	Angry UMETA(DisplayName = "화남"),
+};
+
 /**
  * 
  */
@@ -20,11 +30,10 @@ public:
 
 	float GetPlayerHpPercent_Implementation() const;
 
-	UFUNCTION(BlueprintCallable)
-	void SetFacialExpression(int32 Index);
+	void SetFacialExpression(EPlayerExpressionType type);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	TArray<UTexture2D*> ImageArray;
+	TMap<EPlayerExpressionType, UTexture2D*> ImageMap;
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* PlayerFacialBg;

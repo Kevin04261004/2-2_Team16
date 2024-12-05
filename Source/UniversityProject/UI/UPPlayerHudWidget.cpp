@@ -18,11 +18,11 @@ float UUPPlayerHudWidget::GetPlayerHpPercent_Implementation() const
 	return 0.0f;
 }
 
-void UUPPlayerHudWidget::SetFacialExpression(int32 Index)
+void UUPPlayerHudWidget::SetFacialExpression(EPlayerExpressionType type)
 {
-	if (ImageArray.IsValidIndex(Index) && PlayerFacialBg)
+	if (ImageMap.Find(type) && PlayerFacialBg)
 	{
-		UTexture2D* SelectedTexture = ImageArray[Index];
+		UTexture2D* SelectedTexture = ImageMap[type];
 		if (SelectedTexture)
 		{
 			// 브러시 업데이트

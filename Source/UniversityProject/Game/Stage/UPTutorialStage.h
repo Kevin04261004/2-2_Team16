@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "UI/UPPlayerHudWidget.h"
 #include "UPTutorialStage.generated.h"
 
 UENUM(BlueprintType)
@@ -39,6 +40,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Description;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EPlayerExpressionType ExpressionType;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Tooltip = "DataTable에서 생성할 때 사용할 키 값"))
 	FString SpawnActorKey;
 
