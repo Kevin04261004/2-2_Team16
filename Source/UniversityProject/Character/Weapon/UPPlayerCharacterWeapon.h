@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "UPWeaponBase.h"
 #include "GameFramework/Actor.h"
-#include "Interface/UPResetAttackedActorList.h"
 #include "UPPlayerCharacterWeapon.generated.h"
 
 UCLASS()
