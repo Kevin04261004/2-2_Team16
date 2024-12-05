@@ -6,6 +6,7 @@
 #include "UI/UPUserWidget.h"
 #include "UPHudWidget.generated.h"
 
+enum class EPlayerExpressionType : uint8;
 /**
  * 
  */
@@ -27,7 +28,7 @@ public:
 	void SetPlayerHudVisible(bool bVisible);
 	void SetPettuHudVisible(bool bVisible);
 
-	
+	void SetExpression(EPlayerExpressionType expressionType);
 
 protected:
 	UPROPERTY()
