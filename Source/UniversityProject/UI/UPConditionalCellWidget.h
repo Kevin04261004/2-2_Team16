@@ -22,8 +22,10 @@ protected:
 	class UTextBlock* ProgressText;
 
 	UPROPERTY(meta = (BindWidget))
-	class UCheckBox* Check;
-	
+	class UImage* False;
+
+	UPROPERTY(meta = (BindWidget))
+	class UImage* True;
 public:
 	// 작업 초기화
 	void InitializeTask(const FString& TaskName, int32 CurrentProgress, int32 TotalProgress);
