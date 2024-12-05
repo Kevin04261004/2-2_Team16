@@ -110,7 +110,7 @@ protected:
 protected:
 	virtual void SetupHUDWidget(UUPHudWidget* InHUDWidget) override;
 
-	/* State Section */
+/* State Section */
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSM, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UUPStateManager> StateManager;
@@ -139,7 +139,6 @@ private:
 	FName LookAtLocationSocketName;
 	
 	void SetLookAtAlpha(float DeltaTime);
-	
 	UPROPERTY()
 	TObjectPtr<AUPPettuCharacter> PettuCharacter;
 public:
