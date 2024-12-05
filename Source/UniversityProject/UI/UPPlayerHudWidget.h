@@ -19,4 +19,13 @@ public:
 	float GetPlayerHpPercent() const;
 
 	float GetPlayerHpPercent_Implementation() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetFacialExpression(int32 Index);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TArray<UTexture2D*> ImageArray;
+
+	UPROPERTY(meta = (BindWidget))
+	class UImage* PlayerFacialBg;
 };

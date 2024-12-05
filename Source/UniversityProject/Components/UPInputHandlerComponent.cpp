@@ -11,6 +11,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Manager/UPTimeManager.h"
 #include "Player/UPPlayerController.h"
+#include "UI/UPTutorialWidget.h"
 
 class AUPPlayerController;
 
@@ -43,6 +44,7 @@ void UUPInputHandlerComponent::BindActions(UEnhancedInputComponent* EnhancedInpu
 	EnhancedInputComponent->BindAction(SettingAction, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::SettingInputAction);
 	EnhancedInputComponent->BindAction(TutorialSkip, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::TutorialSkipInputAction);
 	EnhancedInputComponent->BindAction(SkipOneStage, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::SkipOneStageInputAction);
+	EnhancedInputComponent->BindAction(TutoShowUIAction, ETriggerEvent::Triggered, this, &UUPInputHandlerComponent::TutoShowUIInputAction);
 }
 
 
@@ -140,6 +142,23 @@ void UUPInputHandlerComponent::SkipOneStageInputAction(const FInputActionValue& 
 	if (GameMode)
 	{
 		GameMode->StageManager->StartNextStage();
+	}
+}
+
+void UUPInputHandlerComponent::TutoShowUIInputAction(const FInputActionValue& Value)
+{
+	UUPTutorialWidget* TutorialWidget = nullptr;
+	for (TObjectIterator<UUPTutorialWidget> It; It; ++It)
+	{
+		if (It->IsValidLowLevel())
+		{
+			TutorialWidget = *It;
+			break;
+		}
+	}
+	if (TutorialWidget != nullptr)
+	{
+		TutorialWidget->TriggerTutoShowUI();
 	}
 }
 
